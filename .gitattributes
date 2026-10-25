@@ -1,0 +1,14 @@
+# Normalise les fins de ligne du texte, et ne touche jamais aux fichiers binaires
+* text=auto
+*.js text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.bat text eol=crlf
+*.png binary
+*.webp binary
+*.jpg binary
+*.mp3 binary
+*.woff2 binary

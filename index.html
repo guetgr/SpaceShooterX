@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Space Shooter X</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<script src="vendor/phaser.min.js"></script>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="game-container">
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+
+    <div id="hud">
+      <div id="hud-top">
+        <div class="hp-wrap">
+          <div class="hp-label">VAISSEAU</div>
+          <div class="hp-bar-track" id="hpTrack"><div class="hp-bar-fill" id="hpFill"></div></div>
+          <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
+        </div>
+        <button class="mute-btn" id="pauseBtn">⏸</button>
+        <div class="score-wrap">
+          <div class="score-label">SCORE</div>
+          <div class="score-val" id="scoreVal">0</div>
+        </div>
+      </div>
+      <div class="xp-wrap">
+        <div class="lvl-badge" id="lvlBadge">LV.1</div>
+        <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
+      </div>
+      <div class="wave-note" id="waveNote">T+00:00</div>
+      <div id="relicRow"></div>
+    </div>
+
+    <div id="boss-hp-wrap2">
+      <div class="boss-hp-label" id="bossLabel2">BOSS</div>
+      <div class="boss-hp-track"><div class="boss-hp-fill" id="bossHpFill2"></div></div>
+      <div class="boss-sh-track" id="bossShTrack2"><div class="boss-sh-fill" id="bossShFill2"></div></div>
+    </div>
+    <div id="boss-hp-wrap3">
+      <div class="boss-hp-label" id="bossLabel3">BOSS</div>
+      <div class="boss-hp-track"><div class="boss-hp-fill" id="bossHpFill3"></div></div>
+      <div class="boss-sh-track" id="bossShTrack3"><div class="boss-sh-fill" id="bossShFill3"></div></div>
+    </div>
+    <div id="boss-hp-wrap">
+      <div class="boss-hp-label" id="bossLabel">DREADNOUGHT</div>
+      <div class="boss-hp-track"><div class="boss-hp-fill" id="bossHpFill"></div></div>
+      <div class="boss-sh-track" id="bossShTrack"><div class="boss-sh-fill" id="bossShFill"></div></div>
+    </div>
+    <div id="boss-banner">! ALERTE BOSS !</div>
+
+    <div id="start" class="overlay">
+      <div class="title-logo">SPACE<br>SHOOTER <span>X</span></div>
+      <div class="subtitle">-- survie spatiale --</div>
+      <div class="hi-row">MEILLEUR SCORE : <span id="hiScoreStart">0</span></div>
+      <div class="frag-row">◆ FRAGMENTS : <span id="fragStart">0</span></div>
+      <div class="frag-row hidden" id="ascRow" style="color:#ffd76a;"></div>
+      <button class="btn hidden" id="btnContinue">CONTINUER</button>
+      <button class="btn" id="btnStart" style="margin-top:10px;min-width:230px;padding:16px 22px;">DEMARRER</button>
+      <button class="btn secondary hidden" id="btnSandbox" style="border-color:#ff3a3a;color:#ffe14a;">DEMARRER DEV (TEST)</button>
+      <button class="btn secondary" id="btnSkills">COMPETENCES</button>
+      <button class="btn secondary" id="btnOptionsMain">PARAMETRES</button>
+      <button class="btn secondary" id="btnInfo">INFO</button>
+      <div class="controls-hint">Glisse le doigt sur l'écran pour piloter.<br>Le tir est automatique.<br>Récupère les cristaux pour monter de niveau.</div>
+    </div>
+
+    <div id="infoMenu" class="overlay hidden">
+      <div class="lu-title">INFO</div>
+      <button class="btn secondary" id="btnOpenStats">STATS DU VAISSEAU</button>
+      <button class="btn secondary" id="btnOpenBestiary">BESTIAIRE</button>
+      <button class="btn secondary" id="btnOpenAchv">SUCCÈS</button>
+      <button class="btn secondary" id="btnOpenCodex">COLLECTION</button>
+      <button class="btn secondary" id="btnOpenPacts">PACTES</button>
+      <button class="btn secondary" id="btnOpenLeaderboard">CLASSEMENT</button>
+      <button class="btn secondary" id="btnInfoBack">RETOUR</button>
+    </div>
+
+    <div id="statsPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">STATS DU VAISSEAU</div>
+        <button class="btn secondary small" id="btnStatsBack">RETOUR</button>
+      </div>
+      <div class="go-name" style="justify-content:center;"><label for="statsName">PSEUDO</label><input id="statsName" class="name-input" maxlength="12" autocomplete="off" spellcheck="false" placeholder="ANONYME"></div>
+      <div class="info-list" id="statsList"></div>
+    </div>
+
+    <div id="bestiaryPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">BESTIAIRE</div>
+        <button class="btn secondary small" id="btnBestiaryBack">RETOUR</button>
+      </div>
+      <div class="info-list bestiary-grid" id="bestiaryGrid"></div>
+    </div>
+
+    <div id="pactsPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">PACTES</div>
+        <button class="btn secondary small" id="btnPactsBack">RETOUR</button>
+      </div>
+      <div class="controls-hint" id="pactsSummary" style="margin:4px 0 6px; text-align:center;"></div>
+      <div class="info-list" id="pactsList"></div>
+    </div>
+
+    <div id="codexPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">COLLECTION</div>
+        <button class="btn secondary small" id="btnCodexBack">RETOUR</button>
+      </div>
+      <div class="controls-hint" id="codexSummary" style="margin:4px 0 6px; text-align:center;"></div>
+      <div class="info-list" id="codexList"></div>
+    </div>
+
+    <div id="achvPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">SUCCÈS</div>
+        <button class="btn secondary small" id="btnAchvBack">RETOUR</button>
+      </div>
+      <div class="controls-hint" id="achvSummary" style="margin:4px 0 6px; text-align:center; font-size:14px; line-height:1.15;"></div>
+      <div class="info-list" id="achvList"></div>
+    </div>
+
+    <div id="gameNotice"><div class="gn-name" id="gnName"></div><div class="gn-desc" id="gnDesc"></div></div>
+    <div id="achvToast"><div class="at-title">SUCCÈS DÉBLOQUÉ</div><div class="at-name" id="atName"></div><div class="at-desc" id="atDesc"></div></div>
+
+    <div id="leaderboardPage" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="lu-title" style="margin:0;">CLASSEMENT</div>
+        <button class="btn secondary small" id="btnLeaderboardBack">RETOUR</button>
+      </div>
+      <div class="info-list" id="lbList" style="gap:6px;"></div>
+      <div class="controls-hint" style="margin-top:8px; text-align:center;">Classement local (sur cet appareil).<br>Le classement en ligne arrivera plus tard.</div>
+    </div>
+
+    <div id="pauseMenu" class="overlay hidden">
+      <div class="lu-title">PAUSE</div>
+      <div id="pauseGear">
+        <div class="pg-head"><span>COMPETENCES PRISES CETTE PARTIE</span><span id="pgPage"></span></div>
+        <div id="pgGrid"></div>
+        <div id="pgDetail">Ces bonus sont actifs automatiquement. Touche une icône pour voir ce qu'elle fait (x2, x3... = son niveau).</div>
+        <div class="pg-nav"><button class="btn secondary" id="pgPrev">◀</button><button class="btn secondary" id="pgNext">▶</button></div>
+      </div>
+      <button class="btn" id="btnResume">REPRENDRE</button>
+      <button class="btn secondary" id="btnPauseStats">STATS DU VAISSEAU</button>
+      <button class="btn secondary" id="btnSettings">PARAMETRES</button>
+      <button class="btn secondary" id="btnPauseInfo">INFO</button>
+      <button class="btn secondary" id="btnQuit">QUITTER</button>
+    </div>
+
+    <div id="settingsMenu" class="overlay hidden">
+      <div class="lu-title">PARAMETRES</div>
+      <div class="go-name"><label for="setName">PSEUDO</label><input id="setName" class="name-input" maxlength="12" autocomplete="off" spellcheck="false" placeholder="ANONYME"></div>
+      <div class="vol-row"><label for="volMaster">VOLUME</label><input type="range" id="volMaster" min="0" max="100" step="1"><span id="volMasterV">100</span></div>
+      <div class="vol-row"><label for="volMusic">MUSIQUE</label><input type="range" id="volMusic" min="0" max="100" step="1"><span id="volMusicV">100</span></div>
+      <div class="vol-row"><label for="volSfx">EFFETS</label><input type="range" id="volSfx" min="0" max="100" step="1"><span id="volSfxV">100</span></div>
+      <button class="btn secondary" id="btnSfxToggle">SON : ACTIVÉ</button>
+      <button class="btn secondary" id="btnMusicToggle">MUSIQUE : ACTIVÉE</button>
+      <div class="frag-row" id="cloudStatus" style="font-size:15px; margin:0 0 4px;"></div>
+      <div style="display:flex; gap:6px; width:100%; max-width:320px;">
+        <button class="btn secondary small" id="btnExport" style="flex:1;">EXPORTER</button>
+        <button class="btn secondary small" id="btnImport" style="flex:1;">IMPORTER</button>
+      </div>
+      <textarea id="saveBox" class="hidden" spellcheck="false" autocomplete="off"></textarea>
+      <button class="btn secondary small hidden" id="btnImportOk">VALIDER L'IMPORT</button>
+      <button class="btn secondary" id="btnResetProgress">RÉINITIALISER LA PROGRESSION</button>
+      <button class="btn secondary" id="btnSettingsBack">RETOUR</button>
+    </div>
+
+    <div id="skills" class="overlay tree-overlay hidden">
+      <div class="tree-header">
+        <div class="frag-row" id="fragSkills">◆ 0</div>
+        <button class="btn secondary small" id="btnAscend">ASCENSION</button>
+        <button class="btn secondary small" id="btnSkillsBack">RETOUR</button>
+      </div>
+      <div class="alert-row" id="alertRowSkills"></div>
+      <div class="tree-chips" id="treeChips"></div>
+      <div class="tree-stage" id="treeStage">
+        <svg id="treeSvg" viewBox="-620 -620 1240 1240">
+          <g id="treeViewport">
+            <g id="treeRings" style="pointer-events:none"></g>
+            <g id="treeLinks"></g>
+            <g id="treeNodes"></g>
+          </g>
+        </svg>
+      </div>
+      <div class="tree-info" id="treeInfo">
+        <div class="tree-info-icon" id="treeInfoIcon"></div>
+        <div class="tree-info-body">
+          <div class="tree-info-name" id="treeInfoName">CŒUR DU VAISSEAU</div>
+          <div class="tree-info-desc" id="treeInfoDesc">Touche un nœud pour voir ses détails.</div>
+          <div class="tree-info-meta" id="treeInfoMeta"></div>
+        </div>
+        <button class="tree-invest-btn" id="treeInvestBtn" disabled>+</button>
+      </div>
+    </div>
+
+    <div id="levelup" class="overlay hidden">
+      <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;">⏸</button>
+      <div class="lu-title">AMELIORATION — CHOISIS UN MODULE</div>
+      <div class="cards" id="cardsWrap"></div>
+      <button class="btn secondary" id="rerollBtn">RELANCER (2)</button>
+    </div>
+
+    <div id="comboTxt"></div>
+    <div id="styleHud"><div id="styleRank">D</div><div id="styleInfo"><div id="styleName"></div><div id="styleCount"></div><div id="styleXp"></div><div class="style-track"><i id="styleFill"></i></div></div></div>
+    <button id="odBtn"><span>OD</span></button>
+    <div id="redVig"></div>
+    <div id="gameover" class="overlay hidden">
+      <div class="go-title">VAISSEAU DETRUIT</div>
+      <div class="go-stats">Score : <b id="finalScore">0</b><br>Niveau atteint : <b id="finalLvl">1</b><br>Temps de survie : <b id="finalTime">0:00</b></div>
+      <div class="go-extra" id="goExtra"></div>
+      <div class="frag-row" id="fragEarned">+0 ◆ fragments</div>
+      <div class="new-best hidden" id="newBest">★ NOUVEAU RECORD ★</div>
+      <button class="btn" id="btnRetry">REJOUER</button>
+      <button class="btn secondary" id="btnGoSkills">COMPETENCES</button>
+      <button class="btn secondary" id="btnGoMenu">MENU PRINCIPAL</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="src/boot.js"></script>
+</body>
+</html>

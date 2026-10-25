@@ -1,0 +1,10 @@
+# Générés / lourds : à ne pas versionner
+dist/
+backups/
+node_modules/
+__pycache__/
+*.pyc
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

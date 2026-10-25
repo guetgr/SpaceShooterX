@@ -1,0 +1,370 @@
+"use strict";
+// Méthodes de GameScene — interface HTML : menus, boutons, écran de départ.
+mixin(GameScene, {
+  setupDom(){
+    document.getElementById('rerollBtn').onclick = ()=> this.rerollCards();
+    // overdrive: bouton à l'écran (tactile) ou touche ESPACE (PC)
+    const odb = document.getElementById('odBtn');
+    odb.onpointerdown = (ev)=>{
+      ev.stopPropagation(); ev.preventDefault();
+      if (!this.running && this.odReady){ this._odQueue = !this._odQueue; odb.classList.toggle('queued', this._odQueue); sfx.uiOpen && sfx.uiOpen(); return; }      // menu ouvert: on le programme, il part dès que le jeu reprend
+      this.activateOverdrive();
+    };
+    this.input.keyboard.on('keydown-SPACE', ()=> this.activateOverdrive());
+    { const sb = document.getElementById('btnSandbox');
+      if (sb){ if (DEV_SEE_ALL) sb.classList.remove('hidden'); sb.onclick = ()=>{ sfx.resume(); sfx.uiStart(); this.scene.restart({ autoStart:true, sandbox:true }); }; } }
+    document.getElementById('btnStart').onclick = ()=>{
+      sfx.resume(); sfx.uiStart();
+      this.scene.restart({ autoStart:true });
+    };
+    document.getElementById('btnContinue').onclick = ()=>{
+      sfx.resume(); sfx.uiStart();
+      this.resumeRun();
+    };
+    document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true }); };
+    document.getElementById('hiScoreStart').textContent = getHighScore();
+    document.getElementById('fragStart').textContent = this.meta.fragments;
+
+    const pauseBtn = document.getElementById('pauseBtn');
+    pauseBtn.onclick = ()=>{
+      if (!this.running) return;
+      sfx.uiPause();
+      this.running = false;
+      this.physics.world.pause();
+      music.stop();
+      this.renderPauseGear(false);
+      document.getElementById('pauseMenu').classList.remove('hidden');
+    };
+    document.getElementById('luPause').onclick = ()=>{         // pause aussi pendant le choix d'amélioration / de relique (le jeu est déjà figé)
+      sfx.uiPause();
+      this.renderPauseGear(false);
+      document.getElementById('pauseMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnResume').onclick = ()=>{
+      sfx.uiResume();
+      if (!document.getElementById('levelup').classList.contains('hidden')){ document.getElementById('pauseMenu').classList.add('hidden'); return; }   // le choix de carte est encore ouvert: on ne relance pas le jeu derrière
+      document.getElementById('pauseMenu').classList.add('hidden');
+      this.physics.world.resume();
+      this.running = true;
+      music.start();
+    };
+    document.getElementById('btnSettings').onclick = ()=>{
+      sfx.uiOpen();
+      this.settingsReturnTo = 'pause';
+      document.getElementById('pauseMenu').classList.add('hidden');
+      this.updateSettingsLabels();
+      document.getElementById('settingsMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnOptionsMain').onclick = ()=>{
+      sfx.uiOpen();
+      this.settingsReturnTo = 'start';
+      document.getElementById('start').classList.add('hidden');
+      this.updateSettingsLabels();
+      document.getElementById('settingsMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnInfo').onclick = ()=>{
+      sfx.uiOpen();
+      this.infoReturnTo = 'start';
+      document.getElementById('start').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnPauseInfo').onclick = ()=>{
+      sfx.uiOpen();
+      this.infoReturnTo = 'pause';
+      document.getElementById('pauseMenu').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnInfoBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('infoMenu').classList.add('hidden');
+      if (this.infoReturnTo === 'pause') document.getElementById('pauseMenu').classList.remove('hidden');
+      else this.showStartScreen();
+    };
+    // le pseudo se règle dans PARAMETRES ou en haut de STATS DU VAISSEAU (même valeur partout)
+    this.syncNameInputs = ()=>{
+      const n = getPlayerName();
+      document.getElementById('setName').value = n;
+      document.getElementById('statsName').value = n;
+    };
+    ['setName','statsName'].forEach(id=>{
+      document.getElementById(id).oninput = (ev)=>{
+        const clean = sanitizeName(ev.target.value);
+        setPlayerName(clean);
+        ['setName','statsName'].forEach(o=>{ const el = document.getElementById(o); if (el !== ev.target) el.value = clean; });
+      };
+    });
+    this.syncNameInputs();
+    document.getElementById('btnOpenStats').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderStatsPage();
+      document.getElementById('statsPage').classList.remove('hidden');
+    };
+    document.getElementById('btnStatsBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('statsPage').classList.add('hidden');
+      if (this._statsFromPause){ this._statsFromPause = false; this.renderPauseGear(true); document.getElementById('pauseMenu').classList.remove('hidden'); }
+      else document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnPauseStats').onclick = ()=>{
+      sfx.uiOpen(); this.infoReturnTo = 'pause'; this._statsFromPause = true;
+      document.getElementById('pauseMenu').classList.add('hidden');
+      this.renderStatsPage(); document.getElementById('statsPage').classList.remove('hidden');
+    };
+    document.getElementById('pgPrev').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) - 1; this.renderPauseGear(true); };
+    document.getElementById('pgNext').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) + 1; this.renderPauseGear(true); };
+    document.getElementById('btnOpenBestiary').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderBestiaryPage();
+      document.getElementById('bestiaryPage').classList.remove('hidden');
+    };
+    document.getElementById('btnBestiaryBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('bestiaryPage').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnOpenAchv').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderAchievementsPage();
+      document.getElementById('achvPage').classList.remove('hidden');
+    };
+    document.getElementById('btnOpenPacts').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderPactsPage();
+      document.getElementById('pactsPage').classList.remove('hidden');
+    };
+    document.getElementById('btnPactsBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('pactsPage').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnOpenCodex').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderCodexPage();
+      document.getElementById('codexPage').classList.remove('hidden');
+    };
+    document.getElementById('btnCodexBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('codexPage').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnAchvBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('achvPage').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnOpenLeaderboard').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('infoMenu').classList.add('hidden');
+      this.renderLeaderboardPage();
+      document.getElementById('leaderboardPage').classList.remove('hidden');
+    };
+    document.getElementById('btnLeaderboardBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('leaderboardPage').classList.add('hidden');
+      document.getElementById('infoMenu').classList.remove('hidden');
+    };
+    document.getElementById('btnSettingsBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('settingsMenu').classList.add('hidden');
+      if (this.settingsReturnTo === 'start'){
+        this.showStartScreen();
+      } else {
+        document.getElementById('pauseMenu').classList.remove('hidden');
+      }
+    };
+    [['volMaster','master'],['volMusic','music'],['volSfx','sfx']].forEach(([id,k])=>{
+      const el = document.getElementById(id), lab = document.getElementById(id + 'V');
+      const paint = ()=>{ el.value = VOL[k]; lab.textContent = VOL[k]; el.style.setProperty('--p', VOL[k] + '%'); };
+      paint();
+      el.oninput = ()=>{ VOL[k] = +el.value; VOL.save(); paint(); sfx.resume(); sfx.applyVol(); music.applyVol(); };      // effet immédiat
+      el.onchange = ()=>{ if (k !== 'music') sfx.uiSelect(); };                                                       // petit bip pour entendre le niveau des effets
+      el.onpointerdown = (e)=> e.stopPropagation();
+    });
+    document.getElementById('btnSfxToggle').onclick = ()=>{
+      sfx.resume();
+      sfx.setMuted(!sfx.muted); sfx.uiToggle();
+      this.updateSettingsLabels();
+    };
+    document.getElementById('btnMusicToggle').onclick = ()=>{
+      sfx.resume();
+      music.setMuted(!music.muted); sfx.uiToggle();
+      this.updateSettingsLabels();
+    };
+    // sauvegarde manuelle: un code à copier ailleurs, et à recoller pour tout récupérer
+    const box = document.getElementById('saveBox'), okb = document.getElementById('btnImportOk');
+    document.getElementById('btnExport').onclick = ()=>{
+      sfx.uiClick();
+      CloudSave.push();
+      const code = CloudSave.exportCode();
+      box.value = code; box.readOnly = true; box.classList.remove('hidden'); okb.classList.add('hidden');
+      box.focus(); box.select();
+      let copied = false;
+      try { if (navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(code); copied = true; } } catch(e){ /* ignore */ }
+      document.getElementById('btnExport').textContent = copied ? 'COPIE !' : 'EXPORTER';
+      setTimeout(()=>{ document.getElementById('btnExport').textContent = 'EXPORTER'; }, 1600);
+    };
+    document.getElementById('btnImport').onclick = ()=>{
+      sfx.uiClick();
+      box.value = ''; box.readOnly = false; box.classList.remove('hidden'); okb.classList.remove('hidden'); okb.textContent = "VALIDER L'IMPORT"; this._importConfirm = false; box.focus();
+    };
+    okb.onclick = ()=>{
+      sfx.uiClick();
+      if (!this._importConfirm){ this._importConfirm = true; okb.textContent = 'RE-TAPE: REMPLACE TA PARTIE'; setTimeout(()=>{ this._importConfirm = false; okb.textContent = "VALIDER L'IMPORT"; }, 3500); return; }
+      if (CloudSave.importCode(box.value)){ okb.textContent = 'OK, REDEMARRAGE...'; setTimeout(()=> location.reload(), 400); }
+      else { okb.textContent = 'CODE INVALIDE'; this._importConfirm = false; setTimeout(()=>{ okb.textContent = "VALIDER L'IMPORT"; }, 1800); }
+    };
+    document.getElementById('btnAscend').onclick = ()=>{
+      const btn = document.getElementById('btnAscend');
+      if (treeTotalPoints(this.treeState) < ASCEND_MIN) return;
+      if (!this._ascConfirm){
+        this._ascConfirm = true; btn.textContent = 'RE-TAPE: ARBRE REMIS A ZERO';
+        setTimeout(()=>{ this._ascConfirm = false; this.renderTree(); }, 3500);
+        return;
+      }
+      this._ascConfirm = false;
+      this.meta.asc = (this.meta.asc||0) + 1;       // l'arbre repart de zéro, les fragments sont conservés
+      this.meta.tree = {}; this.treeState = this.meta.tree;
+      setMeta(this.meta);
+      sfx.relicOpen();
+      this.cameras.main.flash(300, 255, 215, 100, false);
+      this.achvToast('ASCENSION ' + this.meta.asc + ' !', '+10% dégâts, PV, XP et fragments · alerte +1 pour toujours');
+      this.renderTree();
+      document.getElementById('fragSkills').textContent = '◆ ' + this.meta.fragments;
+    };
+    document.getElementById('btnResetProgress').onclick = ()=>{
+      const btn = document.getElementById('btnResetProgress');
+      if (!this.resetArmed){
+        this.resetArmed = true;
+        sfx.uiError();
+        btn.textContent = 'RE-TAPE: ARBRE + SUCCES + BESTIAIRE';
+        clearTimeout(this.resetArmTimer);
+        this.resetArmTimer = setTimeout(()=>{
+          this.resetArmed = false;
+          btn.textContent = 'RÉINITIALISER LA PROGRESSION';
+        }, 3000);
+        return;
+      }
+      clearTimeout(this.resetArmTimer);
+      this.resetArmed = false;
+      this.meta = { fragments:0, tree:{}, asc:0 };
+      this.treeState = this.meta.tree;
+      setMeta(this.meta);
+      // les succès et le bestiaire repartent aussi de zéro (sinon les kills du bestiaire les feraient réapparaître)
+      this.achv = { killsAlert:{}, tier:{}, glob:{}, bossKills:{}, rawTotal:0, alertKills:0, bossTotal:0, maxAlert:0, maxTime:0, maxLevel:0, maxChain:0 };
+      setAchv(this.achv);
+      this.codex = { relics:{}, cards:{}, fusions:{}, skills:{}, usedSkills:{} }; setCodex(this.codex);
+      this.bestiary = { kills:{} }; this.bestiaryDirty = false;
+      setBestiary(this.bestiary);
+      try { localStorage.removeItem('ssx_bossbag_v1'); } catch(e){ /* ignore */ }
+      sfx.uiClick();
+      btn.textContent = 'RÉINITIALISER LA PROGRESSION';
+      document.getElementById('fragStart').textContent = this.meta.fragments;
+    };
+    document.getElementById('btnQuit').onclick = ()=>{
+      sfx.uiBack();
+      this.hasActiveRun = true;
+      this.goToMenu();
+    };
+
+    document.getElementById('btnSkills').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('start').classList.add('hidden');
+      this.renderTree();
+      document.getElementById('skills').classList.remove('hidden');
+      this.fitTreeView();
+    };
+    document.getElementById('btnSkillsBack').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('skills').classList.add('hidden');
+      this.showStartScreen();
+    };
+    document.getElementById('btnGoSkills').onclick = ()=>{
+      sfx.uiOpen();
+      document.getElementById('gameover').classList.add('hidden');
+      document.getElementById('fragStart').textContent = this.meta.fragments;
+      this.renderTree();
+      document.getElementById('skills').classList.remove('hidden');
+    };
+    document.getElementById('btnGoMenu').onclick = ()=>{
+      sfx.uiBack();
+      document.getElementById('gameover').classList.add('hidden');
+      this.hasActiveRun = false;
+      this.showStartScreen();
+    };
+    this.setupTreeInteraction();
+  },
+
+  setupTreeInteraction(){
+    const stage = document.getElementById('treeStage');
+    const viewport = document.getElementById('treeViewport');
+    if (this.treeScale === undefined){ this.treeTx=0; this.treeTy=0; this.treeScale=0.95; }
+    const svgEl = document.getElementById('treeSvg');
+    const applyT = ()=>{
+      viewport.setAttribute('transform', `translate(${this.treeTx},${this.treeTy}) scale(${this.treeScale})`);
+      if (svgEl) svgEl.classList.toggle('tree-far', this.treeScale < 1.15);   // dézoomé: les noms des compétences non possédées disparaissent
+    };
+    this.buildTreeChips();
+    this._treeApplyTransform = applyT;
+    let dragging=false, lastX=0, lastY=0;
+    stage.onpointerdown = (e)=>{
+      // don't hijack the tap with a pan-drag if it started on a node — let its own click fire
+      if (e.target.closest && e.target.closest('.tree-node')) return;
+      dragging=true; lastX=e.clientX; lastY=e.clientY; stage.setPointerCapture(e.pointerId);
+    };
+    stage.onpointermove = (e)=>{
+      if (!dragging) return;
+      this.treeTx += (e.clientX-lastX); this.treeTy += (e.clientY-lastY);
+      lastX = e.clientX; lastY = e.clientY;
+      applyT();
+    };
+    const endDrag = ()=>{ dragging=false; };
+    stage.onpointerup = endDrag;
+    stage.onpointercancel = endDrag;
+    stage.onpointerleave = endDrag;
+    stage.onwheel = (e)=>{
+      e.preventDefault();
+      const delta = e.deltaY>0 ? -0.08 : 0.08;
+      this.treeScale = Math.min(3.2, Math.max(0.32, this.treeScale+delta));
+      applyT();
+    };
+    applyT();
+  },
+
+  updateSettingsLabels(){
+    if (this.syncNameInputs) this.syncNameInputs();
+    const cs = document.getElementById('cloudStatus');
+    if (cs){
+      cs.textContent = CloudSave.ok
+        ? (CloudSave.status === 'erreur' ? 'SAUVEGARDE CLOUD : ERREUR (copie locale gardée)' : 'SAUVEGARDE CLOUD : ACTIVE' + (CloudSave.restored ? ' (partie restaurée)' : ''))
+        : 'SAUVEGARDE CLOUD : INDISPONIBLE (copie locale seulement)';
+      cs.style.color = CloudSave.ok && CloudSave.status !== 'erreur' ? '#7bff9a' : '#ffb35a';
+    }
+    document.getElementById('btnSfxToggle').textContent = sfx.muted ? 'SON : COUPÉ' : 'SON : ACTIVÉ';
+    document.getElementById('btnMusicToggle').textContent = music.muted ? 'MUSIQUE : COUPÉE' : 'MUSIQUE : ACTIVÉE';
+  },
+
+  showStartScreen(){
+    document.getElementById('btnContinue').classList.toggle('hidden', !this.hasActiveRun);
+    const ar = document.getElementById('ascRow'), asc = this.meta.asc || 0;
+    if (ar){ ar.classList.toggle('hidden', !(asc > 0)); ar.textContent = 'ASCENSION ' + asc + ' · +' + 10*asc + '% dégâts, PV, XP, fragments'; }
+    document.getElementById('start').classList.remove('hidden');
+    music.setScene({ mode:'menu' }); music.setMood(1, 0); music.start();                    // musique du menu
+  },
+
+  goToMenu(){
+    music.stop();
+    document.getElementById('pauseMenu').classList.add('hidden');
+    document.getElementById('settingsMenu').classList.add('hidden');
+    document.getElementById('gameover').classList.add('hidden');
+    document.getElementById('levelup').classList.add('hidden');
+    document.getElementById('skills').classList.add('hidden');
+    document.querySelectorAll('#boss-hp-wrap, #boss-hp-wrap2, #boss-hp-wrap3').forEach(x=>x.classList.remove('show'));
+    document.getElementById('boss-banner').classList.remove('show');
+    this.showStartScreen();
+  },
+});

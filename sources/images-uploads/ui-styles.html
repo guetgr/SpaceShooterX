@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Space Shooter X — 4 directions visuelles</title>
+<style>
+  :root{ color-scheme: dark; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#0b0c14; color:#d7daf0; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; padding:18px 14px 40px; }
+  h1{ font-size:20px; margin:0 0 4px; }
+  .sub{ color:#8d93b8; font-size:13px; margin:0 0 18px; max-width:760px; line-height:1.4; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); gap:22px; max-width:1500px; }
+  .card{ background:#12131f; border:1px solid #23253a; border-radius:10px; padding:12px; }
+  .card h2{ font-size:15px; margin:0 0 2px; }
+  .card .tag{ font-size:12px; color:#ffd76a; margin-bottom:8px; }
+  canvas{ width:100%; max-width:360px; height:auto; display:block; margin:0 auto; border-radius:6px; background:#000; image-rendering:pixelated; }
+  .pts{ font-size:12.5px; color:#a8aed0; line-height:1.45; margin:10px 2px 0; }
+  .pts b{ color:#e6e9ff; }
+</style>
+</head>
+<body>
+<h1>Space Shooter X — 4 directions visuelles</h1>
+<p class="sub">Le même écran (HUD, rang de style, barre de boss, cartes de niveau, compteur de chaîne) dans 4 styles. Tout est dessiné dans le code : polices pixel intégrées et icônes en vrais pixels, sans émojis ni police externe.</p>
+<div class="grid" id="grid"></div>
+
+<script>
+/* ---------- police pixel 5x7 intégrée ---------- */
+const GL = {
+A:'01110/10001/10001/11111/10001/10001/10001', B:'11110/10001/10001/11110/10001/10001/11110', C:'01110/10001/10000/10000/10000/10001/01110',
+D:'11110/10001/10001/10001/10001/10001/11110', E:'11111/10000/10000/11110/10000/10000/11111', F:'11111/10000/10000/11110/10000/10000/10000',
+G:'01110/10001/10000/10111/10001/10001/01111', H:'10001/10001/10001/11111/10001/10001/10001', I:'01110/00100/00100/00100/00100/00100/01110',
+J:'00111/00010/00010/00010/00010/10010/01100', K:'10001/10010/10100/11000/10100/10010/10001', L:'10000/10000/10000/10000/10000/10000/11111',
+M:'10001/11011/10101/10101/10001/10001/10001', N:'10001/11001/10101/10011/10001/10001/10001', O:'01110/10001/10001/10001/10001/10001/01110',
+P:'11110/10001/10001/11110/10000/10000/10000', Q:'01110/10001/10001/10001/10101/10010/01101', R:'11110/10001/10001/11110/10100/10010/10001',
+S:'01111/10000/10000/01110/00001/00001/11110', T:'11111/00100/00100/00100/00100/00100/00100', U:'10001/10001/10001/10001/10001/10001/01110',
+V:'10001/10001/10001/10001/10001/01010/00100', W:'10001/10001/10001/10101/10101/11011/10001', X:'10001/10001/01010/00100/01010/10001/10001',
+Y:'10001/10001/01010/00100/00100/00100/00100', Z:'11111/00001/00010/00100/01000/10000/11111',
+'0':'01110/10001/10011/10101/11001/10001/01110','1':'00100/01100/00100/00100/00100/00100/01110','2':'01110/10001/00001/00010/00100/01000/11111',
+'3':'11110/00001/00001/01110/00001/00001/11110','4':'00010/00110/01010/10010/11111/00010/00010','5':'11111/10000/11110/00001/00001/10001/01110',
+'6':'00110/01000/10000/11110/10001/10001/01110','7':'11111/00001/00010/00100/01000/01000/01000','8':'01110/10001/10001/01110/10001/10001/01110',
+'9':'01110/10001/10001/01111/00001/00010/01100',
+'.':'00000/00000/00000/00000/00000/00110/00110', ':':'00000/00110/00110/00000/00110/00110/00000', '%':'11001/11010/00010/00100/01000/01011/10011',
+'+':'00000/00100/00100/11111/00100/00100/00000', '-':'00000/00000/00000/11111/00000/00000/00000', '!':'00100/00100/00100/00100/00100/00000/00100',
+'/':'00001/00010/00010/00100/01000/01000/10000', '[':'01110/01000/01000/01000/01000/01000/01110', ']':'01110/00010/00010/00010/00010/00010/01110',
+'>':'01000/00100/00010/00001/00010/00100/01000', "'":'00100/00100/01000/00000/00000/00000/00000', '=':'00000/00000/11111/00000/11111/00000/00000',
+'#':'01010/11111/01010/01010/11111/01010/00000', '*':'00000/10101/01110/11111/01110/10101/00000'
+};
+const GB = {}; for (const k in GL) GB[k] = GL[k].split('/');
+function glyph(c,g,x,y,s,col){ c.fillStyle = col; for (let r=0;r<7;r++) for (let q=0;q<5;q++) if (g[r][q]==='1') c.fillRect(x+q*s, y+r*s, s, s); }
+function txt(c,str,x,y,s,col,o){ o = o||{}; str = String(str).toUpperCase(); let cx = x;
+  for (const ch of str){ const g = GB[ch === 'x' ? 'X' : ch];
+    if (g){ if (o.shadow) glyph(c,g,cx+s*o.shadow,y+s*o.shadow,s,o.sc||'#000');
+      if (o.outline) for (const d of [[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[1,1],[-1,1],[1,-1]]) glyph(c,g,cx+d[0]*s,y+d[1]*s,s,o.outline);
+      glyph(c,g,cx,y,s,col); }
+    cx += 6*s; }
+  return cx - x - s; }
+function tw(str,s){ return String(str).length*6*s - s; }
+/* ---------- icônes 8x8 en pixels ---------- */
+const IC = {
+ heart:'.XX..XX./XXXXXXXX/XXXXXXXX/XXXXXXXX/.XXXXXX./..XXXX../...XX.../........',
+ shield:'XXXXXXXX/XXXXXXXX/XXXXXXXX/XXXXXXXX/.XXXXXX./.XXXXXX./..XXXX../...XX...',
+ bolt:'....XX../...XX.../..XX..../.XXXXXX./...XX.../..XX..../.XX...../XX......',
+ star:'...XX.../...XX.../XXXXXXXX/.XXXXXX./..XXXX../.XXXXXX./.XX..XX./XX....XX',
+ skull:'.XXXXXX./XXXXXXXX/XX.XX.XX/XXXXXXXX/.XXXXXX./..X.X.X./..XXXXX./........',
+ coin:'..XXXX../.XXXXXX./XXX..XXX/XX.XX.XX/XX.XX.XX/XXX..XXX/.XXXXXX./..XXXX..'
+};
+function icon(c,name,x,y,s,col,edge){ const rows = IC[name].split('/');
+  if (edge) for (let r=0;r<8;r++) for (let q=0;q<8;q++) if (rows[r][q]==='X'){ c.fillStyle=edge; for (const d of [[-1,0],[1,0],[0,-1],[0,1]]) c.fillRect(x+q*s+d[0]*s, y+r*s+d[1]*s, s, s); }
+  c.fillStyle = col; for (let r=0;r<8;r++) for (let q=0;q<8;q++) if (rows[r][q]==='X') c.fillRect(x+q*s, y+r*s, s, s); }
+/* ---------- fond de jeu commun (étoiles, planète, tirs) ---------- */
+function rnd(seed){ let s=seed; return ()=>{ s = (s*16807)%2147483647; return s/2147483647; }; }
+function space(c,W,H,base){ c.fillStyle = base||'#05060f'; c.fillRect(0,0,W,H); const r = rnd(7);
+  for (let i=0;i<90;i++){ const x=Math.floor(r()*W), y=Math.floor(r()*H); c.fillStyle = r()<0.2 ? '#8e98ff' : '#5a6190'; c.fillRect(x,y,r()<0.15?2:1,r()<0.15?2:1); }
+  // planète
+  const g = c.createRadialGradient(250,420,6,260,430,70); g.addColorStop(0,'#5fb0e8'); g.addColorStop(1,'#10304f'); c.fillStyle=g; c.beginPath(); c.arc(258,430,64,0,7); c.fill();
+  // tirs ennemis (traits rouges) et tirs du joueur (bleus)
+  c.fillStyle='#e8334a'; [[60,250],[110,300],[170,270],[300,330],[210,360],[90,410]].forEach(p=>{ c.save(); c.translate(p[0],p[1]); c.rotate(0.4); c.fillRect(-1.5,-9,3,18); c.restore(); });
+  c.fillStyle='#38c6ff'; [[170,540],[180,500],[190,470]].forEach(p=>c.fillRect(p[0],p[1],2,16));
+  // vaisseau (simple silhouette pixel)
+  c.fillStyle='#e8f0ff'; c.fillRect(176,566,8,16); c.fillRect(170,574,20,8); c.fillStyle='#e8334a'; c.fillRect(166,578,6,8); c.fillRect(188,578,6,8); c.fillStyle='#38c6ff'; c.fillRect(178,582,4,5);
+}
+/* ============ 1. ARCADE AUTHENTIQUE ============ */
+function blocks(c,x,y,n,w,h,gap,fill,colFn,empty){ for (let i=0;i<n;i++){ c.fillStyle = i<fill ? colFn(i,n) : empty; c.fillRect(x+i*(w+gap), y, w, h); } }
+function frame1(c,x,y,w,h,col){ c.fillStyle=col; c.fillRect(x+2,y,w-4,2); c.fillRect(x+2,y+h-2,w-4,2); c.fillRect(x,y+2,2,h-4); c.fillRect(x+w-2,y+2,2,h-4); }
+function style1(c,W,H){
+  space(c,W,H,'#000');
+  txt(c,'1UP',10,8,2,'#ff3b30'); txt(c,'00124771',10,26,2,'#ffffff');
+  txt(c,'HI-SCORE',130,8,2,'#ff3b30'); txt(c,'00500000',130,26,2,'#ffd800');
+  txt(c,'ALERTE',292,8,1,'#00e0e0'); txt(c,'10',298,20,3,'#ffd800');
+  txt(c,'HULL',10,56,2,'#ffffff'); blocks(c,68,54,20,10,12,2,15,(i,n)=> i<5?'#e60000':(i<10?'#ffd800':'#10d010'),'#2a2a2a'); frame1(c,64,50,252,20,'#ffffff');
+  txt(c,'SHLD',10,80,2,'#ffffff'); blocks(c,68,82,20,10,6,2,9,()=>'#00e0e0','#1c1c1c');
+  txt(c,'LV.35',10,102,2,'#ffd800'); blocks(c,68,104,20,10,7,2,13,()=>'#10d010','#1c1c1c');
+  txt(c,'OD',10,124,2,'#ff8800'); blocks(c,68,126,18,10,6,2,18,(i)=>i%2?'#ffd800':'#ff8800','#1c1c1c');
+  txt(c,'READY',296,124,1,'#ffd800'); txt(c,'[SPACE]',296,134,1,'#ffd800');
+  txt(c,'BOSS  HYDRE',10,152,2,'#ff3b30'); blocks(c,10,172,34,9,10,1,23,()=>'#e60000','#2a0000');
+  // rang de style
+  frame1(c,236,196,114,64,'#ff3b30'); c.fillStyle='#000'; c.fillRect(238,198,110,60);
+  txt(c,'S',246,208,6,'#ff3b30',{shadow:1,sc:'#7a0000'}); txt(c,'SAVAGE',284,206,1,'#ffffff'); txt(c,'X95',284,218,2,'#ffd800'); txt(c,'XP X4',284,238,1,'#00e0e0');
+  c.fillStyle='#ff3b30'; c.fillRect(246,250,96,4);
+  txt(c,'CHAIN X87!',8,214,3,'#ffd800',{outline:'#000',shadow:1,sc:'#a00000'});
+  txt(c,'CHOISIS UN MODULE',58,330,2,'#ffffff');
+  const cards = [['bolt','CADENCE+','TIRE 15% PLUS','VITE'],['star','DEGATS+','+20% DEGATS','PAR TIR'],['shield','BOUCLIER','+30 PV DE','BOUCLIER']];
+  cards.forEach((cd,i)=>{ const x = 10 + i*116, y = 356; frame1(c,x,y,108,128,'#ffffff'); frame1(c,x+4,y+4,100,120,'#555'); icon(c,cd[0],x+34,y+16,5,i===0?'#ffd800':(i===1?'#ff3b30':'#00e0e0'));
+    txt(c,cd[1],x+Math.floor((108-tw(cd[1],1))/2),y+66,1,'#ffffff'); txt(c,cd[2],x+Math.floor((108-tw(cd[2],1))/2),y+84,1,'#aaaaaa'); txt(c,cd[3],x+Math.floor((108-tw(cd[3],1))/2),y+96,1,'#aaaaaa'); });
+  frame1(c,100,494,160,22,'#ffd800'); txt(c,'RELANCER (2)',112,501,1,'#ffd800');
+  txt(c,'T+07:50',142,604,1,'#777');
+}
+/* ============ 2. COCKPIT AMBRE ============ */
+function chamfer(c,x,y,w,h,k,stroke,fill,lw){ c.beginPath(); c.moveTo(x+k,y); c.lineTo(x+w-k,y); c.lineTo(x+w,y+k); c.lineTo(x+w,y+h-k); c.lineTo(x+w-k,y+h); c.lineTo(x+k,y+h); c.lineTo(x,y+h-k); c.lineTo(x,y+k); c.closePath(); if (fill){ c.fillStyle=fill; c.fill(); } c.lineWidth=lw||1.5; c.strokeStyle=stroke; c.stroke(); }
+function tbar(c,x,y,w,h,pct,col,dim){ c.strokeStyle=col; c.lineWidth=1; c.strokeRect(x+.5,y+.5,w,h); c.fillStyle=col; const fw=Math.floor((w-4)*pct); for (let i=0;i<fw;i+=3) c.fillRect(x+2+i,y+2,2,h-3); c.fillStyle=dim; for (let i=0;i<=10;i++) c.fillRect(x+Math.floor(i*w/10),y+h+2,1,3); }
+function style2(c,W,H){
+  const A='#ffb000', D='#8a6000', R='#ff4d2e';
+  space(c,W,H,'#0a0700');
+  c.fillStyle='rgba(255,176,0,0.05)'; for (let x=0;x<W;x+=24) c.fillRect(x,0,1,H); for (let y=0;y<H;y+=24) c.fillRect(0,y,W,1);
+  chamfer(c,6,6,348,100,8,A,'rgba(10,7,0,0.8)',1.5);
+  txt(c,'SYS NOMINAL',14,12,1,D); txt(c,'SCORE 00124771',210,12,1,A);
+  txt(c,'HULL',14,28,2,A); tbar(c,72,28,190,10,0.87,A,D); txt(c,'87%',276,28,2,A);
+  txt(c,'SHLD',14,50,2,A); tbar(c,72,50,190,8,0.34,A,D); txt(c,'34%',276,50,2,A);
+  txt(c,'XP',14,72,2,A); tbar(c,72,72,190,8,0.5,A,D); txt(c,'LV35',276,72,2,A);
+  txt(c,'T+07:50',14,92,1,D); txt(c,'ALERT 10',120,92,1,D); txt(c,'OD READY [SPACE]',200,92,1,A);
+  chamfer(c,6,116,348,30,6,R,'rgba(40,8,0,0.7)',1.5); txt(c,'!! TARGET: HYDRE',14,125,1,R); tbar(c,150,124,196,9,0.62,R,'#7a2a10');
+  chamfer(c,206,158,148,62,6,A,'rgba(10,7,0,0.85)',1.5); txt(c,'RANK S',214,166,2,A); txt(c,'SAVAGE',214,184,1,D); txt(c,'COMBO X95',214,196,1,A); txt(c,'1644 PTS',290,196,1,D); txt(c,'XP X4',214,204,2,A);
+  txt(c,'[ CHAIN X87 ]',34,262,3,A);
+  txt(c,'> SELECT MODULE',14,326,2,A);
+  const L = [['1','CADENCE+','TIRE 15% PLUS VITE','+15%'],['2','DEGATS+','+20% DEGATS PAR TIR','+20%'],['3','BOUCLIER','+30 PV DE BOUCLIER','+30']];
+  L.forEach((r,i)=>{ const y=352+i*50; chamfer(c,6,y,348,42,6,i===1?A:D,i===1?'rgba(255,176,0,0.14)':'rgba(10,7,0,0.78)',i===1?2:1);
+    txt(c,'['+r[0]+']',16,y+8,2,i===1?A:D); txt(c,r[1],62,y+8,2,A); txt(c,r[2],62,y+28,1,D); txt(c,r[3],292,y+14,2,A); });
+  txt(c,'REROLL: 2 LEFT',14,512,1,D);
+  c.fillStyle='rgba(0,0,0,0.22)'; for (let y=0;y<H;y+=3) c.fillRect(0,y,W,1);
+}
+/* ============ 3. BD / ENCRE ============ */
+const BF = "italic 900 {S}px Impact, Haettenschweiler, 'Arial Black', 'Arial Narrow Bold', sans-serif";
+function inkText(c,str,x,y,size,fill,stroke,lw,align){ c.font=BF.replace('{S}',size); c.textAlign=align||'left'; c.textBaseline='top'; c.lineJoin='round'; c.lineWidth=lw||5; c.strokeStyle=stroke||'#000'; c.strokeText(str,x,y); c.fillStyle=fill; c.fillText(str,x,y); }
+function inkBox(c,x,y,w,h,fill,rot){ c.save(); c.translate(x+w/2,y+h/2); c.rotate(rot||0); c.fillStyle='#000'; c.fillRect(-w/2+5,-h/2+5,w,h); c.fillStyle=fill; c.fillRect(-w/2,-h/2,w,h); c.lineWidth=4; c.strokeStyle='#000'; c.strokeRect(-w/2,-h/2,w,h); c.restore(); }
+function burst(c,cx,cy,r1,r2,n,fill,rot){ c.save(); c.translate(cx,cy); c.rotate(rot||0); c.beginPath(); for (let i=0;i<n*2;i++){ const a=i*Math.PI/n, r=i%2?r1:r2; c.lineTo(Math.cos(a)*r,Math.sin(a)*r); } c.closePath(); c.fillStyle='#000'; c.save(); c.translate(4,4); c.fill(); c.restore(); c.fillStyle=fill; c.fill(); c.lineWidth=4; c.strokeStyle='#000'; c.stroke(); c.restore(); }
+function pill(c,x,y,w,h,pct,col,bg){ c.fillStyle='#000'; c.fillRect(x-3,y-3,w+6,h+6); c.fillStyle=bg; c.fillRect(x,y,w,h); c.fillStyle=col; c.fillRect(x,y,w*pct,h); c.fillStyle='rgba(255,255,255,.45)'; c.fillRect(x,y,w*pct,Math.max(2,h/4)); }
+function style3(c,W,H){
+  space(c,W,H,'#14102a');
+  c.fillStyle='rgba(255,255,255,0.05)'; for (let y=0;y<H;y+=8) for (let x=(y/8)%2*4;x<W;x+=8) c.fillRect(x,y,2,2);
+  inkBox(c,8,8,200,70,'#fff7d6',-0.015);
+  inkText(c,'VAISSEAU',16,12,13,'#e8334a','#000',3); pill(c,16,32,176,12,0.87,'#e8334a','#5a1a24'); pill(c,16,50,176,8,0.34,'#38a8ff','#14305a'); inkText(c,'LV.35',16,60,12,'#1a1a1a','#fff7d6',2);
+  inkBox(c,214,8,138,40,'#ffd23f',0.02); inkText(c,'SCORE',222,10,11,'#1a1a1a','#ffd23f',2); inkText(c,'124 771',222,24,20,'#e8334a','#000',4);
+  inkBox(c,214,56,138,24,'#7fe0a8',-0.02); inkText(c,'OVERDRIVE PRET!',224,62,12,'#1a1a1a','#7fe0a8',2);
+  inkBox(c,8,100,224,28,'#e8334a',0.01); inkText(c,'HYDRE',16,103,18,'#fff','#000',4); pill(c,92,110,132,10,0.62,'#ffd23f','#5a1a24');
+  burst(c,296,178,38,52,10,'#ffd23f',0.1); inkText(c,'S',296,150,50,'#e8334a','#000',6,'center'); inkText(c,'SAVAGE',296,196,12,'#1a1a1a','#ffd23f',2,'center'); inkText(c,'XP x4',296,208,13,'#fff','#000',3,'center');
+  burst(c,120,272,44,66,13,'#e8334a',-0.12); inkText(c,'BOOM!',120,236,38,'#ffd23f','#000',7,'center'); inkText(c,'CHAINE x87',120,278,18,'#fff','#000',4,'center');
+  inkText(c,'CHOISIS UN MODULE',180,322,18,'#fff','#000',4,'center');
+  const cd = [['CADENCE+','Tire 15% plus vite','#38a8ff','bolt',-0.03],['DEGATS+','+20% de dégâts','#e8334a','star',0.02],['BOUCLIER','+30 PV bouclier','#7fe0a8','shield',-0.015]];
+  cd.forEach((r,i)=>{ const x=10+i*116, y=352; inkBox(c,x,y,108,132,'#fff7d6',r[4]); c.save(); c.translate(x+54,y+66); c.rotate(r[4]); c.fillStyle=r[2]; c.fillRect(-50,-62,100,36); c.strokeStyle='#000'; c.lineWidth=3; c.strokeRect(-50,-62,100,36);
+    icon(c,r[3],-16,-60,4,'#fff','#000'); inkText(c,r[0],0,-14,15,'#1a1a1a','#fff7d6',2,'center'); inkText(c,r[1],0,12,10,'#333','#fff7d6',2,'center'); c.restore(); });
+  inkText(c,'RELANCER x2',180,502,16,'#ffd23f','#000',4,'center');
+}
+/* ============ 4. CARTOON PIERRE / METAL ============ */
+function stone(c,x,y,w,h,base,hi,lo){ c.fillStyle=lo; c.fillRect(x,y,w,h); c.fillStyle=base; c.fillRect(x+3,y+3,w-6,h-6); c.fillStyle=hi; c.fillRect(x+3,y+3,w-6,3); c.fillRect(x+3,y+3,3,h-6); c.fillStyle='#2a2d36'; c.fillRect(x+3,y+h-6,w-6,3); c.fillRect(x+w-6,y+3,3,h-6);
+  [[x+6,y+6],[x+w-10,y+6],[x+6,y+h-10],[x+w-10,y+h-10]].forEach(p=>{ c.fillStyle='#b9bcc8'; c.fillRect(p[0],p[1],4,4); c.fillStyle='#4a4d58'; c.fillRect(p[0]+2,p[1]+2,2,2); }); }
+function thick(c,x,y,w,h,pct,c1,c2){ c.fillStyle='#14161c'; c.fillRect(x-3,y-3,w+6,h+6); c.fillStyle='#262a33'; c.fillRect(x,y,w,h); const fw=Math.max(0,Math.floor(w*pct)); c.fillStyle=c1; c.fillRect(x,y,fw,h); c.fillStyle=c2; c.fillRect(x,y,fw,Math.floor(h/2)); }
+function ptxt(c,str,x,y,size,fill,align){ c.font='bold '+size+"px 'Trebuchet MS', Verdana, sans-serif"; c.textAlign=align||'left'; c.textBaseline='top'; c.lineJoin='round'; c.lineWidth=Math.max(3,size/4); c.strokeStyle='#1c1208'; c.strokeText(str,x,y); c.fillStyle=fill; c.fillText(str,x,y); }
+function style4(c,W,H){
+  space(c,W,H,'#0c1420');
+  stone(c,6,6,210,76,'#737889','#9aa0b4','#3a3d48'); icon(c,'heart',16,16,2,'#e8334a','#1c1208'); thick(c,38,18,168,12,0.87,'#e8334a','#ff7a7a'); icon(c,'shield',16,38,2,'#4aa8ff','#1c1208'); thick(c,38,41,168,8,0.34,'#4aa8ff','#8fd0ff'); ptxt(c,'Niv. 35',16,58,12,'#ffe9a8'); thick(c,76,62,130,8,0.5,'#6fdc6f','#b8f5b8');
+  stone(c,222,6,132,40,'#7a6a48','#a89468','#3f351f'); ptxt(c,'SCORE',230,10,10,'#ffe9a8'); ptxt(c,'124 771',230,22,17,'#fff');
+  stone(c,222,52,132,30,'#7a6a48','#a89468','#3f351f'); icon(c,'bolt',230,58,2,'#ffd23f','#1c1208'); ptxt(c,'Overdrive prêt !',250,62,10,'#fff');
+  stone(c,6,96,230,34,'#6a3a3a','#9a5a5a','#341b1b'); icon(c,'skull',14,104,2,'#f0e6d0','#1c1208'); ptxt(c,'Hydre',36,102,15,'#fff'); thick(c,100,108,128,12,0.62,'#e8334a','#ff8a8a');
+  // médaillon de rang
+  c.fillStyle='#1c1208'; c.beginPath(); c.arc(296,170,40,0,7); c.fill(); c.fillStyle='#d9a826'; c.beginPath(); c.arc(296,170,36,0,7); c.fill(); c.fillStyle='#3a2a10'; c.beginPath(); c.arc(296,170,29,0,7); c.fill();
+  ptxt(c,'S',296,146,40,'#ffd23f','center'); c.fillStyle='#1c1208'; c.fillRect(246,206,100,22); c.fillStyle='#b8322a'; c.fillRect(249,208,94,18); ptxt(c,'XP x4',296,209,13,'#fff','center');
+  ptxt(c,'Sauvage · x95',296,126,10,'#ffe9a8','center');
+  ptxt(c,'CHAÎNE x87 !',120,250,34,'#ffd23f','center');
+  ptxt(c,'Choisis un module',180,318,20,'#ffe9a8','center');
+  const cd = [['bolt','Cadence+','Tire +15% vite','#ffd23f'],['star','Dégâts+','+20% dégâts','#e8334a'],['shield','Bouclier','+30 PV bouclier','#4aa8ff']];
+  cd.forEach((r,i)=>{ const x=10+i*116, y=348; c.fillStyle='#3a2410'; c.fillRect(x,y,108,136); c.fillStyle='#d8c49a'; c.fillRect(x+4,y+4,100,128); c.fillStyle='#c4ad7c'; c.fillRect(x+4,y+4,100,4); c.fillStyle='#8a6a2a'; c.fillRect(x+4,y+120,100,12);
+    c.fillStyle='#1c1208'; c.fillRect(x+34,y+14,40,40); c.fillStyle='#2e2616'; c.fillRect(x+37,y+17,34,34); icon(c,r[0],x+39,y+19,3,r[3],'#1c1208');
+    c.font="bold 14px 'Trebuchet MS', Verdana, sans-serif"; c.textAlign='center'; c.textBaseline='top'; c.fillStyle='#3a2410'; c.fillText(r[1],x+54,y+66); c.font="11px 'Trebuchet MS', Verdana, sans-serif"; c.fillStyle='#4a3418'; c.fillText(r[2],x+54,y+88); });
+  stone(c,100,496,160,28,'#737889','#9aa0b4','#3a3d48'); ptxt(c,'Relancer (2)',180,502,14,'#fff','center');
+}
+/* ---------- assemblage ---------- */
+const STYLES = [
+ { fn:style1, name:'1. Arcade authentique', tag:'Ma recommandation — Raiden, Truxton, Neo-Geo',
+   pts:'<b>Ce qui change :</b> score à 8 chiffres, 1UP / HI-SCORE, jauges en blocs, cadres pixel sans lueur, palette réduite (blanc, jaune, rouge, cyan). <b>Plus :</b> lisible, proche des vrais shoot\'em up, peu coûteux à faire.' },
+ { fn:style2, name:'2. Cockpit ambre', tag:'Écran de phosphore, une seule teinte',
+   pts:'<b>Ce qui change :</b> tout en ambre, textes de terminal (HULL 087%, TARGET // HYDRE), cadres à coins coupés, fines barres graduées, scanlines. <b>Plus :</b> très reconnaissable, très peu « IA ».' },
+ { fn:style3, name:'3. BD / encre', tag:'Contours épais, couleurs plates, onomatopées',
+   pts:'<b>Ce qui change :</b> panneaux inclinés à ombre portée, rang dans une bulle d\'explosion, « BOOM ! » à chaque chaîne, cartes comme des cases de comics. <b>Plus :</b> la plus originale. <b>Moins :</b> la plus grosse refonte.' },
+ { fn:style4, name:'4. Cartoon pierre / métal', tag:'Façon Vampire Survivors / Brotato',
+   pts:'<b>Ce qui change :</b> panneaux en pierre rivetée, barres épaisses, médaillon de rang doré, cartes en parchemin, icônes pixel claires. <b>Plus :</b> chaleureux et très lisible, moins froid que le néon.' }
+];
+const grid = document.getElementById('grid');
+STYLES.forEach(s=>{
+  const wrap = document.createElement('div'); wrap.className='card';
+  wrap.innerHTML = '<h2>'+s.name+'</h2><div class="tag">'+s.tag+'</div>';
+  const cv = document.createElement('canvas'); const DPR = 2; cv.width = 360*DPR; cv.height = 620*DPR; wrap.appendChild(cv);
+  const c = cv.getContext('2d'); c.scale(DPR,DPR); c.imageSmoothingEnabled = false; s.fn(c,360,620);
+  const p = document.createElement('div'); p.className='pts'; p.innerHTML = s.pts; wrap.appendChild(p);
+  grid.appendChild(wrap);
+});
+</script>
+</body>
+</html>
