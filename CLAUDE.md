@@ -4,6 +4,11 @@ Jeu de tir spatial type Raiden / Archero / Vampire Survivors (endless + boss), P
 **Le code est découpé en modules** (`src/`, scripts classiques, pas de bundler) — voir `README.md` pour l'organisation, le lancement, l'ajout de fichiers/assets et le travail Git à deux. Lire aussi `PASSATION.md` (état complet) et `docs/space-shooter-x-gameplay.md` (boucle de gameplay détaillée).
 L'ancien monolithe (un seul `index.html` de 16 Mo) est conservé dans `backups/index_monolithe_avant_split.html` (non versionné).
 
+## Structure du jeu (depuis l'accueil à mondes)
+Plus de partie infinie comme mode principal : **accueil (HomeScene) → carte des mondes → niveau (GameScene avec `lvDef`) → écran de résultat**. Détails, fichiers et tests : `docs/menu-accueil.md`.
+En niveau, `alertLevel` = menace fixée par le niveau (`threat`), plus par l'arbre ; la partie infinie reste accessible en `?dev` (bouton DEV). Mondes/niveaux : `src/data/worlds/*.js` (brouillons). Le revenu de combat en niveau est réduit par `LEVEL_FRAG_MUL` (`data/balance.js`).
+Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous.
+
 ## Au début de chaque session / message
 **Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
 

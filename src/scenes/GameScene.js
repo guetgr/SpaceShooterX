@@ -5,6 +5,8 @@ class GameScene extends Phaser.Scene{
   constructor(){ super('game'); }
   create(data){
     this.sandbox = !!(data && data.sandbox);
+    this.input.enabled = true;
+    this.lvDef = (data && data.levelId && levelById(data.levelId)) || null;      // niveau d'un monde (sinon: partie infinie historique)
     this.cameras.main.setBackgroundColor(0x05040c);
     this.running = false;
     this.hasActiveRun = false;
@@ -19,7 +21,7 @@ class GameScene extends Phaser.Scene{
 
     // apply permanent meta-progression bonuses earned across runs
     this.meta = getMeta();
-    this.alertLevel = effectiveAlert(this.meta);
+    this.alertLevel = this.lvDef ? this.lvDef.threat : effectiveAlert(this.meta);      // en niveau, la menace est fixée par le niveau et non plus par l'arbre
     this.weaponTier = weaponTierFor(this.alertLevel);
     this.bestiary = getBestiary();
     this.achv = getAchv();
@@ -112,6 +114,7 @@ class GameScene extends Phaser.Scene{
     this.player = this.physics.add.sprite(GAME_W/2, GAME_H-90, 'playerBase');
     this.player.setDepth(10);
     this.player.setScale(PLAYER_SHIP_SCALE);
+    this.skinTint = shipSkinTint(getShipSkin()); this.applyShipSkin();      // apparence choisie au hangar
     this.player.body.setSize(150, 170);
     this.playerTarget = { x: this.player.x, y: this.player.y };
     this.dragging = false;
@@ -195,6 +198,7 @@ class GameScene extends Phaser.Scene{
     } catch(e){ /* ignore */ }
     this.bossActive = false;
     this.difficultyTier = 0;
+    this.levelInit();
 
     this.physics.world.pause();
 
@@ -204,7 +208,6 @@ class GameScene extends Phaser.Scene{
     document.getElementById('levelup').classList.add('hidden');
     document.getElementById('pauseMenu').classList.add('hidden');
     document.getElementById('settingsMenu').classList.add('hidden');
-    document.getElementById('skills').classList.add('hidden');
     document.querySelectorAll('#boss-hp-wrap, #boss-hp-wrap2, #boss-hp-wrap3').forEach(x=>x.classList.remove('show'));
     document.getElementById('boss-banner').classList.remove('show');
 
@@ -212,7 +215,10 @@ class GameScene extends Phaser.Scene{
     this.updateHud(true);
 
     if (data && data.autoStart){
+      if (this.scene.isActive('home') || this.scene.isSleeping('home')) this.scene.sleep('home');       // l'accueil s'endort pendant un niveau
+      this.scene.setVisible(true);
+      document.body.classList.remove('at-home');
       this.startRun();
-    }
+    } else this.showStartScreen();                                                                    // sinon : accueil
   }
 }

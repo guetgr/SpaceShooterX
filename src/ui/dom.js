@@ -13,6 +13,13 @@ mixin(GameScene, {
     this.input.keyboard.on('keydown-SPACE', ()=> this.activateOverdrive());
     { const sb = document.getElementById('btnSandbox');
       if (sb){ if (DEV_SEE_ALL) sb.classList.remove('hidden'); sb.onclick = ()=>{ sfx.resume(); sfx.uiStart(); this.scene.restart({ autoStart:true, sandbox:true }); }; } }
+    { const row = document.getElementById('devLevelRow');           // DEV provisoire : lancer n'importe quel niveau (remplacé par la carte des mondes)
+      if (row && DEV_SEE_ALL){
+        row.classList.remove('hidden');
+        const sel = document.getElementById('devLevel'); sel.innerHTML = '';
+        WORLDS.forEach(w=> w.levels.forEach(l=>{ const o = document.createElement('option'); o.value = l.id; o.textContent = l.id + ' · ' + l.name + ' (menace ' + l.threat + ')'; sel.appendChild(o); }));
+        document.getElementById('btnDevLevel').onclick = ()=>{ sfx.resume(); sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: sel.value }); };
+      } }
     document.getElementById('btnStart').onclick = ()=>{
       sfx.resume(); sfx.uiStart();
       this.scene.restart({ autoStart:true });
@@ -21,7 +28,7 @@ mixin(GameScene, {
       sfx.resume(); sfx.uiStart();
       this.resumeRun();
     };
-    document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true }); };
+    document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: this.lvDef ? this.lvDef.id : undefined }); };
     document.getElementById('hiScoreStart').textContent = getHighScore();
     document.getElementById('fragStart').textContent = this.meta.fragments;
 
@@ -218,24 +225,6 @@ mixin(GameScene, {
       if (CloudSave.importCode(box.value)){ okb.textContent = 'OK, REDEMARRAGE...'; setTimeout(()=> location.reload(), 400); }
       else { okb.textContent = 'CODE INVALIDE'; this._importConfirm = false; setTimeout(()=>{ okb.textContent = "VALIDER L'IMPORT"; }, 1800); }
     };
-    document.getElementById('btnAscend').onclick = ()=>{
-      const btn = document.getElementById('btnAscend');
-      if (treeTotalPoints(this.treeState) < ASCEND_MIN) return;
-      if (!this._ascConfirm){
-        this._ascConfirm = true; btn.textContent = 'RE-TAPE: ARBRE REMIS A ZERO';
-        setTimeout(()=>{ this._ascConfirm = false; this.renderTree(); }, 3500);
-        return;
-      }
-      this._ascConfirm = false;
-      this.meta.asc = (this.meta.asc||0) + 1;       // l'arbre repart de zéro, les fragments sont conservés
-      this.meta.tree = {}; this.treeState = this.meta.tree;
-      setMeta(this.meta);
-      sfx.relicOpen();
-      this.cameras.main.flash(300, 255, 215, 100, false);
-      this.achvToast('ASCENSION ' + this.meta.asc + ' !', '+10% dégâts, PV, XP et fragments · alerte +1 pour toujours');
-      this.renderTree();
-      document.getElementById('fragSkills').textContent = '◆ ' + this.meta.fragments;
-    };
     document.getElementById('btnResetProgress').onclick = ()=>{
       const btn = document.getElementById('btnResetProgress');
       if (!this.resetArmed){
@@ -260,36 +249,22 @@ mixin(GameScene, {
       this.codex = { relics:{}, cards:{}, fusions:{}, skills:{}, usedSkills:{} }; setCodex(this.codex);
       this.bestiary = { kills:{} }; this.bestiaryDirty = false;
       setBestiary(this.bestiary);
-      try { localStorage.removeItem('ssx_bossbag_v1'); } catch(e){ /* ignore */ }
+      try { localStorage.removeItem('ssx_bossbag_v1'); localStorage.removeItem(WORLDS_KEY); } catch(e){ /* ignore */ }
       sfx.uiClick();
       btn.textContent = 'RÉINITIALISER LA PROGRESSION';
       document.getElementById('fragStart').textContent = this.meta.fragments;
     };
-    document.getElementById('btnQuit').onclick = ()=>{
+    document.getElementById('btnQuit').onclick = ()=>{            // abandonner le niveau : écran de résultat (les fragments gagnés sont gardés)
       sfx.uiBack();
-      this.hasActiveRun = true;
-      this.goToMenu();
+      document.getElementById('pauseMenu').classList.add('hidden');
+      this.endRun(false, true);
     };
 
-    document.getElementById('btnSkills').onclick = ()=>{
-      sfx.uiOpen();
+    document.getElementById('btnSkills').onclick = ()=>{            // (ancien menu DEV) : l'arbre est la page de droite de l'accueil
       document.getElementById('start').classList.add('hidden');
-      this.renderTree();
-      document.getElementById('skills').classList.remove('hidden');
-      this.fitTreeView();
+      const h = this.scene.get('home'); if (h && h.homeOn) h.goHomePage(1);
     };
-    document.getElementById('btnSkillsBack').onclick = ()=>{
-      sfx.uiBack();
-      document.getElementById('skills').classList.add('hidden');
-      this.showStartScreen();
-    };
-    document.getElementById('btnGoSkills').onclick = ()=>{
-      sfx.uiOpen();
-      document.getElementById('gameover').classList.add('hidden');
-      document.getElementById('fragStart').textContent = this.meta.fragments;
-      this.renderTree();
-      document.getElementById('skills').classList.remove('hidden');
-    };
+    document.getElementById('btnNext').onclick = ()=>{ if (this.lvResult && this.lvResult.next){ sfx.uiStart(); this.scene.restart({ autoStart:true, levelId:this.lvResult.next }); } };
     document.getElementById('btnGoMenu').onclick = ()=>{
       sfx.uiBack();
       document.getElementById('gameover').classList.add('hidden');
@@ -310,19 +285,26 @@ mixin(GameScene, {
     };
     this.buildTreeChips();
     this._treeApplyTransform = applyT;
-    let dragging=false, lastX=0, lastY=0;
+    const pts = new Map(); let pinch0 = 0, scale0 = 1;                  // pointeurs actifs : 1 doigt = déplacer, 2 doigts = zoomer
     stage.onpointerdown = (e)=>{
-      // don't hijack the tap with a pan-drag if it started on a node — let its own click fire
-      if (e.target.closest && e.target.closest('.tree-node')) return;
-      dragging=true; lastX=e.clientX; lastY=e.clientY; stage.setPointerCapture(e.pointerId);
+      // ne pas voler le toucher au nœud visé (son propre clic doit partir)
+      if (pts.size === 0 && e.target.closest && e.target.closest('.tree-node')) return;
+      pts.set(e.pointerId, { x:e.clientX, y:e.clientY }); stage.setPointerCapture(e.pointerId);
+      if (pts.size === 2){ const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); scale0 = this.treeScale; }
     };
     stage.onpointermove = (e)=>{
-      if (!dragging) return;
-      this.treeTx += (e.clientX-lastX); this.treeTy += (e.clientY-lastY);
-      lastX = e.clientX; lastY = e.clientY;
+      const p = pts.get(e.pointerId); if (!p) return;
+      if (pts.size === 2){
+        p.x = e.clientX; p.y = e.clientY;
+        const [a, b] = [...pts.values()], dist = Math.hypot(a.x - b.x, a.y - b.y);
+        if (pinch0 > 0) this.treeScale = Math.min(3.2, Math.max(0.32, scale0*dist/pinch0));
+        applyT(); return;
+      }
+      this.treeTx += (e.clientX - p.x); this.treeTy += (e.clientY - p.y);
+      p.x = e.clientX; p.y = e.clientY;
       applyT();
     };
-    const endDrag = ()=>{ dragging=false; };
+    const endDrag = (e)=>{ pts.delete(e.pointerId); if (pts.size < 2) pinch0 = 0; };
     stage.onpointerup = endDrag;
     stage.onpointercancel = endDrag;
     stage.onpointerleave = endDrag;
@@ -348,12 +330,15 @@ mixin(GameScene, {
     document.getElementById('btnMusicToggle').textContent = music.muted ? 'MUSIQUE : COUPÉE' : 'MUSIQUE : ACTIVÉE';
   },
 
+  // retour à l'accueil (scène 'home') : l'ancien menu #start n'est plus affiché que par le bouton DEV
   showStartScreen(){
-    document.getElementById('btnContinue').classList.toggle('hidden', !this.hasActiveRun);
-    const ar = document.getElementById('ascRow'), asc = this.meta.asc || 0;
-    if (ar){ ar.classList.toggle('hidden', !(asc > 0)); ar.textContent = 'ASCENSION ' + asc + ' · +' + 10*asc + '% dégâts, PV, XP, fragments'; }
-    document.getElementById('start').classList.remove('hidden');
+    document.getElementById('start').classList.add('hidden');
     music.setScene({ mode:'menu' }); music.setMood(1, 0); music.start();                    // musique du menu
+    this.scene.setVisible(false); this.input.enabled = false;                               // le jeu ne dessine plus rien derrière l'accueil
+    const home = this.scene.get('home');
+    if (this.scene.isSleeping('home')) this.scene.wake('home');
+    else if (!this.scene.isActive('home')) this.scene.launch('home');
+    else if (home.homeOn) home.refreshHome();                                               // retour d'un panneau (arbre, réglages)
   },
 
   goToMenu(){
@@ -362,7 +347,6 @@ mixin(GameScene, {
     document.getElementById('settingsMenu').classList.add('hidden');
     document.getElementById('gameover').classList.add('hidden');
     document.getElementById('levelup').classList.add('hidden');
-    document.getElementById('skills').classList.add('hidden');
     document.querySelectorAll('#boss-hp-wrap, #boss-hp-wrap2, #boss-hp-wrap3').forEach(x=>x.classList.remove('show'));
     document.getElementById('boss-banner').classList.remove('show');
     this.showStartScreen();

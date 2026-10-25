@@ -1,0 +1,123 @@
+// Simulateur d'équilibrage : joueur automatique + avance rapide, injecté dans la page par tools/sim_balance.py
+// (chargé APRÈS le jeu ; pas du code du jeu). Expose window.__sim.
+//   __sim.prepare()                               figer le hasard / l'horloge, couper l'affichage et le son
+//   __sim.runLevel(levelId, seed, opts)           joue un niveau entier, renvoie le résultat
+//   __sim.buy(policy)                             dépense les fragments dans l'arbre (comme un joueur raisonnable)
+(function(){
+  "use strict";
+  const DT = 1000/60;
+  let clock = 0, seedState = 1;
+  const rng = ()=>{ seedState |= 0; seedState = seedState + 0x6D2B79F5 | 0; let t = Math.imul(seedState ^ seedState >>> 15, 1 | seedState); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const SC = ()=> window.__ssxScene;
+
+  // ---------- choix des cartes de montée de niveau
+  const CAT = { weapon:3, fusion:4, defense:2, engine:1, utility:1 };
+  function pickCard(sc){
+    const cards = [...document.querySelectorAll('#cardsWrap .card')];
+    if (!cards.length) return false;
+    const low = sc.hp < sc.stats.maxHp*0.5;
+    let best = null, bs = -1e9;
+    cards.forEach(c=>{
+      const name = c.querySelector('.card-name').textContent, u = UPGRADE_POOL.find(x=> x.name === name);
+      let s = u ? (u.id.indexOf('fus_') === 0 ? CAT.fusion : (CAT[u.category] || 1)) : 1;
+      if (u && low && (u.id === 'life' || u.id === 'shield' || u.category === 'defense')) s += 3;
+      s += rng()*0.8;
+      if (s > bs){ bs = s; best = c; }
+    });
+    best.click(); return true;
+  }
+
+  // ---------- déplacement : on évalue une grille de positions proches et on prend la moins dangereuse (et la plus utile)
+  function bot(sc, cfg){
+    const px = sc.player.x, py = sc.player.y, vx = sc.visibleXRange(22), vy = sc.visibleYRange(0), z = sc.cameras.main.zoom;
+    const yMin = vy.min + 120/z, yMax = vy.max - 30/z, yPref = vy.max - 85/z;
+    const bl = [], en = [], gems = [];
+    sc.enemyBullets.children.iterate(b=>{ if (b && b.active && b.body) bl.push([b.x, b.y, b.body.velocity.x, b.body.velocity.y]); });
+    let nEnemies = 0, aimX = null, aimD = 1e9;
+    sc.enemies.children.iterate(e=>{
+      if (!e || !e.active || !e.body) return;
+      nEnemies++;
+      const r = Math.max(8, Math.min(e.displayWidth, e.displayHeight)*0.38);
+      en.push([e.x, e.y, e.body.velocity.x, e.body.velocity.y, r]);
+      if (e.y < py - 20){ const d = Math.abs(e.x - px) + (py - e.y)*0.35; if (d < aimD){ aimD = d; aimX = e.x; } }
+    });
+    sc.gems.children.iterate(g=>{ if (g && g.active) gems.push([g.x, g.y]); });
+    // danger immédiat → esquive
+    if (sc.dodgeCharges > 0 && bl.some(b=> Math.hypot(b[0] + b[2]*0.1 - px, b[1] + b[3]*0.1 - py) < 20)) sc.tryDodge();
+    if (sc.odReady && sc.odActive <= 0 && (nEnemies >= 6 || sc.bossActive)) sc.activateOverdrive();
+    const sens = cfg.sens, TS = [0.1, 0.28, 0.5];
+    let best = null, bs = -1e9;
+    for (let dx = -170; dx <= 170; dx += 34) for (let dy = -90; dy <= 90; dy += 45){
+      const cx = Math.min(vx.max, Math.max(vx.min, px + dx)), cy = Math.min(yMax, Math.max(yMin, py + dy));
+      let danger = 0;
+      for (let i = 0; i < bl.length; i++){
+        const b = bl[i];
+        for (let k = 0; k < 3; k++){ const t = TS[k], ex = b[0] + b[2]*t - cx, ey = b[1] + b[3]*t - cy; danger += Math.exp(-(ex*ex + ey*ey)/(2*24*24)) * (1.1 - 0.25*k); }
+      }
+      for (let i = 0; i < en.length; i++){
+        const e = en[i], ex = e[0] + e[2]*0.3 - cx, ey = e[1] + e[3]*0.3 - cy, rr = e[4] + 20;
+        danger += 2.2*Math.exp(-(ex*ex + ey*ey)/(rr*rr));
+      }
+      let s = -danger*6*sens;
+      if (aimX !== null) s += 1.4*Math.exp(-((aimX - cx)*(aimX - cx))/(2*55*55));                    // se placer sous une cible
+      let gmax = 0; for (let i = 0; i < gems.length; i++){ const g = gems[i], d2 = (g[0] - cx)**2 + (g[1] - cy)**2; if (d2 < 220*220) gmax = Math.max(gmax, Math.exp(-d2/(2*70*70))); }
+      s += 1.1*gmax - 0.006*Math.abs(cy - yPref) - 0.0015*Math.hypot(cx - px, cy - py) - 0.0008*Math.abs(cx - 200) + rng()*cfg.noise;
+      if (s > bs){ bs = s; best = [cx, cy]; }
+    }
+    sc.setTarget(best[0], best[1]);
+  }
+
+  window.__sim = {
+    prepare(){
+      const sc = SC(), g = sc.game;
+      g.loop.stop();                                              // plus de boucle temps réel : c'est nous qui avançons le jeu
+      g.scene.render = function(){};                              // aucun dessin
+      performance.now = ()=> clock;                               // ralenti, délais… suivent le temps simulé
+      sfx.muted = true; try { music.muted = true; music.stop && music.stop(); } catch(e){ /* ignore */ }
+      Math.random = rng;
+    },
+
+    // joue un niveau jusqu'à la victoire, la défaite ou la limite de temps (temps simulé)
+    runLevel(levelId, seed, opts){
+      opts = Object.assign({ sens:1, noise:0.12, react:6, cap:null }, opts || {});
+      seedState = seed >>> 0 || 1;
+      const sc0 = SC(), g = sc0.game, L = levelById(levelId);
+      const cap = opts.cap || (L.type === 'survive' ? L.goal.seconds*3 + 60 : 300);
+      const f0 = getMeta().fragments;
+      sc0.scene.restart({ autoStart:true, levelId });
+      let sc = null, tick = 0, t0 = clock, minHp = 1, cards = 0, introDone = false;
+      const step = ()=>{ clock += DT; g.step(clock, DT); tick++; };
+      for (let i = 0; i < 400 && !(SC() !== sc0 && SC().lvDef && SC().running); i++) step();       // la scène redémarre
+      sc = SC();
+      while (!sc.lvResult && (clock - t0)/1000 < cap){
+        if (sc.introActive && !introDone){ sc.introT = 99999; if (sc._introEarth) introDone = true; }
+        const levelupOpen = !document.getElementById('levelup').classList.contains('hidden');
+        if (levelupOpen){ if (pickCard(sc)) cards++; }
+        else if (sc.running && tick % opts.react === 0) bot(sc, opts);
+        if (sc.running) minHp = Math.min(minHp, sc.hp/sc.stats.maxHp);
+        step();
+      }
+      const res = sc.lvResult, simT = (clock - t0)/1000;
+      return {
+        win: !!(res && res.victory), timeout: !res, time: Math.round(simT*10)/10, kills: sc.runKills, level: sc.level, cards,
+        score: Math.floor(sc.score), minHp: Math.round(minHp*100)/100, progress: res ? res.progress : sc.levelProgress().frac,
+        frags: getMeta().fragments - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
+      };
+    },
+
+    // dépense les fragments : un joueur raisonnable prend d'abord ce qui rend plus solide / plus puissant, puis le moins cher
+    buy(policy){
+      const meta = getMeta(), st = meta.tree;
+      const PREF = policy === 'defense' ? ['defense', 'arme', 'missile'] : ['arme', 'defense', 'missile'];
+      let bought = 0;
+      for (;;){
+        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.fragments);
+        if (!avail.length) break;
+        avail.sort((a, b)=>{ const pa = PREF.indexOf(a.branch), pb = PREF.indexOf(b.branch); return ((pa < 0 ? 9 : pa) - (pb < 0 ? 9 : pb)) || (a.cost() - b.cost()); });
+        const n = avail[0]; meta.fragments -= n.cost(); st[n.nid] = n.k; bought++;
+      }
+      setMeta(meta);
+      return { bought, fragments: meta.fragments, points: treeTotalPoints(st) };
+    },
+  };
+})();

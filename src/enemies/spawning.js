@@ -6,26 +6,11 @@ mixin(GameScene, {
     // niveau d'alerte élevé = les types d'ennemis plus vicieux arrivent plus tôt
     const t = this.elapsed + (this.alertLevel-1)*12;
     // pool of available types grows over time — more variety the longer you survive
-    const pool = [{ type:'grunt', w:38 }];
-    if (t > 8)   pool.push({ type:'diver', w:16 });
-    if (t > 12)  pool.push({ type:'shooter', w:22 });
-    if (t > 20)  pool.push({ type:'turret', w:12 });
-    if (t > 28)  pool.push({ type:'drone', w:16 });
-    if (t > 35)  pool.push({ type:'splitter', w:14 });
-    if (t > 45)  pool.push({ type:'shieldedGrunt', w:12 });
-    if (t > 50)  pool.push({ type:'mine', w:10 });
-    if (t > 55)  pool.push({ type:'tank', w:12 });
-    if (t > 65)  pool.push({ type:'bomber', w:12 });
-    if (t > 75)  pool.push({ type:'sniper', w:10 });
-    if (t > 80)  pool.push({ type:'swarmer', w:18 });
-    if (t > 95)  pool.push({ type:'healer', w:9 });
-    if (t > 110) pool.push({ type:'ghost', w:12 });
-    if (t > 130) pool.push({ type:'elite', w:8 });
-    if (t > 140) pool.push({ type:'mothership', w:8 });
-    if (t > 150) pool.push({ type:'vortex', w:7 });
-    if (t > 100) pool.push({ type:'charo', w:11 });
-    if (t > 22)  pool.push({ type:'kamikaze', w:14 });
-    if (t > 30)  pool.push({ type:'spider', w:11 });
+    const pool = [];
+    if (this.lvDef && this.lvDef.spawns){            // niveau avec sa propre liste d'ennemis
+      this.lvDef.spawns.forEach(sp=>{ if (this.lvT >= sp.from) pool.push({ type:sp.type, w: sp.w || (SPAWN_TABLE.find(x=> x.type === sp.type) || { w:10 }).w }); });
+      if (!pool.length) pool.push({ type:'grunt', w:1 });
+    } else SPAWN_TABLE.forEach(sp=>{ if (t > sp.at) pool.push({ type:sp.type, w:sp.w }); });
 
     if (this._onlySpiders){ pool.length = 0; pool.push({ type:'spider', w:1 }); }      // événement forêt d'araignées
     const totalW = pool.reduce((a,p)=>a+p.w, 0);

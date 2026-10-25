@@ -54,7 +54,7 @@ with sync_playwright() as pw:
     p.route('**/fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))   # polices intégrées au jeu
     print('url:', url)
     p.goto(url)
-    p.wait_for_selector('#btnStart', timeout=60000)
+    p.wait_for_selector('#btnStart', state='attached', timeout=60000)      # l'ancien menu est masqué : l'accueil (#home) le remplace
     p.wait_for_timeout(1500)
     print('menu ok')
     p.evaluate("document.getElementById('btnStart').click()")

@@ -59,11 +59,12 @@ mixin(GameScene, {
     this.updateMusicMood(delta);
 
     this.elapsed += delta/1000;
-    if (!this.bossActive && this.alertLevel < ALERT_CAP){
+    if (!this.bossActive && !this.lvDef && this.alertLevel < ALERT_CAP){
       this.alertTimer += delta/1000;
       if (this.alertTimer >= ALERT_RISE_SECONDS) this.raiseAlert();
     }
     this.updateDifficulty();
+    this.levelUpdate(delta);
 
     // progressively dezoom from a close-in start to the full field, revealing
     // more room for enemies as the run goes on
@@ -206,7 +207,7 @@ mixin(GameScene, {
     }
 
     // spawn
-    if (!this.bossActive && !this.sandbox){
+    if (!this.bossActive && !this.sandbox && !this.lvEnding){
       this.spawnTimer -= delta;
       if (this.spawnTimer <= 0){
         this.spawnTimer = this.getSpawnInterval();

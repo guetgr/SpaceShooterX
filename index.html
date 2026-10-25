@@ -54,7 +54,65 @@
     </div>
     <div id="boss-banner">! ALERTE BOSS !</div>
 
-    <div id="start" class="overlay">
+    <div id="home" class="hidden">
+      <div id="homeTop">
+        <div class="home-frag" id="homeFrag">◆ 0</div>
+        <button class="home-ico" id="homeSettings" aria-label="Paramètres">⚙</button>
+      </div>
+      <div id="homeTrack">
+        <section class="home-page" id="pageHangar">
+          <div class="hp-title">HANGAR</div>
+          <div class="hangar-gap"></div>
+          <div class="hangar-tier" id="hangarTier"></div>
+          <div class="skin-row" id="skinRow"></div>
+          <div class="hangar-seg"><button id="segStats" class="on">STATS</button><button id="segMods">MODULES</button></div>
+          <div class="hangar-body" id="hangarBody"></div>
+        </section>
+        <section class="home-page" id="pageMap" data-mode="world">
+          <div class="map-world world-only">
+            <button class="map-arrow" id="btnGalaxy" aria-label="Carte stellaire">✦</button>
+            <div class="mw-mid"><div class="mw-n" id="mwNum"></div><div class="mw-name" id="mwName"></div><div class="mw-prog" id="mwProg"></div></div>
+            <span class="map-arrow ghost"></span>
+          </div>
+          <div class="map-gap world-only"></div>
+          <div class="level-card world-only" id="levelCard"></div>
+          <button class="btn world-only" id="btnLaunch">DECOLLER</button>
+          <div id="mapOrbit" class="world-only"></div>
+          <div class="gx-title galaxy-only">CARTE STELLAIRE</div>
+          <div class="gx-hint galaxy-only">Glisse pour explorer · touche un monde</div>
+          <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU MONDE</button>
+        </section>
+        <section class="home-page" id="pageTree">
+          <div class="tree-chips" id="treeChips"></div>
+          <div class="tree-stage" id="treeStage">
+            <svg id="treeSvg" viewBox="-620 -620 1240 1240">
+              <g id="treeViewport">
+                <g id="treeLinks"></g>
+                <g id="treeNodes"></g>
+              </g>
+            </svg>
+          </div>
+          <div class="tree-info" id="treeInfo">
+            <div class="tree-info-icon" id="treeInfoIcon"></div>
+            <div class="tree-info-body">
+              <div class="tree-info-name" id="treeInfoName">CŒUR DU VAISSEAU</div>
+              <div class="tree-info-desc" id="treeInfoDesc">Touche un nœud pour voir ses détails.</div>
+              <div class="tree-info-meta" id="treeInfoMeta"></div>
+            </div>
+            <button class="tree-invest-btn" id="treeInvestBtn" disabled>+</button>
+          </div>
+        </section>
+      </div>
+      <nav id="homeTabs">
+        <button class="home-tab" id="tabHangar">HANGAR</button>
+        <button class="home-tab" id="tabMap">CARTE</button>
+        <button class="home-tab" id="tabTree">ARBRE</button>
+      </nav>
+      <div id="homeToast"></div>
+      <button id="btnDevHome" class="hidden">DEV</button>
+    </div>
+
+    <div id="start" class="overlay hidden">
       <div class="title-logo">SPACE<br>SHOOTER <span>X</span></div>
       <div class="subtitle">-- survie spatiale --</div>
       <div class="hi-row">MEILLEUR SCORE : <span id="hiScoreStart">0</span></div>
@@ -63,6 +121,7 @@
       <button class="btn hidden" id="btnContinue">CONTINUER</button>
       <button class="btn" id="btnStart" style="margin-top:10px;min-width:230px;padding:16px 22px;">DEMARRER</button>
       <button class="btn secondary hidden" id="btnSandbox" style="border-color:#ff3a3a;color:#ffe14a;">DEMARRER DEV (TEST)</button>
+      <div id="devLevelRow" class="hidden" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-width:300px;"><select id="devLevel" style="flex:1;min-width:0;font-size:12px;background:#0e0c1e;color:#ffe14a;border:2px solid #ff3a3a;"></select><button class="btn secondary small" id="btnDevLevel" style="margin:0;border-color:#ff3a3a;color:#ffe14a;">NIVEAU</button><button class="btn secondary small" id="btnDevClose" style="margin:0;">FERMER</button></div>
       <button class="btn secondary" id="btnSkills">COMPETENCES</button>
       <button class="btn secondary" id="btnOptionsMain">PARAMETRES</button>
       <button class="btn secondary" id="btnInfo">INFO</button>
@@ -170,34 +229,6 @@
       <button class="btn secondary" id="btnSettingsBack">RETOUR</button>
     </div>
 
-    <div id="skills" class="overlay tree-overlay hidden">
-      <div class="tree-header">
-        <div class="frag-row" id="fragSkills">◆ 0</div>
-        <button class="btn secondary small" id="btnAscend">ASCENSION</button>
-        <button class="btn secondary small" id="btnSkillsBack">RETOUR</button>
-      </div>
-      <div class="alert-row" id="alertRowSkills"></div>
-      <div class="tree-chips" id="treeChips"></div>
-      <div class="tree-stage" id="treeStage">
-        <svg id="treeSvg" viewBox="-620 -620 1240 1240">
-          <g id="treeViewport">
-            <g id="treeRings" style="pointer-events:none"></g>
-            <g id="treeLinks"></g>
-            <g id="treeNodes"></g>
-          </g>
-        </svg>
-      </div>
-      <div class="tree-info" id="treeInfo">
-        <div class="tree-info-icon" id="treeInfoIcon"></div>
-        <div class="tree-info-body">
-          <div class="tree-info-name" id="treeInfoName">CŒUR DU VAISSEAU</div>
-          <div class="tree-info-desc" id="treeInfoDesc">Touche un nœud pour voir ses détails.</div>
-          <div class="tree-info-meta" id="treeInfoMeta"></div>
-        </div>
-        <button class="tree-invest-btn" id="treeInvestBtn" disabled>+</button>
-      </div>
-    </div>
-
     <div id="levelup" class="overlay hidden">
       <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;">⏸</button>
       <div class="lu-title">AMELIORATION — CHOISIS UN MODULE</div>
@@ -211,13 +242,15 @@
     <div id="redVig"></div>
     <div id="gameover" class="overlay hidden">
       <div class="go-title">VAISSEAU DETRUIT</div>
-      <div class="go-stats">Score : <b id="finalScore">0</b><br>Niveau atteint : <b id="finalLvl">1</b><br>Temps de survie : <b id="finalTime">0:00</b></div>
+      <div class="go-level" id="goLevel"></div>
+      <div class="go-prog hidden" id="goProg"><div class="go-prog-bar"><i id="goProgFill"></i></div><span id="goProgTxt"></span></div>
+      <div class="go-stats">Score : <b id="finalScore">0</b><br>Ennemis éliminés : <b id="finalKills">0</b><br>Niveau atteint : <b id="finalLvl">1</b><br>Temps : <b id="finalTime">0:00</b></div>
+      <div class="go-rewards" id="goRewards"></div>
       <div class="go-extra" id="goExtra"></div>
-      <div class="frag-row" id="fragEarned">+0 ◆ fragments</div>
       <div class="new-best hidden" id="newBest">★ NOUVEAU RECORD ★</div>
+      <button class="btn hidden" id="btnNext">NIVEAU SUIVANT</button>
       <button class="btn" id="btnRetry">REJOUER</button>
-      <button class="btn secondary" id="btnGoSkills">COMPETENCES</button>
-      <button class="btn secondary" id="btnGoMenu">MENU PRINCIPAL</button>
+      <button class="btn secondary" id="btnGoMenu">ACCUEIL</button>
     </div>
 
   </div>

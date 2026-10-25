@@ -5,7 +5,7 @@ mixin(GameScene, {
   // mais le niveau d'alerte est recalculé — si des compétences ont été achetées entre-temps, il suit l'arbre
   resumeRun(){
     const lvl = effectiveAlert(this.meta);
-    if (lvl !== this.baseAlert){
+    if (!this.lvDef && lvl !== this.baseAlert){
       this.baseAlert = lvl;
       this.alertLevel = Math.min(ALERT_CAP, lvl + (this.alertRises||0));
       this.weaponTier = weaponTierFor(this.alertLevel);
@@ -38,7 +38,7 @@ mixin(GameScene, {
     this.introEndY = this.player.y; this.introStartY = vy0.max + 70/ZOOM_START; this.introMidY = (vy0.min + vy0.max)/2; this.player.y = this.introStartY;
     this.introActive = true; this.introT = 0; this._introFx = 0; this._introApex = false;
     this.hitCooldown = Math.max(this.hitCooldown, 3200); this.spawnTimer = Math.max(this.spawnTimer, 3200);
-    this._introEarth = !this.sandbox && this.textures.exists('earth');          // DECOLLAGE DEPUIS LA TERRE (jeu normal); le bac à sable garde le décollage court
+    this._introEarth = !this.sandbox && this.textures.exists('earth') && (!this.lvDef || this.lvDef.intro === 'earth');          // DECOLLAGE DEPUIS LA TERRE (jeu normal); le bac à sable garde le décollage court
     if (this._introEarth){
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
@@ -52,26 +52,37 @@ mixin(GameScene, {
     else this.destroySandboxUI();
   },
 
-  endRun(){
+  // victory = objectif du niveau atteint (levelWin) ; sinon le vaisseau est détruit
+  endRun(victory, abandon){
     this.bankCombo(false);
     this.running = false;
     this.hasActiveRun = false;
     this.physics.world.pause();
     music.stop();
-    this.playerDeathFx();                // le vaisseau explose; le jingle et l'écran de fin viennent après
+    if (!victory && !abandon) this.playerDeathFx();  // le vaisseau explose; le jingle et l'écran de fin viennent après
     if (this.achv) setAchv(this.achv);   // on enregistre les compteurs de succès en fin de partie
     if (this.bestiaryDirty){ setBestiary(this.bestiary); this.bestiaryDirty = false; }
     const hs = getHighScore();
     const isNew = this.score > hs;
     if (isNew) setHighScore(Math.floor(this.score));
 
-    const fragmentsEarned = Math.round((Math.max(1, Math.round(Math.floor(this.score/15) * (1+this.stats.fragmentBonus))) + Math.floor(this.runFragBonus)) * (this.pactBonusMul || 1));
+    let fragmentsEarned = Math.round((Math.max(1, Math.round(Math.floor(this.score/15) * (1+this.stats.fragmentBonus))) + Math.floor(this.runFragBonus)) * (this.pactBonusMul || 1));
+    if (this.lvDef) fragmentsEarned = Math.max(1, Math.round(fragmentsEarned * LEVEL_FRAG_MUL));      // niveaux courts et rejouables : revenu de combat réduit
+    // niveau d'un monde : une victoire est enregistrée (déblocages) et ajoute sa récompense ; une défaite garde tous les fragments gagnés
+    let clearBonus = 0, rec = null;
+    if (this.lvDef && victory){
+      rec = recordLevelClear(this.lvDef.id, this.score);
+      clearBonus = this.lvDef.reward.clear + (rec && rec.first ? (this.lvDef.reward.first || 0) : 0);
+      fragmentsEarned += clearBonus;
+    }
+    const nxt = (this.lvDef && victory) ? nextLevelOf(this.lvDef.id) : null;
+    this.lvResult = { victory: !!victory, rec, clearBonus, progress: this.lvDef ? (victory ? 1 : this.levelProgress().frac) : 0, next: nxt && isLevelUnlocked(nxt.id) ? nxt.id : null };
     this.meta.fragments += fragmentsEarned;
     setMeta(this.meta);
 
     // classement local : la partie est enregistrée avec le dernier pseudo utilisé (modifiable juste après)
     this.lastEntryId = Date.now() + '-' + Math.floor(Math.random()*1e6);
-    addLeaderboardEntry({
+    if (!this.lvDef) addLeaderboardEntry({
       id:this.lastEntryId, name: sanitizeName(getPlayerName()) || 'ANONYME',
       score: Math.floor(this.score), level:this.level, time:Math.floor(this.elapsed),
       alert:this.alertLevel, date:Date.now()
@@ -83,7 +94,7 @@ mixin(GameScene, {
     const addLine = (txt, cls)=>{ const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; ex.appendChild(d); };
     if (this.pacts && this.pacts.length) addLine('PACTES (' + this.pacts.length + ')  fragments x' + this.pactBonusMul.toFixed(2), 'go-near');
     addLine('MEILLEUR COMBO x' + this.runBestCombo + ' · RANG ' + STYLE_RANKS[this.runBestRank].l + ' (' + STYLE_RANKS[this.runBestRank].name + ')');
-    addLine('KILLS ' + this.runKills + ' · MEILLEURE CHAINE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
+    addLine('MEILLEURE CHAINE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
     if (this.bossActive && this.currentBoss && this.currentBoss.active){
       const pc = Math.max(1, Math.round(this.currentBoss.hp / this.currentBoss.maxHp * 100));
       addLine('Le boss avait encore ' + pc + '% de PV...', 'go-boss');
@@ -98,18 +109,41 @@ mixin(GameScene, {
       const f = v => n.time ? Math.floor(v/60) + ':' + String(v%60).padStart(2,'0') : v;
       addLine('PRESQUE : ' + n.name + ' ' + f(n.pr) + ' / ' + f(n.need), 'go-near');
     });
+    document.querySelector('#gameover .go-title').textContent = victory ? 'NIVEAU TERMINE' : (abandon ? 'NIVEAU ABANDONNE' : 'VAISSEAU DETRUIT');
     document.getElementById('finalScore').textContent = Math.floor(this.score);
     document.getElementById('finalLvl').textContent = this.level;
     const m = Math.floor(this.elapsed/60), s = Math.floor(this.elapsed%60);
     document.getElementById('finalTime').textContent = m+':'+String(s).padStart(2,'0');
-    document.getElementById('fragEarned').textContent = '+'+fragmentsEarned+' ◆ fragments';
+    // en-tête du niveau, barre d'objectif, détail des récompenses, déblocages, boutons
+    { const goEl = document.getElementById('gameover'), L = this.lvDef, res = this.lvResult;
+      goEl.classList.toggle('win', !!victory);
+      document.getElementById('finalKills').textContent = this.runKills;
+      document.getElementById('goLevel').textContent = L ? (worldById(L.world).name + ' · NIV.' + L.num + ' — ' + L.name) : '';
+      const pr = document.getElementById('goProg'); pr.classList.toggle('hidden', !L);
+      if (L){ document.getElementById('goProgFill').style.width = Math.round(res.progress*100) + '%'; document.getElementById('goProgTxt').textContent = Math.round(res.progress*100) + '%'; }
+      const rw = document.getElementById('goRewards'); rw.innerHTML = '';
+      const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.textContent = val; rw.appendChild(d); };
+      if (clearBonus){
+        addRw('Combat', '+' + (fragmentsEarned - clearBonus) + ' ◆');
+        addRw('Niveau terminé', '+' + this.lvDef.reward.clear + ' ◆');
+        if (rec.first && this.lvDef.reward.first) addRw('1re victoire', '+' + this.lvDef.reward.first + ' ◆');
+        addRw('TOTAL', '+' + fragmentsEarned + ' ◆', 'total');
+      } else addRw('Fragments gagnés', '+' + fragmentsEarned + ' ◆', 'total');
+      const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.textContent = txt; rw.appendChild(d); };
+      if (rec && rec.unlockedLevel) unl('▶ NIVEAU SUIVANT DEBLOQUE');
+      if (rec && rec.unlockedWorld) unl('★ NOUVEAU MONDE : ' + worldById(rec.unlockedWorld).name);
+      if (victory && L && !nxt) unl('FIN DE LA CAMPAGNE (pour l\'instant)');
+      const bn = document.getElementById('btnNext'), br = document.getElementById('btnRetry');
+      bn.classList.toggle('hidden', !res.next);
+      br.classList.toggle('secondary', !!res.next);      // victoire avec une suite: SUIVANT est le bouton principal
+    }
     document.getElementById('newBest').classList.toggle('hidden', !isNew);
     // l'écran de fin n'apparaît (en fondu) qu'une fois l'explosion du vaisseau passée
     clearTimeout(this.deathTimer);
     this.deathTimer = setTimeout(()=>{
       const go = document.getElementById('gameover');
       go.classList.remove('hidden'); go.classList.remove('fadein'); void go.offsetWidth; go.classList.add('fadein');
-    }, 1800);
+    }, victory ? 700 : (abandon ? 150 : 1800));
   },
 
   // MORT DU VAISSEAU: grosse explosion, petites explosions décalées, ondes de choc, débris, ralenti et vignette rouge
