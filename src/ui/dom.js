@@ -24,7 +24,7 @@ mixin(GameScene, {
       tb.onclick = ()=>{ sfx.resume(); sfx.uiStart(); ['pauseMenu','settingsMenu'].forEach(x=>{ const e = document.getElementById(x); if (e) e.classList.add('hidden'); }); this.scene.restart({ autoStart:true, tuto:true }); }; });
     document.getElementById('btnStart').onclick = ()=>{
       sfx.resume(); sfx.uiStart();
-      this.scene.restart(this.tutoPending() ? { autoStart:true, tuto:true } : { autoStart:true });          // 1re partie (ou après réinitialisation) = le tuto
+      this.scene.restart({ autoStart:true });
     };
     document.getElementById('btnContinue').onclick = ()=>{
       sfx.resume(); sfx.uiStart();

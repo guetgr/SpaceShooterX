@@ -34,7 +34,10 @@ function isLevelUnlocked(id, p){
   if (_seeAll()) return true;
   p = p || getWorldProgress();
   if (!isWorldUnlocked(l.world, p)) return false;
-  return l.index === 0 || isLevelDone(worldById(l.world).levels[l.index - 1].id, p);
+  if (l.index === 0) return true;
+  const prev = worldById(l.world).levels[l.index - 1];
+  if (prev.type === 'tuto' && Object.keys(p.levels).length) return true;      // sauvegarde d'avant le tuto-niveau : on ne reverrouille rien
+  return isLevelDone(prev.id, p);
 }
 
 // { done, total, bossDown } pour l'anneau de progression d'un monde

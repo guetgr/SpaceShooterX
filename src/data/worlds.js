@@ -4,7 +4,7 @@
 //
 // Monde : { id, order, name, sub, boss, theme:{ glow, rim, seed, freq, bands?, palette:[couleurs sombre→clair] }, levels:[ niveau… ] }   (le DERNIER niveau est le boss du monde)
 // Niveau : { id, name, type, threat, goal, reward, spawns?, events?, boss?, zoom? }
-//   type    : 'survive' (goal:{seconds}) · 'kill' (goal:{count}) · 'collect' (goal:{gems}) · 'boss' (boss:'<id>') · 'endless' (ancien mode infini, DEV)
+//   type    : 'tuto' (tutoriel scripté, game/tuto.js ; flag tuto:true, sans objectif ni lvDef) · 'survive' (goal:{seconds}) · 'kill' (goal:{count}) · 'collect' (goal:{gems}) · 'boss' (boss:'<id>') · 'endless' (ancien mode infini, DEV)
 //   threat  : niveau de menace 1..ALERT_CAP — c'est l'ancien « niveau d'alerte » (docs/niveaux-alerte.md), fixé par le niveau et non plus par l'arbre
 //   reward  : { clear } fragments ◆ ajoutés à une victoire · { first } bonus supplémentaire à la première victoire
 //   hpMul, dmgMul : réglage fin de la difficulté (× PV des ennemis et du boss, × dégâts des ennemis et du boss) en plus de `threat` ; 1 par défaut
@@ -13,7 +13,7 @@
 //   events  : [{ kind, at }] événements (clés de EVENT_DEFS) déclenchés à `at` secondes
 
 const WORLDS = [];
-const LEVEL_TYPES = ['survive', 'kill', 'collect', 'boss', 'endless'];
+const LEVEL_TYPES = ['survive', 'kill', 'collect', 'boss', 'endless', 'tuto'];
 let _levelIdx = null;
 
 function registerWorld(def){

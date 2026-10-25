@@ -76,7 +76,7 @@ with sync_playwright() as pw:
     ck(mode()=='galaxy' and p.evaluate("document.getElementById('homeToast').classList.contains('show')"),'monde verrouillé : message, on reste sur la carte')
     p.mouse.click(pos[0][0],pos[0][1]); p.wait_for_timeout(2200)
     ck(mode()=='world' and p.evaluate("document.getElementById('mwName').textContent")=='ORBITE TERRESTRE','toucher un monde ouvert -> vue du monde')
-    ck(p.evaluate("document.querySelectorAll('#mapOrbit .node').length")==5,'5 niveaux en orbite')
+    ck(p.evaluate("document.querySelectorAll('#mapOrbit .node').length")==6,'6 niveaux en orbite (tuto + 5)')
     # déblocage animé : monde 1 terminé -> le monde 2 se débloque au retour sur l'accueil
     p.evaluate("localStorage.setItem('ssx_worlds_v1', JSON.stringify({v:1,levels:{'w1-l1':{clears:1,best:5},'w1-l2':{clears:1,best:5},'w1-l3':{clears:1,best:5},'w1-l4':{clears:1,best:5},'w1-l5':{clears:1,best:5}},seen:{},last:'w1-l5'}))")
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(500)

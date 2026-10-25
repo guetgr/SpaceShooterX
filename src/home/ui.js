@@ -10,6 +10,7 @@ function levelGoalText(l){
   if (l.type === 'survive') return 'Survivre <b>' + g.seconds + ' s</b>';
   if (l.type === 'kill') return 'Éliminer <b>' + g.count + '</b> ennemis';
   if (l.type === 'collect') return 'Récolter <b>' + g.gems + '</b> cristaux';
+  if (l.type === 'tuto') return 'Apprendre les bases : <b>satellites, débris, boss</b>';
   if (l.type === 'boss') return 'Vaincre le boss : <b>' + ((BOSS_DEFS[l.boss] || {}).name || l.boss) + '</b>';
   return '';
 }
@@ -129,7 +130,7 @@ mixin(HomeScene, {
       slot.style.left = ((O.cx + O.rx*Math.cos(th))/GAME_W*100) + '%'; slot.style.top = ((O.cy + O.ry*Math.sin(th))/GAME_H*100) + '%';
       const b = document.createElement('button');
       b.className = 'node ' + (done ? 'done' : (unl ? 'open' : 'locked')) + (l.type === 'boss' ? ' boss' : '') + (l.id === this.homeSel ? ' sel' : '');
-      b.innerHTML = '<span>' + (!unl ? '🔒' : (done ? '✔' : (l.type === 'boss' ? '☠' : l.num))) + '</span>';
+      b.innerHTML = '<span>' + (!unl ? '🔒' : (done ? '✔' : (l.type === 'boss' ? '☠' : (l.type === 'tuto' ? '?' : l.num)))) + '</span>';
       b.setAttribute('aria-label', 'Niveau ' + l.num + ' ' + l.name);
       b.style.pointerEvents = 'auto';
       b.onclick = ()=> this.selectHomeLevel(l.id);
@@ -142,7 +143,7 @@ mixin(HomeScene, {
     const unl = isLevelUnlocked(l.id, p), rec = p.levels[l.id];
     $('levelCard').innerHTML = '<div class="lc-name"></div><div class="lc-line">' + levelGoalText(l) + '</div><div class="lc-line">MENACE <b>' + l.threat + '</b> · ◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · Record <b>' + rec.best + '</b>' : ' (1re : <b>+' + (l.reward.first || 0) + '</b>)') + '</div>' +
       (!rec && !unl ? '<div class="lc-line lock">Termine le niveau précédent.</div>' : '');
-    $('levelCard').querySelector('.lc-name').textContent = 'NIV.' + l.num + ' — ' + (unl ? l.name : '? ? ?');
+    $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'NIV.' + l.num + ' — ') + (unl ? l.name : '? ? ?');
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REJOUER' : 'DECOLLER') : 'VERROUILLE';
     this.setHomeVanTier(l.threat);
   },
@@ -212,7 +213,7 @@ mixin(HomeScene, {
       const gs = this.scene.get('game');
       this.scene.setVisible(true, 'game'); gs.input.enabled = true;
       gs.meta = getMeta();
-      gs.scene.restart(gs.tutoPending() ? { autoStart:true, tuto:true } : { autoStart:true, levelId:l.id });      // 1re partie (progression vide ou réinitialisée) = le tuto ; il ramène ensuite à l'accueil
+      gs.scene.restart(l.tuto ? { autoStart:true, tuto:true } : { autoStart:true, levelId:l.id });      // le tuto est un niveau comme les autres (w1-tuto) ; il ramène ensuite à l'accueil
     });
   },
 });
