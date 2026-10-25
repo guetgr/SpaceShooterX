@@ -3,7 +3,7 @@
 
 /* SONS ENREGISTRES (remplacent la version synthétique du même nom). pk = niveau de crête, rv = envoi réverbération, tier = hauteur selon le niveau d'arme, d = les prises (une au hasard à chaque fois). */
 const SFX_FILES = {
-  laser: { pk:0.16, rv:0.04, tier:false, d:[asset('audio/sfx/laser.mp3')] },
+  laser: { pk:0.11, rv:0.04, tier:false, d:[asset('audio/sfx/laser.mp3')] },
   lightning: { pk:0.13, rv:0.06, tier:false, d:[asset('audio/sfx/lightning.mp3')] },
   missile: { pk:0.3, rv:0.06, tier:false, d:[asset('audio/sfx/missile_1.mp3'), asset('audio/sfx/missile_2.mp3')] },
   pulsar: { pk:0.14, rv:0.18, tier:false, d:[asset('audio/sfx/pulsar.mp3')] },
@@ -50,4 +50,8 @@ const SFX_FILES = {
   gemBig: { pk:0.22, rv:0.08, tier:false, d:[asset('audio/sfx/gemBig.mp3')] },
   gem: { pk:0.16, rv:0.04, tier:false, d:[asset('audio/sfx/gem.mp3')] },
   mineDrop: { pk:0.24, rv:0.08, tier:false, d:[asset('audio/sfx/mineDrop.mp3')] },
+  achievement: { pk:0.3, rv:0.1, tier:false, d:[asset('audio/sfx/achievement.mp3')] },
+  heal: { pk:0.2, rv:0.15, tier:false, d:[asset('audio/sfx/heal.mp3')] },
+  jackpot: { pk:0.3, rv:0.15, tier:false, d:[asset('audio/sfx/jackpot.mp3')] },
+  levelup: { pk:0.3, rv:0.15, tier:false, d:[asset('audio/sfx/levelup.mp3')] },
 };

@@ -5,6 +5,7 @@ class GameScene extends Phaser.Scene{
   constructor(){ super('game'); }
   create(data){
     this.sandbox = !!(data && data.sandbox);
+    this.tuto = !!(data && data.tuto);
     this.cameras.main.setBackgroundColor(0x05040c);
     this.running = false;
     this.hasActiveRun = false;
@@ -46,6 +47,7 @@ class GameScene extends Phaser.Scene{
     });
     applyAchvBuffs(this.stats, this.achv);   // buffs permanents des succès
     applyAscension(this.stats, this.meta.asc);   // bonus permanents d'ascension
+    if (this.tuto){ this.stats = makeDefaultStats(); this.stats.damage = 14; this.alertLevel = 1; this.weaponTier = 1; this.treeState = {}; }   // TUTO: vaisseau de base, sans arbre ni succès
     // pactes choisis avant la partie: règles plus dures, plus de fragments à la fin
     const odUi = document.getElementById('odBtn');
     if (odUi){ odUi.classList.toggle('show', this.stats.overdrive > 0); odUi.classList.remove('ready','active'); odUi.style.setProperty('--deg','0deg'); }   // le bouton n'apparaît qu'une fois l'overdrive débloqué
@@ -213,6 +215,6 @@ class GameScene extends Phaser.Scene{
 
     if (data && data.autoStart){
       this.startRun();
-    }
+    } else if (data && data.toMenu){ this.showStartScreen(); }
   }
 }

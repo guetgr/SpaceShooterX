@@ -110,7 +110,7 @@ class MusicLoop{
 const MUSIC_SLOTS = { menu:['menu','menu2'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'] };
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
-const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'] };
+const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'] };
 
 const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 

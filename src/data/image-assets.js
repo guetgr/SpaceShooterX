@@ -264,3 +264,11 @@ const B64_HYSTUMP = asset('sprites/hystump.png');
 const B64_HYREGROW = asset('sprites/hyregrow.png');
 
 const SNIPER_EXPL_B64 = asset('sprites/sniper_expl.png');
+
+const TUTO_SAT_B64 = asset('sprites/tuto_sat.webp');
+const TUTO_BOSS_B64 = asset('sprites/tuto_boss.webp');
+const TUTO_BOSSX_B64 = asset('sprites/tuto_bossx.webp');
+const TUTO_PANEL_B64 = asset('sprites/tuto_panel.webp');
+const TUTO_DEBRIS_B64 = asset('sprites/tuto_debris.webp');
+const TUTO_NDEB = 8;
+const TUTO_BOSS_AT = 70, TUTO_BOSS_WARN = 66, TUTO_SAT_END = 64;   // secondes après le décollage

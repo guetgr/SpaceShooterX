@@ -41,6 +41,7 @@
   "fx/effects.js",
   "ui/tree-ui.js",
   "game/run.js",
+  "game/tuto.js",
   "dev/sandbox.js",
   "game/loop.js",
   "game/difficulty.js",
