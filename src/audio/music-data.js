@@ -3,8 +3,10 @@
 
 /* MUSIQUE: 7 boucles de 48 s (24 mesures à 120 BPM exactement, premier temps fort à 0 s) tirées des morceaux Suno */
 const MUSIC_FILES = {
-  menu: asset('audio/music/menu.mp3'),
-  menu2: asset('audio/music/menu2.mp3'),
+  menu_a: asset('audio/music/menu_a.mp3'),
+  menu_b: asset('audio/music/menu_b.mp3'),
+  menu_c: asset('audio/music/menu_c.mp3'),
+  menu_d: asset('audio/music/menu_d.mp3'),
   niv_1: asset('audio/music/niv_1.mp3'),
   niv_1b: asset('audio/music/niv_1b.mp3'),
   niv_2: asset('audio/music/niv_2.mp3'),
