@@ -26,7 +26,7 @@ mixin(GameScene, {
   },
   tutoHitSat(s, dmg, x, y){
     if (s.dead) return;
-    s.hp -= dmg; this.spawnHitParticles(x, y, 4); this.tutoSfx('hitEnemy', s.sp.x);
+    s.hp -= dmg; this.spawnHitParticles(x, y, 4); this.tutoSfx('tutoSatHit', s.sp.x);
     if (s.hp <= 0){ this.tutoKillSat(s, true); return; }
     const f = s.hp / s.max; s.sp.setFrame(f > 0.8 ? 0 : f > 0.62 ? 1 : f > 0.46 ? 2 : f > 0.32 ? 3 : f > 0.18 ? 4 : 5);
     s.sp.setTintFill(0xffffff); this.time.delayedCall(50, ()=>{ if (s.sp && s.sp.active) s.sp.clearTint(); });
@@ -37,7 +37,7 @@ mixin(GameScene, {
     s.sp.destroy();
     const fx = this.add.image(x, y, 'tutoSat', 6).setDepth(5).setScale(sc).setRotation(rot);
     let k = 6; this.time.addEvent({ delay:85, repeat:8, callback:()=>{ k++; if (fx.active){ if (k <= 14) fx.setFrame(k); if (k >= 13) fx.setAlpha(0.5); if (k >= 14) fx.destroy(); } } });
-    this.explodeFx(x, y, 54); this.cameras.main.shake(100, 0.004); this.tutoSfx('boomSmall', x);
+    this.explodeFx(x, y, 54); this.cameras.main.shake(100, 0.004); this.tutoSfx('tutoSatBoom', x);
     if (byPlayer){ this.score += 25; this.tutoKills = (this.tutoKills||0) + 1; }
     // débris: à esquiver (un en direction du joueur pour que ça s'apprenne)
     const n = Phaser.Math.Between(5, 8), pa = Phaser.Math.Angle.Between(x, y, this.player.x, this.player.y);
@@ -71,7 +71,7 @@ mixin(GameScene, {
     else if (!this._tutoH.sat && this.tutoT > 6){ this._tutoH.sat = 1; this.tutoHint('DÉTRUIS LES SATELLITES', 3500); }
     if (this.tutoPhase === 'sats'){
       if (this.tutoT >= TUTO_BOSS_WARN && !this.tutoWarned){
-        this.tutoWarned = true; this.tutoSfx('bossAlert', GAME_W/2);
+        this.tutoWarned = true; this.tutoSfx('tutoBossWarn', GAME_W/2);
         const bn = document.getElementById('boss-banner'); if (bn){ bn.classList.add('show'); setTimeout(()=> bn.classList.remove('show'), 2400); }
       }
       this.tutoSpawnCd -= delta;
@@ -103,7 +103,6 @@ mixin(GameScene, {
     this.tutoBoss = { sp, hp:700, max:700, state:'enter', t:0, ty:vy.min + 175, cx:GAME_W/2, amp:Math.max(20, Math.min(80, (vx.max - vx.min)/2 - 150)), phase:1, aimCd:1800, ringCd:4200, rainCd:2600, spCd:0, spA:0, dead:false, hitT:0 };
     const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
     if (lab) lab.textContent = 'SATELLITE SPACEX'; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
-    music.setScene({ mode:'game', alert:1, boss:true, fast:true });
   },
   tutoBossShot(x, y, ang, spd, tint, dmg){
     const b = this.enemyBullets.create(x, y, 'tutoOrb'); b.setDepth(4); b.damage = dmg || 8; b.setTint(tint); b.setScale(0.75); b.body.setCircle(7, 6, 6); b.setBlendMode(Phaser.BlendModes.ADD);
@@ -116,16 +115,16 @@ mixin(GameScene, {
     else {
       sp.x = B.cx + Math.sin(B.t*0.55)*B.amp; sp.y = B.ty + Math.sin(B.t*0.9)*10;
       const f = B.hp / B.max, ph = f > 0.66 ? 1 : f > 0.33 ? 2 : 3;
-      if (ph !== B.phase){ B.phase = ph; this.cameras.main.flash(90, 255, 140, 60, false); this.cameras.main.shake(300, 0.01); this.tutoSfx('boomMed', sp.x);
+      if (ph !== B.phase){ B.phase = ph; this.cameras.main.flash(90, 255, 140, 60, false); this.cameras.main.shake(300, 0.01); this.tutoSfx('tutoBossPhase', sp.x);
         const fill = document.getElementById('bossHpFill'); if (fill) fill.className = 'boss-hp-fill p' + ph;
         sp.setTint(ph === 2 ? 0xffd2b4 : 0xff9a9a); this.tutoHint(ph === 2 ? 'IL EST ENDOMMAGÉ !' : 'FUREUR !', 2200); }
       const bx = sp.x, by = sp.y + 40;
-      B.aimCd -= delta; if (B.aimCd <= 0){ B.aimCd = ph === 3 ? 1100 : 1500; const a = Phaser.Math.Angle.Between(bx, by, px, py); [-0.2, 0, 0.2].forEach(o=> this.tutoBossShot(bx, by, a + o, 230, 0xff5050, 9)); this.tutoSfx('enemyShot', bx); }
-      B.ringCd -= delta; if (B.ringCd <= 0){ B.ringCd = 4200; const n = 16, gap = Phaser.Math.Between(0, n-1); for (let i=0;i<n;i++){ if (i === gap || i === (gap+1)%n) continue; this.tutoBossShot(bx, by, i/n*6.2832, 135, 0xffa040, 8); } this.tutoSfx('heavyShot', bx); }
-      if (ph >= 2){ B.rainCd -= delta; if (B.rainCd <= 0){ B.rainCd = 1700; [-115, 0, 115].forEach(o=> this.tutoBossShot(bx + o + Phaser.Math.Between(-20, 20), by - 10, Math.PI/2, 265, 0xff8040, 8)); this.tutoSfx('spreadShot', bx); } }
-      if (ph >= 3){ B.spCd -= delta; if (B.spCd <= 0){ B.spCd = 140; B.spA += 0.36; this.tutoBossShot(bx, by, B.spA, 150, 0xff3060, 7); this.tutoBossShot(bx, by, B.spA + Math.PI, 150, 0xff3060, 7); } }
+      B.aimCd -= delta; if (B.aimCd <= 0){ B.aimCd = ph === 3 ? 1100 : 1500; const a = Phaser.Math.Angle.Between(bx, by, px, py); [-0.2, 0, 0.2].forEach(o=> this.tutoBossShot(bx, by, a + o, 230, 0xff5050, 9)); this.tutoSfx('tutoBossAim', bx); }
+      B.ringCd -= delta; if (B.ringCd <= 0){ B.ringCd = 4200; const n = 16, gap = Phaser.Math.Between(0, n-1); for (let i=0;i<n;i++){ if (i === gap || i === (gap+1)%n) continue; this.tutoBossShot(bx, by, i/n*6.2832, 135, 0xffa040, 8); } this.tutoSfx('tutoBossRing', bx); }
+      if (ph >= 2){ B.rainCd -= delta; if (B.rainCd <= 0){ B.rainCd = 1700; [-115, 0, 115].forEach(o=> this.tutoBossShot(bx + o + Phaser.Math.Between(-20, 20), by - 10, Math.PI/2, 265, 0xff8040, 8)); this.tutoSfx('tutoBossRain', bx); } }
+      if (ph >= 3){ B.spCd -= delta; if (B.spCd <= 0){ B.spCd = 140; B.spA += 0.36; this.tutoBossShot(bx, by, B.spA, 150, 0xff3060, 7); this.tutoBossShot(bx, by, B.spA + Math.PI, 150, 0xff3060, 7); this.tutoSfx('tutoBossSpiral', bx); } }
       // dégâts reçus
-      const hit = (b, d)=>{ B.hp -= d; this.spawnHitParticles(b.x, b.y, 3); this.tutoSfx('hitHeavy', b.x); if (B.hitT <= 0){ B.hitT = 60; sp.setTintFill(0xffffff); this.time.delayedCall(45, ()=>{ if (sp.active) sp.setTint(B.phase === 1 ? 0xffffff : B.phase === 2 ? 0xffd2b4 : 0xff9a9a); if (B.phase === 1) sp.clearTint(); }); } };
+      const hit = (b, d)=>{ B.hp -= d; this.spawnHitParticles(b.x, b.y, 3); this.tutoSfx('tutoBossHit', b.x); if (B.hitT <= 0){ B.hitT = 60; sp.setTintFill(0xffffff); this.time.delayedCall(45, ()=>{ if (sp.active) sp.setTint(B.phase === 1 ? 0xffffff : B.phase === 2 ? 0xffd2b4 : 0xff9a9a); if (B.phase === 1) sp.clearTint(); }); } };
       B.hitT -= delta;
       this.tutoHitBox(this.playerBullets, { x:sp.x, y:sp.y }, 130, 118, b=> hit(b, b.damage || 10), B);
       this.tutoHitBox(this.missiles, { x:sp.x, y:sp.y }, 135, 122, b=>{ this.explodeFx(b.x, b.y, 50); hit(b, b.damage || 20); }, B);
@@ -144,10 +143,10 @@ mixin(GameScene, {
     [0, 1, 2, 3, 4].forEach(i=> this.time.delayedCall(i*430, ()=>{
       if (ex.active) ex.setFrame(i);
       for (let k=0;k<3;k++){ const ox = x + Phaser.Math.Between(-120, 120), oy = y + Phaser.Math.Between(-100, 100); this.explodeFx(ox, oy, 70); }
-      this.tutoSfx(i < 3 ? 'boomMed' : 'boomBig', x + Phaser.Math.Between(-80, 80));
+      this.tutoSfx(i < 3 ? 'tutoBossBoomA' : 'tutoBossBoomFinal', x + Phaser.Math.Between(-80, 80));
     }));
     this.time.delayedCall(2150, ()=>{
-      this.cameras.main.flash(600, 255, 255, 255, false); this.tutoSfx('boomBig', x);
+      this.cameras.main.flash(600, 255, 255, 255, false); this.tutoSfx('tutoBossBoomFinal', x);
       this.tweens.add({ targets:ex, alpha:0, duration:700, onComplete:()=> ex.destroy() });
       [0, 1].forEach(i=>{
         const p = this.add.image(x + (i ? 60 : -60), y, 'tutoPanel', i).setDepth(7).setScale(2.4);
@@ -155,7 +154,7 @@ mixin(GameScene, {
       });
       B.sp.destroy(); this.score += 500;
     });
-    this.time.delayedCall(3400, ()=> this.tutoHint('TUTO TERMINÉ — BIEN JOUÉ !', 2600));
+    this.time.delayedCall(3400, ()=>{ this.tutoSfx('tutoDone', GAME_W/2); this.tutoHint('TUTO TERMINÉ — BIEN JOUÉ !', 2600); });
     this.time.delayedCall(6200, ()=>{ try { localStorage.setItem('ssx_tuto_v1', '1'); } catch(e){ /* ignore */ } this.tutoFinish(); });
   },
   tutoCleanup(){

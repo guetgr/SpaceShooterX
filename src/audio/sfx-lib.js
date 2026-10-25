@@ -122,6 +122,19 @@ const SFX_LIB = {
   uiError: { g:0.31, lim:[2,150], run:(s,t)=>{ strike(s,t,0,'wood',190,{ a:0.1, len:1.3 }); strike(s,t,0.13,'wood',170,{ a:0.1, len:1.3 }); } },
   uiPause: { g:1.43, lim:[1,200], run:(s,t)=>{ s.N(t,0,{ d:0.17, a:0.05, f:5000, f1:1500, type:'highpass' }); strike(s,t,0.02,'wood',520,{ a:0.05, len:0.6 }); } },
   uiResume: { g:0.61, lim:[1,200], run:(s,t)=>{ s.N(t,0,{ d:0.17, a:0.05, f:1500, f1:5000, type:'highpass', atk:0.1 }); strike(s,t,0.1,'wood',760,{ a:0.05, len:0.6 }); } },
+  // --- TUTO: sons enregistrés (SFX_FILES); le run de secours rejoue un son existant
+  tutoSatHit: { g:1, lim:[3,80], run:(s,t,p)=>{ s.play('hitEnemy', p); } },
+  tutoSatBoom: { g:1, lim:[3,100], run:(s,t,p)=>{ s.play('boomSmall', p); } },
+  tutoBossWarn: { g:1, lim:[1,800], run:(s,t,p)=>{ s.play('bossAlert', p); } },
+  tutoBossHit: { g:1, lim:[3,100], run:(s,t,p)=>{ s.play('hitHeavy', p); } },
+  tutoBossAim: { g:1, lim:[2,200], run:(s,t,p)=>{ s.play('enemyShot', p); } },
+  tutoBossRing: { g:1, lim:[1,300], run:(s,t,p)=>{ s.play('heavyShot', p); } },
+  tutoBossRain: { g:1, lim:[1,300], run:(s,t,p)=>{ s.play('spreadShot', p); } },
+  tutoBossSpiral: { g:1, lim:[2,150], run:(s,t,p)=>{ s.play('enemyShot', p); } },
+  tutoBossPhase: { g:1, lim:[1,500], run:(s,t,p)=>{ s.play('boomMed', p); } },
+  tutoBossBoomA: { g:1, lim:[2,200], run:(s,t,p)=>{ s.play('boomMed', p); } },
+  tutoBossBoomFinal: { g:1, lim:[1,500], run:(s,t,p)=>{ s.play('boomBig', p); } },
+  tutoDone: { g:1, lim:[1,1000], run:(s,t,p)=>{ s.play('bossAlert', p); } },
 };
 
 // noms de compatibilité: les anciens appels du jeu (sfx.laser(), sfx.explosion()...) continuent de marcher
