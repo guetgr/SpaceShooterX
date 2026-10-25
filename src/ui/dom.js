@@ -20,9 +20,11 @@ mixin(GameScene, {
         WORLDS.forEach(w=> w.levels.forEach(l=>{ const o = document.createElement('option'); o.value = l.id; o.textContent = l.id + ' · ' + l.name + ' (menace ' + l.threat + ')'; sel.appendChild(o); }));
         document.getElementById('btnDevLevel').onclick = ()=>{ sfx.resume(); sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: sel.value }); };
       } }
+    ['btnTuto','btnTutoDev'].forEach(id=>{ const tb = document.getElementById(id); if (!tb) return; if (DEV_SEE_ALL) tb.classList.remove('hidden');
+      tb.onclick = ()=>{ sfx.resume(); sfx.uiStart(); ['pauseMenu','settingsMenu'].forEach(x=>{ const e = document.getElementById(x); if (e) e.classList.add('hidden'); }); this.scene.restart({ autoStart:true, tuto:true }); }; });
     document.getElementById('btnStart').onclick = ()=>{
       sfx.resume(); sfx.uiStart();
-      this.scene.restart({ autoStart:true });
+      this.scene.restart(this.tutoPending() ? { autoStart:true, tuto:true } : { autoStart:true });          // 1re partie (ou après réinitialisation) = le tuto
     };
     document.getElementById('btnContinue').onclick = ()=>{
       sfx.resume(); sfx.uiStart();
@@ -249,13 +251,14 @@ mixin(GameScene, {
       this.codex = { relics:{}, cards:{}, fusions:{}, skills:{}, usedSkills:{} }; setCodex(this.codex);
       this.bestiary = { kills:{} }; this.bestiaryDirty = false;
       setBestiary(this.bestiary);
-      try { localStorage.removeItem('ssx_bossbag_v1'); localStorage.removeItem(WORLDS_KEY); } catch(e){ /* ignore */ }
+      try { localStorage.removeItem('ssx_bossbag_v1'); localStorage.removeItem(WORLDS_KEY); localStorage.removeItem('ssx_tuto_v1'); } catch(e){ /* ignore */ }      // après une réinitialisation, la 1re partie redevient le tuto
       sfx.uiClick();
       btn.textContent = 'RÉINITIALISER LA PROGRESSION';
       document.getElementById('fragStart').textContent = this.meta.fragments;
     };
     document.getElementById('btnQuit').onclick = ()=>{            // abandonner le niveau : écran de résultat (les fragments gagnés sont gardés)
       sfx.uiBack();
+      if (this.tuto){ this.hasActiveRun = false; this.tutoFinish(); return; }
       document.getElementById('pauseMenu').classList.add('hidden');
       this.endRun(false, true);
     };

@@ -107,10 +107,10 @@ class MusicLoop{
    Les morceaux sont des boucles de 48 s qui commencent toutes sur un premier temps: à n'importe quel moment, la position
    dans la boucle est (horloge musicale) modulo 48 s, donc un nouveau morceau entre toujours "en phase".
 ========================================================= */
-const MUSIC_SLOTS = { menu:['menu','menu2'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'] };
+const MUSIC_SLOTS = { menu:['menu','menu2'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'], tutoniv:['tuto_niv_a','tuto_niv_b'] };
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
-const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'] };
+const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['tuto_boss_a'], tuto2:['tuto_boss_b','tuto_boss_c','tuto_boss_d'] };      // tuto: a = phase 1, puis b/c/d en alternance
 
 const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 
@@ -135,6 +135,7 @@ class FileMusic{
   slotNow(){
     const s = this.o.scene || { mode:'menu' };
     if (s.mode === 'menu') return 'menu';
+    if (s.tutoLevel) return 'tutoniv';
     if (s.boss) return (s.bossId && MUSIC_BOSS[s.bossId]) ? 'boss:' + s.bossId : 'boss';
     return (s.alert || 1) <= 4 ? 'tier1' : 'tier2';
   }
@@ -160,8 +161,8 @@ class FileMusic{
   // morceaux à garder en mémoire selon la situation (4 au plus)
   keepSet(){
     const sc = this.o.scene || { mode:'menu' }; if (sc.mode === 'menu') return MUSIC_SLOTS.menu.slice();
-    const slot = this.slotNow(), isB = slot.indexOf('boss') === 0, base = isB ? ((sc.alert || 1) <= 4 ? 'tier1' : 'tier2') : slot;   // pendant un boss on garde aussi la musique du niveau
-    const k = MUSIC_SLOTS[base].slice(); if (isB) k.push(...this.keysOf(slot)); else k.push(...MUSIC_SLOTS.boss);   // le boss peut arriver à tout moment
+    const slot = this.slotNow(), isB = slot.indexOf('boss') === 0, base = isB ? (sc.bossId && sc.bossId.indexOf('tuto') === 0 ? 'tutoniv' : (sc.alert || 1) <= 4 ? 'tier1' : 'tier2') : slot;   // pendant un boss on garde aussi la musique du niveau
+    const k = MUSIC_SLOTS[base].slice(); if (isB) k.push(...this.keysOf(slot)); else k.push(...(base === 'tutoniv' ? MUSIC_BOSS.tuto1 : MUSIC_SLOTS.boss));   // le boss peut arriver à tout moment
     if (base === 'tier1' && (sc.alert || 1) >= 3) k.push(MUSIC_SLOTS.tier2[0]);        // le palier suivant approche
     if (this.cur && !k.includes(this.cur.key)) k.push(this.cur.key);
     return k;

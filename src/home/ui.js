@@ -211,7 +211,8 @@ mixin(HomeScene, {
     this.cameras.main.once('camerafadeoutcomplete', ()=>{
       const gs = this.scene.get('game');
       this.scene.setVisible(true, 'game'); gs.input.enabled = true;
-      gs.scene.restart({ autoStart:true, levelId:l.id });
+      gs.meta = getMeta();
+      gs.scene.restart(gs.tutoPending() ? { autoStart:true, tuto:true } : { autoStart:true, levelId:l.id });      // 1re partie (progression vide ou réinitialisée) = le tuto ; il ramène ensuite à l'accueil
     });
   },
 });

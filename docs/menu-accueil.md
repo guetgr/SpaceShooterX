@@ -21,6 +21,7 @@ Pour le voir : `python3 tools/serve.py 8080` puis <http://localhost:8080/> (ou `
 | Récompenses détaillées, déblocages, **NIVEAU SUIVANT** / REJOUER / ACCUEIL. | Progression atteinte, fragments **conservés**, REJOUER / ACCUEIL. |
 
 ## Parcours
+**Toute première partie** (progression vide ou réinitialisée) : DECOLLER lance le **tuto** (satellites, débris, boss satellite) au lieu du niveau 1, puis ramène à l'accueil (`tutoPending()` / `src/game/tuto.js`). Ensuite, parcours normal :
 Accueil (page CARTE) → choisir un niveau → DECOLLER → niveau (objectif : survivre X s, éliminer N ennemis, récolter N cristaux, ou vaincre le boss du monde) → écran de résultat → SUIVANT / REJOUER / ACCUEIL.
 Navigation : glisser le doigt gauche/droite (ou onglets du bas, ou flèches du clavier) entre HANGAR · CARTE · ARBRE. Sur l'arbre, un glissement déplace la vue : pour changer de page, glisser depuis le bord gauche ou toucher un onglet.
 Victoire sur un niveau = niveau suivant débloqué ; boss vaincu = monde suivant débloqué (animation : la camionnette voyage jusqu'au nouveau monde). QUITTER dans la pause = niveau abandonné (fragments gagnés gardés).

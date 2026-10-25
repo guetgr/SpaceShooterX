@@ -16,4 +16,12 @@ const MUSIC_FILES = {
   bossf_b: asset('audio/music/bossf_b.mp3'),
   bossr_a: asset('audio/music/bossr_a.mp3'),
   bossr_b: asset('audio/music/bossr_b.mp3'),
+  bossp_a: asset('audio/music/bossp_a.mp3'),
+  bossp_b: asset('audio/music/bossp_b.mp3'),
+  tuto_niv_a: asset('audio/music/tuto_niv_a.mp3'),
+  tuto_niv_b: asset('audio/music/tuto_niv_b.mp3'),
+  tuto_boss_a: asset('audio/music/tuto_boss_a.mp3'),
+  tuto_boss_b: asset('audio/music/tuto_boss_b.mp3'),
+  tuto_boss_c: asset('audio/music/tuto_boss_c.mp3'),
+  tuto_boss_d: asset('audio/music/tuto_boss_d.mp3'),
 };

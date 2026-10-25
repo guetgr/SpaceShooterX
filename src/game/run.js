@@ -45,15 +45,17 @@ mixin(GameScene, {
     }
     sfx.launch();
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
-    music.setScene({ mode:'game', alert:this.alertLevel, boss:false, fast:true });
+    music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
     music.start();
     this._lowMood = false;
     if (this.sandbox){ this._double1 = true; this.nextBossAt = 1e9; this.evPlan = []; this.goldCd = 1e9; this.sbFire = false; this.sbAI = true; this.sbGod = true; this.buildSandboxUI(); }
     else this.destroySandboxUI();
+    if (this.tuto){ this.nextBossAt = 1e9; this.evPlan = []; this.goldCd = 1e9; this.smallCd = 1e9; this.eventCd = 1e9; this._double1 = true; this.tutoInit(); }
   },
 
   // victory = objectif du niveau atteint (levelWin) ; sinon le vaisseau est détruit
   endRun(victory, abandon){
+    if (this.tuto){ this.tutoPlayerDied(); return; }
     this.bankCombo(false);
     this.running = false;
     this.hasActiveRun = false;

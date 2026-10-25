@@ -1,0 +1,7 @@
+sources/
+docs/
+tools/
+backups/
+dist/
+*.md
+

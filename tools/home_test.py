@@ -18,6 +18,11 @@ with sync_playwright() as pw:
     vis=lambda s: p.evaluate("!document.querySelector('%s').classList.contains('hidden')"%s)
     ck(vis('#home') and not vis('#start'),'accueil visible, ancien menu masqué')
     ck(p.evaluate("document.getElementById('tabMap').classList.contains('on')"),'onglet CARTE actif au départ')
+    # 1re partie (progression vide) : DECOLLER lance le tuto, qui ramène ensuite à l'accueil
+    p.evaluate("document.getElementById('btnLaunch').click()"); p.wait_for_timeout(2500)
+    ck(p.evaluate("window.__ssxScene.tuto===true && window.__ssxScene.running"),'1re partie : DECOLLER lance le tuto')
+    p.evaluate("window.__ssxScene.tutoFinish()"); p.wait_for_timeout(1800)
+    ck(p.evaluate("window.__ssxScene.scene.isActive('home') && !document.getElementById('home').classList.contains('hidden')"),'fin du tuto : retour à l\'accueil')
     p.mouse.click(380,30); p.wait_for_timeout(500)       # engrenage (vrai clic)
     ck(vis('#settingsMenu'),'engrenage ouvre les paramètres')
     p.evaluate("document.getElementById('btnSettingsBack').click()"); p.wait_for_timeout(500)
