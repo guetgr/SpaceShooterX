@@ -59,7 +59,8 @@ mixin(GameScene, {
     this.updateMusicMood(delta);
 
     this.elapsed += delta/1000;
-    if (!this.bossActive && this.alertLevel < ALERT_CAP){
+    if (this.tuto) this.tutoUpdate(delta);
+    if (!this.bossActive && this.alertLevel < ALERT_CAP && !this.tuto){
       this.alertTimer += delta/1000;
       if (this.alertTimer >= ALERT_RISE_SECONDS) this.raiseAlert();
     }
@@ -206,7 +207,7 @@ mixin(GameScene, {
     }
 
     // spawn
-    if (!this.bossActive && !this.sandbox){
+    if (!this.bossActive && !this.sandbox && !this.tuto){
       this.spawnTimer -= delta;
       if (this.spawnTimer <= 0){
         this.spawnTimer = this.getSpawnInterval();

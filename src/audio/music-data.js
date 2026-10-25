@@ -16,4 +16,6 @@ const MUSIC_FILES = {
   bossf_b: asset('audio/music/bossf_b.mp3'),
   bossr_a: asset('audio/music/bossr_a.mp3'),
   bossr_b: asset('audio/music/bossr_b.mp3'),
+  bossp_a: asset('audio/music/bossp_a.mp3'),
+  bossp_b: asset('audio/music/bossp_b.mp3'),
 };
