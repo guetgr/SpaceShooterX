@@ -107,7 +107,7 @@ class MusicLoop{
    Les morceaux sont des boucles de 48 s qui commencent toutes sur un premier temps: à n'importe quel moment, la position
    dans la boucle est (horloge musicale) modulo 48 s, donc un nouveau morceau entre toujours "en phase".
 ========================================================= */
-const MUSIC_SLOTS = { menu:['menu','menu2'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'], tutoniv:['tuto_niv_a','tuto_niv_b'] };
+const MUSIC_SLOTS = { menu:['menu_a','menu_b','menu_c','menu_d'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'], tutoniv:['tuto_niv_a','tuto_niv_b'] };
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
 const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['tuto_boss_a'], tuto2:['tuto_boss_b','tuto_boss_c','tuto_boss_d'] };      // tuto: a = phase 1, puis b/c/d en alternance
