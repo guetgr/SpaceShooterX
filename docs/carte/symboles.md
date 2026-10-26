@@ -369,7 +369,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `homeToast` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `housekeeping` | méthode | `src/audio/music.js` | `FileMusic` |
 | `hpScaleNow` | méthode | `src/game/difficulty.js` | `GameScene` |
+| `HUD_AVATARS` | const | `src/ui/hud.js` |  |
 | `HUD_SAFE_Y` | const | `src/core/constants.js` |  |
+| `HUD_STILL` | const | `src/ui/hud.js` |  |
+| `hudFlash` | méthode | `src/ui/hud.js` | `GameScene` |
 | `inFiringPosition` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `initBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `INTRO_E_A` | const | `src/core/constants.js` |  |
@@ -794,6 +797,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateHomeVan` | méthode | `src/home/background.js` | `HomeScene` |
 | `updateHomingBullets` | méthode | `src/bosses/core.js` | `GameScene` |
 | `updateHud` | méthode | `src/ui/hud.js` | `GameScene` |
+| `updateHudSway` | méthode | `src/ui/hud.js` | `GameScene` |
 | `updateHydraLabel` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `updateMissiles` | méthode | `src/player/weapons.js` | `GameScene` |
 | `updateMusicMood` | méthode | `src/audio/scene-audio.js` | `GameScene` |
@@ -834,4 +838,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-827 symboles.
+831 symboles.

@@ -55,6 +55,7 @@ with sync_playwright() as pw:
     print('url:', url)
     p.goto(url)
     p.wait_for_selector('#btnStart', state='attached', timeout=60000)      # l'ancien menu est masqué : l'accueil (#home) le remplace
+    p.wait_for_function('window.__game && window.__game.scene.scenes.some(s=>s.startRun && s.sys.settings.status >= 5)', timeout=60000)   # le jeu est vraiment démarré (le chargement peut durer)
     p.wait_for_timeout(1500)
     print('menu ok')
     p.evaluate("document.getElementById('btnStart').click()")

@@ -39,6 +39,11 @@ Accueil animé à 3 pages (Hangar · Carte · Arbre), carte stellaire, mondes �
 ### Icônes d'interface en sprites (26 oct. 2026)
 - Les symboles de l'interface (cadenas, coche, ◆ composants, ★, ☠, pause, engrenage, flèches, pastilles, trophée, main) sont des sprites pixel 12x12 : `tools/gen_ui_icons.py` → `assets/sprites/ui_*.png`, utilisés par `uiIco()` (`src/ui/ui-icons.js`). Les icônes de compétences, cartes, reliques et pactes restent des émojis réduits en pixel (`pxImg`) : à remplacer plus tard par des sprites générés.
 
+### HUD en niveau refait (26 oct. 2026, branche `hud-agp`)
+- `css/hud.css` (3e couche CSS, embarquée par le build) : portrait de la camionnette + grade, barres épaisses et brillantes avec graduations et points de coque chiffrés, rendement en gros chiffres contourés, bouton pause en relief, ordre de mission en jauge avec icône du type d'objectif, jauge de boss assortie, voile sombre en haut de l'écran.
+- Effets : flash + secousse à l'impact, éclat vert au soin, portrait qui bat en alerte coque, reflet qui passe, éclair sur l'expérience à la montée de grade, parallaxe légère (le HUD traîne derrière le vaisseau, 2 plans, ±3 px). Coupés si mouvement réduit.
+- `smoke_test.py` attend désormais que le jeu soit vraiment démarré (il échouait quand le chargement durait plus de ~4 s).
+
 ## 2. Contexte utilisateur
 Bio, francophone, ne code pas. Veut un jeu agréable pour un petit revenu passif (Google Play), éventuellement d'autres jeux ensuite. Style pixel art rétro, contrôles au glissement du doigt. Assets graphiques via ChatGPT (prompts dans `docs/prompts-chatgpt-*.md`), musique via Suno (`docs/suno-prompts.md`, `docs/musique-suno.md`), sons enregistrés/générés par lui (gratuits uniquement). Philosophie d'équilibrage : voir CLAUDE.md (pas de plafonds artificiels).
 Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran transparent par-dessus les autres applis, bouton pause).

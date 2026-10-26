@@ -140,6 +140,7 @@ const Motion = {
     const last = this._hpPct; if (last !== undefined && Math.abs(pct - last) < 0.01) return;
     this._hpPct = pct;
     if (this._ghostTw){ this._ghostTw.kill(); this._ghostTw = null; }
+    if (last !== undefined && pct > last + 0.5){ const t = document.getElementById('hpTrack'); if (t){ t.classList.remove('heal'); void t.offsetWidth; t.classList.add('heal'); } }      // soin : éclat vert
     if (!this.ok() || last === undefined || pct > last){ g.style.width = pct + '%'; return; }
     this._ghostTw = gsap.to(g, { width:pct + '%', duration:.45, delay:.35, ease:'power2.in' });
   },

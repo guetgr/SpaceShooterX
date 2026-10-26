@@ -176,6 +176,35 @@ ICONS = {
   "..KYYYYYDK..",
   "..KKKKKKKK..",
  ]),
+ # objectif de survie : chrono
+ 'clock': ({'C': '#e9f1ec', 'D': '#9db0a4', 'Y': '#ffc21a'}, [
+  "...KKKKKK...",
+  "..KCCCCCCK..",
+  ".KCCCYCCCDK.",
+  "KCCCCYCCCCDK",
+  "KCCCCYCCCCDK",
+  "KCCCCYYYCCDK",
+  "KCCCCCCCCCDK",
+  "KCCCCCCCCDDK",
+  ".KCCCCCCDDK.",
+  "..KDDDDDDK..",
+  "...KKKKKK...",
+ ]),
+ # objectif d'élimination : réticule
+ 'target': ({'R': '#ff4438', 'L': '#ff8a7a'}, [
+  ".....KK.....",
+  "...KKRRKK...",
+  "..KRLKKRRK..",
+  ".KRK.KK.KRK.",
+  ".KRK.KK.KRK.",
+  "KRRKKLRKKRRK",
+  "KRRKKRRKKRRK",
+  ".KRK.KK.KRK.",
+  ".KRK.KK.KRK.",
+  "..KRRKKRRK..",
+  "...KKRRKK...",
+  ".....KK.....",
+ ]),
  # « touche ici » : main au doigt levé
  'hand': ({'S': '#f2c79b', 'D': '#c9976a'}, [
   ".....KK.....",
