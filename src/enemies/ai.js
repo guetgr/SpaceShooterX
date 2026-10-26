@@ -162,6 +162,34 @@ mixin(GameScene, {
           this.time.delayedCall(i*140, ()=>{ if (e.active) this.dropBomb(e); });
         }
       }
+    } else if (e.enemyType === 'sat'){
+      e.wobble += delta;
+      e.baseX += e.driftX * delta/1000;
+      e.x = e.baseX + Math.sin(e.wobble/1100 + e.ph)*24; e.rotation = Math.sin(e.wobble/1600 + e.ph)*0.2;
+      const f = e.hp / e.maxHp, fr = f > 0.8 ? 0 : f > 0.62 ? 1 : f > 0.46 ? 2 : f > 0.32 ? 3 : f > 0.18 ? 4 : 5;      // l'état du satellite suit sa vie
+      if (e._fr !== fr){ e._fr = fr; e.setFrame(fr); }
+    } else if (e.enemyType === 'satgun'){
+      if (e.y >= e.stopY && e.body.velocity.y !== 0) e.body.velocity.y = 0;
+      const stopped = e.body.velocity.y === 0;
+      if (stopped){ e.wobble += delta; e.x = e.baseX + Math.sin(e.wobble/900 + e.ph)*16; }
+      const f = e.hp / e.maxHp, hurt = f <= 0.85;
+      if (hurt && !e._recoil){                                            // abîmé : image fixe selon la vie (9 états), la lueur de charge devient une teinte
+        const fr = 9 + Math.min(8, Math.floor((1 - f) / 0.85 * 9));
+        if (e._fr !== fr){ e._fr = fr; e.anims.stop(); e.setFrame(fr); }
+      }
+      this.tryDodgePlayerBullets(e, delta);
+      if (stopped){
+        e.fireCd -= delta;
+        if (!e.charging && e.fireCd <= 800){
+          e.charging = true; sfx.snipeCharge && sfx.snipeCharge({ pan:this.panOf(e.x) });
+          if (hurt) e.setTint(0x9fd8ff); else e.play('satgunCharge');
+        }
+        if (e.fireCd <= 0){
+          e.fireCd = this.rollFireCd(2300,3200,60); e.charging = false; e.clearTint();
+          this.enemySatShot(e);
+          if (!hurt){ e._recoil = true; e.play('satgunRecoil'); e.once('animationcomplete', ()=>{ e._recoil = false; if (e.active && e.enemyType === 'satgun') e.play('satgunIdle'); }); }
+        }
+      }
     } else if (e.enemyType === 'sniper'){
       if (e.y >= e.stopY && e.body.velocity.y !== 0){ e.body.velocity.y = 0; }
       this.tryDodgePlayerBullets(e, delta);
@@ -429,6 +457,34 @@ mixin(GameScene, {
         this.damagePlayer(16);
       }
     });
+  },
+
+  // satellite armé : 1 orbe bleu visé (2 puis 3 selon la menace)
+  enemySatShot(e){
+    if (!this.player.active || this._bLoad > BULLET_CAP) return;
+    if (!this.textures.exists('satOrb')){ const c = this.textures.createCanvas('satOrb', 26, 26), g = c.context, gr = g.createRadialGradient(13,13,1,13,13,12); gr.addColorStop(0,'#ffffff'); gr.addColorStop(0.4,'#bfe8ff'); gr.addColorStop(0.75,'rgba(70,150,255,0.8)'); gr.addColorStop(1,'rgba(30,90,255,0)'); g.fillStyle = gr; g.fillRect(0,0,26,26); c.refresh(); }
+    const base = Phaser.Math.Angle.Between(e.x, e.y + 10, this.player.x, this.player.y), n = this.alertLevel >= 3 ? 3 : (this.alertLevel >= 2 ? 2 : 1);
+    this.spreadOffsets(n).forEach(off=>{
+      const b = this.enemyBullets.create(e.x, e.y + 12, 'satOrb');
+      b.setDepth(4); b.damage = 8; b.setScale(0.8); b.body.setCircle(7, 6, 6); b.setBlendMode(Phaser.BlendModes.ADD);
+      this.physics.velocityFromRotation(base + off, this.eSpd(235), b.body.velocity);
+    });
+    sfx.enemyShot({ pan:this.panOf(e.x) });
+  },
+
+  // un satellite détruit se disloque : des débris partent dans tous les sens (le premier vise le vaisseau s'il est proche) — à esquiver
+  satDebris(e){
+    if (this._bLoad > BULLET_CAP) return;
+    const x = e.x, y = e.y, big = e.enemyType === 'sat', n = big ? Phaser.Math.Between(4, 6) : Phaser.Math.Between(3, 4);
+    const pa = Phaser.Math.Angle.Between(x, y, this.player.x, this.player.y), close = Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < 300;
+    for (let i=0;i<n;i++){
+      const b = this.enemyBullets.create(x, y, 'tutoDebris', Phaser.Math.Between(0, TUTO_NDEB-1));
+      b.setDepth(4).setScale(0.6); b.damage = 6;
+      const r = Math.max(6, b.width*0.28); b.body.setCircle(r, b.width/2 - r, b.height/2 - r);
+      const ang = (i === 0 && close) ? pa + Phaser.Math.FloatBetween(-0.25, 0.25) : Math.random()*Math.PI*2;
+      this.physics.velocityFromRotation(ang, Phaser.Math.Between(70, 140), b.body.velocity);
+      b.setAngularVelocity(Phaser.Math.Between(-260, 260));
+    }
   },
 
   enemySnipeShot(e){

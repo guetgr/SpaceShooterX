@@ -54,7 +54,7 @@ mixin(HomeScene, {
     const p = getWorldProgress(), n = WORLDS.length;
     this.galWorlds.forEach(g=>{
       const w = g.w, open = isWorldUnlocked(w.id, p) && this.galForceLock !== g.i, th = w.theme || {};
-      const key = makePlanetTexture(this, 'planet_' + w.id, { size:96, seed:th.seed || 1, freq:th.freq || 1.6, bands:th.bands || 0, rim:th.rim, palette:th.palette || [0x222244, 0x44448a, 0x8888cc] });
+      const key = worldPlanetTexture(this, w, 96);
       g.img.setTexture(key).setTint(open ? 0xffffff : 0x2c3050).setScale(open ? GAL_SCALE : GAL_SCALE*0.85);
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
       const sm = worldSummary(w.id, p);

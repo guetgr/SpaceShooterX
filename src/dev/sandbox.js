@@ -30,7 +30,7 @@ mixin(GameScene, {
     btn('TOUT EFFACER', ()=>{ sc.enemies.children.iterate(e=>{ if (e && e.active && !e.bossId) e.destroy(); }); sc.enemyBullets.clear(true, true); });
     btn('TUER LES BOSS', ()=>{ const bs = []; sc.enemies.children.iterate(e=>{ if (e && e.active && e.bossId && !e.isBossPart) bs.push(e); }); bs.forEach(b=> sc.killEnemy(b)); });
     sec('MOBS');
-    ['grunt','diver','shooter','turret','drone','splitter','shieldedGrunt','mine','tank','bomber','sniper','swarmer','healer','ghost','elite','mothership','vortex','charo','kamikaze','spider'].forEach(t=>{
+    ['grunt','diver','shooter','turret','drone','splitter','shieldedGrunt','mine','tank','bomber','sat','satgun','sniper','swarmer','healer','ghost','elite','mothership','vortex','charo','kamikaze','spider'].forEach(t=>{
       btn(t, ()=>{ const n = { swarmer:4, kamikaze:3, spider:4 }[t] || 1, vx = sc.visibleXRange(150), cx = Phaser.Math.Between(vx.min, vx.max);
                    for (let i=0;i<n;i++) sc.spawnOneEnemy(t, n > 1 ? cx + (i-(n-1)/2)*60 : undefined); });
     });

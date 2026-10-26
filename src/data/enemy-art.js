@@ -25,5 +25,7 @@ const ENEMY_ART = {
   splitterMini: { tex:'splitterMiniIdle', scale:0.55, anim:'splitterMiniFly', body:[70,70], boomTex:'splitterMiniExpl', boom:'explodeSplitterMini', boomScale:0.55 },
   mothership: { tex:'motherIdle', scale:0.72, anim:'motherFly', body:[66,86], boomTex:'motherDeath', boom:'explodeMother', boomScale:0.5 },
   healer:  { tex:'healerIdle',  scale:0.62,  anim:'healerFly',   body:[40,58], boomTex:'explosionSheet', boom:'explodeGrunt', boomScale:0.4 },
+  sat:      { tex:'tutoSat', scale:0.5, anim:null, flipY:false, body:[110,110], boomTex:'tutoSat', boom:'explodeSat', boomScale:0.5 },                       // satellite hors service (celui du tuto), dérive en lâchant des débris
+  satgun:   { tex:'satgunSheet', scale:0.5, anim:'satgunIdle', flipY:false, body:[120,150], boomTex:'satgunSheet', boom:'explodeSatgun', boomScale:0.5 },     // satellite armé : se met en position, charge (lueur bleue), tire des orbes
   sniper:  { tex:'sniperIdle',  scale:0.55,  anim:'sniperFly',   body:[90,110], boomTex:'sniperExpl',     boom:'explodeSniper',  boomScale:0.5, bulletTex:'sniperBullet', bulletScale:0.45 },
 };

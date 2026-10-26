@@ -28,6 +28,8 @@ const BESTIARY_LIST = [
   { type:'mine',          label:'MINE',           tex:'mine2' },
   { type:'tank',          label:'TANK',           tex:'tankSheet', frame:0 },
   { type:'bomber',        label:'BOMBER',         tex:'bomberSheet', frame:0 },
+  { type:'sat',           label:'SATELLITE',      tex:'tutoSat', frame:0 },
+  { type:'satgun',        label:'SATELLITE ARME', tex:'satgunSheet', frame:0 },
   { type:'sniper',        label:'SNIPER',         tex:'sniperIdle', frame:0 },
   { type:'swarmer',       label:'SWARMER',        tex:'swarmerSheet', frame:0 },
   { type:'healer',        label:'HEALER',         tex:'healerIdle', frame:0 },
