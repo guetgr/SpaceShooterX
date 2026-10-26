@@ -16,6 +16,7 @@
 <script src="vendor/gsap.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/agp.css">
+<link rel="stylesheet" href="css/hud.css">
 </head>
 <body>
 <div id="stage">
@@ -26,21 +27,22 @@
     <div id="hud">
       <div id="hud-top">
         <div class="hp-wrap">
-          <div class="hp-label">COQUE</div>
-          <div class="hp-bar-track" id="hpTrack"><div class="hp-bar-ghost" id="hpGhost"></div><div class="hp-bar-fill" id="hpFill"></div></div>
-          <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
+          <div class="hud-ava"><img id="hudAvaImg" alt="" draggable="false"><div class="lvl-badge" id="lvlBadge">1</div></div>
+          <div class="hud-bars">
+            <div class="hp-bar-track" id="hpTrack"><div class="hp-bar-ghost" id="hpGhost"></div><div class="hp-bar-fill" id="hpFill"></div><span class="hp-txt" id="hpTxt"></span></div>
+            <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
+            <div class="xp-wrap"><div class="xp-track" id="xpTrack"><div class="xp-fill" id="xpFill"></div></div></div>
+          </div>
         </div>
-        <button class="mute-btn" id="pauseBtn" aria-label="Pause"><i data-ico="pause" data-s="24"></i></button>
-        <div class="score-wrap">
-          <div class="score-label">RENDEMENT</div>
-          <div class="score-val" id="scoreVal">0</div>
+        <div class="hud-right">
+          <div class="score-wrap">
+            <div class="score-label">RENDEMENT</div>
+            <div class="score-val" id="scoreVal">0</div>
+          </div>
+          <button class="mute-btn" id="pauseBtn" aria-label="Pause"><i data-ico="pause" data-s="24"></i></button>
         </div>
       </div>
-      <div class="xp-wrap">
-        <div class="lvl-badge" id="lvlBadge">GR.1</div>
-        <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
-      </div>
-      <div class="wave-note" id="waveNote">T+00:00</div>
+      <div class="wave-note" id="waveNote"><i class="wn-fill" id="waveFill"></i><i class="wn-ico" id="waveIco"></i><span class="wn-txt" id="waveTxt">T+00:00</span></div>
       <div id="relicRow"></div>
     </div>
 

@@ -270,6 +270,7 @@ mixin(GameScene, {
     if (!this.introActive) this.updateSkills(delta);                    // les compétences automatiques (tonnerre, pulsar...) attendent la fin du décollage
     this.updateOverdrive(delta);
     this.updateStyleHud(delta);
+    this.updateHudSway(delta);
     this.cleanupGroup(this.playerBullets, 40);
     this.cleanupGroup(this.missiles, 60);
     this.cleanupGroup(this.enemyBullets, 40);
