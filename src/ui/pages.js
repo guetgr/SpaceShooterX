@@ -54,23 +54,50 @@ mixin(GameScene, {
     return items;
   },
 
+  // atouts GLOBAUX : les modules du catalogue R&D achetés (permanents, appliqués à chaque mission, jamais perdus)
+  globalGearItems(){
+    const st = this.treeState || {}, out = [];
+    ALL_TREE_NODES.forEach(n=>{
+      const r = st[n.id] || 0; if (n.isHub || r <= 0) return;
+      out.push({ icon:n.icon, name:n.name, desc:n.desc.replace(/\s*\/\s*niveau/i, ' par rang'), count:r, max:n.max, kind:'GLOBAL' });
+    });
+    return out;
+  },
+
+  // texte « atouts globaux actifs » (début de mission) : combien de modules R&D et ce qu'ils apportent aux caractéristiques de base
+  globalGearSummary(){
+    const g = this.globalGearItems(); if (!g.length) return '';
+    const b = this.treeBonus || {}, parts = [];
+    if (b.dmg > 0.005) parts.push('+' + Math.round(b.dmg*100) + ' % de charge');
+    if (b.hp >= 1) parts.push('+' + Math.round(b.hp) + ' de coque');
+    if (b.shield >= 1) parts.push('+' + Math.round(b.shield) + ' de champ de sécurité');
+    return 'Catalogue R&D chargé : ' + g.length + (g.length > 1 ? ' atouts globaux actifs' : ' atout global actif') + (parts.length ? ' (' + parts.join(', ') + ')' : '') + '.';
+  },
+
   renderPauseGear(keepPage){
-    const items = this.pauseGearItems(), per = 18, pages = Math.max(1, Math.ceil(items.length/per));
+    const G = this.globalGearItems(), M = this.pauseGearItems();
+    if (!this.pgTab) this.pgTab = G.length || !M.length ? 'global' : 'mission';
+    const isG = this.pgTab === 'global', items = isG ? G : M, per = 18, pages = Math.max(1, Math.ceil(items.length/per));
+    document.getElementById('pgTabG').classList.toggle('on', isG); document.getElementById('pgTabM').classList.toggle('on', !isG);
+    document.getElementById('pgNG').textContent = G.length ? G.length : ''; document.getElementById('pgNM').textContent = M.length ? M.length : '';
+    document.getElementById('pgTitle').textContent = isG ? 'R&D · PERMANENTS, TOUJOURS ACTIFS' : 'CETTE MISSION SEULEMENT';
+    document.getElementById('pauseGear').classList.toggle('g-global', isG);
     if (!keepPage) this.pgPageNo = 0;
     this.pgPageNo = Math.min(Math.max(0, this.pgPageNo||0), pages-1);
     const grid = document.getElementById('pgGrid'); grid.innerHTML = '';
     items.slice(this.pgPageNo*per, (this.pgPageNo+1)*per).forEach(it=>{
-      const b = document.createElement('button'); b.className = 'pg-it' + (it.kind === 'RELIQUE' ? ' rel' : '');
+      const b = document.createElement('button'); b.className = 'pg-it' + (it.kind === 'RELIQUE' ? ' rel' : '') + (isG ? ' glob' : '');
       b.innerHTML = pxImg(it.icon, 24) + (it.count > 1 ? '<b>x'+it.count+'</b>' : '');
       b.onclick = ()=>{
         sfx.uiSelect(); grid.querySelectorAll('.pg-it').forEach(x=>x.classList.remove('sel')); b.classList.add('sel');
-        document.getElementById('pgDetail').innerHTML = '<em>' + it.name + '</em>' + (it.count > 1 ? ' (niveau ' + it.count + ')' : '') + ' · ' + it.kind + '<br>' + it.desc;
+        document.getElementById('pgDetail').innerHTML = '<em>' + it.name + '</em>' + (isG ? ' (rang ' + it.count + '/' + it.max + ') · <u>ATOUT GLOBAL</u> : permanent' : (it.count > 1 ? ' (niveau ' + it.count + ')' : '') + ' · <u>ATOUT DE MISSION</u> (' + it.kind.toLowerCase() + ')') + '<br>' + it.desc;
       };
       grid.appendChild(b);
     });
-    if (!items.length) document.getElementById('pgDetail').textContent = "Aucune compétence prise pour l'instant : monte de niveau pour en choisir.";
-    document.getElementById('pgCount').textContent = items.length ? '(' + items.length + ')' : '';
-    document.getElementById('pgPage').textContent = items.length ? ('PAGE ' + (this.pgPageNo+1) + '/' + pages + ' · ' + items.length) : '';
+    if (!items.length) document.getElementById('pgDetail').textContent = isG ? "Aucun atout global : commandez des modules au catalogue R&D, ils s'activeront à chaque mission." : "Aucun atout de mission pour l'instant : montez de niveau pour en choisir.";
+    else if (!keepPage) document.getElementById('pgDetail').textContent = isG ? "Ces atouts viennent du catalogue R&D : actifs dès le décollage, à chaque mission, pour toujours." : "Ces atouts ont été choisis pendant cette intervention : ils disparaissent à la fin.";
+    document.getElementById('pgCount').textContent = (G.length + M.length) ? '(' + G.length + ' · ' + M.length + ')' : '';
+    document.getElementById('pgPage').textContent = pages > 1 ? ('PAGE ' + (this.pgPageNo+1) + '/' + pages) : '';
     document.querySelector('#pauseGear .pg-nav').style.display = pages > 1 ? 'flex' : 'none';
   },
 

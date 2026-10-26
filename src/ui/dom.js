@@ -116,6 +116,7 @@ mixin(GameScene, {
       this.renderStatsPage();
       Motion.closeSheet('pauseMenu', ()=> document.getElementById('statsPage').classList.remove('hidden'));
     };
+    ['pgTabG', 'pgTabM'].forEach(id=>{ document.getElementById(id).onclick = ()=>{ const t = document.getElementById(id).dataset.t; if (this.pgTab === t) return; sfx.uiSelect(); this.pgTab = t; this.renderPauseGear(false); }; });
     document.getElementById('pgPrev').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) - 1; this.renderPauseGear(true); };
     document.getElementById('pgNext').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) + 1; this.renderPauseGear(true); };
     document.getElementById('btnOpenBestiary').onclick = ()=>{
