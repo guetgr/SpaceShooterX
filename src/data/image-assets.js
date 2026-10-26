@@ -266,9 +266,10 @@ const B64_HYREGROW = asset('sprites/hyregrow.png');
 const SNIPER_EXPL_B64 = asset('sprites/sniper_expl.png');
 
 const TUTO_SAT_B64 = asset('sprites/tuto_sat.webp');
-const TUTO_BOSS_B64 = asset('sprites/tuto_boss.webp');
-const TUTO_BOSSX_B64 = asset('sprites/tuto_bossx.webp');
-const TUTO_PANEL_B64 = asset('sprites/tuto_panel.webp');
 const TUTO_DEBRIS_B64 = asset('sprites/tuto_debris.webp');
+// Antenne-Mère (boss du tuto) : 4 états d'usure 512x512 + feuilles d'effets (lumière additive) — voir game/tuto-boss-fx.js et data/boss-antenne.js
+const AC_BOSS_B64 = [0, 1, 2, 3].map(i=> asset('sprites/ac_boss' + i + '.webp'));
+const AC_FX_B64 = {};
+['flame', 'smoke', 'spark', 'impact', 'orb', 'charge', 'muzzle', 'boom', 'shock'].forEach(n=>{ AC_FX_B64[n] = asset('sprites/ac_fx_' + n + '.webp'); });
 const SATGUN_SHEET_B64 = asset('sprites/satgun_sheet.webp');      // satellite armé : 26 images de 200x200 (idle 0-4 · charge 5-6 · recul 7-8 · dégâts 9-17 · explosion 18-25)
 const TUTO_NDEB = 8;

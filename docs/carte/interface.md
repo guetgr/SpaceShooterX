@@ -273,14 +273,14 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`audio/music/` : 23, `audio/sfx/` : 66, `fonts/` : 3, `sprites/` : 138
+`audio/music/` : 23, `audio/sfx/` : 81, `fonts/` : 3, `sprites/` : 148
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 
 —
 
-### Assets dont le nom n'apparaît nulle part dans le code (0 candidats)
+### Assets dont le nom n'apparaît nulle part dans le code (13 candidats)
 
 Les sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.
 
-
+`sprites/ac_boss0.webp`, `sprites/ac_boss1.webp`, `sprites/ac_boss2.webp`, `sprites/ac_boss3.webp`, `sprites/ac_fx_boom.webp`, `sprites/ac_fx_charge.webp`, `sprites/ac_fx_flame.webp`, `sprites/ac_fx_impact.webp`, `sprites/ac_fx_muzzle.webp`, `sprites/ac_fx_orb.webp`, `sprites/ac_fx_shock.webp`, `sprites/ac_fx_smoke.webp`, `sprites/ac_fx_spark.webp`

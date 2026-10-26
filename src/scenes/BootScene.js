@@ -44,9 +44,10 @@ class BootScene extends Phaser.Scene{
       { key:'bossSheet',    src:BOSS2_SHEET_B64,   fw:200, fh:220, n:8 },
       { key:'bossExpl',     src:BOSS2_EXPL_B64,    fw:200, fh:200, n:5 },
       { key:'tutoSat',      src:TUTO_SAT_B64,      fw:165, fh:145, n:15 },
-      { key:'tutoBoss',     src:TUTO_BOSS_B64,     fw:0,   fh:0,   n:0 },
-      { key:'tutoBossX',    src:TUTO_BOSSX_B64,    fw:200, fh:170, n:5 },
-      { key:'tutoPanel',    src:TUTO_PANEL_B64,    fw:90,  fh:60,  n:2 },
+      { key:'acBoss0', src:AC_BOSS_B64[0], fw:0, fh:0, n:0 }, { key:'acBoss1', src:AC_BOSS_B64[1], fw:0, fh:0, n:0 }, { key:'acBoss2', src:AC_BOSS_B64[2], fw:0, fh:0, n:0 }, { key:'acBoss3', src:AC_BOSS_B64[3], fw:0, fh:0, n:0 },
+      { key:'acFxFlame', src:AC_FX_B64.flame, fw:64, fh:96, n:12 }, { key:'acFxSmoke', src:AC_FX_B64.smoke, fw:96, fh:96, n:10 }, { key:'acFxSpark', src:AC_FX_B64.spark, fw:64, fh:64, n:8 },
+      { key:'acFxImpact', src:AC_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'acFxOrb', src:AC_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'acFxCharge', src:AC_FX_B64.charge, fw:128, fh:128, n:12 },
+      { key:'acFxMuzzle', src:AC_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'acFxBoom', src:AC_FX_B64.boom, fw:256, fh:256, n:14 }, { key:'acFxShock', src:AC_FX_B64.shock, fw:192, fh:192, n:10 },
       { key:'tutoDebris',   src:TUTO_DEBRIS_B64,   fw:48,  fh:48,  n:TUTO_NDEB },
       { key:'satgunSheet',  src:SATGUN_SHEET_B64,  fw:200, fh:200, n:26 },
       { key:'bossBullet2',  src:BOSS2_BULLET_B64,  fw:0,   fh:0,   n:0 },
@@ -193,6 +194,8 @@ class BootScene extends Phaser.Scene{
     this.anims.create({ key:'satgunCharge', frames:this.anims.generateFrameNumbers('satgunSheet', {start:5,end:6}), frameRate:9, repeat:-1 });
     this.anims.create({ key:'satgunRecoil', frames:this.anims.generateFrameNumbers('satgunSheet', {start:7,end:8}), frameRate:10, repeat:0 });
     this.anims.create({ key:'explodeSatgun', frames:this.anims.generateFrameNumbers('satgunSheet', {start:18,end:25}), frameRate:14, repeat:0 });
+    [['acFlame', 'acFxFlame', 11, 18, -1], ['acSmoke', 'acFxSmoke', 9, 9, 0], ['acSpark', 'acFxSpark', 7, 30, 0], ['acImpact', 'acFxImpact', 7, 28, 0], ['acOrb', 'acFxOrb', 7, 16, -1], ['acCharge', 'acFxCharge', 11, 26, 0], ['acMuzzle', 'acFxMuzzle', 5, 30, 0], ['acBoom', 'acFxBoom', 13, 24, 0], ['acShock', 'acFxShock', 9, 22, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // effets du boss du tuto (feuilles de la bibliothèque d'effets)
     this.anims.create({ key:'explodeSat', frames:this.anims.generateFrameNumbers('tutoSat', {start:6,end:14}), frameRate:12, repeat:0 });
     this.anims.create({ key:'explodeBomber', frames:this.anims.generateFrameNumbers('bomberExpl', {start:0,end:4}), frameRate:16, repeat:0 });
     this.anims.create({ key:'swarmerFly', frames:this.anims.generateFrameNumbers('swarmerSheet', {start:0,end:3}), frameRate:13, repeat:-1 });

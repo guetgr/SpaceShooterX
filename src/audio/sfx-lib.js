@@ -131,6 +131,7 @@ const SFX_LIB = {
   tutoBossRing: { g:1, lim:[1,300], run:(s,t,p)=>{ s.play('heavyShot', p); } },
   tutoBossRain: { g:1, lim:[1,300], run:(s,t,p)=>{ s.play('spreadShot', p); } },
   tutoBossSpiral: { g:1, lim:[2,150], run:(s,t,p)=>{ s.play('enemyShot', p); } },
+  tutoBossCharge: { g:1, lim:[1,500], run:(s,t,p)=>{ s.play('bossAlert', p); } },
   tutoBossPhase: { g:1, lim:[1,500], run:(s,t,p)=>{ s.play('boomMed', p); } },
   tutoBossBoomA: { g:1, lim:[2,200], run:(s,t,p)=>{ s.play('boomMed', p); } },
   tutoBossBoomFinal: { g:1, lim:[1,500], run:(s,t,p)=>{ s.play('boomBig', p); } },

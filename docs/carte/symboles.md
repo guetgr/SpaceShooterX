@@ -16,6 +16,22 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `_treeLayout` | const | `src/ui/tree-ui.js` |  |
 | `_uiScale` | const | `src/main.js` |  |
 | `_vnoise` | fonction | `src/gfx/planets.js` |  |
+| `AC` | const | `src/data/boss-antenne.js` |  |
+| `AC_BOSS_B64` | const | `src/data/image-assets.js` |  |
+| `AC_FX_B64` | const | `src/data/image-assets.js` |  |
+| `acBossBuild` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acBossClear` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acBossHit` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acBossUpdate` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acBreak` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acChargeStart` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acChargeStop` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acDeathBoom` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acDeathFinal` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acDrawLive` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acFollow` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acFx` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acHitFlash` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `ACHV_EXPLO` | const | `src/data/achievements.js` |  |
 | `ACHV_GLOBALS` | const | `src/data/achievements.js` |  |
 | `ACHV_KEY` | const | `src/data/achievements.js` |  |
@@ -32,7 +48,14 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `achvTierFor` | fonction | `src/data/achievements.js` |  |
 | `achvToast` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `achvWeighted` | fonction | `src/data/achievements.js` |  |
+| `acPix` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acRandomHull` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acRebuildFlames` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acSetState` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acShard` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
+| `acShot` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `activateOverdrive` | méthode | `src/systems/overdrive.js` | `GameScene` |
+| `acW` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `addLeaderboardEntry` | fonction | `src/data/leaderboard.js` |  |
 | `addOverdrive` | méthode | `src/systems/overdrive.js` | `GameScene` |
 | `addWell` | méthode | `src/events/forces.js` | `GameScene` |
@@ -310,6 +333,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `FLANK_TYPES` | const | `src/core/constants.js` |  |
 | `flipVortex` | méthode | `src/events/core.js` | `GameScene` |
 | `FUSIONS` | const | `src/data/fusions.js` |  |
+| `FX_ANCHOR` | const | `src/data/boss-antenne.js` |  |
 | `GAL_FONT` | const | `src/home/galaxy.js` |  |
 | `GAL_STEP` | const | `src/home/galaxy.js` |  |
 | `galaxyBlast` | méthode | `src/world/background.js` | `GameScene` |
@@ -730,13 +754,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `TURRET_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `TURRET_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `TURRET_SHEET_B64` | const | `src/data/image-assets.js` |  |
-| `TUTO_BOSS_B64` | const | `src/data/image-assets.js` |  |
-| `TUTO_BOSSX_B64` | const | `src/data/image-assets.js` |  |
 | `TUTO_DEBRIS_B64` | const | `src/data/image-assets.js` |  |
 | `TUTO_DEFAULTS` | const | `src/data/tuning-defaults.js` |  |
 | `TUTO_ID` | const | `src/game/tuto.js` |  |
 | `TUTO_NDEB` | const | `src/data/image-assets.js` |  |
-| `TUTO_PANEL_B64` | const | `src/data/image-assets.js` |  |
 | `TUTO_SAT_B64` | const | `src/data/image-assets.js` |  |
 | `TUTO_STEPS` | const | `src/game/tuto.js` |  |
 | `TUTO_TUNE` | const | `src/data/tuning-apply.js` |  |
@@ -826,4 +847,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-819 symboles.
+840 symboles.
