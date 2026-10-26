@@ -1,68 +1,52 @@
 "use strict";
-// Méthodes de GameScene — TUTO (niveau 1 du monde 1, `w1-tuto`, / bouton DEV) : 5 étapes pédagogiques (bouger, tirer, esquiver, enchaîner, boss), satellites + débris, boss satellite.
+// Méthodes de GameScene — TUTO (niveau 1 du monde 1, `w1-tuto`, / bouton DEV) : 3 étapes pédagogiques (bouger, tirer, boss), satellites + débris, boss satellite. Une seule boîte de consigne : N.O.R.M.A. (ui/norma.js).
 // La FINITION (%) du niveau (objectifs pondérés, meilleur de chaque objectif gardé) est définie dans data/completion.js ; ici on la mesure, on l'affiche en direct et on montre le bilan.
 const TUTO_ID = 'w1-tuto';
-const TUTO_STEPS = [
-  { id:'move',  title:'DÉPLACE-TOI',           text:()=> 'GLISSE LE DOIGT POUR BOUGER (OU LES FLÈCHES) · LE TIR EST AUTOMATIQUE', max:()=> TUTO_TUNE.steps.maxMove },
-  { id:'shoot', title:'DÉTRUIS UN SATELLITE',  text:()=> 'PLACE-TOI SOUS LE SATELLITE : TU TIRES TOUT SEUL', max:()=> TUTO_TUNE.steps.maxShoot },
-  { id:'dodge', title:'ESQUIVE LES DÉBRIS',    text:()=> 'DÉTRUIS-EN ' + TUTO_TUNE.steps.dodgeKills + ' DE PLUS · LEURS DÉBRIS TE VISENT : BOUGE !', max:()=> TUTO_TUNE.steps.maxDodge },
-  { id:'wave',  title:'ENCHAÎNE LES VAGUES',   text:()=> 'ILS ARRIVENT DE PLUS EN PLUS VITE', max:()=> TUTO_TUNE.steps.maxWave },
-  { id:'boss',  title:'VAINCS LE BOSS',        text:()=> 'LE SATELLITE SPACEX ARRIVE', max:()=> 1e9 },
+const TUTO_STEPS = [          // 3 étapes : se déplacer, tirer sur les ennemis, le boss. Les consignes sont dans AGP_LINES.tuto (boîte N.O.R.M.A.)
+  { id:'move',  line:'move',  max:()=> TUTO_TUNE.steps.maxMove },
+  { id:'shoot', line:'shoot', max:()=> TUTO_TUNE.steps.maxShoot },
+  { id:'boss',  line:'boss',  max:()=> 1e9 },
 ];
 mixin(GameScene, {
   /* ================= TUTO (bouton dans les PARAMETRES DEV et le menu DEV) =================
-     Étapes: bouger → détruire un satellite → esquiver ses débris → vagues → boss satellite (3 phases), puis bilan de finition.
-     Tout est géré ici: pas de spawn normal, pas d'XP, pas de classement, pas d'événements. Vaisseau de base (stats par défaut). */
+     Étapes: bouger → tirer sur les satellites → boss satellite (3 phases), puis bilan de finition.
+     Tout est géré ici: pas de spawn normal, pas d'XP, pas de classement, pas d'événements. Le vaisseau garde les compétences achetées dans l'arbre. */
   tutoInit(){
     if (!this.textures.exists('tutoOrb')){ const c = this.textures.createCanvas('tutoOrb', 26, 26), g = c.context, gr = g.createRadialGradient(13,13,1,13,13,12); gr.addColorStop(0,'#ffffff'); gr.addColorStop(0.4,'#ffe0c0'); gr.addColorStop(0.75,'rgba(255,150,90,0.8)'); gr.addColorStop(1,'rgba(255,80,40,0)'); g.fillStyle = gr; g.fillRect(0,0,26,26); c.refresh(); }
-    this.tutoSats = []; this.tutoStepLog = []; this.tutoT = 0; this.tutoSpawnCd = 600; this.tutoBoss = null; this.tutoDone = false; this.tutoPhase = 'sats'; this.tutoWarned = false; this._tutoH = {}; this._tutoFin = false;
+    this.tutoSats = []; this.tutoStepLog = []; this.tutoT = 0; this.tutoSpawnCd = 600; this.tutoBoss = null; this.tutoDone = false; this.tutoPhase = 'sats'; this.tutoWarned = false; this._tutoH = {}; this._tutoFin = false; this._tutoWave0 = null; this._tutoSaid = false;
     this.tutoStep = 0; this.tutoStepT = 0; this.tutoKills = 0; this.tutoHits = 0; this.tutoMoved = 0; this.tutoLast = null; this.tutoBossWait = 0;
     this.tutoBest = completionPct(TUTO_ID); this.tutoPctShown = -1; this.tutoRecordBeaten = false; this._tutoRec = null;
     this.tutoUiInit(); this.tutoStepEnter(true);
   },
-  tutoHint(text, ms){
-    let el = document.getElementById('tutoHint');
-    if (!el){ el = document.createElement('div'); el.id = 'tutoHint'; el.style.cssText = 'position:fixed;top:19%;left:50%;transform:translateX(-50%);z-index:60;font:600 11px SSX Label,monospace;color:#9ff;background:rgba(0,10,30,.75);padding:7px 13px;border:1px solid #4af;border-radius:6px;pointer-events:none;text-align:center;max-width:86vw;transition:opacity .4s;opacity:0;'; document.body.appendChild(el); }
-    el.textContent = text; el.style.opacity = '1'; clearTimeout(el._t); el._t = setTimeout(()=>{ el.style.opacity = '0'; }, ms || 3500);
-  },
+  // une transmission de N.O.R.M.A. (la seule boîte de texte du tuto). hold : la consigne reste affichée ; sinon elle s'efface après lecture.
+  tutoSay(key, hold){ Norma.say(AGP_LINES.tuto[key], { prio:true, hold:!!hold }); },
   tutoSfx(name, x){ try { sfx.play(name, { pan: this.panOf(x) }); } catch(e){ /* ignore */ } },
 
   /* ---------- ÉTAPES PÉDAGOGIQUES ---------- */
   tutoUiInit(){
     this.tutoUiClear();
     const host = document.getElementById('boss-hp-wrap').parentNode;
-    const g = document.createElement('div'); g.id = 'tutoGuide';
-    g.innerHTML = '<div class="tg-top"><b class="tg-n"></b><span class="tg-t"></span></div><div class="tg-bar"><i></i></div>';
-    host.appendChild(g);
     const p = document.createElement('div'); p.id = 'tutoPct';
     p.innerHTML = '<div class="tp-row"><span class="tp-lab">FINITION</span><b class="tp-n">0%</b><span class="tp-rec"></span></div><div class="tp-bar"><i class="tp-fill"></i><u class="tp-best"></u><s style="left:25%"></s><s style="left:50%"></s><s style="left:75%"></s></div>';
     host.appendChild(p);
   },
-  tutoUiClear(){ ['tutoGuide', 'tutoPct', 'tutoEnd'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); }); },
+  tutoUiClear(){ ['tutoPct', 'tutoEnd'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); }); },
   tutoStepEnter(first){
-    const S = TUTO_STEPS[this.tutoStep], g = document.getElementById('tutoGuide'); this.tutoStepT = 0;
-    if (g){
-      g.querySelector('.tg-n').textContent = 'ÉTAPE ' + (this.tutoStep + 1) + '/' + TUTO_STEPS.length; g.querySelector('.tg-t').textContent = S.title;
-      g.classList.remove('done'); g.classList.remove('pop'); void g.offsetWidth; g.classList.add('pop');
-    }
+    const S = TUTO_STEPS[this.tutoStep]; this.tutoStepT = 0;
     this.tutoStepLog.push({ id:S.id, at:Math.round(this.tutoT*10)/10 });
-    this.tutoHint(S.text(), S.id === 'move' ? 5500 : 4200);
     if (!first) this.tutoSfx('tutoDone', GAME_W/2);
-    if (S.id === 'wave') this.tutoSpawnCd = 400;
     if (S.id === 'boss'){ this.tutoPhase = 'bosswarn'; this.tutoBossWait = TUTO_TUNE.steps.bossWait * 1000; this.tutoWarned = true; this.tutoSfx('tutoBossWarn', GAME_W/2); const bn = document.getElementById('boss-banner'); if (bn){ bn.classList.add('show'); setTimeout(()=> bn.classList.remove('show'), 2400); } }
+    if (!first || this._tutoSaid) this.tutoSay(S.line, true);        // la 1re consigne part à la fin du décollage (tutoUpdate)
   },
   tutoStepProgress(){            // 0..1 de l'étape en cours
-    const id = TUTO_STEPS[this.tutoStep].id, k = this.tutoKills, T = TUTO_TUNE.steps, dk = Math.max(1, T.dodgeKills);
+    const id = TUTO_STEPS[this.tutoStep].id, T = TUTO_TUNE.steps;
     if (id === 'move') return Math.min(1, this.tutoMoved / Math.max(1, T.moveNeed));
-    if (id === 'shoot') return Math.min(1, k / 1);
-    if (id === 'dodge') return Math.min(1, Math.max(0, (k - 1) / dk));
-    if (id === 'wave') return Math.min(1, Math.max(0, (k - 1 - dk) / Math.max(1, T.satTarget - 1 - dk)));
+    if (id === 'shoot') return Math.min(1, this.tutoKills / Math.max(1, T.satTarget));
     const B = this.tutoBoss; return B ? Math.max(0, Math.min(1, 1 - B.hp / B.max)) : 0;
   },
   tutoStepCheck(){
     const S = TUTO_STEPS[this.tutoStep]; if (S.id === 'boss') return;
     if (this.tutoStepProgress() >= 1 || this.tutoStepT > S.max()){       // plafond de temps: on n'enferme jamais le joueur dans une étape
-      const g = document.getElementById('tutoGuide'); if (g) g.classList.add('done');
       this.tutoStep++; this.tutoStepEnter(false);
     }
   },
@@ -71,8 +55,8 @@ mixin(GameScene, {
     return { sats: Math.min(1, this.tutoKills / Math.max(1, TUTO_TUNE.steps.satTarget)), boss: B ? Math.max(0, Math.min(1, 1 - B.hp / B.max)) : 0, win: won ? 1 : 0, clean: won ? Math.max(0, 1 - this.tutoHits * TUTO_TUNE.comp.hitPenalty) : 0 };
   },
   tutoUiUpdate(){
-    const g = document.getElementById('tutoGuide'), p = document.getElementById('tutoPct'); if (!g || !p) return;
-    g.querySelector('.tg-bar > i').style.width = Math.round(this.tutoStepProgress() * 100) + '%';
+    const p = document.getElementById('tutoPct'); if (!p) return;
+    Norma.progress(this.tutoStepProgress());
     const pct = completionPct(TUTO_ID, this.tutoComp());
     if (pct === this.tutoPctShown) return;
     const prev = this.tutoPctShown; this.tutoPctShown = pct;
@@ -82,7 +66,7 @@ mixin(GameScene, {
     p.classList.remove('tick'); void p.offsetWidth; p.classList.add('tick');
     if (!this.tutoRecordBeaten && this.tutoBest > 0 && pct > this.tutoBest){ this.tutoRecordBeaten = true; p.classList.add('rec'); p.querySelector('.tp-rec').textContent = 'NOUVEAU RECORD !'; this.tutoSfx('tutoBossPhase', GAME_W/2); }
     const st = COMPLETION_STEPS.find(s=> prev < s && pct >= s);
-    if (st){ p.classList.remove('mile'); void p.offsetWidth; p.classList.add('mile'); this.tutoHint(st === 100 ? '★ FINITION 100% ★' : 'PALIER ' + st + '% !', 1800); this.tutoSfx('tutoDone', GAME_W/2); }
+    if (st){ p.classList.remove('mile'); void p.offsetWidth; p.classList.add('mile'); this.tutoSfx('tutoDone', GAME_W/2); }
   },
 
   /* ---------- SATELLITES ---------- */
@@ -117,7 +101,6 @@ mixin(GameScene, {
       this.physics.velocityFromRotation(ang, Phaser.Math.Between(D.speedMin, D.speedMax), b.body.velocity);
       b.setAngularVelocity(Phaser.Math.Between(-260, 260));
     }
-    if (byPlayer && !this._tutoH.debris){ this._tutoH.debris = 1; this.tutoHint('ÉVITE LES DÉBRIS !', 3200); }
   },
   tutoHitBox(list, obj, hw, hh, fn, tag){
     list.children.iterate(b=>{
@@ -130,22 +113,24 @@ mixin(GameScene, {
       }
     });
   },
-  tutoSpawnLogic(delta){          // le rythme des satellites dépend de l'étape (aucun à l'étape 1, un seul et lent à l'étape 2, etc.)
-    const id = TUTO_STEPS[this.tutoStep].id, alive = this.tutoSats.length;
-    if (id !== 'shoot' && id !== 'dodge' && id !== 'wave') return;
+  tutoSpawnLogic(delta){          // étape 1 : aucun satellite · étape 2 : un seul, lent, puis des vagues de plus en plus serrées
+    if (TUTO_STEPS[this.tutoStep].id !== 'shoot') return;
+    const alive = this.tutoSats.length;
     this.tutoSpawnCd -= delta; if (this.tutoSpawnCd > 0) return;
-    if (id === 'shoot'){ if (alive < 1){ this.tutoSpawnCd = 900; this.tutoSpawnSat(true); } return; }
-    if (id === 'dodge'){ if (alive < 2){ this.tutoSpawnCd = 1300; this.tutoSpawnSat(false); } return; }
-    const T = TUTO_TUNE.sats;
-    if (alive < T.capBase + Math.min(T.capExtra, Math.floor(this.tutoStepT / Math.max(1, T.capEvery)))){ this.tutoSpawnCd = Phaser.Math.Linear(T.spawnCdStart, T.spawnCdEnd, Math.min(1, this.tutoStepT / Math.max(1, T.rampTime))) * Phaser.Math.FloatBetween(0.8, 1.2); this.tutoSpawnSat(false); }
+    if (this.tutoKills < 1){ if (alive < 1){ this.tutoSpawnCd = 900; this.tutoSpawnSat(true); } return; }
+    if (this._tutoWave0 === null) this._tutoWave0 = this.tutoStepT;
+    const T = TUTO_TUNE.sats, w = this.tutoStepT - this._tutoWave0;
+    if (alive < T.capBase + Math.min(T.capExtra, Math.floor(w / Math.max(1, T.capEvery)))){ this.tutoSpawnCd = Phaser.Math.Linear(T.spawnCdStart, T.spawnCdEnd, Math.min(1, w / Math.max(1, T.rampTime))) * Phaser.Math.FloatBetween(0.8, 1.2); this.tutoSpawnSat(false); }
   },
   tutoUpdate(delta){
     if (this.tutoDone || !this.running) return;
     if (this.introActive){ return; }
+    delta = Math.min(delta, 100);                     // un à-coup (chargement, onglet en arrière-plan) ne doit pas avaler une étape
     const dt = delta/1000; this.tutoT += dt; this.tutoStepT += dt;
     const vy = this.visibleYRange(0), px = this.player.x, py = this.player.y;
     if (this.tutoLast) this.tutoMoved += Math.hypot(px - this.tutoLast.x, py - this.tutoLast.y);
     this.tutoLast = { x:px, y:py };
+    if (!this._tutoSaid){ this._tutoSaid = true; this.tutoSay(TUTO_STEPS[this.tutoStep].line, true); }       // 1re consigne : le décollage est fini
     this.tutoStepCheck();
     if (this.tutoPhase === 'sats') this.tutoSpawnLogic(delta);
     else if (this.tutoPhase === 'bosswarn'){ this.tutoBossWait -= delta; if (this.tutoBossWait <= 0) this.tutoSpawnBoss(); }
@@ -182,18 +167,18 @@ mixin(GameScene, {
   tutoBossUpdate(delta, dt){
     const B = this.tutoBoss; if (B.dead) return;
     B.t += dt; const sp = B.sp, px = this.player.x, py = this.player.y;
-    if (B.state === 'enter'){ sp.y += 80*dt; if (sp.y >= B.ty){ sp.y = B.ty; B.state = 'fight'; B.t = 0; this.tutoHint('DÉTRUIS LE SATELLITE !', 3000); } }
+    if (B.state === 'enter'){ sp.y += 80*dt; if (sp.y >= B.ty){ sp.y = B.ty; B.state = 'fight'; B.t = 0; } }
     else {
       sp.x = B.cx + Math.sin(B.t*0.55)*B.amp; sp.y = B.ty + Math.sin(B.t*0.9)*10;
       const BT = TUTO_TUNE.boss, f = B.hp / B.max, ph = f > BT.p2 ? 1 : f > BT.p3 ? 2 : 3;
       if (ph !== B.phase){ B.phase = ph; this.cameras.main.flash(90, 255, 140, 60, false); this.juiceShake(0.5); this.juiceStop('bossPhase'); this.tutoSfx('tutoBossPhase', sp.x);
         const fill = document.getElementById('bossHpFill'); if (fill) fill.className = 'boss-hp-fill p' + ph;
-        sp.setTint(ph === 2 ? 0xffd2b4 : 0xff9a9a); this.tutoHint(ph === 2 ? 'IL EST ENDOMMAGÉ !' : 'FUREUR !', 2200); }
+        sp.setTint(ph === 2 ? 0xffd2b4 : 0xff9a9a); this.tutoSay(ph === 2 ? 'p2' : 'p3'); }
       const bx = sp.x, by = sp.y + 40;
       B.aimCd -= delta; if (B.aimCd <= 0){ B.aimCd = ph === 3 ? BT.aimCd3 : BT.aimCd; const a = Phaser.Math.Angle.Between(bx, by, px, py); [-0.2, 0, 0.2].forEach(o=> this.tutoBossShot(bx, by, a + o, BT.aimSpeed, 0xff5050, BT.aimDmg)); this.tutoSfx('tutoBossAim', bx);
-        if (!this._tutoH.aim){ this._tutoH.aim = 1; this.tutoHint('TIRS VISÉS : NE RESTE PAS EN PLACE !', 2800); } }
+        if (!this._tutoH.aim){ this._tutoH.aim = 1; this.tutoSay('aim'); } }
       B.ringCd -= delta; if (B.ringCd <= 0){ B.ringCd = BT.ringCd; const n = Math.max(3, Math.round(BT.ringCount)), gap = Phaser.Math.Between(0, n-1), gw = Math.round(BT.ringGap); for (let i=0;i<n;i++){ if (((i - gap + n) % n) < gw) continue; this.tutoBossShot(bx, by, i/n*6.2832, BT.ringSpeed, 0xffa040, BT.ringDmg); } this.tutoSfx('tutoBossRing', bx);
-        if (!this._tutoH.ring){ this._tutoH.ring = 1; this.tutoHint('FAUFILE-TOI DANS LA BRÈCHE DE L\'ANNEAU !', 3000); } }
+        if (!this._tutoH.ring){ this._tutoH.ring = 1; this.tutoSay('ring'); } }
       if (ph >= 2){ B.rainCd -= delta; if (B.rainCd <= 0){ B.rainCd = BT.rainCd; [-115, 0, 115].forEach(o=> this.tutoBossShot(bx + o + Phaser.Math.Between(-20, 20), by - 10, Math.PI/2, BT.rainSpeed, 0xff8040, BT.rainDmg)); this.tutoSfx('tutoBossRain', bx); } }
       if (ph >= 3){ B.spCd -= delta; if (B.spCd <= 0){ B.spCd = BT.spiralCd; B.spA += 0.36; this.tutoBossShot(bx, by, B.spA, BT.spiralSpeed, 0xff3060, BT.spiralDmg); this.tutoBossShot(bx, by, B.spA + Math.PI, BT.spiralSpeed, 0xff3060, BT.spiralDmg); this.tutoSfx('tutoBossSpiral', bx); } }
       // dégâts reçus
@@ -208,7 +193,7 @@ mixin(GameScene, {
   },
   tutoBossDie(){
     const B = this.tutoBoss; if (B.dead) return; B.dead = true; this.tutoPhase = 'end'; this.tutoDone = true;
-    this.tutoUiUpdate();
+    this.tutoUiUpdate(); Norma.progress(null); this.tutoSay('win');
     this.enemyBullets.children.iterate(b=>{ if (b) b.destroy(); });
     const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.remove('show');
     const sp = B.sp, x = sp.x, y = sp.y; sp.setVisible(false);
@@ -268,7 +253,7 @@ mixin(GameScene, {
   },
   tutoCleanup(){
     (this.tutoSats || []).forEach(s=>{ if (s.sp && s.sp.active) s.sp.destroy(); }); this.tutoSats = [];
-    const h = document.getElementById('tutoHint'); if (h) h.remove();
+    Norma.reset();
     this.tutoUiClear();
     const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.remove('show');
     const bn = document.getElementById('boss-banner'); if (bn) bn.classList.remove('show');
@@ -281,7 +266,7 @@ mixin(GameScene, {
   },
   tutoPlayerDied(){
     if (this.tutoDone) return; this.tutoDone = true; this.running = false; this.hasActiveRun = false;
-    music.stop(); this.playerDeathFx(); this.tutoBank();
+    music.stop(); this.playerDeathFx(); this.tutoBank(); Norma.progress(null); this.tutoSay('lose');
     this.time.delayedCall(1800, ()=> this.tutoShowEnd(false));
   },
 });

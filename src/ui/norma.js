@@ -17,24 +17,33 @@ const Norma = {
     if (!e){
       const host = document.getElementById('game-container'); if (!host) return null;
       e = document.createElement('div'); e.id = 'norma';
-      e.innerHTML = '<div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A <u>// TRANSMISSION</u></div><div class="nm-txt"></div></div>';
+      e.innerHTML = '<div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A <u>// TRANSMISSION</u></div><div class="nm-txt"></div><div class="nm-prog"><i></i></div></div>';
       host.appendChild(e);
     }
     return e;
   },
 
   // transmission en combat. o.prio : passe devant la file · o.gap : délai minimum depuis la dernière (ms, 14 s par défaut)
+  // o.hold : la ligne reste affichée jusqu'à la suivante (consignes du tuto) au lieu de s'effacer toute seule
   say(text, o){
     o = o || {}; if (!text) return;
     const now = performance.now();
     if (!o.prio && now - this._lastAt < (o.gap == null ? 14000 : o.gap)) return;
     if (o.prio) this._q = [];
-    this._q.push(text); if (!this._showing || o.prio) this._next(!!o.prio);
+    this._q.push({ text, hold:!!o.hold }); if (!this._showing || o.prio) this._next(!!o.prio);
+  },
+
+  // mini barre sous le texte (avancement de la consigne en cours) ; null la masque
+  progress(p){
+    const e = document.getElementById('norma'); if (!e) return;
+    e.classList.toggle('prog', p != null);
+    if (p != null) e.querySelector('.nm-prog > i').style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + '%';
   },
 
   _next(force){
     if (this._showing && !force) return;
-    const text = this._q.shift(), e = this.el(); if (!text || !e){ this._showing = false; return; }
+    const item = this._q.shift(), e = this.el(); if (!item || !e){ this._showing = false; return; }
+    const text = item.text, hold = item.hold;
     clearTimeout(this._hide); clearInterval(this._tw);
     this._showing = true; this._lastAt = performance.now();
     const t = e.querySelector('.nm-txt'); t.textContent = '';
@@ -43,13 +52,13 @@ const Norma = {
     let n = 0;
     this._tw = setInterval(()=>{
       n += 2; t.textContent = text.slice(0, n);
-      if (n >= text.length){ clearInterval(this._tw); e.classList.remove('talk'); this._hide = setTimeout(()=> this.clear(true), 2300 + text.length*22); }
+      if (n >= text.length){ clearInterval(this._tw); e.classList.remove('talk'); if (!hold) this._hide = setTimeout(()=> this.clear(true), 2300 + text.length*22); }
     }, 24);
   },
 
   clear(next){
     clearTimeout(this._hide); clearInterval(this._tw);
-    const e = document.getElementById('norma'); if (e) e.classList.remove('show', 'talk');
+    const e = document.getElementById('norma'); if (e) e.classList.remove('show', 'talk', 'prog');
     this._showing = false;
     if (next && this._q.length) setTimeout(()=> this._next(), 450);
   },
@@ -83,13 +92,14 @@ const Norma = {
 // Méthodes de GameScene : déclencheurs des transmissions pendant une partie (aucun effet sur le jeu)
 mixin(GameScene, {
   normaStart(){
-    Norma.reset(); this._normaLow = false; { const e = Norma.el(); if (e) e.classList.toggle('low', !!this.tuto); }
-    const pool = this.tuto ? 'startTuto' : 'start';
+    Norma.reset(); this._normaLow = false; { const e = Norma.el(); if (e){ e.classList.remove('low'); e.classList.toggle('tuto', !!this.tuto); } }
+    if (this.tuto) return;                         // tuto : les consignes viennent de game/tuto.js (tutoSay)
+    const pool = 'start';
     // la transmission part quelques secondes après la fin du décollage (jamais pendant l'intro, ni pendant un menu)
     const ev = this.time.addEvent({ delay:300, loop:true, callback:()=>{
       if (this.introActive || !this.running) return;
       ev.remove(false);
-      this.time.delayedCall(this.tuto ? 700 : 2200, ()=>{
+      this.time.delayedCall(2200, ()=>{
         if (!this.running) return;
         Norma.say(Norma.pick(pool), { prio:true });
         const g = this.globalGearSummary(); if (g) Norma.say(g, { gap:0 });         // 2e transmission : les atouts globaux (R&D) actifs

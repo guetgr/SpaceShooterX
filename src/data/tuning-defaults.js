@@ -3,7 +3,7 @@
 // dans data/tuning.js (généré) et se superposent à ces valeurs. Rien à changer ici sauf pour fixer de nouveaux défauts.
 // Durées en secondes (sauf mention contraire), vitesses en px/s, délais de tir en ms.
 const TUTO_DEFAULTS = {
-  steps:{ moveNeed:420, dodgeKills:2, satTarget:12, bossWait:3.6, maxMove:30, maxShoot:45, maxDodge:60, maxWave:75 },       // moveNeed = px à parcourir ; max* = durée max d'une étape avant de passer à la suivante
+  steps:{ moveNeed:420, satTarget:12, bossWait:3.6, maxMove:30, maxShoot:90 },       // moveNeed = px à parcourir · satTarget = satellites à détruire (étape 2 + objectif de finition) · max* = durée max d'une étape avant de passer à la suivante
   sats:{ hp:30, speedMin:60, speedMax:105, slowSpeed:55, drift:22, score:25, contactDmg:10, spawnCdStart:1500, spawnCdEnd:650, rampTime:40, capBase:3, capExtra:3, capEvery:14 },
   debris:{ min:5, max:8, dmg:7, speedMin:75, speedMax:150 },
   boss:{ hp:700, p2:0.66, p3:0.33, contactDmg:15, killScore:500,

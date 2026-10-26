@@ -114,7 +114,7 @@
     runTuto(seed, opts){
       opts = Object.assign({ sens:1, noise:0.12, react:6, cap:420 }, opts || {});
       seedState = seed >>> 0 || 1;
-      ['tutoEnd', 'tutoGuide', 'tutoPct', 'tutoHint'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); });
+      ['tutoEnd', 'tutoPct'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); });
       const sc0 = SC(), g = sc0.game, t0 = clock;
       sc0.scene.restart({ autoStart:true, tuto:true });
       const step = ()=>{ clock += DT; g.step(clock, DT); };
