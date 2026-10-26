@@ -296,3 +296,9 @@
 #tutoGuide .tg-t{ color:var(--agp-yellow); }
 #tutoGuide .tg-bar > i{ background:var(--agp-yellow); }
 #tutoPct .tp-fill{ background:linear-gradient(90deg,#ffa31a,#ffd75a); }
+
+/* ---------- pause et réglages : feuille modale dans la charte AGP ---------- */
+#pauseMenu, #settingsMenu{ --accent:#ffc21a; --accent-dim:rgba(255,194,26,.14); }
+.sheet-overlay{ background:rgba(4,7,6,.78) !important; }
+.sheet{ background:linear-gradient(180deg,#121a16,#080c0a); border:2px solid #2f4238; box-shadow:0 0 0 2px #070a09, 0 18px 50px rgba(0,0,0,.65), inset 0 0 34px rgba(255,194,26,.07); }
+.sheet::before{ left:-2px; right:-2px; top:-8px; height:6px; background:var(--hazard); }
