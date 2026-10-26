@@ -220,7 +220,7 @@ mixin(GameScene, {
       b.querySelector('.pi').innerHTML = pxImg(pc.icon, 30);
       b.querySelector('.pn').textContent = pc.name;
       b.querySelector('.pd').textContent = pc.desc;
-      b.querySelector('.pb').textContent = (on ? 'ACTIF ' : '') + '+' + Math.round(pc.bonus*100) + '% ◆';
+      b.querySelector('.pb').innerHTML = (on ? 'ACTIF ' : '') + '+' + Math.round(pc.bonus*100) + '% ' + uiIco('frag');
       b.onclick = ()=>{
         sfx.pactSign();
         const cur = getPacts(), i = cur.indexOf(pc.id);
@@ -257,7 +257,7 @@ mixin(GameScene, {
     const row = (img, name, desc, pct, done, pips)=>{
       const d = document.createElement('div');
       d.className = 'ach-row' + (done ? ' done' : '');
-      d.innerHTML = (img ? '<img src="'+img+'" alt="">' : '<div style="width:34px;flex:none;text-align:center;">' + pxImg('🏆', 28) + '</div>') +
+      d.innerHTML = (img ? '<img src="'+img+'" alt="">' : '<div style="width:34px;flex:none;text-align:center;">' + uiIco('trophy', 24) + '</div>') +
         '<div class="ach-main"><div class="ach-name"></div><div class="ach-desc"></div><div class="ach-bar"><i style="width:'+Math.round(pct*100)+'%"></i></div></div>' +
         (pips ? '<div class="ach-pips">'+pips+'</div>' : '');
       d.querySelector('.ach-name').textContent = name;
@@ -276,13 +276,13 @@ mixin(GameScene, {
       const desc = t === 0
         ? 'Explosion à débloquer · ' + Math.floor(w) + ' / ' + nextThr + ' pts de kills'
         : 'Explosion zone ' + ACHV_EXPLO[t-1].radius + ' · dégâts ' + Math.round(ACHV_EXPLO[t-1].frac*100) + '% de leurs PV' + (t < 3 ? ' · suivant ' + Math.floor(w) + ' / ' + nextThr : ' · MAX');
-      row(img, (entry ? entry.label : type), desc, pct, t >= 3, '●'.repeat(t) + '○'.repeat(3-t));
+      row(img, (entry ? entry.label : type), desc, pct, t >= 3, uiIco('pip_on').repeat(t) + uiIco('pip_off').repeat(3-t));
     });
     addSec('GLOBAUX — buffs permanents');
     ACHV_GLOBALS.forEach(g=>{
       const prog = achvGlobalProgress(a, g), done = !!a.glob[g.id];
       const fmt = v => g.kind === 'maxTime' ? Math.floor(v/60) + ':' + String(v%60).padStart(2,'0') : v;
-      row('', g.name, g.txt + ' · ' + fmt(Math.min(prog, g.need)) + ' / ' + fmt(g.need), Math.min(1, prog/g.need), done, done ? '✔' : '');
+      row('', g.name, g.txt + ' · ' + fmt(Math.min(prog, g.need)) + ' / ' + fmt(g.need), Math.min(1, prog/g.need), done, done ? uiIco('check') : '');
     });
   },
 });

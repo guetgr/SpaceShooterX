@@ -211,7 +211,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 
 Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase les règles du haut), mais source de confusion.
 
-### `css/style.css` : 471 sélecteurs, 36 définis plusieurs fois
+### `css/style.css` : 473 sélecteurs, 36 définis plusieurs fois
 
 - `:root` : 2 fois
 - `#hud` : 2 fois
@@ -250,7 +250,7 @@ Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase l
 - `#pageTree` : 2 fois
 - `.acc-head` : 2 fois
 
-### `css/agp.css` : 241 sélecteurs, 2 définis plusieurs fois
+### `css/agp.css` : 262 sélecteurs, 2 définis plusieurs fois
 
 - `#stage` : 2 fois
 - `.lu-sub` : 2 fois
@@ -273,14 +273,14 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`audio/music/` : 23, `audio/sfx/` : 66, `fonts/` : 3, `sprites/` : 138
+`audio/music/` : 23, `audio/sfx/` : 66, `fonts/` : 3, `sprites/` : 163
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 
 —
 
-### Assets dont le nom n'apparaît nulle part dans le code (0 candidats)
+### Assets dont le nom n'apparaît nulle part dans le code (15 candidats)
 
 Les sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.
 
-
+`sprites/ui_arrow_l.png`, `sprites/ui_arrow_r.png`, `sprites/ui_check.png`, `sprites/ui_frag.png`, `sprites/ui_galaxy.png`, `sprites/ui_gear.png`, `sprites/ui_hand.png`, `sprites/ui_lock.png`, `sprites/ui_next.png`, `sprites/ui_pause.png`, `sprites/ui_pip_off.png`, `sprites/ui_pip_on.png`, `sprites/ui_skull.png`, `sprites/ui_star.png`, `sprites/ui_trophy.png`

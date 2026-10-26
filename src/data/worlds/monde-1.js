@@ -2,7 +2,7 @@
 // Monde 1 — BROUILLON : valeurs provisoires pour tester le moteur (étape 8 du plan : contenu et équilibrage).
 registerWorld({
   id:'w1', order:1, name:'ORBITE TERRESTRE', sub:'Le départ', boss:'dread', draft:true,
-  theme:{ photo:'earth', glow:0x4ff2ff, rim:0x7fd0ff, seed:7, freq:1.7, palette:[0x14305f, 0x1f5fa8, 0x2f86c9, 0x3f9c5a, 0x86bf62, 0xd9e8f2] },
+  theme:{ photo:'earth', clouds:'cloudsEarth', orbiter:'orbitW1', glow:0x4ff2ff, rim:0x7fd0ff, seed:7, freq:1.7, palette:[0x14305f, 0x1f5fa8, 0x2f86c9, 0x3f9c5a, 0x86bf62, 0xd9e8f2] },
   levels:[
     { id:'w1-tuto', name:'TUTORIEL',            type:'tuto',    threat:1, tuto:true, reward:{ clear:10, first:20 } },     // satellites, débris, boss satellite : src/game/tuto.js
     { id:'w1-l1', name:'DECOLLAGE',           type:'survive', threat:1, goal:{ seconds:60 }, intro:'earth', spawns:[{ type:'sat', from:0, w:10 }, { type:'satgun', from:14, w:5 }], reward:{ clear:20, first:40 } },

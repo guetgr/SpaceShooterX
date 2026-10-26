@@ -1,6 +1,6 @@
 "use strict";
 const PLANET_BIG = 384;      // grande version de la planète d'un monde (fond de l'accueil + décollage) ; le décollage la réutilise : créée à l'accueil, rien à calculer au lancement
-const HOME_ORBIT = { cx:GAME_W/2, cy:252, rx:150, ry:58 };      // orbite des niveaux autour de la planète du monde
+const HOME_ORBIT = { cx:GAME_W/2, cy:252, rx:160, ry:58 };      // orbite des niveaux autour de la planète du monde
 // Méthodes de HomeScene — décor : étoiles en parallaxe, nébuleuses, étoiles filantes, planète du monde, camionnette qui flotte.
 mixin(HomeScene, {
   buildHomeBackground(){
@@ -51,6 +51,12 @@ mixin(HomeScene, {
     this.planet = this.add.image(GAME_W/2, 250, 'star0').setDepth(-0.5).setVisible(false);
     this.orbitBack = this.add.graphics().setDepth(-0.7); this.orbitFront = this.add.graphics().setDepth(0.5);
     this.drawHomeOrbit();
+    // nuages qui défilent sur la planète (monde avec theme.clouds) : tuile qui boucle, rognée en disque par un masque qui suit la planète
+    this.clouds = this.add.tileSprite(GAME_W/2, 250, 96, 96, 'cloudsEarth').setDepth(-0.45).setVisible(false);
+    this.cloudMaskG = this.make.graphics({ add:false }); this.cloudMaskG.fillStyle(0xffffff).fillCircle(0, 0, 46.5);
+    this.clouds.setMask(this.cloudMaskG.createGeometryMask());
+    // objet en orbite (monde avec theme.orbiter) : passe derrière la planète puis devant, sur une ellipse plus petite que celle des niveaux
+    this.orbiter = this.add.image(GAME_W/2, 250, 'orbitW1').setDepth(0.4).setVisible(false);
   },
 
   // orbite des niveaux : une ellipse autour de la planète, moitié arrière derrière elle, moitié avant devant
@@ -68,6 +74,9 @@ mixin(HomeScene, {
     this.setHomeBackPlanet(world, locked);
     this.planet.setTexture(key).setVisible(true).setTint(locked ? 0x2c3050 : 0xffffff);
     this.planetGlow.setVisible(true).setTint(locked ? 0x30345a : (th.glow || 0x4fa8ff));
+    this.cloudsOn = !!th.clouds && !locked; this.orbiterOn = !!th.orbiter && !locked;
+    if (th.clouds) this.clouds.setTexture(th.clouds).setTileScale(96/256);
+    if (th.orbiter) this.orbiter.setTexture(th.orbiter);
   },
 
   // grande planète du monde en fond des pages HANGAR et ARBRE (la carte a déjà la sienne au centre) : coin bas, lente rotation, glisse avec les pages
@@ -130,5 +139,20 @@ mixin(HomeScene, {
     this.planet.setPosition(px, pp.y).setScale(pp.s*pulse).setAlpha(pa);
     this.planetGlow.setPosition(px, pp.y).setScale(pp.s*0.66*pulse).setAlpha(pa*(this.planetLocked ? 0.25 : 0.5));
     [this.orbitBack, this.orbitFront].forEach(g=> g.setPosition(-this.pageX*GAME_W, 0).setAlpha(pa*this.orbitA));
+    // nuages : suivent la planète (position, taille, visibilité) et défilent lentement
+    const cl = this.clouds, on = this.cloudsOn && this.planet.visible;
+    cl.setVisible(on);
+    if (on){
+      cl.setPosition(px, pp.y).setScale(pp.s*pulse).setAlpha(pa*0.62); cl.tilePositionX = time/1000*11;
+      this.cloudMaskG.setPosition(px, pp.y).setScale(pp.s*pulse);
+    }
+    // objet en orbite : ellipse autour de la planète (derrière la moitié du temps, devant l'autre), il tourne lentement sur lui-même
+    const ob = this.orbiter, oon = this.orbiterOn && this.planet.visible && this.orbitA > 0.02;
+    ob.setVisible(oon);
+    if (oon){
+      const a = time/15000*Math.PI*2, k = pp.s/1.95, s = Math.sin(a), d = 0.5 + 0.5*s;
+      ob.setPosition(px + Math.cos(a)*128*k, pp.y + s*(36 + 8*d)*k - 6*k).setScale((0.15 + 0.075*d)*k).setAngle(Math.sin(time/2300)*14).setAlpha(pa*this.orbitA)
+        .setDepth(s > 0 ? 0.4 : -0.55).setTint(s > 0 ? 0xffffff : 0xb8c4d8);
+    }
   },
 });

@@ -34,7 +34,10 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
 - `tools/gen_codemap.py` — Génère la carte du code dans docs/carte/ (rien à installer : Python 3 seul).
 - `tools/gen_manifest.py` — Régénère assets/manifest.json à partir du contenu de assets/ (à lancer après avoir ajouté/supprimé un fichier).
+- `tools/gen_ui_icons.py` — Dessine les icônes d'interface en pixel art (12x12, contour sombre) et les écrit dans assets/sprites/ui_*.png, puis relance gen_manifest.py.
 - `tools/home_test.py` — Test headless de l'accueil : pages (glisser, onglets), paramètres, arbre, retour. python tools/home_test.py
+- `tools/import_decors_carte.py` — Importe les décors de la carte du monde livrés en PNG à fond transparent : planètes des mondes 2 et 3, nuages de la Terre, satellite en orbite
+- `tools/import_sprites_niveaux.py` — Importe les icônes de niveaux livrées en PNG (256x256, fond transparent) : PNG RGBA -> assets/sprites/*.webp, puis relance gen_manifest.py. (Planètes,
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
 - `tools/serve.py` — Serveur local de développement (sans cache : tu modifies un fichier, tu rafraîchis la page, c'est pris en compte).

@@ -31,6 +31,14 @@ Accueil animé à 3 pages (Hangar · Carte · Arbre), carte stellaire, mondes �
 - `docs/carte-du-code.md` (écrit à la main : flux de démarrage, accueil ↔ niveau, stats, atouts, sauvegardes, N.O.R.M.A., audio, éditeur, conventions, pièges, tests) + `docs/carte/*.md` **générés** par `tools/gen_codemap.py` (Python 3 seul, regex ; sans numéros de ligne ni tailles pour éviter les conflits de merge). `--check` signale une carte périmée ; à lancer avant de pousser.
 - `docs/carte/audit.md` liste des candidats au code mort et des restes de l'ancien arbre radial : ce sont des heuristiques, à vérifier avant toute suppression (aucun nettoyage fait).
 
+### Carte du monde vivante (26 oct. 2026, branche `carte-monde-vivante`)
+- Niveaux = médaillons avec icône (`LEVEL_ICONS`, `data/image-assets.js`), badge ✔ / 🔒, numéro en étiquette, icône qui flotte ; trace de la route entre les niveaux (verte jusqu'au dernier niveau fini, jaune animée vers le suivant). Un niveau sans icône garde l'ancien rond numéroté (mondes 2 et 3 pour l'instant).
+- Planètes des mondes 2 et 3 = images (`theme.photo`), nuages qui défilent sur la Terre (`theme.clouds`), satellite en orbite (`theme.orbiter`).
+- Images : icônes du monde 1 importées par `tools/import_sprites_niveaux.py` ; planètes 2 et 3, nuages (rendus bouclables) et satellite importés par `tools/import_decors_carte.py` (PNG à fond transparent livrés par Bio). Restent à fournir : icônes des niveaux des mondes 2 et 3 (ajouter leurs ids à `LEVEL_ICONS`), éventuels objets en orbite des mondes 2 et 3 (`theme.orbiter`).
+
+### Icônes d'interface en sprites (26 oct. 2026)
+- Les symboles de l'interface (cadenas, coche, ◆ composants, ★, ☠, pause, engrenage, flèches, pastilles, trophée, main) sont des sprites pixel 12x12 : `tools/gen_ui_icons.py` → `assets/sprites/ui_*.png`, utilisés par `uiIco()` (`src/ui/ui-icons.js`). Les icônes de compétences, cartes, reliques et pactes restent des émojis réduits en pixel (`pxImg`) : à remplacer plus tard par des sprites générés.
+
 ## 2. Contexte utilisateur
 Bio, francophone, ne code pas. Veut un jeu agréable pour un petit revenu passif (Google Play), éventuellement d'autres jeux ensuite. Style pixel art rétro, contrôles au glissement du doigt. Assets graphiques via ChatGPT (prompts dans `docs/prompts-chatgpt-*.md`), musique via Suno (`docs/suno-prompts.md`, `docs/musique-suno.md`), sons enregistrés/générés par lui (gratuits uniquement). Philosophie d'équilibrage : voir CLAUDE.md (pas de plafonds artificiels).
 Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran transparent par-dessus les autres applis, bouton pause).

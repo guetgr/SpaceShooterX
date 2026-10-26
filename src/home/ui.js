@@ -104,7 +104,7 @@ mixin(HomeScene, {
   refreshHome(){
     if (!this.homeOn) return;
     const meta = getMeta();
-    document.getElementById('homeFrag').textContent = '◆ ' + meta.fragments;
+    document.getElementById('homeFrag').innerHTML = uiIco('frag') + ' ' + meta.fragments;
     this.renderHomeMap();
     if (this.mapMode === 'galaxy') this.refreshGalaxy();
     this.renderHomeHangar(meta);
@@ -141,16 +141,24 @@ mixin(HomeScene, {
     $('mwNum').textContent = 'SECTEUR ' + String(w.order).padStart(2, '0');
     $('mwName').textContent = open ? w.name : '? ? ?';
     const sm = worldSummary(w.id, p);
-    $('mwProg').textContent = open ? ('ORDRES EXECUTES ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ★' : '')) : 'ACCES REFUSE';
+    $('mwProg').innerHTML = open ? ('ORDRES EXECUTES ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ' + uiIco('star') : '')) : 'ACCES REFUSE';
     const orb = $('mapOrbit'); orb.innerHTML = '';
     const n = w.levels.length, O = HOME_ORBIT;
+    { // trace de la route entre les niveaux : pointillée, verte jusqu'au dernier niveau terminé, jaune animée vers le suivant
+      const P = w.levels.map((l, k)=>{ const th = Math.PI*(160 - k*(140/Math.max(1, n - 1)))/180; return [(O.cx + O.rx*Math.cos(th))/GAME_W*100, (O.cy + O.ry*Math.sin(th))/GAME_H*100]; });
+      let nextSeg = -1; w.levels.forEach((l, k)=>{ if (nextSeg < 0 && k < n - 1 && isLevelDone(l.id, p) && !isLevelDone(w.levels[k + 1].id, p)) nextSeg = k; });
+      orb.insertAdjacentHTML('beforeend', '<svg class="trace" viewBox="0 0 100 100" preserveAspectRatio="none">' + P.slice(1).map((q, i)=>
+        '<path class="' + (isLevelDone(w.levels[i].id, p) ? (i === nextSeg ? 'next' : 'done') : '') + '" d="M' + P[i][0].toFixed(2) + ' ' + P[i][1].toFixed(2) + 'L' + q[0].toFixed(2) + ' ' + q[1].toFixed(2) + '"/>').join('') + '</svg>');
+    }
     w.levels.forEach((l, k)=>{
       const done = isLevelDone(l.id, p), unl = isLevelUnlocked(l.id, p), th = Math.PI*(160 - k*(140/Math.max(1, n - 1)))/180;
       const slot = document.createElement('div'); slot.className = 'node-slot';
       slot.style.left = ((O.cx + O.rx*Math.cos(th))/GAME_W*100) + '%'; slot.style.top = ((O.cy + O.ry*Math.sin(th))/GAME_H*100) + '%';
-      const b = document.createElement('button');
-      b.className = 'node ' + (done ? 'done' : (unl ? 'open' : 'locked')) + (l.type === 'boss' ? ' boss' : '') + (l.id === this.homeSel ? ' sel' : '');
-      b.innerHTML = '<span>' + (!unl ? '🔒' : (done ? '✔' : (l.type === 'boss' ? '☠' : (l.type === 'tuto' ? '?' : l.num)))) + '</span>';
+      const b = document.createElement('button'), ico = LEVEL_ICONS[l.id];
+      b.className = 'node ' + (done ? 'done' : (unl ? 'open' : 'locked')) + (l.type === 'boss' ? ' boss' : '') + (ico ? ' ico' : '') + (l.id === this.homeSel ? ' sel' : '');
+      if (ico) b.innerHTML = '<img class="node-ico" alt="" draggable="false" src="' + ico + '" style="--b:' + (-k*0.7).toFixed(1) + 's">' +      // médaillon : l'icône du niveau (elle flotte), badge d'état, numéro en étiquette
+        (!unl ? '<i class="nd-badge nd-lock">' + uiIco('lock') + '</i>' : (done ? '<i class="nd-badge nd-done">' + uiIco('check') + '</i>' : (l.type === 'boss' ? '<i class="nd-badge nd-boss">' + uiIco('skull') + '</i>' : ''))) + '<em class="nd-num">' + (l.type === 'tuto' ? '?' : l.num) + '</em>';
+      else b.innerHTML = '<span>' + (!unl ? uiIco('lock', 16) : (done ? uiIco('check', 16) : (l.type === 'boss' ? uiIco('skull', 16) : (l.type === 'tuto' ? '?' : l.num)))) + '</span>';
       b.setAttribute('aria-label', 'Niveau ' + l.num + ' ' + l.name);
       b.style.pointerEvents = 'auto';
       b.onclick = ()=> this.selectHomeLevel(l.id);
@@ -169,7 +177,7 @@ mixin(HomeScene, {
     $('levelCard').innerHTML = '<div class="om-top"><span class="om-no">ORDRE ' + agpDossier(l) + '</span><span class="om-tag ' + ty.cls + '">' + ty.label + '</span></div><div class="lc-name"></div>' +
       '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
       '<div class="om-row"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
-      '<div class="om-row"><span>PRIME</span><em>◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (l.reward.first || 0) + '</b>') + '</em></div>' +
+      '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + l.reward.clear + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (l.reward.first || 0) + '</b>') + '</em></div>' +
       this.finitionLine(l, p) +
       '<div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div>';
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
@@ -182,7 +190,7 @@ mixin(HomeScene, {
     if (!completionDefs(l.id)) return '';
     const comp = p.comp[l.id] || {}, pct = completionPct(l.id, comp), nx = completionNext(l.id, comp);
     return '<div class="lc-line lc-comp">FINITION <b>' + pct + '%</b><i><u style="width:' + pct + '%"></u></i></div>' +
-      (nx ? '<div class="lc-line">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line">★ FINITION 100% ★</div>');
+      (nx ? '<div class="lc-line">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line">' + uiIco('star') + ' FINITION 100% ' + uiIco('star') + '</div>');
   },
 
   // hangar : palier, apparence (teintes) et contenu du bas — STATS du vaisseau ou MODULES installés (compétences de l'arbre possédées)
@@ -231,7 +239,7 @@ mixin(HomeScene, {
   // fragments, stats du hangar, point doré : après un achat dans l'arbre
   refreshHomeStats(){
     const meta = getMeta();
-    Motion.count(document.getElementById('homeFrag'), meta.fragments, v=> '◆ ' + v);
+    Motion.count(document.getElementById('homeFrag'), meta.fragments, v=> uiIco('frag') + ' ' + v);
     this.renderHomeHangar(meta); this.renderHomeTree(meta);
   },
 

@@ -35,7 +35,7 @@ mixin(GameScene, {
     const i = this.treeCardInfo(n), cls = ['tcard', i.st, i.can ? 'aff' : '', (i.avail && !i.can) ? 'cant' : '', n.isKey ? 'key' : '', n.isCap ? 'cap' : '', compact ? 'compact' : '',
       this.selectedTreeNode === n ? 'sel' : '', this._treeFlash === n.id ? 'flash' : ''].join(' ');
     let pips = ''; for (let k = 0; k < n.max; k++) pips += '<i class="' + (k < i.r ? 'f' : '') + '"></i>';
-    const cost = i.st === 'max' ? 'MAX' : '◆ ' + i.v.cost();
+    const cost = i.st === 'max' ? 'MAX' : uiIco('frag') + ' ' + i.v.cost();
     return '<button class="' + cls + '" style="--c:' + br.color + '" data-id="' + n.id + '"><span class="tc-ic">' + pxImg(n.icon, compact ? 22 : 26) + '</span>' +
       '<span class="tc-nm">' + n.name + '</span>' + (n.max > 1 ? '<span class="tc-pips">' + pips + '</span>' : '') +
       '<span class="tc-cost">' + cost + (i.can ? '<b>+</b>' : '') + '</span></button>';
@@ -60,12 +60,12 @@ mixin(GameScene, {
     let h = '';
     L.tiers.forEach((tier, t)=>{
       const open = tier.some(n=> this.treeCardInfo(n).st !== 'locked');
-      h += '<div class="ttier' + (open ? '' : ' locked') + '">HABILITATION ' + (t + 1) + (open ? '' : '<span>🔒 habilitation précédente requise</span>') + '</div>' +
+      h += '<div class="ttier' + (open ? '' : ' locked') + '">HABILITATION ' + (t + 1) + (open ? '' : '<span>' + uiIco('lock') + ' habilitation précédente requise</span>') + '</div>' +
         '<div class="tgrid n' + tier.length + '">' + tier.map(n=> this.treeCardHtml(n, br, false)).join('') + '</div>';
     });
     if (L.lanes.length){
       const sum = treeBranchStemSum(this.treeState, br.id), need = br.forkThreshold || 0, ok = sum >= need;
-      h += '<div class="ttier' + (ok ? '' : ' locked') + '">PROJETS HORS CATALOGUE' + (ok ? '' : '<span>🔒 ' + sum + '/' + need + ' pts d\'habilitation</span>') + '</div>' +
+      h += '<div class="ttier' + (ok ? '' : ' locked') + '">PROJETS HORS CATALOGUE' + (ok ? '' : '<span>' + uiIco('lock') + ' ' + sum + '/' + need + ' pts d\'habilitation</span>') + '</div>' +
         '<div class="tlanes n' + L.lanes.length + '">' + L.lanes.map(lane=> '<div class="tlane">' + lane.map(n=> this.treeCardHtml(n, br, true)).join('') + '</div>').join('') + '</div>';
     }
     scroll.innerHTML = h; scroll.scrollTop = y;
@@ -97,7 +97,7 @@ mixin(GameScene, {
   refreshTreeSheet(){
     const node = this.selectedTreeNode, btn = document.getElementById('treeInvestBtn');
     if (!node){
-      document.getElementById('treeInfoIcon').innerHTML = pxImg('👆', 30);
+      document.getElementById('treeInfoIcon').innerHTML = uiIco('hand', 24);
       document.getElementById('treeInfoName').textContent = 'DPT ' + ((AGP_LORE.depts[this.treeBranch] || {}).name || 'CATALOGUE');
       document.getElementById('treeInfoDesc').textContent = 'Touchez une fiche pour consulter le catalogue et passer commande.';
       document.getElementById('treeInfoMeta').textContent = '';
@@ -110,14 +110,14 @@ mixin(GameScene, {
     document.getElementById('treeInfoDesc').textContent = node.desc.replace(/\s*\/\s*niveau/i, ' par rang');
     let meta;
     if (i.st === 'max') meta = node.max > 1 ? 'Rang maximum atteint. Budget épuisé.' : 'Installé.';
-    else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ◆ ' + i.v.cost() + (i.can ? '' : ' (il manque ◆ ' + (i.v.cost() - this.meta.fragments) + ')');
+    else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ' + uiIco('frag') + ' ' + i.v.cost() + (i.can ? '' : ' (il manque ' + uiIco('frag') + ' ' + (i.v.cost() - this.meta.fragments) + ')');
     else if (node.isKey && node.forkThreshold && node.requires.some(p => (state[p] || 0) > 0))
       meta = 'Non habilité · ' + node.forkThreshold + ' pts d\'habilitation requis dans ce département (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
     else if (node.isKey) meta = "Non habilité · terminez d'abord la dernière habilitation du département.";
     else meta = "Non habilité · commandez d'abord le module précédent.";
-    document.getElementById('treeInfoMeta').textContent = meta;
+    document.getElementById('treeInfoMeta').innerHTML = meta;
     btn.disabled = !i.can;
-    btn.textContent = i.st === 'max' ? '✓' : '+';
+    btn.innerHTML = i.st === 'max' ? uiIco('check') : '+';
     btn.onclick = ()=> this.investTreeNode(node);
   },
 

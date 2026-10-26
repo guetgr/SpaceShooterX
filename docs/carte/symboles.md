@@ -182,6 +182,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `cleanupBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `cleanupGroup` | méthode | `src/game/loop.js` | `GameScene` |
 | `clearWells` | méthode | `src/events/forces.js` | `GameScene` |
+| `CLOUDS_EARTH_B64` | const | `src/data/image-assets.js` |  |
 | `CloudSave` | const | `src/core/cloud-save.js` |  |
 | `codexMark` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `COLLISION_DMG_MUL` | const | `src/data/balance.js` |  |
@@ -418,6 +419,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LEVEL_BASE` | const | `src/data/tuning-apply.js` |  |
 | `LEVEL_COMPLETION` | const | `src/data/completion.js` |  |
 | `LEVEL_FRAG_MUL` | const | `src/data/balance.js` |  |
+| `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
 | `levelGoalText` | fonction | `src/home/ui.js` |  |
@@ -487,6 +489,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `onEnemyHitsPlayer` | méthode | `src/combat/damage.js` | `GameScene` |
 | `onMissileHitsEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
 | `openPauseMenu` | méthode | `src/ui/dom.js` | `GameScene` |
+| `ORBIT_W1_B64` | const | `src/data/image-assets.js` |  |
 | `pactBonus` | fonction | `src/data/pacts-style.js` |  |
 | `PACTS` | const | `src/data/pacts-style.js` |  |
 | `panOf` | méthode | `src/game/intro.js` | `GameScene` |
@@ -498,6 +501,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `pickFusions` | méthode | `src/systems/relics-fusions.js` | `GameScene` |
 | `pickKey` | méthode | `src/audio/music.js` | `FileMusic` |
 | `PLANET_BIG` | const | `src/home/background.js` |  |
+| `PLANET_W2_B64` | const | `src/data/image-assets.js` |  |
+| `PLANET_W3_B64` | const | `src/data/image-assets.js` |  |
 | `planEvents` | méthode | `src/events/core.js` | `GameScene` |
 | `play` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `PLAYER_BASE_B64` | const | `src/data/image-assets.js` |  |
@@ -766,6 +771,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `tutoUiInit` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUiUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
+| `UI_ICONS` | const | `src/ui/ui-icons.js` |  |
+| `uiIco` | fonction | `src/ui/ui-icons.js` |  |
+| `uiIconsInit` | fonction | `src/ui/ui-icons.js` |  |
 | `update` | méthode | `src/game/loop.js` | `GameScene` |
 | `update` | méthode | `src/scenes/HomeScene.js` | `HomeScene` |
 | `updateBgDecor` | méthode | `src/world/background.js` | `GameScene` |
@@ -826,4 +834,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-819 symboles.
+827 symboles.
