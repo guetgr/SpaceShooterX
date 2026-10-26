@@ -125,7 +125,7 @@ with sync_playwright() as pw:
     check(p.evaluate("%s.lvDef && %s.lvDef.id" % (SC, SC)) is not None and not p.evaluate("document.body.classList.contains('at-home')"), 'DECOLLER lance le niveau choisi')
     check(p.evaluate("!document.getElementById('home') || document.getElementById('home').classList.contains('hidden')"), "l'accueil disparaît pendant le niveau")
     p.evaluate("document.getElementById('pauseBtn').click()"); p.wait_for_timeout(300)
-    p.evaluate("document.getElementById('btnQuit').click()"); p.wait_for_timeout(900)
+    p.evaluate("document.getElementById('btnQuit').click(); document.getElementById('btnQuitYes').click()"); p.wait_for_timeout(900)
     check(go_visible() and title() == 'ORDRE ANNULE', 'QUITTER = niveau abandonné (écran de résultat)')
 
     print('partie infinie historique')

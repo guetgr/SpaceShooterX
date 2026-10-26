@@ -202,39 +202,62 @@
       <div class="controls-hint" style="margin-top:8px; text-align:center;">Classement local (sur cet appareil).<br>Le classement en ligne arrivera plus tard.</div>
     </div>
 
-    <div id="pauseMenu" class="overlay hidden">
-      <div class="lu-title">PAUSE</div>
-      <div id="pauseGear">
-        <div class="pg-head"><span>COMPETENCES PRISES CETTE PARTIE</span><span id="pgPage"></span></div>
-        <div id="pgGrid"></div>
-        <div id="pgDetail">Ces bonus sont actifs automatiquement. Touche une icône pour voir ce qu'elle fait (x2, x3... = son niveau).</div>
-        <div class="pg-nav"><button class="btn secondary" id="pgPrev">◀</button><button class="btn secondary" id="pgNext">▶</button></div>
+    <div id="pauseMenu" class="overlay sheet-overlay hidden">
+      <div class="sheet" role="dialog" aria-label="Pause">
+        <div class="sh-head" data-in><div class="sh-title">PAUSE</div><div class="sh-sub" id="pauseSub"></div></div>
+        <button class="btn" id="btnResume" data-in><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2l10 6-10 6z"/></svg><span>REPRENDRE</span></button>
+        <div class="tiles" data-in>
+          <button class="tile" id="btnSettings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7zm8.2 5.1l1.8 1.4-2 3.4-2.1-.8a7.6 7.6 0 01-1.7 1l-.3 2.2h-4l-.3-2.2a7.6 7.6 0 01-1.7-1l-2.1.8-2-3.4 1.8-1.4a7.8 7.8 0 010-2L3.8 10.2l2-3.4 2.1.8a7.6 7.6 0 011.7-1L9.9 4.4h4l.3 2.2a7.6 7.6 0 011.7 1l2.1-.8 2 3.4-1.8 1.4a7.8 7.8 0 010 2z"/></svg><span>RÉGLAGES</span></button>
+          <button class="tile" id="btnPauseStats"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l8 18-8-4-8 4z"/></svg><span>VAISSEAU</span></button>
+          <button class="tile" id="btnPauseInfo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1.2 15.5h-2.4v-6.4h2.4zm-1.2-8.1a1.4 1.4 0 110-2.8 1.4 1.4 0 010 2.8z"/></svg><span>INFOS</span></button>
+        </div>
+        <div id="pauseGear" class="acc" data-in>
+          <button class="acc-head" id="btnGearToggle" aria-expanded="false"><span>ÉQUIPEMENT <b id="pgCount"></b></span><i aria-hidden="true"></i></button>
+          <div class="acc-body"><div class="acc-in">
+            <div class="pg-head"><span>COMPÉTENCES DE LA PARTIE</span><span id="pgPage"></span></div>
+            <div id="pgGrid"></div>
+            <div id="pgDetail">Ces bonus sont actifs automatiquement. Touche une icône pour voir ce qu'elle fait (x2, x3... = son niveau).</div>
+            <div class="pg-nav"><button class="btn secondary" id="pgPrev">◀</button><button class="btn secondary" id="pgNext">▶</button></div>
+          </div></div>
+        </div>
+        <div class="quit" data-in>
+          <button class="lnk" id="btnQuit">QUITTER LE NIVEAU</button>
+          <div class="qc hidden" id="quitConfirm">
+            <div class="qc-msg" id="quitMsg"></div>
+            <div class="qc-row"><button class="btn secondary small" id="btnQuitNo">ANNULER</button><button class="btn danger small" id="btnQuitYes">QUITTER</button></div>
+          </div>
+        </div>
       </div>
-      <button class="btn" id="btnResume">REPRENDRE</button>
-      <button class="btn secondary" id="btnPauseStats">STATS DU VAISSEAU</button>
-      <button class="btn secondary" id="btnSettings">PARAMETRES</button>
-      <button class="btn secondary" id="btnPauseInfo">INFO</button>
-      <button class="btn secondary" id="btnQuit">QUITTER</button>
     </div>
 
-    <div id="settingsMenu" class="overlay hidden">
-      <div class="lu-title">PARAMETRES</div>
-      <div class="go-name"><label for="setName">PSEUDO</label><input id="setName" class="name-input" maxlength="12" autocomplete="off" spellcheck="false" placeholder="ANONYME"></div>
-      <div class="vol-row"><label for="volMaster">VOLUME</label><input type="range" id="volMaster" min="0" max="100" step="1"><span id="volMasterV">100</span></div>
-      <div class="vol-row"><label for="volMusic">MUSIQUE</label><input type="range" id="volMusic" min="0" max="100" step="1"><span id="volMusicV">100</span></div>
-      <div class="vol-row"><label for="volSfx">EFFETS</label><input type="range" id="volSfx" min="0" max="100" step="1"><span id="volSfxV">100</span></div>
-      <button class="btn secondary" id="btnSfxToggle">SON : ACTIVÉ</button>
-      <button class="btn secondary" id="btnMusicToggle">MUSIQUE : ACTIVÉE</button>
-      <div class="frag-row" id="cloudStatus" style="font-size:15px; margin:0 0 4px;"></div>
-      <div style="display:flex; gap:6px; width:100%; max-width:320px;">
-        <button class="btn secondary small" id="btnExport" style="flex:1;">EXPORTER</button>
-        <button class="btn secondary small" id="btnImport" style="flex:1;">IMPORTER</button>
+    <div id="settingsMenu" class="overlay sheet-overlay hidden">
+      <div class="sheet sheet-lg" role="dialog" aria-label="Paramètres">
+        <div class="sh-bar" data-in><button class="bk" id="btnSettingsBack" aria-label="Retour"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2L4.5 8l6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square"/></svg></button><div class="sh-title">PARAMÈTRES</div><span class="sp"></span></div>
+        <div class="sh-scroll">
+          <section class="grp" data-in>
+            <h3>AUDIO</h3>
+            <div class="vol-row"><span class="sw-sp"></span><label for="volMaster">GÉNÉRAL</label><input type="range" id="volMaster" min="0" max="100" step="1"><span id="volMasterV">100</span></div>
+            <div class="vol-row"><button class="sw" id="btnMusicToggle" aria-pressed="true" aria-label="Couper la musique"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2v8.6A2.6 2.6 0 104 13a2.6 2.6 0 002.6-2.6V5l6-1.4v5.2A2.6 2.6 0 1010.2 11 2.6 2.6 0 0012.8 8.4V1z"/><path class="x" d="M1 1l14 14"/></svg></button><label for="volMusic">MUSIQUE</label><input type="range" id="volMusic" min="0" max="100" step="1"><span id="volMusicV">100</span></div>
+            <div class="vol-row"><button class="sw" id="btnSfxToggle" aria-pressed="true" aria-label="Couper les effets"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5.5h3L8 2v12l-4-3.5H1z"/><path d="M10.5 5.2a4 4 0 010 5.6M12.4 3a7 7 0 010 10" fill="none" stroke="currentColor" stroke-width="1.6"/><path class="x" d="M1 1l14 14"/></svg></button><label for="volSfx">EFFETS</label><input type="range" id="volSfx" min="0" max="100" step="1"><span id="volSfxV">100</span></div>
+          </section>
+          <section class="grp" data-in>
+            <h3>JOUEUR</h3>
+            <div class="row"><label for="setName">PSEUDO</label><input id="setName" class="name-input" maxlength="12" autocomplete="off" spellcheck="false" placeholder="ANONYME"></div>
+          </section>
+          <section class="grp" data-in>
+            <h3>SAUVEGARDE</h3>
+            <div class="cloud" id="cloudStatus"></div>
+            <div class="row2"><button class="btn secondary small" id="btnExport">EXPORTER</button><button class="btn secondary small" id="btnImport">IMPORTER</button></div>
+            <textarea id="saveBox" class="hidden" spellcheck="false" autocomplete="off"></textarea>
+            <button class="btn secondary small hidden" id="btnImportOk">VALIDER L'IMPORT</button>
+          </section>
+          <section class="grp danger" data-in>
+            <h3>ZONE DANGEREUSE</h3>
+            <button class="btn danger small" id="btnResetProgress">RÉINITIALISER LA PROGRESSION</button>
+            <button class="btn secondary small hidden" id="btnTutoDev">LANCER LE TUTO (DEV)</button>
+          </section>
+        </div>
       </div>
-      <textarea id="saveBox" class="hidden" spellcheck="false" autocomplete="off"></textarea>
-      <button class="btn secondary small hidden" id="btnImportOk">VALIDER L'IMPORT</button>
-      <button class="btn secondary" id="btnResetProgress">RÉINITIALISER LA PROGRESSION</button>
-      <button class="btn secondary hidden" id="btnTutoDev" style="border-color:#4af;color:#9ff;">LANCER LE TUTO (DEV)</button>
-      <button class="btn secondary" id="btnSettingsBack">RETOUR</button>
     </div>
 
     <div id="levelup" class="overlay hidden">
