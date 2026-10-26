@@ -38,7 +38,7 @@ mixin(GameScene, {
     this.score += pts;
     this.achvCheck(null);
     if (c.n >= 10){
-      const t = this.add.text(this.player.x, this.player.y - 60, (hit ? 'COMBO CASSE ' : 'COMBO ') + 'x' + c.n + '  +' + pts, { fontFamily:'Press Start 2P, PSP2E, monospace', fontSize:'11px', color: hit ? '#ff7088' : '#ffd76a', stroke:'#000', strokeThickness:4 }).setOrigin(0.5).setDepth(20);
+      const t = this.add.text(this.player.x, this.player.y - 60, (hit ? 'COMBO CASSE ' : 'COMBO ') + 'x' + c.n + '  +' + pts, { fontFamily:'SSX Label, monospace', fontSize:'11px', color: hit ? '#ff7088' : '#ffd76a', stroke:'#000', strokeThickness:4 }).setOrigin(0.5).setDepth(20);
       this.tweens.add({ targets:t, y:t.y - 50, alpha:0, duration:1300, onComplete:()=> t.destroy() });
     }
     c.n = 0; c.pts = 0; c.t = 0; this.comboRank = 0;

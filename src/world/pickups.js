@@ -30,7 +30,7 @@ mixin(GameScene, {
     this.runFragBonus += bonus; this.runGold += 1;
     this.xp += this.xpToNext * 0.25 * this.xpMul();
     for (let i=0;i<10;i++) this.spawnGemAt(enemy.x + Phaser.Math.Between(-30,30), enemy.y + Phaser.Math.Between(-20,20), 4, 'gemM', 50);
-    const t = this.add.text(enemy.x, enemy.y, '+' + bonus + ' ◆', { fontFamily:'Press Start 2P, PSP2E, monospace', fontSize:'16px', color:'#ffd76a', stroke:'#3a2a00', strokeThickness:4 }).setOrigin(0.5).setDepth(20);
+    const t = this.add.text(enemy.x, enemy.y, '+' + bonus + ' ◆', { fontFamily:'SSX Label, monospace', fontSize:'16px', color:'#ffd76a', stroke:'#3a2a00', strokeThickness:4 }).setOrigin(0.5).setDepth(20);
     this.tweens.add({ targets:t, y:t.y - 60, alpha:0, duration:1100, onComplete:()=> t.destroy() });
     this.cameras.main.flash(120, 255, 215, 100, false);
     sfx.jackpot();

@@ -22,7 +22,7 @@ mixin(GameScene, {
   },
   tutoHint(text, ms){
     let el = document.getElementById('tutoHint');
-    if (!el){ el = document.createElement('div'); el.id = 'tutoHint'; el.style.cssText = 'position:fixed;top:19%;left:50%;transform:translateX(-50%);z-index:60;font:bold 13px monospace;color:#9ff;background:rgba(0,10,30,.75);padding:7px 13px;border:1px solid #4af;border-radius:6px;pointer-events:none;text-align:center;max-width:86vw;transition:opacity .4s;opacity:0;'; document.body.appendChild(el); }
+    if (!el){ el = document.createElement('div'); el.id = 'tutoHint'; el.style.cssText = 'position:fixed;top:19%;left:50%;transform:translateX(-50%);z-index:60;font:600 11px SSX Label,monospace;color:#9ff;background:rgba(0,10,30,.75);padding:7px 13px;border:1px solid #4af;border-radius:6px;pointer-events:none;text-align:center;max-width:86vw;transition:opacity .4s;opacity:0;'; document.body.appendChild(el); }
     el.textContent = text; el.style.opacity = '1'; clearTimeout(el._t); el._t = setTimeout(()=>{ el.style.opacity = '0'; }, ms || 3500);
   },
   tutoSfx(name, x){ try { sfx.play(name, { pan: this.panOf(x) }); } catch(e){ /* ignore */ } },
