@@ -1,4 +1,6 @@
-﻿# PASSATION — Space Shooter X (état au 25 oct. 2026)
+﻿# PASSATION — Space Shooter X (état au 26 oct. 2026)
+
+> **Contexte narratif et ton (AGP, N.O.R.M.A.) : lire `docs/brief-univers-agp.md`** avant de toucher à l'interface ou aux textes.
 
 ## 1. Où on en est
 Jeu fonctionnel et très avancé : boucle complète (runs infinies par niveaux d'alerte, boss, événements, arbre de compétences, cartes, reliques, fusions, bestiaire, succès, pactes, classement local, bac à sable DEV). Dernières versions publiées sur claude.ai : jeu v150, DEV v71 (artifacts, déjà obsolètes dès que tu travailles en local — le code de `src/` est la référence).
@@ -16,6 +18,14 @@ Seuls changements de comportement : `DEV_SEE_ALL` vient de `?dev` dans l'URL (au
 
 ### Refonte accueil / mondes (25 oct. 2026, branche `menu-accueil`)
 Accueil animé à 3 pages (Hangar · Carte · Arbre), carte stellaire, mondes → niveaux → boss, écran de résultat, arbre intégré à l'accueil, 3 apparences de la camionnette. **Voir `docs/menu-accueil.md`** (captures, fichiers, tests). Mondes 1-3 = brouillons à équilibrer (simulateur : `tools/sim_balance.py`). La partie infinie n'est plus qu'en `?dev` (bouton DEV). L'ascension et les anneaux d'alerte de l'arbre sont retirés de l'interface.
+
+### Refonte interface (26 oct. 2026, branches `competences`, `animations-jeu`, `ecran-chargement`, `icone-pwa`, `direction-agp`)
+- **Arbre en cartes** (onglets par branche, rangs en pastilles) à la place de l'arbre radial de 330 nœuds : `src/ui/tree-ui.js`. Mêmes données, mêmes sauvegardes. Analyse et pistes : `docs/arbre-competences.md`.
+- **Animations GSAP** (`src/ui/motion.js`) : boutons, CTA, pages, cartes, compteurs de fragments, rapport de fin, HUD (traînée de vie, vie basse, tic du score).
+- **Écran de chargement** avec image de fond (`loading/bg.webp`) et barre lissée ; **icône d'écran d'accueil** (`manifest.webmanifest`, `icons/`).
+- **Direction artistique AGP-OS** (`docs/direction-artistique-agp.md`, captures dans `docs/img/agp/`) : l'interface est le logiciel de bord de l'Agence Galactique de Propreté (an 2247). Palette/composants dans `css/agp.css` (chargé après `style.css` ; le retirer redonne l'ancienne apparence), textes dans `src/data/agp-lore.js`, voix de **N.O.R.M.A.** (assistante embarquée, transmissions courtes) dans `src/ui/norma.js`. Vocabulaire : mondes = secteurs, niveaux = ordres de mission, boss = incidents majeurs, fragments = composants, arbre = catalogue R&D, écran de fin = rapport d'intervention. **Aucune mécanique, aucun équilibrage ni sauvegarde modifié.**
+- Assets encore provisoires (CSS/texte) : logo AGP, visage de N.O.R.M.A., tampons, sons de transmission/impression/tampon (liste au §9 du doc AGP). Idées touchant au gameplay (primes/retenues, notation RH, syndicat…) : §10 du doc, non faites.
+- Points d'attention : le build « fichier unique » n'a pas l'écran de chargement (il reste noir pendant l'analyse du fichier, ~21 Mo) ; pas de service worker (pas de mode hors ligne).
 
 ## 2. Contexte utilisateur
 Bio, francophone, ne code pas. Veut un jeu agréable pour un petit revenu passif (Google Play), éventuellement d'autres jeux ensuite. Style pixel art rétro, contrôles au glissement du doigt. Assets graphiques via ChatGPT (prompts dans `docs/prompts-chatgpt-*.md`), musique via Suno (`docs/suno-prompts.md`, `docs/musique-suno.md`), sons enregistrés/générés par lui (gratuits uniquement). Philosophie d'équilibrage : voir CLAUDE.md (pas de plafonds artificiels).
@@ -45,6 +55,8 @@ Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran
 - Vérif syntaxe : faite automatiquement par `tools/build.py` (`node --check`).
 
 ## 6. À faire / questions ouvertes
+- Interface AGP : produire les assets listés (doc AGP §9), valider le ton de N.O.R.M.A., tester sur de vrais téléphones (rythme des animations, lisibilité du HUD).
+- Écran de chargement statique pour le build fichier unique ; éventuel service worker (hors ligne).
 - Réécouter tous les sons, ajuster niveaux ; clarifier slowField.
 - Page d'audition des sons dans le build DEV (proposée, pas faite).
 - Équilibrage : simulateur + journal de fin de run (proposés, voir analyse) ; plafonds d'armure de l'arbre (0.6/0.75/0.8, relique `r_phase` min 0.8) = décision de Bio en attente ; boss final à l'alerte 26 (cap actuel 20) ; listes d'ennemis par alerte.
