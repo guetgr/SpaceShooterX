@@ -59,7 +59,7 @@ mixin(HomeScene, {
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
       const sm = worldSummary(w.id, p);
       g.num.setText(open ? w.name : '? ? ?').setColor(open ? '#cfd6ff' : '#5a6290');
-      g.sub.setText(open ? ('MONDE ' + w.order + ' · ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ★' : '')) : 'VERROUILLE').setColor(open ? '#ffce4a' : '#7a5a6a');
+      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ★' : '')) : 'ACCES REFUSE').setColor(open ? '#ffc21a' : '#7a5a4a');
       // anneau : un segment par niveau (vert = terminé, rouge = boss), on laisse les dernières lueurs pour les niveaux restants
       const L = w.levels.length, gap = 0.12, seg = Math.PI*2/L;
       g.ring.clear();
@@ -165,7 +165,7 @@ mixin(HomeScene, {
     sfx.uiError && sfx.uiError();
     const c = this.galWorlds[i].c, x0 = c.x;
     this.tweens.add({ targets:c, x:{ from:x0 - 5, to:x0 + 5 }, duration:60, yoyo:true, repeat:3, onComplete:()=> c.x = x0 });
-    this.homeToast('Vaincs le boss du monde ' + WORLDS[i - 1].order + ' pour débloquer ce monde');
+    this.homeToast('Habilitation insuffisante : clôturez l\'incident du secteur ' + WORLDS[i - 1].order + '.');
   },
 
   // remet la page CARTE en vue « monde » (retour d'un niveau, premier affichage)
@@ -199,7 +199,7 @@ mixin(HomeScene, {
           this.tweens.add({ targets:g.img, alpha:{ from:0.1, to:1 }, duration:900 });
           this.cameras.main.flash(260, 255, 255, 255, false);
           sfx.relicOpen();
-          this.homeToast('NOUVEAU MONDE : ' + w.name, 3000);
+          this.homeToast('NOUVEAU SECTEUR ATTRIBUE : ' + w.name, 3000);
           markWorldSeen('w:' + w.id);
           this.mapMode = 'galaxy';
         } });

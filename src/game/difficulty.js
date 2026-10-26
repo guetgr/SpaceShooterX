@@ -22,7 +22,7 @@ mixin(GameScene, {
     this.weaponTier = weaponTierFor(this.alertLevel);
     this.cameras.main.flash(300, 255, 40, 40, false); this.cameras.main.shake(260, 0.006);
     sfx.alertUp(); music.setIntensity(this.alertLevel);
-    this.notice('ALERTE ' + this.alertLevel, 'La menace augmente !', this.alertLevel);
+    this.notice('RISQUE NIVEAU ' + this.alertLevel, 'Le risque augmente. Merci de rester productif.', this.alertLevel);
     if (this.updateShipTier) this.updateShipTier();
   },
 

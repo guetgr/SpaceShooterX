@@ -10,7 +10,7 @@ mixin(GameScene, {
     if (this.od >= 100){
       this.odReady = true;
       sfx.odCharge();
-      this.notice('OVERDRIVE PRET !', 'Bouton OD ou ESPACE : dégâts x2');
+      this.notice('SURCADENCE DISPONIBLE', 'Bouton OD ou ESPACE : dégâts x2');
     }
   },
 

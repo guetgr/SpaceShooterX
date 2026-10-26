@@ -27,6 +27,7 @@ mixin(GameScene, {
     this.currentCardPool = pool;
     const picks = Phaser.Utils.Array.Shuffle(pool.slice()).slice(0,n);
     this.renderCardChoices(picks);
+    document.getElementById('luNorma').textContent = Norma.pick('cards');
     document.getElementById('levelup').classList.remove('hidden');
   },
 

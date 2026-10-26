@@ -29,6 +29,7 @@ mixin(HomeScene, {
     $('btnBackWorld').onclick = ()=> this.enterWorldView(this.homeWorld);
     $('btnLaunch').onclick = ()=> this.launchLevel();
     Motion.bindPress();
+    Norma.startTicker(document.getElementById('homeTicker'), ()=> this.homeOn);
     this.hangarSeg = 'stats';
     $('segStats').onclick = ()=>{ this.hangarSeg = 'stats'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
     $('segMods').onclick = ()=>{ this.hangarSeg = 'mods'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
@@ -72,8 +73,19 @@ mixin(HomeScene, {
     this.input.keyboard.on('keydown-ENTER', ()=>{ if (this.homeOn && this.page === 0 && !document.querySelector('.overlay:not(.hidden)')) this.launchLevel(); });
   },
 
+  // la camionnette de l'atelier est dessinée dans la zone de jeu (400x700, centrée) alors que le texte HTML couvre tout l'écran : sur un téléphone
+  // plus haut que 400x700 on décale le texte pour qu'il reste juste sous la camionnette
+  layoutHome(){
+    const cv = document.querySelector('#game-container canvas'), box = document.getElementById('game-container'), home = document.getElementById('home');
+    if (!cv || !home) return;
+    const c = cv.getBoundingClientRect(), b = box.getBoundingClientRect(), s = c.height / GAME_H;
+    home.style.setProperty('--hg', Math.max(120, Math.round((c.top - b.top) + 258*s - 108)) + 'px');
+  },
+
   enterHome(){
     this.homeOn = true; this._launching = false;
+    if (!this._layoutBound){ this._layoutBound = true; window.addEventListener('resize', ()=> setTimeout(()=> this.layoutHome(), 60)); }
+    this.layoutHome(); setTimeout(()=> this.layoutHome(), 400);
     Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');
@@ -137,10 +149,10 @@ mixin(HomeScene, {
     const $ = id=> document.getElementById(id), p = getWorldProgress(), w = WORLDS[this.homeWorld], open = isWorldUnlocked(w.id, p);
     this.planetLocked = !open;
     if (this.mapMode !== 'galaxy') this.setHomePlanet(w, !open);
-    $('mwNum').textContent = 'MONDE ' + w.order;
+    $('mwNum').textContent = 'SECTEUR ' + String(w.order).padStart(2, '0');
     $('mwName').textContent = open ? w.name : '? ? ?';
     const sm = worldSummary(w.id, p);
-    $('mwProg').textContent = open ? (sm.done + ' / ' + sm.total + (sm.bossDown ? ' ★' : '')) : 'VERROUILLE';
+    $('mwProg').textContent = open ? ('ORDRES EXECUTES ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ★' : '')) : 'ACCES REFUSE';
     const orb = $('mapOrbit'); orb.innerHTML = '';
     const n = w.levels.length, O = HOME_ORBIT;
     w.levels.forEach((l, k)=>{
@@ -162,10 +174,17 @@ mixin(HomeScene, {
     const l = levelById(this.homeSel) && levelById(this.homeSel).world === w.id ? levelById(this.homeSel) : w.levels[0];
     if (l.id !== this.homeSel) this.homeSel = l.id;
     const unl = isLevelUnlocked(l.id, p), rec = p.levels[l.id];
-    $('levelCard').innerHTML = '<div class="lc-name"></div><div class="lc-line">' + levelGoalText(l) + '</div><div class="lc-line">MENACE <b>' + l.threat + '</b> · ◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · Record <b>' + rec.best + '</b>' : ' (1re : <b>+' + (l.reward.first || 0) + '</b>)') + '</div>' +
-      (!rec && !unl ? '<div class="lc-line lock">Termine le niveau précédent.</div>' : '') + this.finitionLine(l, p);
-    $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'NIV.' + l.num + ' — ') + (unl ? l.name : '? ? ?');
-    const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REJOUER' : 'DECOLLER') : 'VERROUILLE'; Motion.syncBreath(lb);
+    // fiche « ordre de mission » : n° de dossier, nature de l'ordre, objectif, risque, prime, note de service
+    const ty = agpType(l), pips = '<i class="om-pips">' + [1, 2, 3, 4].map(k=> '<u' + (k <= Math.min(4, l.threat) ? ' class="f"' : '') + '></u>').join('') + '</i>';
+    $('levelCard').className = 'level-card world-only ' + (l.type === 'boss' ? 'is-boss' : (l.type === 'tuto' ? 'is-tuto' : ''));
+    $('levelCard').innerHTML = '<div class="om-top"><span class="om-no">ORDRE ' + agpDossier(l) + '</span><span class="om-tag ' + ty.cls + '">' + ty.label + '</span></div><div class="lc-name"></div>' +
+      '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
+      '<div class="om-row"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
+      '<div class="om-row"><span>PRIME</span><em>◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (l.reward.first || 0) + '</b>') + '</em></div>' +
+      this.finitionLine(l, p) +
+      '<div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div>';
+    $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
+    const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
     this.setHomeVanTier(l.threat);
   },
 
@@ -180,7 +199,7 @@ mixin(HomeScene, {
   // hangar : palier, apparence (teintes) et contenu du bas — STATS du vaisseau ou MODULES installés (compétences de l'arbre possédées)
   renderHomeHangar(meta){
     const l = levelById(this.homeSel), t = Math.min(4, Math.max(1, (l && l.threat) || 1)), cur = getShipSkin();
-    document.getElementById('hangarTier').textContent = 'CAMIONNETTE · PALIER ' + ['I', 'I', 'II', 'III', 'IV'][t];
+    document.getElementById('hangarTier').innerHTML = 'CAMIONNETTE AGP-77 · HOMOLOGATION ' + ['I', 'I', 'II', 'III', 'IV'][t] + '<span>Contrôle technique : <b>EXPIRE</b></span>';
     const row = document.getElementById('skinRow'); row.innerHTML = '';
     SHIP_SKINS.forEach(sk=>{
       const b = document.createElement('button'); b.className = 'skin' + (sk.id === cur ? ' sel' : '');
@@ -194,11 +213,11 @@ mixin(HomeScene, {
     const body = document.getElementById('hangarBody');
     if (!mods){
       const s = computeStartingStatsPreview();
-      body.innerHTML = HOME_STAT_LINES.map(r=> '<div class="stat-row"><span>' + r[0] + '</span><b>' + r[1](s) + '</b></div>').join('');
+      body.innerHTML = HOME_STAT_LINES.map(r=> '<div class="stat-row"><span>' + (AGP_LORE.statNames[r[0]] || r[0]) + '</span><i></i><b>' + r[1](s) + '</b></div>').join('');
       return;
     }
     const owned = ALL_TREE_NODES.filter(n=> (meta.tree[n.id] || 0) > 0 && !n.isHub);
-    if (!owned.length){ body.innerHTML = '<div class="mod-empty">Aucun module installé.<br>Achète des compétences dans l\'arbre.</div>'; return; }
+    if (!owned.length){ body.innerHTML = '<div class="mod-empty">Aucun module installé.<br>Commandez du matériel au catalogue R&D.</div>'; return; }
     body.innerHTML = '<div class="mod-grid"></div><div class="mod-detail" id="modDetail">Touche un module pour voir ce qu\'il fait.</div>';
     const grid = body.querySelector('.mod-grid');
     owned.forEach(n=>{

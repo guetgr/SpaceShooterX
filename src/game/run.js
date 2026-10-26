@@ -43,7 +43,7 @@ mixin(GameScene, {
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
-    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined;
+    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this.normaStart();
     Motion.uncover();                      // le rideau de transition (accueil → niveau) se rouvre
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
@@ -95,14 +95,14 @@ mixin(GameScene, {
     const ex = document.getElementById('goExtra');
     ex.innerHTML = '';
     const addLine = (txt, cls)=>{ const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; ex.appendChild(d); };
-    if (this.pacts && this.pacts.length) addLine('PACTES (' + this.pacts.length + ')  fragments x' + this.pactBonusMul.toFixed(2), 'go-near');
-    addLine('MEILLEUR COMBO x' + this.runBestCombo + ' · RANG ' + STYLE_RANKS[this.runBestRank].l + ' (' + STYLE_RANKS[this.runBestRank].name + ')');
-    addLine('MEILLEURE CHAINE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
+    if (this.pacts && this.pacts.length) addLine('CLAUSES SPECIALES (' + this.pacts.length + ') · composants x' + this.pactBonusMul.toFixed(2), 'go-near');
+    addLine('SERIE MAXIMALE x' + this.runBestCombo + ' · RANG ' + STYLE_RANKS[this.runBestRank].l);
+    addLine('CHAINE MAXIMALE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
     if (this.bossActive && this.currentBoss && this.currentBoss.active){
       const pc = Math.max(1, Math.round(this.currentBoss.hp / this.currentBoss.maxHp * 100));
-      addLine('Le boss avait encore ' + pc + '% de PV...', 'go-boss');
+      addLine('L\'incident majeur était encore actif à ' + pc + ' %...', 'go-boss');
     } else if (this.nextBossAt - this.elapsed > 0 && this.nextBossAt - this.elapsed <= 25){
-      addLine('Le prochain boss arrivait dans ' + Math.ceil(this.nextBossAt - this.elapsed) + ' s...', 'go-boss');
+      addLine('Le prochain incident majeur arrivait dans ' + Math.ceil(this.nextBossAt - this.elapsed) + ' s...', 'go-boss');
     }
     const near = [];
     const achvA = this.achv;
@@ -112,7 +112,8 @@ mixin(GameScene, {
       const f = v => n.time ? Math.floor(v/60) + ':' + String(v%60).padStart(2,'0') : v;
       addLine('PRESQUE : ' + n.name + ' ' + f(n.pr) + ' / ' + f(n.need), 'go-near');
     });
-    document.querySelector('#gameover .go-title').textContent = victory ? 'NIVEAU TERMINE' : (abandon ? 'NIVEAU ABANDONNE' : 'VAISSEAU DETRUIT');
+    document.querySelector('#gameover .go-title').textContent = victory ? 'INTERVENTION VALIDEE' : (abandon ? 'ORDRE ANNULE' : 'ACCIDENT DU TRAVAIL');
+    Norma.reset();
     document.getElementById('finalScore').textContent = Math.floor(this.score);
     document.getElementById('finalLvl').textContent = this.level;
     const m = Math.floor(this.elapsed/60), s = Math.floor(this.elapsed%60);
@@ -121,21 +122,24 @@ mixin(GameScene, {
     { const goEl = document.getElementById('gameover'), L = this.lvDef, res = this.lvResult;
       goEl.classList.toggle('win', !!victory);
       document.getElementById('finalKills').textContent = this.runKills;
-      document.getElementById('goLevel').textContent = L ? (worldById(L.world).name + ' · NIV.' + L.num + ' — ' + L.name) : '';
+      document.getElementById('goLevel').textContent = L ? ('SECTEUR ' + worldById(L.world).name + ' · ORDRE ' + String(L.num).padStart(2, '0') + ' — ' + L.name) : '';
+      document.getElementById('rpNo').textContent = 'N° ' + (L ? agpDossier(L) : 'AGP-' + String(Math.floor(this.score) % 100000).padStart(5, '0'));
+      { const g = STYLE_RANKS[this.runBestRank].l, gr = document.getElementById('rpGrade'); gr.textContent = g; gr.style.setProperty('--gc', STYLE_RANKS[this.runBestRank].col); document.getElementById('rpMention').textContent = AGP_LORE.grades[g] || '';
+        document.getElementById('rpNorma').textContent = Norma.report(victory ? 'win' : (abandon ? 'abort' : 'lose'), g); }
       const pr = document.getElementById('goProg'); pr.classList.toggle('hidden', !L);
       if (L){ document.getElementById('goProgFill').style.width = Math.round(res.progress*100) + '%'; document.getElementById('goProgTxt').textContent = Math.round(res.progress*100) + '%'; }
       const rw = document.getElementById('goRewards'); rw.innerHTML = '';
       const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.textContent = val; rw.appendChild(d); };
       if (clearBonus){
-        addRw('Combat', '+' + (fragmentsEarned - clearBonus) + ' ◆');
-        addRw('Niveau terminé', '+' + this.lvDef.reward.clear + ' ◆');
-        if (rec.first && this.lvDef.reward.first) addRw('1re victoire', '+' + this.lvDef.reward.first + ' ◆');
+        addRw('Collecte en combat', '+' + (fragmentsEarned - clearBonus) + ' ◆');
+        addRw('Prime d\'intervention', '+' + this.lvDef.reward.clear + ' ◆');
+        if (rec.first && this.lvDef.reward.first) addRw('Prime de 1re validation', '+' + this.lvDef.reward.first + ' ◆');
         addRw('TOTAL', '+' + fragmentsEarned + ' ◆', 'total');
-      } else addRw('Fragments gagnés', '+' + fragmentsEarned + ' ◆', 'total');
+      } else addRw('Collecte en combat', '+' + fragmentsEarned + ' ◆', 'total');
       const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.textContent = txt; rw.appendChild(d); };
-      if (rec && rec.unlockedLevel) unl('▶ NIVEAU SUIVANT DEBLOQUE');
-      if (rec && rec.unlockedWorld) unl('★ NOUVEAU MONDE : ' + worldById(rec.unlockedWorld).name);
-      if (victory && L && !nxt) unl('FIN DE LA CAMPAGNE (pour l\'instant)');
+      if (rec && rec.unlockedLevel) unl('▶ ORDRE SUIVANT ATTRIBUE');
+      if (rec && rec.unlockedWorld) unl('★ NOUVEAU SECTEUR : ' + worldById(rec.unlockedWorld).name);
+      if (victory && L && !nxt) unl('FIN DES ORDRES (pour l\'instant)');
       const bn = document.getElementById('btnNext'), br = document.getElementById('btnRetry');
       bn.classList.toggle('hidden', !res.next);
       br.classList.toggle('secondary', !!res.next);      // victoire avec une suite: SUIVANT est le bouton principal

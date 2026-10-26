@@ -13,6 +13,8 @@ Plus de partie infinie comme mode principal : **accueil (HomeScene) → carte de
 En niveau, `alertLevel` = menace fixée par le niveau (`threat`), plus par l'arbre ; la partie infinie reste accessible en `?dev` (bouton DEV). Mondes/niveaux : `src/data/worlds/*.js` (brouillons). Le tuto est le niveau 1 du monde 1 (`w1-tuto`, type `tuto`, `src/game/tuto.js`) : sans `lvDef`, lancé par `tuto:true`. Le revenu de combat en niveau est réduit par `LEVEL_FRAG_MUL` (`data/balance.js`).
 Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de npm/bundler/lint : Python 3 (+ `pip install playwright numpy`), Node (vérif syntaxe du build) et Chrome suffisent. `file://` ne marche pas : toujours passer par le serveur.
 
+**Habillage AGP (branche `direction-agp`)** : l'interface est le logiciel de bord de l'Agence Galactique de Propreté (AGP-OS). Palette, composants et écrans : `docs/direction-artistique-agp.md` ; couche CSS : `css/agp.css` (chargée après `style.css`) ; textes et voix de N.O.R.M.A. : `src/data/agp-lore.js` + `src/ui/norma.js`. Les libellés de l'interface suivent ce vocabulaire (secteurs, ordres de mission, composants, rapport d'intervention).
+
 ## Au début de chaque session / message
 **Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
 
