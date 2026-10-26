@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AGP — placement précis</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101719;color:#eaf0ec;font:15px system-ui}header{padding:18px 24px;border-bottom:1px solid #41504a}h1{font-size:22px;margin:0 0 8px}p{color:#b4c4bc;margin:5px 0}main{display:grid;grid-template-columns:300px 1fr;height:calc(100vh - 110px)}aside{padding:20px;overflow:auto}label{display:block;margin:14px 0 5px}input,select,button,textarea{font:inherit;border:1px solid #53645e;border-radius:4px;background:#202e2b;color:#edf2ee;padding:9px}input[type=number]{width:100%}button{cursor:pointer;margin:8px 0;width:100%}button.primary{background:#ffcf24;color:#111;font-weight:bold}textarea{width:100%;height:140px;font:11px monospace}.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}#viewport{overflow:auto;background:#090f11;padding:24px}#canvas{display:block;image-rendering:pixelated;touch-action:none;outline:none;box-shadow:0 0 0 1px #68756d}#canvas:focus{box-shadow:0 0 0 2px #ffcf24}small{color:#adc2b6}#status{min-height:40px;color:#ffcf24}@media(max-width:720px){main{grid-template-columns:220px 1fr}aside{padding:12px}}
+</style>
+<header><h1>Placement des modules AGP</h1><p>Glissez le module. Cliquez sur l’image puis utilisez les flèches : 1 px · Maj + flèche : 10 px. Le véhicule reste fixe.</p></header>
+<main><aside>
+<label for="module">Module à placer</label><select id="module"><option value="magnet">Aimant</option><option value="cannon">Canon</option></select>
+<div class="pair"><div><label for="x">X (px)</label><input id="x" type="number" step="1"></div><div><label for="y">Y (px)</label><input id="y" type="number" step="1"></div></div>
+<label for="width">Largeur du PNG (px)</label><input id="width" type="number" min="1" max="3000" step="1">
+<label for="zoom">Zoom de travail</label><select id="zoom"><option value="0.5">50 %</option><option value="0.75">75 %</option><option value="1" selected>100 % — 1 pixel = 1 pixel</option><option value="2">200 %</option><option value="3">300 %</option></select>
+<label><input id="grid" type="checkbox"> Grille (16 px)</label><label><input id="bounds" type="checkbox" checked> Cadre du PNG et origine</label><label><input id="visible" type="checkbox" checked> Afficher le module</label>
+<button id="reset">Réinitialiser ce module</button><small>Positions enregistrées automatiquement dans ce navigateur.</small>
+<button class="primary" id="copy">Copier les deux placements</button><button id="download">Télécharger le fichier JSON</button><p id="status" role="status"></p><textarea id="output" readonly aria-label="Coordonnées à me transmettre"></textarea>
+<small>Coordonnées du coin supérieur gauche du PNG, marges transparentes comprises. Repère commun : 768 × 820 px. Aucun changement du jeu.</small>
+</aside><div id="viewport"><canvas id="canvas" width="768" height="820" tabindex="0" aria-label="Surface de placement du module, contrôlable avec les flèches"></canvas></div></main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id), key='agp-module-placement-v1';
+const defaults={magnet:{x:349,y:273,width:310},cannon:{x:413,y:342,width:215}};
+let placements=structuredClone(defaults),active='magnet',drag=null,ready=false;
+try{const saved=JSON.parse(localStorage.getItem(key));for(const id of Object.keys(defaults)){const v=saved?.[id];if(v&&Number.isFinite(v.x)&&Number.isFinite(v.y)&&Number.isFinite(v.width)&&v.width>=1&&v.width<=3000)placements[id]={x:Math.round(v.x),y:Math.round(v.y),width:Math.round(v.width)};}}catch{}
+const files={van:'vehicule-nu.png',magnet:'module-aimant-v2.png',cannon:'module-canon.png'},images={},canvas=$('canvas'),ctx=canvas.getContext('2d');
+function exported(){return {version:1,coordinateSystem:{width:768,height:820,origin:'top-left of full PNG including transparent padding',units:'logical pixels'},vehicle:{file:files.van,x:0,y:330,width:768,sourceWidth:1536,sourceHeight:1024},modules:Object.fromEntries(Object.entries(placements).map(([id,v])=>[id,{file:files[id],...v,height:v.width*2/3,sourceWidth:1536,sourceHeight:1024}]))};}
+function draw(){if(!ready)return;ctx.clearRect(0,0,768,820);ctx.fillStyle='#1b292b';ctx.fillRect(0,0,768,820);ctx.imageSmoothingEnabled=false;
+if($('grid').checked){ctx.strokeStyle='#344543';ctx.lineWidth=1;ctx.beginPath();for(let x=0;x<=768;x+=16){ctx.moveTo(x+.5,0);ctx.lineTo(x+.5,820)}for(let y=0;y<=820;y+=16){ctx.moveTo(0,y+.5);ctx.lineTo(768,y+.5)}ctx.stroke();}
+ctx.drawImage(images.van,0,330,768,512);const v=placements[active],h=v.width*2/3;
+if($('visible').checked){ctx.drawImage(images[active],v.x,v.y,v.width,h);if($('bounds').checked){ctx.strokeStyle='#ffcf24';ctx.lineWidth=1;ctx.setLineDash([5,4]);ctx.strokeRect(v.x+.5,v.y+.5,v.width,h);ctx.setLineDash([]);ctx.fillStyle='#ffcf24';ctx.fillRect(v.x-3,v.y-3,7,7);}}
+}
+function sync(){const v=placements[active];for(const f of ['x','y','width'])$(f).value=v[f];$('output').value=JSON.stringify(exported(),null,2);try{localStorage.setItem(key,JSON.stringify(placements))}catch{}draw();}
+function point(e){const r=canvas.getBoundingClientRect();return {x:(e.clientX-r.left)*768/r.width,y:(e.clientY-r.top)*820/r.height};}
+canvas.addEventListener('pointerdown',e=>{if(!ready||!$('visible').checked)return;const p=point(e),v=placements[active];if(p.x<v.x||p.x>v.x+v.width||p.y<v.y||p.y>v.y+v.width*2/3)return;canvas.focus({preventScroll:true});drag={pointer:e.pointerId,x:p.x,y:p.y,startX:v.x,startY:v.y};canvas.setPointerCapture(e.pointerId);});
+canvas.addEventListener('pointermove',e=>{if(!drag||drag.pointer!==e.pointerId)return;const p=point(e);placements[active].x=Math.round(drag.startX+p.x-drag.x);placements[active].y=Math.round(drag.startY+p.y-drag.y);sync();});
+for(const event of ['pointerup','pointercancel','lostpointercapture'])canvas.addEventListener(event,()=>{drag=null});
+canvas.addEventListener('keydown',e=>{const dirs={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};if(!dirs[e.key])return;e.preventDefault();const d=dirs[e.key],n=e.shiftKey?10:1;placements[active].x+=d[0]*n;placements[active].y+=d[1]*n;sync();});
+for(const f of ['x','y','width'])$(f).addEventListener('input',()=>{if($(f).value==='')return;const n=Number($(f).value);if(!Number.isFinite(n))return;placements[active][f]=f==='width'?Math.max(1,Math.min(3000,Math.round(n))):Math.round(n);sync();});
+$('module').onchange=()=>{active=$('module').value;sync()};
+$('zoom').onchange=()=>{canvas.style.width=768*Number($('zoom').value)+'px';canvas.style.height=820*Number($('zoom').value)+'px'};
+for(const id of ['grid','bounds','visible'])$(id).onchange=draw;
+$('reset').onclick=()=>{placements[active]={...defaults[active]};sync()};
+$('copy').onclick=async()=>{sync();try{await navigator.clipboard.writeText($('output').value);$('status').textContent='Copié. Collez le résultat dans notre conversation.'}catch{$('output').focus();$('output').select();$('status').textContent='Texte sélectionné : copiez-le puis collez-le dans notre conversation.'}};
+$('download').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(exported(),null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='placements-agp.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+Promise.all(Object.entries(files).map(([id,src])=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images[id]=im;resolve()};im.onerror=reject;im.src=src}))).then(()=>{ready=true;sync()}).catch(()=>{$('status').textContent='Impossible de charger les sprites.'});
+</script></html>

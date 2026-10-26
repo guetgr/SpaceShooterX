@@ -99,6 +99,7 @@ mixin(HomeScene, {
 
   buildHomeVan(){
     this.van = this.add.image(GAME_W/2, 620, 'playerBase').setDepth(2).setScale(0.22);
+    this.vanParts = this.add.image(GAME_W/2, 620, shipPartsTexture(this, getShipParts())).setDepth(2.1).setScale(0.22);
     this.vanBase = { x:GAME_W/2, y:620, s:0.22, a:1 };
     this.vanSway = 0;
     this.exhaust = this.add.particles(0, 0, 'star2', {
@@ -109,7 +110,7 @@ mixin(HomeScene, {
 
   // fait voyager la camionnette entre les pages (position, taille, transparence)
   moveHomeVan(page){
-    const to = page === -1 ? { x:GAME_W/2, y:184, s:0.45, a:1 } : (page === 1 ? { x:GAME_W/2, y:628, s:0.2, a:0 } : { x:GAME_W/2, y:432, s:0.22, a:1 });
+    const to = page === -1 ? { x:GAME_W/2, y:218, s:0.5, a:1 } : (page === 1 ? { x:GAME_W/2, y:628, s:0.2, a:0 } : { x:GAME_W/2, y:432, s:0.22, a:1 });
     this.tweens.add({ targets:this.vanBase, x:to.x, y:to.y, s:to.s, a:to.a, duration:450, ease:'Cubic.easeInOut' });
   },
 
@@ -124,14 +125,25 @@ mixin(HomeScene, {
     }
   },
 
+  applyHomeParts(flash){
+    this.vanParts.setTexture(shipPartsTexture(this, getShipParts()));
+    if (flash){
+      const k = this.vanBase.s;
+      this.tweens.add({ targets:this.vanBase, s:k*1.08, duration:120, yoyo:true, ease:'Quad.easeOut' });
+    }
+  },
+
   setHomeVanTier(threat){
     const key = ['playerBase', 'playerBase', 'playerT2', 'playerT3', 'playerT4'][Math.min(4, Math.max(1, threat || 1))];
     if (this.van.texture.key !== key) this.van.setTexture(key);
   },
 
   updateHomeVan(time){
+    const hideClassicVan = this.page === -1;
+    this.van.setVisible(!hideClassicVan); this.vanParts.setVisible(!hideClassicVan); this.exhaust.setVisible(!hideClassicVan);
     const b = this.vanBase, bob = Math.sin(time/700)*5*Math.max(0.4, b.s*2);
     this.van.setPosition(b.x + Math.sin(time/1900)*3, b.y + bob).setScale(b.s).setAlpha(b.a).setAngle(Math.sin(time/1500)*2);
+    this.vanParts.setPosition(this.van.x, this.van.y).setScale(this.van.scaleX).setAlpha(this.van.alpha).setAngle(this.van.angle);
     this.exhaust.setPosition(this.van.x, this.van.y + 118*b.s).setAlpha(b.a);
     this.updateHomeBackPlanet(time);
     // la planète et ses éléments suivent la page (glissement horizontal)

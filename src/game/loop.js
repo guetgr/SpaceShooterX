@@ -302,6 +302,7 @@ mixin(GameScene, {
       if (a > 40){ a = 40; w = Math.min(w, 0); } else if (a < -40){ a = -40; w = Math.max(w, 0); }
       this._angVel = w; this.player.angle = a;
       this.shieldAura.setPosition(this.player.x, this.player.y); this.shieldAura.setAngle(this.player.angle);
+      this.playerParts.setPosition(this.player.x, this.player.y).setScale(this.player.scaleX).setAngle(this.player.angle).setAlpha(this.player.alpha).setVisible(this.player.visible);
       // fumée de dérapage: seulement quand ça glisse vraiment (peu de réacteurs), jamais pendant le décollage
       this._skidT = (this._skidT || 0) - delta;
       if (!this.introActive && slip > 0.3 && Math.abs(a) > 0.5*maxA && Math.abs(vx) > 140 && this._skidT <= 0 && this.player.active){

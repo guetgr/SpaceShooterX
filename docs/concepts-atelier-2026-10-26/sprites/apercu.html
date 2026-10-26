@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AGP — assemblage des sprites</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:28px;background:#101719;color:#e8eeea;font-family:system-ui,sans-serif}h1{margin:0 0 8px;font-size:25px}p{color:#a9bab4}button{background:#ffd021;color:#101719;border:0;border-radius:4px;padding:14px 22px;font-weight:800;cursor:pointer}main{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1300px;margin:24px auto}section{background:#1b2527;border:1px solid #40504d;border-radius:8px;overflow:hidden}h2{font-size:17px;margin:18px;color:#ffd021}.stage{position:relative;width:100%;aspect-ratio:768/900;background:radial-gradient(ellipse at 50% 65%,#354240,#141d20 70%)}.stage img{position:absolute;height:auto;image-rendering:pixelated;pointer-events:none}.van{width:100%;left:0;top:36.6667%}.magnet{width:59.8958%;left:33.8542%;top:18.8889%}.off .magnet{display:none}footer{max-width:1000px;font-size:14px;color:#a9bab4}@media(max-width:700px){main{grid-template-columns:1fr}}
+</style>
+<h1>AGP — véhicule nu / module monté</h1>
+<p>Le même sprite de camionnette reste en place. Seul le calque de l’aimant change.</p>
+<button id="toggle" aria-pressed="true">Retirer l’aimant</button>
+<main><section><h2>01 — VÉHICULE NU</h2><div class="stage"><img class="van" src="vehicule-nu.png" alt="Camionnette nue avec toit complet"></div></section>
+<section><h2 id="state">02 — AIMANT ÉQUIPÉ</h2><div class="stage" id="assembly"><img class="van" src="vehicule-nu.png" alt="Même camionnette"><img class="magnet" src="module-aimant.png" alt="Module aimant, bras et câble"></div></section></main>
+<footer>Prototype visuel : PNG transparents séparés, assemblés dans un repère commun de 768 × 900. Socle conservé sur le toit. Les légers halos et les différences de densité de pixels devront être nettoyés pour des sprites de production. Aucun changement du jeu.</footer>
+<script>document.getElementById('toggle').onclick=function(){const off=document.getElementById('assembly').classList.toggle('off');this.setAttribute('aria-pressed',String(!off));this.textContent=off?'Équiper l’aimant':'Retirer l’aimant';document.getElementById('state').textContent=off?'02 — AIMANT RETIRÉ':'02 — AIMANT ÉQUIPÉ';};</script></html>

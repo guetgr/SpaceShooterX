@@ -1,0 +1,5 @@
+# Passe géométrique retenue
+
+Imagegen intégré. Seul guide-calibration.png utilisé comme référence pour éviter la reprise des axes erronés de l’ancien décor.
+
+Texture this EXACT geometric blockout into a lightly detailed pixel art industrial space garage. Geometry preservation is mandatory. Do not rearrange anything. Left broad wall lines slope UP toward RIGHT at -5.599 degrees. Right narrow wall lines slope DOWN toward RIGHT at +10.389 degrees. Preserve wall corner position at 53% image width and floor junction 65% image height. Preserve every floor direction and parking parallelogram exactly. Orthographic oblique projection NO convergence. Dark slate steel, sparse rivets, amber maintenance lamp, mustard worn parking marks replacing colored guide segments. Minimal detail, no windows needed, no props that obscure geometry. Pixel art flat restrained shading. Exact same landscape 3:2 aspect ratio. No vehicles, no modules, no UI. This is geometry-first material pass, retain blockout shapes exactly.

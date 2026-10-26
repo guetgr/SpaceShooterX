@@ -1,0 +1,1 @@
+{"image":"vehicule-nu.png","imageSize":[1536,1024],"edges":{"longitudinal":[[820,350],[1330,300]],"transverse":[[510,265],[810,320]]},"screenSlopes":{"longitudinal":-0.09803921568627451,"transverse":0.18333333333333332},"screenAnglesDegrees":[-5.59933933652057,10.388857815469612],"projection":"affine oblique fitted to selected roof edges; vertical axis screen-up"}

@@ -30,9 +30,7 @@ mixin(HomeScene, {
     $('btnLaunch').onclick = ()=> this.launchLevel();
     Motion.bindPress();
     Norma.startTicker(document.getElementById('homeTicker'), ()=> this.homeOn);
-    this.hangarSeg = 'stats';
-    $('segStats').onclick = ()=>{ this.hangarSeg = 'stats'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
-    $('segMods').onclick = ()=>{ this.hangarSeg = 'mods'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
+    AtelierGarage.setup();
     $('homeSettings').onclick = ()=>{ $('btnOptionsMain').click(); };
     if (DEV_SEE_ALL){
       $('btnDevHome').classList.remove('hidden');
@@ -193,41 +191,9 @@ mixin(HomeScene, {
       (nx ? '<div class="lc-line">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line">' + uiIco('star') + ' FINITION 100% ' + uiIco('star') + '</div>');
   },
 
-  // hangar : palier, apparence (teintes) et contenu du bas — STATS du vaisseau ou MODULES installés (compétences de l'arbre possédées)
-  renderHomeHangar(meta){
-    const l = levelById(this.homeSel), t = Math.min(4, Math.max(1, (l && l.threat) || 1)), cur = getShipSkin();
-    document.getElementById('hangarTier').innerHTML = 'CAMIONNETTE AGP-77 · HOMOLOGATION ' + ['I', 'I', 'II', 'III', 'IV'][t] + '<span>Contrôle technique : <b>EXPIRE</b></span>';
-    const row = document.getElementById('skinRow'); row.innerHTML = '';
-    SHIP_SKINS.forEach(sk=>{
-      const b = document.createElement('button'); b.className = 'skin' + (sk.id === cur ? ' sel' : '');
-      b.innerHTML = '<i style="--sw:' + sk.swatch + '"></i><span>' + sk.name + '</span>';
-      b.onclick = ()=>{ if (getShipSkin() === sk.id) return; sfx.uiSelect(); setShipSkin(sk.id); this.applyHomeSkin(true); this.renderHomeHangar(getMeta()); };
-      row.appendChild(b);
-    });
+  // Conserve la livrée existante sur le sprite de navigation et de mission.
+  renderHomeHangar(){
     this.applyHomeSkin(false);
-    const mods = this.hangarSeg === 'mods';
-    document.getElementById('segStats').classList.toggle('on', !mods); document.getElementById('segMods').classList.toggle('on', mods);
-    const body = document.getElementById('hangarBody');
-    if (!mods){
-      const s = computeStartingStatsPreview();
-      body.innerHTML = HOME_STAT_LINES.map(r=> '<div class="stat-row"><span>' + (AGP_LORE.statNames[r[0]] || r[0]) + '</span><i></i><b>' + r[1](s) + '</b></div>').join('');
-      return;
-    }
-    const owned = ALL_TREE_NODES.filter(n=> (meta.tree[n.id] || 0) > 0 && !n.isHub);
-    if (!owned.length){ body.innerHTML = '<div class="mod-empty">Aucun atout global installé.<br>Commandez du matériel au catalogue R&D : il s\'active à chaque mission.</div>'; return; }
-    body.innerHTML = '<div class="mod-head">ATOUTS GLOBAUX · R&D · permanents</div><div class="mod-grid"></div><div class="mod-detail" id="modDetail">Touche un module pour voir ce qu\'il fait.</div>';
-    const grid = body.querySelector('.mod-grid');
-    owned.forEach(n=>{
-      const b = document.createElement('button'), lvl = meta.tree[n.id];
-      b.className = 'mod'; b.innerHTML = pxImg(n.icon, 22) + (lvl > 1 ? '<b>' + lvl + '</b>' : '');
-      b.setAttribute('aria-label', n.name);
-      b.onclick = ()=>{
-        sfx.uiSelect(); grid.querySelectorAll('.mod').forEach(x=> x.classList.remove('sel')); b.classList.add('sel');
-        const d = document.getElementById('modDetail'); d.innerHTML = '<em></em><span></span>';
-        d.querySelector('em').textContent = n.name + (lvl > 1 ? '  (rang ' + lvl + ')' : ''); d.querySelector('span').textContent = n.desc;
-      };
-      grid.appendChild(b);
-    });
   },
 
   // arbre : le panneau (méthodes de GameScene) se redessine quand on arrive sur la page ; le point doré de l'onglet signale un achat possible
