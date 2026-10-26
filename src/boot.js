@@ -4,6 +4,12 @@
 //  2. expose asset('sprites/x.png') -> data URI, utilisable dès la première ligne des autres fichiers
 //  3. charge les fichiers de src/scripts.json dans l'ordre
 // Il faut un serveur local (fetch ne marche pas en file://) : lance serve.bat.
+// ?sandbox : sauvegarde EN MÉMOIRE (rien n'est écrit dans le vrai localStorage) — utilisé par l'éditeur de niveaux (editor.html) pour tester sans abîmer la progression.
+if (/[?&]sandbox\b/.test(location.search)) {
+  const mem = {};
+  const fake = { getItem: k => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = String(v); }, removeItem: k => { delete mem[k]; }, clear: () => { Object.keys(mem).forEach(k => delete mem[k]); }, key: i => Object.keys(mem)[i] || null, get length() { return Object.keys(mem).length; } };
+  try { Object.defineProperty(window, 'localStorage', { value: fake, configurable: true }); } catch (e) { /* ignore */ }
+}
 (function () {
   const MIME = { png: 'image/png', webp: 'image/webp', jpg: 'image/jpeg', mp3: 'audio/mpeg', woff2: 'font/woff2' };
   const store = {};

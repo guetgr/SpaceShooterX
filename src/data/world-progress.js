@@ -8,9 +8,9 @@ const WORLDS_KEY = 'ssx_worlds_v1';
 function getWorldProgress(){
   try {
     const r = JSON.parse(localStorage.getItem(WORLDS_KEY) || 'null');
-    if (r && typeof r === 'object') return { v:1, levels: (r.levels && typeof r.levels === 'object') ? r.levels : {}, seen: (r.seen && typeof r.seen === 'object') ? r.seen : {}, last: r.last || null };
+    if (r && typeof r === 'object') return { v:1, levels: (r.levels && typeof r.levels === 'object') ? r.levels : {}, seen: (r.seen && typeof r.seen === 'object') ? r.seen : {}, comp: (r.comp && typeof r.comp === 'object') ? r.comp : {}, last: r.last || null };
   } catch(e){ /* ignore */ }
-  return { v:1, levels:{}, seen:{}, last:null };
+  return { v:1, levels:{}, seen:{}, comp:{}, last:null };
 }
 
 function setWorldProgress(p){
