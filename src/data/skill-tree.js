@@ -6,10 +6,9 @@
 ========================================================= */
 function mkCost(base, step){ return (lvl)=> base + lvl*step; }
 
-const TREE_R0 = 95, TREE_RSTEP = 78, TREE_FAN = 13, TREE_FORKSTEP = 78;
 
 const TREE_BRANCHES = [
-  { id:'arme', name:'Arme principale', angle:270, color:'#ff7a45',
+  { id:'arme', name:'Arme principale', color:'#ff7a45',
     stem:[
       [ {id:'t_puissance', icon:'💪', name:'PUISSANCE', desc:'+10% dégâts de départ / niveau.', max:6, cost:mkCost(6,5),
          apply:(s,l)=>{ s.damage *= (1+0.10*l); } },
@@ -32,24 +31,21 @@ const TREE_BRANCHES = [
     ],
     forkThreshold: 14,
     forks:[
-      { angleOffset:-38,
-        keystone:{id:'t_laser_c', icon:'🔫', name:'LASER CONTINU', desc:"Débloque un laser perforant comme arme (proposé en jeu).", max:1, cost:mkCost(30,0) },
+      { keystone:{id:'t_laser_c', icon:'🔫', name:'LASER CONTINU', desc:"Débloque un laser perforant comme arme (proposé en jeu).", max:1, cost:mkCost(30,0) },
         path:[
           {id:'t_laser_c_portee', icon:'📏', name:'PORTEE LASER', desc:'+10% vitesse du laser / niveau.', max:4, cost:mkCost(10,8),
            apply:(s,l)=>{ s.laserSpeedBonus = 0.10*l; } },
           {id:'t_laser_c_degats', icon:'💥', name:'DEGATS LASER+', desc:'+15% dégâts du laser / niveau.', max:5, cost:mkCost(10,8),
            apply:(s,l)=>{ s.laserDamageBonus = 0.15*l; } } ],
         cap:{id:'t_laser_c_cap', icon:'☄️', name:'LASER DESTRUCTEUR', desc:"Après 2s de tir continu, le laser double ses dégâts.", max:1, cost:mkCost(40,0) } },
-      { angleOffset:0,
-        keystone:{id:'t_laser_a', icon:'🎯', name:'LASER AUTO-CIBLEUR', desc:"Débloque un laser qui verrouille l'ennemi le plus proche (proposé en jeu).", max:1, cost:mkCost(30,0) },
+      { keystone:{id:'t_laser_a', icon:'🎯', name:'LASER AUTO-CIBLEUR', desc:"Débloque un laser qui verrouille l'ennemi le plus proche (proposé en jeu).", max:1, cost:mkCost(30,0) },
         path:[
           {id:'t_laser_a_verrou', icon:'🔒', name:'VERROUILLAGE+', desc:'Verrouille la cible plus vite.', max:4, cost:mkCost(9,7),
            apply:(s,l)=>{ s.laserLockBonus = l; } },
           {id:'t_laser_a_priorite', icon:'🧠', name:'CIBLAGE PRIORITAIRE', desc:'Vise en priorité les ennemis à faibles PV.', max:3, cost:mkCost(10,8),
            apply:(s,l)=>{ s.laserPriority = true; } } ],
         cap:{id:'t_laser_a_cap', icon:'🌐', name:'RETICULE OMNISCIENT', desc:"Verrouille 3 cibles à la fois au lieu d'une.", max:1, cost:mkCost(40,0) } },
-      { angleOffset:38,
-        keystone:{id:'t_shotgun', icon:'💠', name:'SHOTGUN', desc:"Débloque une salve en cône (proposée en jeu), plus lente mais plus lourde.", max:1, cost:mkCost(30,0) },
+      { keystone:{id:'t_shotgun', icon:'💠', name:'SHOTGUN', desc:"Débloque une salve en cône (proposée en jeu), plus lente mais plus lourde.", max:1, cost:mkCost(30,0) },
         path:[
           {id:'t_shotgun_plombs', icon:'🔵', name:'PLUS DE PLOMBS', desc:'+1 plomb / niveau.', max:4, cost:mkCost(10,8),
            apply:(s,l)=>{ s.shotgunExtraPellets = l; } },
@@ -58,7 +54,7 @@ const TREE_BRANCHES = [
         cap:{id:'t_shotgun_cap', icon:'💥', name:'CANON A FRAGMENTATION', desc:'Chaque plomb touché se fragmente en 2 éclats.', max:1, cost:mkCost(40,0) } },
     ]
   },
-  { id:'missile', name:'Missiles', angle:0, color:'#ff3f6e',
+  { id:'missile', name:'Missiles', color:'#ff3f6e',
     stem:[
       [ {id:'t_lancemissiles', icon:'🚀', name:'LANCE-MISSILES', desc:"Débloque l'emplacement de missiles (proposé en jeu dès le niveau 5).", max:1, cost:mkCost(14,0) },
         {id:'t_chargemissiles', icon:'📦', name:'CHARGE', desc:'+1 missile de départ par salve tous les 2 niveaux.', max:4, cost:mkCost(9,7),
@@ -78,16 +74,14 @@ const TREE_BRANCHES = [
     ],
     forkThreshold: 10,
     forks:[
-      { angleOffset:-28,
-        keystone:{id:'t_missile_droit', icon:'➡️', name:'MISSILES DROITS', desc:"Les missiles partent tout droit et explosent en zone à l'impact.", max:1, cost:mkCost(26,0) },
+      { keystone:{id:'t_missile_droit', icon:'➡️', name:'MISSILES DROITS', desc:"Les missiles partent tout droit et explosent en zone à l'impact.", max:1, cost:mkCost(26,0) },
         path:[
           {id:'t_missile_droit_vitesse', icon:'💨', name:'VITESSE MISSILE', desc:'+10% vitesse / niveau.', max:4, cost:mkCost(9,7),
            apply:(s,l)=>{ s.missileSpeedBonus = 0.1*l; } },
           {id:'t_missile_droit_charge', icon:'🧨', name:'CHARGE LOURDE', desc:"+15% dégâts d'explosion / niveau.", max:4, cost:mkCost(10,8),
            apply:(s,l)=>{ s.missileDamageBonus = 0.15*l; } } ],
         cap:{id:'t_missile_droit_cap', icon:'☢️', name:'MISSILE NUCLEAIRE', desc:'Un missile dévastateur part tout droit périodiquement et rase une immense zone.', max:1, cost:mkCost(38,0) } },
-      { angleOffset:28,
-        keystone:{id:'t_missile_chercheur', icon:'🧭', name:'MISSILES CHERCHEURS', desc:"Les missiles sont auto-guidés vers l'ennemi le plus proche.", max:1, cost:mkCost(26,0) },
+      { keystone:{id:'t_missile_chercheur', icon:'🧭', name:'MISSILES CHERCHEURS', desc:"Les missiles sont auto-guidés vers l'ennemi le plus proche.", max:1, cost:mkCost(26,0) },
         path:[
           {id:'t_missile_chercheur_multi', icon:'🎯', name:'VERROU. MULTIPLE', desc:'Les missiles chercheurs se répartissent sur plusieurs cibles (+1 cible / niveau).', max:4, cost:mkCost(9,7),
            apply:(s,l)=>{ s.missileMultiLock = l; } },
@@ -96,7 +90,7 @@ const TREE_BRANCHES = [
         cap:{id:'t_missile_chercheur_cap', icon:'☄️', name:"ESSAIM D'AUTOMISSILES", desc:'Une nuée de petits missiles auto-guidés est tirée en continu autour du vaisseau.', max:1, cost:mkCost(38,0) } },
     ]
   },
-  { id:'defense', name:'Défense & vitalité', angle:90, color:'#33e0a1',
+  { id:'defense', name:'Défense & vitalité', color:'#33e0a1',
     stem:[
       [ {id:'t_vitalite', icon:'❤️', name:'VITALITE', desc:'+15 PV de départ / niveau.', max:6, cost:mkCost(6,5),
          apply:(s,l)=>{ s.maxHp += 15*l; } },
@@ -125,8 +119,7 @@ const TREE_BRANCHES = [
     ],
     forkThreshold: 14,
     forks:[
-      { angleOffset:-38,
-        keystone:{id:'t_forteresse', icon:'🏰', name:'FORTERESSE', desc:'+50% PV max, -15% de dégâts de collision, mais -20% de réactivité du vaisseau.', max:1, cost:mkCost(28,0),
+      { keystone:{id:'t_forteresse', icon:'🏰', name:'FORTERESSE', desc:'+50% PV max, -15% de dégâts de collision, mais -20% de réactivité du vaisseau.', max:1, cost:mkCost(28,0),
          apply:(s)=>{ s.maxHp *= 1.5; s.moveResponsiveness *= 0.8; s.collisionMul *= 0.85; } },
         path:[
           {id:'t_forteresse_resist', icon:'🧱', name:'RESISTANCE+', desc:'-3% dégâts subis supplémentaires et -7% de dégâts de collision / niveau.', max:5, cost:mkCost(10,8),
@@ -135,16 +128,14 @@ const TREE_BRANCHES = [
            apply:(s,l)=>{ s.hpRegenPct += 0.003*l; } } ],
         cap:{id:'t_forteresse_cap', icon:'🛡️', name:'AURA DE FER', desc:'+25% PV max, -15% dégâts subis supplémentaires et -20% de dégâts de collision.', max:1, cost:mkCost(40,0),
          apply:(s)=>{ s.maxHp *= 1.25; s.armorPct = Math.min(0.8, s.armorPct + 0.15); s.collisionMul *= 0.8; } } },
-      { angleOffset:0,
-        keystone:{id:'t_phenix', icon:'🕊️', name:'PHENIX', desc:'Revient une fois à la vie avec 50% des PV.', max:1, cost:mkCost(28,0) },
+      { keystone:{id:'t_phenix', icon:'🕊️', name:'PHENIX', desc:'Revient une fois à la vie avec 50% des PV.', max:1, cost:mkCost(28,0) },
         path:[
           {id:'t_phenix_esquive', icon:'💨', name:'ESQUIVE+', desc:"+1 charge d'esquive supplémentaire / niveau.", max:3, cost:mkCost(12,9),
            apply:(s,l)=>{ s.dodgeCharges += l; } },
           {id:'t_phenix_bouclier', icon:'🔷', name:'RENAISSANCE BOUCLIER', desc:'+15 PV de bouclier permanents / niveau.', max:4, cost:mkCost(9,7),
            apply:(s,l)=>{ s.shieldMax += 15*l; } } ],
         cap:{id:'t_phenix_cap', icon:'✨', name:'IMMORTEL', desc:'Peut revenir à la vie une seconde fois pendant la run.', max:1, cost:mkCost(40,0) } },
-      { angleOffset:38,
-        keystone:{id:'t_sangsue', icon:'🩸', name:'SANGSUE', desc:'Chaque ennemi tué à proximité soigne une petite zone autour du vaisseau.', max:1, cost:mkCost(28,0) },
+      { keystone:{id:'t_sangsue', icon:'🩸', name:'SANGSUE', desc:'Chaque ennemi tué à proximité soigne une petite zone autour du vaisseau.', max:1, cost:mkCost(28,0) },
         path:[
           {id:'t_sangsue_vol', icon:'🩸', name:'VOL+', desc:'+0,1% des dégâts infligés restitués en PV / niveau.', max:5, cost:mkCost(10,8),
            apply:(s,l)=>{ s.lifesteal += 0.001*l; } },
@@ -154,7 +145,7 @@ const TREE_BRANCHES = [
          apply:(s)=>{ s.sangsueHealMul = (s.sangsueHealMul||1) * 2; } } },
     ]
   },
-  { id:'util', name:'Mobilité & utilitaire', angle:180, color:'#38c6ff',
+  { id:'util', name:'Mobilité & utilitaire', color:'#38c6ff',
     stem:[
       [ {id:'t_aimantgrowth', icon:'🧲', name:'AIMANT+', desc:"+15 portée d'aimant de départ / niveau.", max:5, cost:mkCost(6,5),
          apply:(s,l)=>{ s.magnetRadius += 15*l; } },
@@ -183,8 +174,7 @@ const TREE_BRANCHES = [
     ],
     forkThreshold: 14,
     forks:[
-      { angleOffset:-38,
-        keystone:{id:'t_coffre', icon:'💰', name:'COFFRE-FORT', desc:'+25% de fragments gagnés en fin de run.', max:1, cost:mkCost(28,0),
+      { keystone:{id:'t_coffre', icon:'💰', name:'COFFRE-FORT', desc:'+25% de fragments gagnés en fin de run.', max:1, cost:mkCost(28,0),
          apply:(s)=>{ s.fragmentBonus += 0.25; } },
         path:[
           {id:'t_coffre_xp', icon:'🧪', name:'XP++', desc:'+5% XP gagnée par cristal supplémentaire / niveau.', max:5, cost:mkCost(9,7),
@@ -193,8 +183,7 @@ const TREE_BRANCHES = [
            apply:(s,l)=>{ s.bonusGemChance += 0.04*l; } } ],
         cap:{id:'t_coffre_cap', icon:'🎰', name:'JACKPOT', desc:'+50% de fragments gagnés en fin de run supplémentaires.', max:1, cost:mkCost(40,0),
          apply:(s)=>{ s.fragmentBonus += 0.5; } } },
-      { angleOffset:0,
-        keystone:{id:'t_eclair', icon:'⚡', name:'ECLAIR', desc:'Vaisseau nettement plus réactif aux commandes.', max:1, cost:mkCost(28,0),
+      { keystone:{id:'t_eclair', icon:'⚡', name:'ECLAIR', desc:'Vaisseau nettement plus réactif aux commandes.', max:1, cost:mkCost(28,0),
          apply:(s)=>{ s.moveResponsiveness += 6; } },
         path:[
           {id:'t_eclair_reactivite', icon:'🛰️', name:'REACTIVITE+', desc:'Vaisseau encore plus réactif / niveau.', max:4, cost:mkCost(9,7),
@@ -203,8 +192,7 @@ const TREE_BRANCHES = [
            apply:(s,l)=>{ s.magnetRadius += 25*l; } } ],
         cap:{id:'t_eclair_cap', icon:'💫', name:'VITESSE LUMIERE', desc:'Le vaisseau suit le doigt quasi instantanément.', max:1, cost:mkCost(40,0),
          apply:(s)=>{ s.moveResponsiveness += 12; } } },
-      { angleOffset:38,
-        keystone:{id:'t_drone', icon:'🤖', name:'DRONE SATELLITE', desc:'Un drone orbite le vaisseau et tire automatiquement sur les ennemis.', max:1, cost:mkCost(28,0) },
+      { keystone:{id:'t_drone', icon:'🤖', name:'DRONE SATELLITE', desc:'Un drone orbite le vaisseau et tire automatiquement sur les ennemis.', max:1, cost:mkCost(28,0) },
         path:[
           {id:'t_drone_cadence', icon:'⏫', name:'CADENCE DRONE', desc:'Le(s) drone(s) tirent plus souvent / niveau.', max:4, cost:mkCost(9,7),
            apply:(s,l)=>{ s.droneFireRateMul = Math.pow(0.88,l); } },
@@ -216,7 +204,7 @@ const TREE_BRANCHES = [
 ];
 
 // branche "Savoir": choix de cartes et relances (mini-bras en diagonale, ne touche à aucune autre branche)
-TREE_BRANCHES.push({ id:'savoir', name:'Savoir', angle:238, color:'#c88bff',
+TREE_BRANCHES.push({ id:'savoir', name:'Savoir', color:'#c88bff',
   stem:[
     [ {id:'t_intuition', icon:'🧠', name:'INTUITION', desc:'+1 choix de carte à chaque montée de niveau / niveau (2 de base, 5 au maximum).', max:3, cost:mkCost(8,14),
        apply:(s,l)=>{ s.cardChoices += l; } } ],
@@ -230,7 +218,7 @@ TREE_BRANCHES.push({ id:'savoir', name:'Savoir', angle:238, color:'#c88bff',
 });
 
 // branche "Tempête": foudre, rebonds, éclats, tonnerre (mini-bras à 315°)
-TREE_BRANCHES.push({ id:'tempete', name:'Tempête', angle:328, color:'#ffe14a',
+TREE_BRANCHES.push({ id:'tempete', name:'Tempête', color:'#ffe14a',
   stem:[
     [ {id:'t_foudre', icon:'⚡', name:'FOUDRE', desc:"Chaque tir qui touche libère un arc de foudre vers 1 ennemi proche de plus / niveau (30% des dégâts).", max:3, cost:mkCost(14,12),
        apply:(s,l)=>{ s.chainLightning = l; } } ],
@@ -244,7 +232,7 @@ TREE_BRANCHES.push({ id:'tempete', name:'Tempête', angle:328, color:'#ffe14a',
 });
 
 // branche "Gravité": champ lent, pulsar, trou noir (mini-bras à 45°)
-TREE_BRANCHES.push({ id:'gravite', name:'Gravité', angle:58, color:'#7f9cff',
+TREE_BRANCHES.push({ id:'gravite', name:'Gravité', color:'#7f9cff',
   stem:[
     [ {id:'t_champlent', icon:'🐌', name:'CHAMP LENT', desc:"Les tirs ennemis ralentissent près du vaisseau (zone et ralentissement qui augmentent / niveau).", max:4, cost:mkCost(12,10),
        apply:(s,l)=>{ s.slowField = l; } } ],
@@ -258,7 +246,7 @@ TREE_BRANCHES.push({ id:'gravite', name:'Gravité', angle:58, color:'#7f9cff',
 });
 
 // branche "Furie": débloque et renforce l'OVERDRIVE (mini-bras à 135°)
-TREE_BRANCHES.push({ id:'furie', icon:'', name:'Furie', angle:148, color:'#ff8a3c',
+TREE_BRANCHES.push({ id:'furie', icon:'', name:'Furie', color:'#ff8a3c',
   stem:[
     [ {id:'t_overdrive', icon:'🔥', name:'OVERDRIVE', desc:"Débloque l'overdrive : une jauge qui se charge en frôlant les tirs ennemis et en tuant. Pleine, touche OD : dégâts x2, cadence +60% et bouclier jaune invincible (aucun dégât subi) pendant 5 s, ton bouclier normal se régénère 2x plus vite. Le bonus s'érode pendant l'effet (jusqu'à -60%) et chaque activation est 8% plus faible que la précédente; les cellules d'énergie le ravivent (+1 s / niveau).", max:4, cost:mkCost(10,12),
        apply:(s,l)=>{ s.overdrive = l; s.odDur = 5000 + 1000*l; } } ],
@@ -271,23 +259,15 @@ TREE_BRANCHES.push({ id:'furie', icon:'', name:'Furie', angle:148, color:'#ff8a3
   ]
 });
 
-function treePolar(angleDeg, r){
-  const rad = angleDeg*Math.PI/180;
-  return { x: Math.cos(rad)*r, y: Math.sin(rad)*r };
-}
-
-const TREE_HUB = { id:'hub', icon:'🛸', name:'CŒUR DU VAISSEAU', desc:'Le point de départ de toute build.', max:1, x:0, y:0, requires:[], isHub:true, branch:'hub', color:'#ffd76a' };
+const TREE_HUB = { id:'hub', icon:'🛸', name:'CŒUR DU VAISSEAU', desc:'Le point de départ de toute build.', max:1, requires:[], isHub:true, branch:'hub', color:'#ffd76a' };
 
 let ALL_TREE_NODES = [TREE_HUB];
 
 TREE_BRANCHES.forEach(branch=>{
   branch.stem.forEach((pair,tierIdx)=>{
     pair.forEach((node,laneIdx)=>{
-      const angle = branch.angle + (laneIdx===0 ? -TREE_FAN : (laneIdx===1 ? TREE_FAN : 0));
-      const r = TREE_R0 + tierIdx*TREE_RSTEP;
-      const p = treePolar(angle,r);
       const parent = tierIdx===0 ? 'hub' : (branch.stem[tierIdx-1][laneIdx] || branch.stem[tierIdx-1][0]).id;
-      ALL_TREE_NODES.push({...node, x:p.x, y:p.y, branch:branch.id, color:branch.color, requires:[parent], stemOf:branch.id});
+      ALL_TREE_NODES.push({...node, branch:branch.id, color:branch.color, requires:[parent], stemOf:branch.id});
     });
   });
   const lastTier = branch.stem[branch.stem.length-1];
@@ -295,25 +275,16 @@ TREE_BRANCHES.forEach(branch=>{
 
   if (branch.forks){
     branch.forks.forEach(fork=>{
-      const kAngle = branch.angle + fork.angleOffset;
-      let r = TREE_R0 + branch.stem.length*TREE_RSTEP;
-      const kPos = treePolar(kAngle, r);
-      ALL_TREE_NODES.push({...fork.keystone, x:kPos.x, y:kPos.y, branch:branch.id, color:branch.color, requires:[...lastIds], isKey:true, forkThreshold:branch.forkThreshold});
+      ALL_TREE_NODES.push({...fork.keystone, branch:branch.id, color:branch.color, requires:[...lastIds], isKey:true, forkThreshold:branch.forkThreshold});
       let prevId = fork.keystone.id;
       fork.path.forEach(pn=>{
-        r += TREE_FORKSTEP;
-        const pos = treePolar(kAngle, r);
-        ALL_TREE_NODES.push({...pn, x:pos.x, y:pos.y, branch:branch.id, color:branch.color, requires:[prevId]});
+        ALL_TREE_NODES.push({...pn, branch:branch.id, color:branch.color, requires:[prevId]});
         prevId = pn.id;
       });
-      r += TREE_FORKSTEP;
-      const capPos = treePolar(kAngle, r);
-      ALL_TREE_NODES.push({...fork.cap, x:capPos.x, y:capPos.y, branch:branch.id, color:branch.color, requires:[prevId], isCap:true});
+      ALL_TREE_NODES.push({...fork.cap, branch:branch.id, color:branch.color, requires:[prevId], isCap:true});
     });
   } else if (branch.cap){
-    const r = TREE_R0 + branch.stem.length*TREE_RSTEP;
-    const pos = treePolar(branch.angle, r);
-    ALL_TREE_NODES.push({...branch.cap, x:pos.x, y:pos.y, branch:branch.id, color:branch.color, requires:[...lastIds], isCap:true});
+    ALL_TREE_NODES.push({...branch.cap, branch:branch.id, color:branch.color, requires:[...lastIds], isCap:true});
   }
 });
 
@@ -321,17 +292,14 @@ const TREE_NODE_BY_ID = {};
 
 ALL_TREE_NODES.forEach(n=> TREE_NODE_BY_ID[n.id]=n);
 
-/* ARBRE À L'ÉCRAN: chaque niveau d'une compétence est une compétence à part (nœud visuel).
-   Les données (rangs sauvegardés, statistiques) ne changent pas: acheter le niveau k d'une compétence = passer son rang à k. */
-const TREE_VIS_POS = {"t_puissance":[-46,-108],"t_puissance#2":[-68,-141],"t_puissance#3":[-91,-174],"t_puissance#4":[-113,-207],"t_puissance#5":[-135,-241],"t_puissance#6":[-158,-274],"t_degats":[-46,-186],"t_degats#2":[-68,-219],"t_degats#3":[-91,-252],"t_degats#4":[-113,-285],"t_degats#5":[-135,-319],"t_degats#6":[-158,-352],"t_degats#7":[-180,-385],"t_degats#8":[-203,-418],"t_multi":[-46,-264],"t_multi#2":[-68,-297],"t_multi#3":[-91,-330],"t_multi#4":[-113,-363],"t_velocite":[-46,-342],"t_velocite#2":[-68,-375],"t_velocite#3":[-91,-408],"t_velocite#4":[-113,-441],"t_celerite":[46,-108],"t_celerite#2":[68,-141],"t_celerite#3":[91,-174],"t_celerite#4":[113,-207],"t_celerite#5":[135,-241],"t_celerite#6":[158,-274],"t_cadence":[46,-186],"t_cadence#2":[68,-219],"t_cadence#3":[91,-252],"t_cadence#4":[113,-285],"t_cadence#5":[135,-319],"t_cadence#6":[158,-352],"t_perforant":[46,-264],"t_perforant#2":[68,-297],"t_perforant#3":[91,-330],"t_critique":[46,-342],"t_critique#2":[68,-375],"t_critique#3":[91,-408],"t_critique#4":[113,-441],"t_critique#5":[135,-475],"t_laser_c":[-43,-446],"t_laser_c_portee":[-86,-504],"t_laser_c_portee#2":[-123,-518],"t_laser_c_portee#3":[-161,-531],"t_laser_c_portee#4":[-199,-545],"t_laser_c_degats":[-133,-569],"t_laser_c_degats#2":[-170,-583],"t_laser_c_degats#3":[-208,-596],"t_laser_c_degats#4":[-246,-610],"t_laser_c_degats#5":[-283,-624],"t_laser_c_cap":[-180,-634],"t_laser_a":[0,-460],"t_laser_a_verrou":[0,-532],"t_laser_a_verrou#2":[-22,-565],"t_laser_a_verrou#3":[-45,-598],"t_laser_a_verrou#4":[-67,-631],"t_laser_a_priorite":[0,-612],"t_laser_a_priorite#2":[22,-645],"t_laser_a_priorite#3":[45,-678],"t_laser_a_cap":[0,-692],"t_shotgun":[43,-446],"t_shotgun_plombs":[86,-504],"t_shotgun_plombs#2":[123,-518],"t_shotgun_plombs#3":[161,-531],"t_shotgun_plombs#4":[199,-545],"t_shotgun_recul":[133,-569],"t_shotgun_recul#2":[170,-583],"t_shotgun_recul#3":[208,-596],"t_shotgun_recul#4":[246,-610],"t_shotgun_cap":[180,-634],"t_lancemissiles":[108,-46],"t_cadmissiles":[186,-46],"t_cadmissiles#2":[219,-68],"t_cadmissiles#3":[252,-91],"t_cadmissiles#4":[285,-113],"t_perforantmissile":[264,-46],"t_perforantmissile#2":[297,-68],"t_perforantmissile#3":[330,-91],"t_stabilisateurs":[342,-46],"t_stabilisateurs#2":[375,-68],"t_stabilisateurs#3":[408,-91],"t_chargemissiles":[108,46],"t_chargemissiles#2":[141,68],"t_chargemissiles#3":[174,91],"t_chargemissiles#4":[207,113],"t_explosion":[186,46],"t_explosion#2":[219,68],"t_explosion#3":[252,91],"t_napalm":[264,46],"t_napalm#2":[297,68],"t_napalm#3":[330,91],"t_rechargerapide":[342,46],"t_rechargerapide#2":[375,68],"t_rechargerapide#3":[408,91],"t_missile_droit":[446,-43],"t_missile_droit_vitesse":[504,-86],"t_missile_droit_vitesse#2":[518,-123],"t_missile_droit_vitesse#3":[531,-161],"t_missile_droit_vitesse#4":[545,-199],"t_missile_droit_charge":[569,-133],"t_missile_droit_charge#2":[583,-170],"t_missile_droit_charge#3":[596,-208],"t_missile_droit_charge#4":[610,-246],"t_missile_droit_cap":[634,-180],"t_missile_chercheur":[446,43],"t_missile_chercheur_multi":[504,86],"t_missile_chercheur_multi#2":[518,123],"t_missile_chercheur_multi#3":[531,161],"t_missile_chercheur_multi#4":[545,199],"t_missile_chercheur_cad":[569,133],"t_missile_chercheur_cad#2":[583,170],"t_missile_chercheur_cad#3":[596,208],"t_missile_chercheur_cad#4":[610,246],"t_missile_chercheur_cap":[634,180],"t_vitalite":[46,108],"t_vitalite#2":[68,141],"t_vitalite#3":[91,174],"t_vitalite#4":[113,207],"t_vitalite#5":[135,241],"t_vitalite#6":[158,274],"t_blindage":[46,186],"t_blindage#2":[68,219],"t_blindage#3":[91,252],"t_blindage#4":[113,285],"t_blindage#5":[135,319],"t_blindage#6":[158,352],"t_regen":[46,264],"t_regen#2":[68,297],"t_regen#3":[91,330],"t_regen#4":[113,363],"t_regen#5":[135,397],"t_esquive":[46,342],"t_esquive#2":[68,375],"t_esquive#3":[91,408],"t_voldevie":[46,420],"t_voldevie#2":[68,453],"t_voldevie#3":[91,486],"t_voldevie#4":[113,519],"t_voldevie#5":[135,553],"t_resilience":[46,498],"t_resilience#2":[68,531],"t_resilience#3":[91,564],"t_resilience#4":[113,597],"t_boucliergrowth":[-46,108],"t_boucliergrowth#2":[-68,141],"t_boucliergrowth#3":[-91,174],"t_bouclier":[-46,186],"t_bouclier#2":[-68,219],"t_bouclier#3":[-91,252],"t_bouclier#4":[-113,285],"t_rechargebouclier":[-46,264],"t_rechargebouclier#2":[-68,297],"t_rechargebouclier#3":[-91,330],"t_rechargebouclier#4":[-113,363],"t_armure":[-46,342],"t_armure#2":[-68,375],"t_armure#3":[-91,408],"t_armure#4":[-113,441],"t_armure#5":[-135,475],"t_reactif":[-46,420],"t_reactif#2":[-68,453],"t_reactif#3":[-91,486],"t_secondsouffle":[-46,498],"t_secondsouffle#2":[-68,531],"t_secondsouffle#3":[-91,564],"t_forteresse":[43,602],"t_forteresse_resist":[86,660],"t_forteresse_resist#2":[123,674],"t_forteresse_resist#3":[161,687],"t_forteresse_resist#4":[199,701],"t_forteresse_resist#5":[236,715],"t_forteresse_regen":[133,725],"t_forteresse_regen#2":[170,739],"t_forteresse_regen#3":[208,752],"t_forteresse_regen#4":[246,766],"t_forteresse_cap":[180,790],"t_phenix":[0,616],"t_phenix_esquive":[0,688],"t_phenix_esquive#2":[22,721],"t_phenix_esquive#3":[45,754],"t_phenix_bouclier":[0,768],"t_phenix_bouclier#2":[-22,801],"t_phenix_bouclier#3":[-45,834],"t_phenix_bouclier#4":[-67,867],"t_phenix_cap":[0,848],"t_sangsue":[-43,602],"t_sangsue_vol":[-86,660],"t_sangsue_vol#2":[-123,674],"t_sangsue_vol#3":[-161,687],"t_sangsue_vol#4":[-199,701],"t_sangsue_vol#5":[-236,715],"t_sangsue_rayon":[-133,725],"t_sangsue_rayon#2":[-170,739],"t_sangsue_rayon#3":[-208,752],"t_sangsue_cap":[-180,790],"t_aimantgrowth":[-108,46],"t_aimantgrowth#2":[-141,68],"t_aimantgrowth#3":[-174,91],"t_aimantgrowth#4":[-207,113],"t_aimantgrowth#5":[-241,135],"t_aimant":[-186,46],"t_aimant#2":[-219,68],"t_aimant#3":[-252,91],"t_aimant#4":[-285,113],"t_aimant#5":[-319,135],"t_xp":[-264,46],"t_xp#2":[-297,68],"t_xp#3":[-330,91],"t_xp#4":[-363,113],"t_xp#5":[-397,135],"t_xp#6":[-430,158],"t_collecte":[-342,46],"t_collecte#2":[-375,68],"t_collecte#3":[-408,91],"t_chancedevie":[-420,46],"t_chancedevie#2":[-453,68],"t_chancedevie#3":[-486,91],"t_chancedevie#4":[-519,113],"t_chancedevie#5":[-553,135],"t_cristauxvaleur":[-498,46],"t_cristauxvaleur#2":[-531,68],"t_cristauxvaleur#3":[-564,91],"t_cristauxvaleur#4":[-597,113],"t_cristauxvaleur#5":[-631,135],"t_reacteurs":[-108,-46],"t_reacteurs#2":[-141,-68],"t_reacteurs#3":[-174,-91],"t_reacteurs#4":[-207,-113],"t_reacteurs#5":[-241,-135],"t_vitessevaisseau":[-186,-46],"t_vitessevaisseau#2":[-219,-68],"t_vitessevaisseau#3":[-252,-91],"t_vitessevaisseau#4":[-285,-113],"t_vitessevaisseau#5":[-319,-135],"t_chance":[-264,-46],"t_chance#2":[-297,-68],"t_chance#3":[-330,-91],"t_chance#4":[-363,-113],"t_cooldown":[-342,-46],"t_cooldown#2":[-375,-68],"t_cooldown#3":[-408,-91],"t_butindouble":[-420,-46],"t_butindouble#2":[-453,-68],"t_butindouble#3":[-486,-91],"t_butindouble#4":[-519,-113],"t_soinmajeur":[-498,-46],"t_soinmajeur#2":[-531,-68],"t_soinmajeur#3":[-564,-91],"t_coffre":[-602,43],"t_coffre_xp":[-660,86],"t_coffre_xp#2":[-674,123],"t_coffre_xp#3":[-687,161],"t_coffre_xp#4":[-701,199],"t_coffre_xp#5":[-715,236],"t_coffre_chance":[-725,133],"t_coffre_chance#2":[-739,170],"t_coffre_chance#3":[-752,208],"t_coffre_chance#4":[-766,246],"t_coffre_cap":[-790,180],"t_eclair":[-616,0],"t_eclair_reactivite":[-688,0],"t_eclair_reactivite#2":[-721,22],"t_eclair_reactivite#3":[-754,45],"t_eclair_reactivite#4":[-787,67],"t_eclair_aimant":[-768,0],"t_eclair_aimant#2":[-801,-22],"t_eclair_aimant#3":[-834,-45],"t_eclair_aimant#4":[-867,-67],"t_eclair_cap":[-848,0],"t_drone":[-602,-43],"t_drone_cadence":[-660,-86],"t_drone_cadence#2":[-674,-123],"t_drone_cadence#3":[-687,-161],"t_drone_cadence#4":[-701,-199],"t_drone_degats":[-725,-133],"t_drone_degats#2":[-739,-170],"t_drone_degats#3":[-752,-208],"t_drone_degats#4":[-766,-246],"t_drone_cap":[-790,-180],"t_intuition":[-79,-79],"t_intuition#2":[-101,-113],"t_intuition#3":[-123,-146],"t_relance":[-185,-185],"t_relance#2":[-223,-200],"t_relance#3":[-260,-214],"t_relance#4":[-297,-228],"t_genie":[-291,-291],"t_genie#2":[-300,-330],"t_genie#3":[-309,-369],"t_genie#4":[-318,-408],"t_genie#5":[-327,-447],"t_butin":[-397,-397],"t_butin#2":[-436,-406],"t_foudre":[79,-79],"t_foudre#2":[113,-101],"t_foudre#3":[146,-123],"t_rebond":[185,-185],"t_rebond#2":[200,-223],"t_rebond#3":[214,-260],"t_eclats":[291,-291],"t_eclats#2":[330,-300],"t_eclats#3":[369,-309],"t_tonnerre":[397,-397],"t_champlent":[79,79],"t_champlent#2":[101,113],"t_champlent#3":[123,146],"t_champlent#4":[145,180],"t_pulsar":[185,185],"t_pulsar#2":[223,200],"t_pulsar#3":[260,214],"t_pulsar#4":[297,228],"t_trounoir":[291,291],"t_trounoir#2":[300,330],"t_trounoir#3":[309,369],"t_gravite":[397,397],"t_overdrive":[-79,79],"t_overdrive#2":[-113,101],"t_overdrive#3":[-146,123],"t_overdrive#4":[-180,145],"t_frolement":[-185,185],"t_frolement#2":[-200,223],"t_frolement#3":[-214,260],"t_surchauffe":[-291,291],"t_surchauffe#2":[-330,300],"t_surchauffe#3":[-369,309],"t_souffle":[-397,397],"t_souffle#2":[-406,436],"t_souffle#3":[-415,475]};
-
 { const cap = ALL_TREE_NODES.find(n=>n.id==='t_drone_cap');
   if (cap){
     ALL_TREE_NODES.push({ id:'t_radar', icon:'📡', name:'RADAR', desc:'Dans une nébuleuse, le cône de vision porte plus loin et s\'élargit / niveau.', max:4, cost:mkCost(26,22),
-      apply:(s,l)=>{ s.nebulaVision = l; }, x:cap.x-60, y:cap.y-14, branch:cap.branch, color:cap.color, requires:['t_drone_cap'] });
-    [[-849,-193],[-880,-201],[-911,-210],[-942,-218]].forEach((p,i)=>{ TREE_VIS_POS[i ? 't_radar#'+(i+1) : 't_radar'] = p; });
+      apply:(s,l)=>{ s.nebulaVision = l; }, branch:cap.branch, color:cap.color, requires:['t_drone_cap'] });
   } }
 
+/* ARBRE À L'ÉCRAN: chaque niveau d'une compétence est une compétence à part (nœud visuel).
+   Les données (rangs sauvegardés, statistiques) ne changent pas: acheter le niveau k d'une compétence = passer son rang à k. */
 const ROMAN = ['','I','II','III','IV','V','VI','VII','VIII','IX','X'];
 
 const TREE_VIS = [], TREE_VIS_BY_ID = {};
@@ -341,9 +309,9 @@ function visId(nid, k){ return k === 1 ? nid : nid + '#' + k; }
 ALL_TREE_NODES.forEach(n=>{
   if (n.isHub) return;
   for (let k=1; k<=n.max; k++){
-    const id = visId(n.id, k), pos = TREE_VIS_POS[id] || [Math.round(n.x), Math.round(n.y)];
+    const id = visId(n.id, k);
     const v = { id, nid:n.id, k, orig:n, name:n.name + (n.max > 1 ? ' ' + ROMAN[k] : ''), icon:n.icon,
-      desc:n.desc.replace(/\s*\/\s*niveau/i, ''), max:1, x:pos[0], y:pos[1], branch:n.branch, color:n.color,
+      desc:n.desc.replace(/\s*\/\s*niveau/i, ''), max:1, branch:n.branch, color:n.color,
       isKey:k === 1 && !!n.isKey, isCap:k === 1 && !!n.isCap, forkThreshold:n.forkThreshold,
       requires: k > 1 ? [visId(n.id, k-1)] : n.requires.map(p => p === 'hub' ? 'hub' : visId(p, 1)) };
     v.cost = ((nn, kk)=> ()=> nn.cost(kk-1))(n, k);
@@ -357,18 +325,6 @@ function treeVisStatus(state, v){
   if (r >= v.k) return 'owned';
   if (v.k === r + 1 && (v.k > 1 || treeNodeUnlocked(state, v.orig))) return 'avail';
   return null;
-}
-
-// ce qui est visible: possédé + achetable en plein, puis un cran au-delà en petits points ('hint'). Rien d'autre (sauf mode DEV)
-function treeVisRevealed(state){
-  const st = {};
-  TREE_VIS.forEach(v=>{ st[v.id] = treeVisStatus(state, v); });
-  TREE_VIS.forEach(v=>{
-    if (st[v.id]) return;
-    if (v.requires.some(p => p !== 'hub' && (st[p] === 'avail' || st[p] === 'owned'))) st[v.id] = 'hint';
-  });
-  if (DEV_SEE_ALL) TREE_VIS.forEach(v=>{ if (!st[v.id]) st[v.id] = 'dev'; });
-  return st;
 }
 
 const TREE_TOTAL = ALL_TREE_NODES.reduce((a,n)=> a + (n.max||0), 0);   // points de l'arbre complet

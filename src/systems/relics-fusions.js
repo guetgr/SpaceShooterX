@@ -54,8 +54,6 @@ mixin(GameScene, {
     return Phaser.Utils.Array.Shuffle(this.eligibleFusions()).slice(0, max || 1);
   },
 
-  pickFusion(){ const l = this.eligibleFusions(); return l.length ? l[Math.floor(Math.random()*l.length)] : null; },
-
   eligibleFusions(){
     return FUSIONS.filter(f=>{
       if ((this.upgradeCounts[f.id]||0) > 0) return false;

@@ -329,15 +329,4 @@ mixin(GameScene, {
     else if (!this.scene.isActive('home')) this.scene.launch('home');
     else if (home.homeOn) home.refreshHome();                                               // retour d'un panneau (arbre, réglages)
   },
-
-  goToMenu(){
-    music.stop();
-    document.getElementById('pauseMenu').classList.add('hidden');
-    document.getElementById('settingsMenu').classList.add('hidden');
-    document.getElementById('gameover').classList.add('hidden');
-    document.getElementById('levelup').classList.add('hidden');
-    document.querySelectorAll('#boss-hp-wrap, #boss-hp-wrap2, #boss-hp-wrap3').forEach(x=>x.classList.remove('show'));
-    document.getElementById('boss-banner').classList.remove('show');
-    this.showStartScreen();
-  },
 });

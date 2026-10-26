@@ -29,7 +29,6 @@
   padding:6px 6px 5px; display:inline-block; flex:none;
   clip-path:polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
 }
-.hazard{ height:6px; background:var(--hazard); }
 
 /* ===================================================================
    ACCUEIL

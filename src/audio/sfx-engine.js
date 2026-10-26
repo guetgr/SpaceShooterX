@@ -145,7 +145,6 @@ class Sfx{
   V(t, dt, o){ this.v(Object.assign({}, o, { at: t + dt })); }
   N(t, dt, o){ this.n(Object.assign({}, o, { at: t + dt })); }
   // compatibilité avec les anciens appels
-  tone(freq, dur, type, vol, glideTo, detuneCents, at){ this.v({ f:freq, d:dur, t:type, a:vol, g:glideTo, det:detuneCents, at }); }
   noise(dur, vol, filterFreq, at, hp){ this.n({ d:dur, a:vol, f:filterFreq || 1200, type: hp ? 'highpass' : 'lowpass', at }); }
   play(name, p){
     if (this.muted) return;
