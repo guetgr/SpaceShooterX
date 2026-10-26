@@ -124,7 +124,7 @@ mixin(GameScene, {
     if ((this._jNum || 0) >= JUICE.maxNumbers) return;
     this._jNum = (this._jNum || 0) + 1;
     const kz = this._juiceKz();
-    const t = this.add.text(x, y, String(Math.round(val)), { fontFamily:"'Press Start 2P','PSP2E',monospace", fontSize:Math.round(9 * kz) + 'px', color:'#ffe27a', stroke:'#2a1400', strokeThickness:Math.round(3 * kz) }).setOrigin(0.5).setDepth(13).setScale(0.3);
+    const t = this.add.text(x, y, String(Math.round(val)), { fontFamily:"'SSX Label',monospace", fontSize:Math.round(9 * kz) + 'px', color:'#ffe27a', stroke:'#2a1400', strokeThickness:Math.round(3 * kz) }).setOrigin(0.5).setDepth(13).setScale(0.3);
     this.tweens.add({ targets:t, scale:1.35, duration:90, ease:'Back.easeOut' });
     this.tweens.add({ targets:t, y:y - 30 * kz, x:x + Phaser.Math.Between(-10, 10) * kz, alpha:0, delay:140, duration:520, ease:'Quad.easeOut', onComplete:()=>{ this._jNum--; t.destroy(); } });
   },

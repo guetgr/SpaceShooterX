@@ -23,7 +23,7 @@ if (/[?&]sandbox\b/.test(location.search)) {
   // ---- écran de chargement : image de fond (loading/bg.webp, hors manifeste : elle doit s'afficher avant tout le reste), logo, barre de progression ----
   const css = document.createElement('style');
   css.textContent =
-    '#boot{position:fixed;inset:0;z-index:99999;background:#070a09;color:#d9e3dc;overflow:hidden;font-family:"Press Start 2P",monospace;transition:opacity .55s ease-out}' +
+    '#boot{position:fixed;inset:0;z-index:99999;background:#070a09;color:#d9e3dc;overflow:hidden;font-family:"SSX Label",monospace;transition:opacity .55s ease-out}' +
     '#boot.done{opacity:0;pointer-events:none}' +
     '#boot .bt-bg{position:absolute;inset:-4%;background:#070a09 url(loading/bg.webp) center/cover no-repeat;opacity:0;transition:opacity .8s ease-out;animation:btZoom 22s ease-in-out infinite alternate}' +
     '#boot .bt-bg.on{opacity:1}' +

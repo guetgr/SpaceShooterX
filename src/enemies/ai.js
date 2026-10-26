@@ -462,7 +462,7 @@ mixin(GameScene, {
           if (this._arcs.length < 60) this._arcs.push({ x1:e.x, y1:e.y, x2:other.x, y2:other.y, t:260, c1:0xc04dff, c2:0xffffff, amp:3 });
           if (this._plusN === undefined || this._plusN < 14){
             this._plusN = (this._plusN || 0) + 1;
-            const t = this.add.text(other.x, other.y - 8, '+', { fontFamily:'Press Start 2P, PSP2E, monospace', fontSize:'12px', color:'#7bff9a', stroke:'#04200c', strokeThickness:3 }).setOrigin(0.5).setDepth(7);
+            const t = this.add.text(other.x, other.y - 8, '+', { fontFamily:'SSX Label, monospace', fontSize:'12px', color:'#7bff9a', stroke:'#04200c', strokeThickness:3 }).setOrigin(0.5).setDepth(7);
             this.tweens.add({ targets:t, y:t.y - 26, alpha:0, duration:700, onComplete:()=>{ t.destroy(); this._plusN--; } });
           }
         }

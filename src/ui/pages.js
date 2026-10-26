@@ -127,7 +127,7 @@ mixin(GameScene, {
       grid.appendChild(cell);
     });
     const note = document.createElement('div');
-    note.style.cssText = 'grid-column:1/-1; text-align:center; font-family:VT323,VT323E,monospace; font-size:15px; color:#8f98c8; padding:6px 0;';
+    note.style.cssText = 'grid-column:1/-1; text-align:center; font-family:SSX Text,monospace; font-size:15px; color:#8f98c8; padding:6px 0;';
     note.textContent = seen === 0 ? "Aucun ennemi rencontré pour l'instant : va les affronter !" : seen + ' / ' + BESTIARY_LIST.length + ' ennemis découverts';
     grid.appendChild(note);
   },

@@ -3,7 +3,7 @@
 // voyage en hyperespace, zoom vers un monde, animation de déblocage d'un nouveau monde.
 // Modes de la page CARTE (this.mapMode) : 'world' (un monde et ses niveaux en orbite) · 'galaxy' (vue d'ensemble) · 'moving' (transition).
 const GAL_STEP = 165, GAL_BASE_Y = 500, GAL_R = 50, GAL_SCALE = 0.78;
-const GAL_FONT = "'Press Start 2P','PSP2E',monospace", GAL_FONT2 = "'VT323','VT323E',monospace";
+const GAL_FONT = "'SSX Label',monospace", GAL_FONT2 = "'SSX Text',monospace";
 
 mixin(HomeScene, {
   galaxyPos(i){ return { x: (i % 2 === 0) ? 130 : 270, y: GAL_BASE_Y - i*GAL_STEP }; },

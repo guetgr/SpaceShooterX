@@ -8,7 +8,7 @@
      orange / rouge  #ff7a2b / #ff4438   alerte, accident du travail
      bleu acier      #7fc8ff   champ de sécurité · gris acier #7f948a texte secondaire
      papier          #e9e2c8   documents imprimés (rapport, formulaires) · encre #1c211d
-   Typographie : Press Start 2P (étiquettes, titres, 6-12 px, majuscules) + VT323 (valeurs, texte courant, 15-22 px)
+   Typographie (famille du jeu, voir style.css) : SSX Label / Display = Chakra Petch 600 + Jersey 15 (étiquettes, titres, 6-12 px, majuscules) · SSX Text = Chakra Petch 400 (valeurs et texte, 15-22 px)
    Motifs : rayures de chantier, coins de cadre, champs de formulaire pointillés, papier listing à perforations, tampons, curseur de terminal
    ===================================================================== */
 :root{
@@ -16,7 +16,7 @@
   --agp-green:#5dffa0; --agp-orange:#ff7a2b; --agp-red:#ff4438; --agp-teal:#3fe0c5; --agp-steel:#7f948a; --agp-blue:#7fc8ff;
   --agp-paper:#e9e2c8; --agp-ink:#1c211d; --agp-line:#28362f;
   --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16);
-  --px:'Press Start 2P','PSP2E',monospace; --vt:'VT323','VT323E',monospace;
+  --px:'SSX Label',monospace; --vt:'SSX Text',monospace;
   --hazard:repeating-linear-gradient(-45deg,#ffc21a 0 7px,#14110a 7px 14px);
 }
 #stage{ background:radial-gradient(ellipse at 50% -10%, #12261c 0%, #070a09 58%), #070a09; }
