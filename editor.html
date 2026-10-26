@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Éditeur de niveaux</title>
+<!-- Éditeur de niveaux de Space Shooter X (outil de conception, pas du jeu). Ouvre-le via le serveur local : http://localhost:8080/editor.html
+     Il pilote deux copies du jeu en iframe (?edit=play : aperçu jouable · ?edit=bot : joueur automatique) via src/dev/editor-hook.js, avec une sauvegarde en mémoire (?sandbox) :
+     tes parties de test n'abîment pas ta progression. EXPORTER écrit src/data/tuning.js (serveur tools/serve.py). -->
+<style>
+@font-face{ font-family:'PSP2E'; src:url('assets/fonts/PSP2E.woff2') format('woff2'); }
+@font-face{ font-family:'VT323E'; src:url('assets/fonts/VT323E.woff2') format('woff2'); }
+:root{
+  --bg:#07060f; --panel:#0e0c1e; --panel2:#14122b; --line:#2c2750; --ink:#eaf6ff; --dim:#7f8bb8; --cyan:#4ff2ff; --amber:#ffce4a; --green:#7bff9a; --red:#ff4f6d;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:'VT323E','VT323',monospace; font-size:18px; }
+button,input,select{ font:inherit; color:inherit; }
+body{ display:grid; grid-template-rows:auto 1fr; }
+header{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 14px; background:var(--panel); border-bottom:2px solid var(--line); }
+header h1{ margin:0; font:12px 'PSP2E',monospace; color:var(--cyan); letter-spacing:1px; margin-right:auto; }
+.btn{ background:var(--panel2); border:2px solid var(--line); padding:6px 12px; cursor:pointer; font-size:18px; }
+.btn:hover{ border-color:var(--cyan); } .btn:disabled{ opacity:.45; cursor:default; border-color:var(--line); }
+.btn.go{ background:var(--cyan); color:#04121a; border-color:var(--cyan); } .btn.save{ border-color:var(--amber); color:var(--amber); } .btn.save.dirty{ background:var(--amber); color:#1a1200; }
+.chip{ font-size:16px; color:var(--dim); } .chip.ok{ color:var(--green); } .chip.bad{ color:var(--red); }
+main{ display:grid; grid-template-columns:230px minmax(320px,1fr) 400px; min-height:0; }
+aside,section,.right{ min-height:0; overflow-y:auto; }
+aside{ background:var(--panel); border-right:2px solid var(--line); padding:8px; }
+aside h3{ font:9px 'PSP2E',monospace; color:var(--dim); margin:12px 4px 6px; } aside h3:first-child{ margin-top:2px; }
+.lv{ display:flex; align-items:center; gap:6px; padding:6px 8px; cursor:pointer; border:2px solid transparent; } .lv:hover{ background:var(--panel2); }
+.lv.sel{ border-color:var(--cyan); background:var(--panel2); } .lv .n{ color:var(--dim); width:20px; } .lv .t{ margin-left:auto; font-size:14px; color:var(--dim); } .lv i{ width:8px; height:8px; border-radius:50%; background:var(--amber); visibility:hidden; } .lv.mod i{ visibility:visible; }
+section{ padding:12px 16px 40px; }
+section h2{ margin:0 0 4px; font:13px 'PSP2E',monospace; color:var(--amber); } .sub{ color:var(--dim); margin:0 0 12px; }
+details{ background:var(--panel); border:2px solid var(--line); margin-bottom:10px; } summary{ cursor:pointer; padding:8px 12px; font:10px 'PSP2E',monospace; color:var(--cyan); list-style:none; } summary::before{ content:'▸ '; } details[open] summary::before{ content:'▾ '; }
+details .body{ padding:4px 12px 10px; }
+.f{ display:grid; grid-template-columns:1fr 92px; gap:2px 10px; align-items:center; padding:5px 0; border-top:1px solid #1d1a38; } .f:first-child{ border-top:none; }
+.f label{ line-height:1.05; } .f label small{ display:block; color:var(--dim); font-size:15px; }
+.f input[type=number]{ width:92px; background:#05040c; border:2px solid var(--line); padding:3px 6px; text-align:right; } .f input[type=number]:focus{ outline:none; border-color:var(--cyan); }
+.f input[type=range]{ grid-column:1 / 2; width:100%; accent-color:var(--cyan); } .f .meta{ grid-column:2; font-size:14px; color:var(--dim); text-align:right; }
+.f.mod input[type=number]{ border-color:var(--amber); color:var(--amber); } .f.mod .meta{ color:var(--amber); cursor:pointer; text-decoration:underline; }
+.warn{ color:var(--red); padding:4px 0; }
+.right{ background:var(--panel); border-left:2px solid var(--line); padding:10px; display:flex; flex-direction:column; gap:10px; }
+.frame{ position:relative; width:100%; max-width:360px; aspect-ratio:9/16; align-self:center; border:2px solid var(--line); background:#000; } .frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+.frame .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--dim); text-align:center; padding:20px; pointer-events:none; }
+#botFrame{ position:fixed; left:-2000px; top:0; width:420px; height:760px; border:0; }
+.card{ background:var(--panel2); border:2px solid var(--line); padding:10px 12px; } .card h4{ margin:0 0 6px; font:9px 'PSP2E',monospace; color:var(--dim); }
+.bar{ height:10px; background:#05040c; border:1px solid var(--line); position:relative; margin:4px 0 8px; } .bar i{ position:absolute; top:0; bottom:0; left:0; background:var(--cyan); } .bar u{ position:absolute; top:-3px; bottom:-3px; background:rgba(123,255,154,.28); border:1px solid var(--green); }
+.big{ font:22px 'PSP2E',monospace; } .kv{ display:flex; justify-content:space-between; } .kv b{ color:var(--amber); font-weight:normal; }
+.verdict{ margin-top:6px; padding:6px 8px; border-left:4px solid var(--dim); } .verdict.ok{ border-color:var(--green); color:var(--green); } .verdict.easy{ border-color:var(--cyan); color:var(--cyan); } .verdict.hard{ border-color:var(--red); color:var(--red); }
+.opts{ display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; } .opts select,.opts input{ background:#05040c; border:2px solid var(--line); padding:2px 6px; } .opts input{ width:80px; }
+table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align:right; padding:1px 4px; border-top:1px solid #1d1a38; } td:first-child,th:first-child{ text-align:left; } th{ color:var(--dim); font-weight:normal; }
+.toast{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--panel2); border:2px solid var(--cyan); padding:8px 16px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:9; } .toast.show{ opacity:1; } .toast.err{ border-color:var(--red); }
+@media (max-width:1000px){ main{ grid-template-columns:1fr; } aside{ border-right:0; border-bottom:2px solid var(--line); max-height:200px; } .right{ border-left:0; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>ÉDITEUR DE NIVEAUX</h1>
+  <span class="chip" id="srv">serveur…</span>
+  <button class="btn go" id="btnPlay" disabled>▶ TESTER</button>
+  <button class="btn save" id="btnSave" disabled>💾 EXPORTER</button>
+  <button class="btn" id="btnReset" disabled>↺ TOUT REMETTRE</button>
+</header>
+<main>
+  <aside id="list"></aside>
+  <section id="form"><p class="sub">Chargement du jeu…</p></section>
+  <div class="right">
+    <div class="frame"><iframe id="playFrame" title="Aperçu du jeu"></iframe><div class="ph" id="ph">Chargement…</div></div>
+    <div class="card">
+      <h4>JOUEUR AUTOMATIQUE (BOT)</h4>
+      <div class="opts">
+        <select id="skill"><option value="casual">débutant</option><option value="average" selected>moyen</option><option value="expert">expert</option></select>
+        <select id="seeds"><option>5</option><option selected>10</option><option>20</option><option>40</option></select><span>parties</span>
+        <span id="budgetWrap">arbre ◆ <input type="number" id="budget" min="0" step="10" value="0" title="Fragments dépensés dans l'arbre de compétences avant la partie (puissance du joueur)"></span>
+        <button class="btn" id="btnBot" disabled>🤖 LANCER</button>
+      </div>
+      <div class="bar" id="botBar" style="display:none"><i style="width:0"></i></div>
+    </div>
+    <div class="card" id="results" style="display:none"></div>
+  </div>
+</main>
+<iframe id="botFrame" title="Bot"></iframe>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* ---------- schéma des réglages du tuto : [clé, libellé, min, max, pas, unité, aide] ---------- */
+const TUTO_SCHEMA = [
+  { g:'Étapes pédagogiques', k:'steps', open:true, f:[
+    ['moveNeed', 'Étape 1 · distance à parcourir', 100, 1500, 10, 'px', 'Distance que le joueur doit parcourir pour valider « déplace-toi »'],
+    ['dodgeKills', 'Étape 3 · satellites à détruire', 1, 6, 1, '', 'En plus du premier ; leurs débris sont à esquiver'],
+    ['satTarget', 'Étape 4 · satellites au total', 4, 40, 1, '', 'Fin des vagues. Sert aussi d\'objectif de finition (satellites détruits)'],
+    ['bossWait', 'Délai avant le boss', 1, 10, 0.1, 's', 'Entre l\'alerte et l\'arrivée du boss'],
+    ['maxMove', 'Durée max · étape 1', 5, 90, 1, 's', 'Au-delà, on passe à la suite même sans avoir réussi'],
+    ['maxShoot', 'Durée max · étape 2', 5, 90, 1, 's', ''], ['maxDodge', 'Durée max · étape 3', 5, 120, 1, 's', ''], ['maxWave', 'Durée max · étape 4', 10, 180, 1, 's', ''],
+  ]},
+  { g:'Satellites', k:'sats', open:true, f:[
+    ['hp', 'Points de vie', 5, 200, 1, '', 'Un tir de base fait ~14 dégâts'],
+    ['speedMin', 'Vitesse de chute min', 20, 250, 5, 'px/s', ''], ['speedMax', 'Vitesse de chute max', 20, 300, 5, 'px/s', ''],
+    ['slowSpeed', 'Vitesse du 1er satellite (étape 2)', 10, 150, 5, 'px/s', 'Lent exprès pour apprendre à viser'],
+    ['drift', 'Dérive latérale', 0, 100, 1, 'px/s', ''], ['score', 'Score par satellite', 0, 200, 1, '', ''],
+    ['contactDmg', 'Dégâts au contact', 0, 50, 1, '', 'Quand un satellite percute le vaisseau'],
+    ['spawnCdStart', 'Intervalle d\'apparition · début', 300, 4000, 50, 'ms', 'Étape 4 : l\'intervalle passe de « début » à « fin »'], ['spawnCdEnd', 'Intervalle d\'apparition · fin', 200, 4000, 50, 'ms', ''],
+    ['rampTime', 'Durée de la montée en cadence', 5, 120, 1, 's', ''],
+    ['capBase', 'Satellites simultanés · départ', 1, 12, 1, '', ''], ['capExtra', 'Satellites simultanés · en plus', 0, 12, 1, '', 'Ajoutés progressivement'], ['capEvery', 'Un de plus toutes les', 3, 60, 1, 's', ''],
+  ]},
+  { g:'Débris', k:'debris', f:[
+    ['min', 'Nombre min', 0, 20, 1, '', ''], ['max', 'Nombre max', 0, 30, 1, '', ''], ['dmg', 'Dégâts', 0, 40, 1, '', ''],
+    ['speedMin', 'Vitesse min', 20, 400, 5, 'px/s', ''], ['speedMax', 'Vitesse max', 20, 500, 5, 'px/s', ''],
+  ]},
+  { g:'Boss · général', k:'boss', f:[
+    ['hp', 'Points de vie', 100, 4000, 10, '', 'Le plus gros levier de durée du combat'],
+    ['p2', 'Phase 2 sous', 0.1, 0.95, 0.01, '× PV', 'Fraction de PV restants qui déclenche la phase 2'], ['p3', 'Phase 3 sous', 0.05, 0.9, 0.01, '× PV', ''],
+    ['contactDmg', 'Dégâts au contact', 0, 60, 1, '', ''], ['killScore', 'Score à la mort', 0, 2000, 10, '', ''],
+  ]},
+  { g:'Boss · tirs visés', k:'boss', f:[
+    ['aimCd', 'Cadence (phases 1-2)', 400, 4000, 50, 'ms', ''], ['aimCd3', 'Cadence (phase 3)', 300, 4000, 50, 'ms', ''], ['aimDmg', 'Dégâts', 0, 40, 1, '', ''], ['aimSpeed', 'Vitesse', 60, 500, 5, 'px/s', ''],
+  ]},
+  { g:'Boss · anneau', k:'boss', f:[
+    ['ringCd', 'Cadence', 1500, 9000, 50, 'ms', ''], ['ringCount', 'Nombre de balles', 6, 40, 1, '', ''], ['ringGap', 'Largeur de la brèche', 1, 8, 1, 'balles', 'Plus c\'est grand, plus c\'est facile de passer'],
+    ['ringDmg', 'Dégâts', 0, 40, 1, '', ''], ['ringSpeed', 'Vitesse', 40, 400, 5, 'px/s', ''],
+  ]},
+  { g:'Boss · pluie (phase 2+) et spirale (phase 3)', k:'boss', f:[
+    ['rainCd', 'Pluie · cadence', 600, 6000, 50, 'ms', ''], ['rainDmg', 'Pluie · dégâts', 0, 40, 1, '', ''], ['rainSpeed', 'Pluie · vitesse', 60, 500, 5, 'px/s', ''],
+    ['spiralCd', 'Spirale · cadence', 60, 1000, 10, 'ms', 'Plus petit = plus dense'], ['spiralDmg', 'Spirale · dégâts', 0, 40, 1, '', ''], ['spiralSpeed', 'Spirale · vitesse', 40, 400, 5, 'px/s', ''],
+  ]},
+  { g:'Finition (%)', k:'comp', open:true, f:[
+    ['sats', 'Poids · satellites détruits', 0, 100, 1, '', 'Les poids sont ramenés à un total de 100'], ['boss', 'Poids · boss endommagé', 0, 100, 1, '', ''],
+    ['win', 'Poids · boss vaincu', 0, 100, 1, '', ''], ['clean', 'Poids · sans te faire toucher', 0, 100, 1, '', ''],
+    ['hitPenalty', 'Perte par coup reçu', 0, 1, 0.05, '', '0,25 = 4 coups font perdre tout l\'objectif « sans te faire toucher »'],
+  ]},
+  { g:'Récompenses des paliers de finition', k:'rewards', f:[
+    ['m25', 'Palier 25 %', 0, 200, 1, '◆', ''], ['m50', 'Palier 50 %', 0, 200, 1, '◆', ''], ['m75', 'Palier 75 %', 0, 200, 1, '◆', ''], ['m100', 'Palier 100 %', 0, 500, 1, '◆', ''],
+  ]},
+];
+const TARGET_BUDGET = { 'w1-l1':0, 'w1-l2':55, 'w1-l3':95, 'w1-l4':130, 'w1-l5':190, 'w2-l1':270, 'w2-l2':350, 'w2-l3':420, 'w2-l4':500, 'w2-l5':650, 'w3-l1':750, 'w3-l2':850, 'w3-l3':950, 'w3-l4':1070, 'w3-l5':1290 };
+const TARGET_WIN = { tuto:0.9, boss:0.55, normal:0.8 }, TOL = 0.12;
+const $ = id=> document.getElementById(id);
+const clone = o=> JSON.parse(JSON.stringify(o));
+const GAME = location.origin;
+
+const S = { levels:[], base:{}, defaults:null, ov:{ tuto:{}, levels:{} }, saved:'', sel:'w1-tuto', ready:false, botReady:false, botRes:null, serverOk:null };
+const frames = { play:$('playFrame'), bot:$('botFrame') };
+
+function toast(t, err){ const e = $('toast'); e.textContent = t; e.classList.toggle('err', !!err); e.classList.add('show'); clearTimeout(e._t); e._t = setTimeout(()=> e.classList.remove('show'), 2600); }
+function post(which, msg){ const w = frames[which].contentWindow; if (w) w.postMessage(Object.assign({ ssx:1 }, msg), GAME); }
+const lvl = id=> S.levels.find(l=> l.id === id);
+
+/* ---------- état : surcharges ---------- */
+function getPath(o, path){ return path.reduce((a, k)=> (a == null ? undefined : a[k]), o); }
+function setOv(root, path, val, def){        // enregistre une surcharge, ou l'efface si elle revient à la valeur d'origine
+  let o = root; for (let i = 0; i < path.length - 1; i++){ o = o[path[i]] = o[path[i]] || {}; }
+  const k = path[path.length - 1];
+  if (val === def) delete o[k]; else o[k] = val;
+  (function prune(obj, p){ for (let i = 0; i < p.length - 1; i++){ const c = obj[p[i]]; if (!c) return; prune(c, p.slice(i + 1)); if (!Object.keys(c).length) delete obj[p[i]]; return; } })(root, path);
+}
+function pruneAll(o){ Object.keys(o).forEach(k=>{ if (o[k] && typeof o[k] === 'object'){ pruneAll(o[k]); if (!Object.keys(o[k]).length) delete o[k]; } }); }
+const dirty = ()=> JSON.stringify(S.ov) !== S.saved;
+function levelModified(id){ return !!(S.ov.levels[id] && Object.keys(S.ov.levels[id]).length) || (id === 'w1-tuto' && Object.keys(S.ov.tuto).length > 0); }
+function refreshChrome(){
+  $('btnSave').classList.toggle('dirty', dirty()); $('btnSave').textContent = dirty() ? '💾 EXPORTER *' : '💾 EXPORTER';
+  document.querySelectorAll('.lv').forEach(e=> e.classList.toggle('mod', levelModified(e.dataset.id)));
+}
+function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); }
+
+/* ---------- liste des niveaux ---------- */
+function renderList(){
+  const L = $('list'); L.innerHTML = ''; let w = null;
+  S.levels.forEach(l=>{
+    if (l.world !== w){ w = l.world; const h = document.createElement('h3'); h.textContent = l.worldName; L.appendChild(h); }
+    const e = document.createElement('div'); e.className = 'lv' + (l.id === S.sel ? ' sel' : ''); e.dataset.id = l.id;
+    e.innerHTML = '<i></i><span class="n">' + (l.tuto ? '?' : l.num) + '</span><span>' + l.name + '</span><span class="t">' + l.type + '</span>';
+    e.onclick = ()=>{ S.sel = l.id; S.botRes = null; renderList(); renderForm(); renderResults(); };
+    L.appendChild(e);
+  });
+  refreshChrome();
+}
+
+/* ---------- formulaire ---------- */
+function field(label, hint, min, max, step, unit, cur, def, onSet){
+  const d = document.createElement('div'), id = 'f' + Math.random().toString(36).slice(2, 8);
+  d.className = 'f';
+  d.innerHTML = '<label for="' + id + '">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</label><input type="number" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '"><input type="range" min="' + min + '" max="' + max + '" step="' + step + '"><span class="meta"></span>';
+  const num = d.querySelector('input[type=number]'), rng = d.querySelector('input[type=range]'), meta = d.querySelector('.meta');
+  let val = cur;
+  const show = ()=>{ num.value = val; rng.value = val; d.classList.toggle('mod', val !== def); meta.textContent = val !== def ? '↺ ' + def + (unit ? ' ' + unit : '') : (unit || ''); meta.title = val !== def ? 'Remettre la valeur d\'origine' : ''; };
+  const commit = v=>{ if (!isFinite(v)) return; val = +(+v).toFixed(4); onSet(val); show(); };
+  num.oninput = ()=>{ if (num.value !== '') { val = +num.value; onSet(val); d.classList.toggle('mod', val !== def); rng.value = val; meta.textContent = val !== def ? '↺ ' + def + (unit ? ' ' + unit : '') : (unit || ''); } };
+  rng.oninput = ()=> commit(+rng.value);
+  meta.onclick = ()=>{ if (val !== def) commit(def); };
+  show(); return d;
+}
+function section(title, open){ const d = document.createElement('details'); d.open = !!open; d.innerHTML = '<summary>' + title + '</summary><div class="body"></div>'; return d; }
+
+function renderForm(){
+  const F = $('form'), l = lvl(S.sel); F.innerHTML = ''; if (!l) return;
+  const h = document.createElement('div'); h.innerHTML = '<h2></h2><p class="sub"></p>'; h.querySelector('h2').textContent = l.worldName + ' · ' + (l.tuto ? 'TUTORIEL' : 'NIV.' + l.num + ' — ' + l.name);
+  h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 5 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
+  F.appendChild(h);
+  const base = S.base[l.id] || {}, ovL = ()=> (S.ov.levels[l.id] = S.ov.levels[l.id] || {});
+  // --- niveau (tous)
+  const sec = section('Niveau', true), body = sec.querySelector('.body');
+  const lf = (path, label, hint, min, max, step, unit, defv)=>{
+    const cur = getPath(S.ov.levels[l.id] || {}, path); const baseV = getPath(base, path); const def = baseV === undefined ? defv : baseV;
+    body.appendChild(field(label, hint, min, max, step, unit, cur === undefined ? def : cur, def, v=>{ setOv(S.ov.levels, [l.id].concat(path), v, def); changed(); }));
+  };
+  if (!l.tuto) lf(['threat'], 'Menace', 'Niveau d\'alerte du niveau : puissance des ennemis et des armes', 1, 20, 1, '', 1);
+  if (l.type === 'survive') lf(['goal', 'seconds'], 'Objectif · durée', '', 10, 300, 1, 's', 60);
+  if (l.type === 'kill') lf(['goal', 'count'], 'Objectif · ennemis à éliminer', '', 5, 300, 1, '', 40);
+  if (l.type === 'collect') lf(['goal', 'gems'], 'Objectif · cristaux à récolter', '', 5, 200, 1, '', 25);
+  if (!l.tuto){ lf(['hpMul'], 'PV des ennemis ×', 'Réglage fin de la difficulté, en plus de la menace', 0.2, 5, 0.05, '×', 1); lf(['dmgMul'], 'Dégâts des ennemis ×', '', 0.2, 5, 0.05, '×', 1); }
+  lf(['reward', 'clear'], 'Récompense de victoire', '', 0, 500, 1, '◆', 10); lf(['reward', 'first'], 'Bonus de 1re victoire', '', 0, 1000, 1, '◆', 0);
+  F.appendChild(sec);
+  // --- tuto
+  if (l.tuto){
+    TUTO_SCHEMA.forEach(g=>{
+      const s = section(g.g, g.open), b = s.querySelector('.body');
+      g.f.forEach(([key, label, min, max, step, unit, hint])=>{
+        const def = S.defaults[g.k][key], cur = getPath(S.ov.tuto, [g.k, key]);
+        b.appendChild(field(label, hint, min, max, step, unit, cur === undefined ? def : cur, def, v=>{ setOv(S.ov.tuto, [g.k, key], v, def); changed(); if (g.k === 'comp') updateSum(); }));
+      });
+      if (g.k === 'comp'){ const w = document.createElement('div'); w.className = 'warn'; w.id = 'sumWarn'; b.appendChild(w); }
+      F.appendChild(s);
+    });
+    updateSum();
+  }
+  $('budgetWrap').style.display = l.tuto ? 'none' : ''; if (!l.tuto) $('budget').value = TARGET_BUDGET[l.id] || 0;      // puissance du joueur pour le bot
+}
+function updateSum(){
+  const w = $('sumWarn'); if (!w) return; const C = Object.assign({}, S.defaults.comp, S.ov.tuto.comp || {});
+  const t = C.sats + C.boss + C.win + C.clean; w.textContent = t === 100 ? '' : 'Total des poids : ' + t + ' → ramené à 100 (' + (t <= 0 ? 'impossible : mets au moins un poids' : 'proportions conservées') + ')';
+}
+
+/* ---------- bot : résultats ---------- */
+const avg = a=> a.length ? a.reduce((x, y)=> x + y, 0) / a.length : 0, fx = (v, n)=> (Math.round(v * Math.pow(10, n || 0)) / Math.pow(10, n || 0)).toString().replace('.', ',');
+function renderResults(){
+  const R = $('results'), r = S.botRes; if (!r || r.levelId !== S.sel){ R.style.display = 'none'; return; }
+  const l = lvl(S.sel), res = r.results, n = res.length, wins = res.filter(x=> x.win).length, rate = wins / n;
+  const tgt = l.tuto ? TARGET_WIN.tuto : (l.type === 'boss' ? TARGET_WIN.boss : TARGET_WIN.normal);
+  const times = res.map(x=> x.time), hp = res.map(x=> x.minHp);
+  let html = '<h4>RÉSULTAT · ' + n + ' PARTIES · ' + r.skill + '</h4><div class="big">' + Math.round(rate * 100) + '% <span style="font-size:16px;color:var(--dim)">de victoires (' + wins + '/' + n + ')</span></div>' +
+    '<div class="bar"><i style="width:' + Math.round(rate * 100) + '%"></i><u style="left:' + Math.round((tgt - TOL) * 100) + '%;width:' + Math.round(2 * TOL * 100) + '%"></u></div>' +
+    '<div class="kv"><span>Durée moyenne</span><b>' + fx(avg(times), 0) + ' s (' + fx(Math.min(...times), 0) + '–' + fx(Math.max(...times), 0) + ')</b></div>' +
+    '<div class="kv"><span>PV mini atteint (moy.)</span><b>' + Math.round(avg(hp) * 100) + '%</b></div>';
+  if (l.tuto){
+    html += '<div class="kv"><span>Coups reçus (moy.)</span><b>' + fx(avg(res.map(x=> x.hits)), 1) + '</b></div><div class="kv"><span>Finition d\'une partie (moy.)</span><b>' + Math.round(avg(res.map(x=> x.pct))) + '%</b></div>';
+    const ids = ['move', 'shoot', 'dodge', 'wave', 'boss'], names = { move:'1 · bouger', shoot:'2 · tirer', dodge:'3 · esquiver', wave:'4 · vagues', boss:'5 · boss' };
+    html += '<table style="margin-top:8px"><tr><th>Étape</th><th>début (s)</th><th>durée (s)</th></tr>' + ids.map((id, i)=>{
+      const at = res.map(x=>{ const s = (x.steps || []).find(y=> y.id === id); return s ? s.at : null; }).filter(v=> v !== null);
+      const nx = res.map(x=>{ const a = (x.steps || []).find(y=> y.id === id), b = (x.steps || []).find(y=> y.id === ids[i + 1]); return a && b ? b.at - a.at : (a && id === 'boss' ? x.time - a.at : null); }).filter(v=> v !== null);
+      return '<tr><td>' + names[id] + '</td><td>' + (at.length ? fx(avg(at), 0) : '—') + '</td><td>' + (nx.length ? fx(avg(nx), 0) : '—') + '</td></tr>'; }).join('') + '</table>';
+  } else html += '<div class="kv"><span>Ennemis tués (moy.)</span><b>' + fx(avg(res.map(x=> x.kills)), 0) + '</b></div><div class="kv"><span>Avancement si défaite</span><b>' + Math.round(avg(res.filter(x=> !x.win).map(x=> x.progress * 100)) || 0) + '%</b></div>';
+  let cls = 'ok', msg = 'JUSTE : taux de victoire proche de la cible (' + Math.round(tgt * 100) + '%)';
+  if (rate > tgt + TOL){ cls = 'easy'; msg = 'TROP FACILE pour ce profil (cible ' + Math.round(tgt * 100) + '%) → ' + (l.tuto ? 'baisse les PV du boss ou serre les cadences' : 'monte hpMul / dmgMul ou la menace'); }
+  else if (rate < tgt - TOL){ cls = 'hard'; msg = 'TROP DUR pour ce profil (cible ' + Math.round(tgt * 100) + '%) → ' + (l.tuto ? 'monte la brèche de l\'anneau, baisse les dégâts ou les cadences' : 'baisse hpMul / dmgMul ou la menace'); }
+  html += '<div class="verdict ' + cls + '">' + msg + '</div>';
+  if (res.some(x=> x.timeout)) html += '<div class="verdict hard">' + res.filter(x=> x.timeout).length + ' partie(s) sans fin (temps dépassé)</div>';
+  html += '<p style="color:var(--dim);font-size:15px;margin:8px 0 0">Le bot juge la difficulté relative, pas le plaisir : joue aussi toi-même (TESTER).</p>';
+  R.innerHTML = html; R.style.display = '';
+}
+
+/* ---------- actions ---------- */
+$('btnPlay').onclick = ()=>{ $('ph').style.display = 'none'; post('play', { type:'play', levelId:S.sel, overrides:S.ov }); };
+$('btnBot').onclick = ()=>{
+  const l = lvl(S.sel); $('btnBot').disabled = true; $('botBar').style.display = ''; $('botBar').firstChild.style.width = '0';
+  S.botCfg = { levelId:S.sel, skill:$('skill').value, seeds:+$('seeds').value };
+  post('bot', { type:'bot', levelId:S.sel, overrides:S.ov, seeds:S.botCfg.seeds, skill:S.botCfg.skill, budget: l.tuto ? 0 : +$('budget').value || 0 });
+};
+$('btnReset').onclick = ()=>{ if (!confirm('Remettre TOUS les réglages aux valeurs d\'origine ? (rien n\'est écrit tant que tu n\'exportes pas)')) return; S.ov = { tuto:{}, levels:{} }; changed(); renderForm(); };
+$('btnSave').onclick = async ()=>{
+  const body = JSON.stringify(S.ov);
+  try {
+    const r = await fetch('/__editor/save', { method:'POST', headers:{ 'Content-Type':'application/json' }, body }), j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'erreur');
+    S.saved = JSON.stringify(S.ov); refreshChrome(); toast('Exporté dans src/data/tuning.js ✔  (recharge le jeu pour le voir)');
+  } catch(e){
+    const txt = '"use strict";\n// GÉNÉRÉ par l\'éditeur de niveaux (editor.html).\nconst TUNING_OVERRIDES = ' + JSON.stringify(S.ov, null, 1) + ';\n';
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([txt], { type:'text/javascript' })); a.download = 'tuning.js'; a.click();
+    toast('Serveur d\'export absent (' + e.message + ') : tuning.js téléchargé, à copier dans src/data/', true);
+  }
+};
+$('skill').onchange = $('seeds').onchange = ()=>{};
+window.addEventListener('beforeunload', e=>{ if (dirty()){ e.preventDefault(); e.returnValue = ''; } });
+
+window.addEventListener('message', ev=>{
+  if (ev.origin !== GAME || !ev.data || ev.data.ssx !== 1) return;
+  const m = ev.data;
+  if (m.type === 'ready' && m.mode === 'play'){
+    S.levels = m.levels; S.base = m.base; S.defaults = m.defaults; S.ov = clone(m.overrides || { tuto:{}, levels:{} }); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; S.saved = JSON.stringify(S.ov); S.ready = true;
+    if (!lvl(S.sel)) S.sel = S.levels[0].id;
+    $('ph').textContent = 'Choisis un niveau puis ▶ TESTER'; $('btnPlay').disabled = false; $('btnSave').disabled = false; $('btnReset').disabled = false;
+    renderList(); renderForm();
+  } else if (m.type === 'ready' && m.mode === 'bot'){ S.botReady = true; $('btnBot').disabled = false; }
+  else if (m.type === 'bot-progress'){ $('botBar').firstChild.style.width = Math.round(m.done / m.total * 100) + '%'; }
+  else if (m.type === 'bot-done'){ S.botRes = Object.assign({ levelId:m.levelId, results:m.results }, { skill:$('skill').selectedOptions[0].textContent }); $('btnBot').disabled = false; $('botBar').style.display = 'none'; renderResults(); }
+  else if (m.type === 'bot-error'){ $('btnBot').disabled = false; $('botBar').style.display = 'none'; toast('Bot : ' + m.error, true); }
+});
+$('list').addEventListener('input', ()=>{});
+fetch('/__editor/ping').then(r=> r.json()).then(j=>{ if (!j.ok) throw 0; $('srv').textContent = 'export : serveur local OK'; $('srv').className = 'chip ok'; }).catch(()=>{ $('srv').textContent = 'export : hors serveur (téléchargement)'; $('srv').className = 'chip bad'; });
+frames.play.src = 'index.html?dev&edit=play&sandbox=1';
+frames.bot.src = 'index.html?dev&edit=bot&sandbox=1';
+</script>
+</body>
+</html>

@@ -43,6 +43,7 @@ Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de np
 
 ## Outils (dossier tools/)
 - `serve.py` / `serve.bat` : serveur local sans cache (`http://localhost:8080/?dev`).
+- `editor.html` (racine) : éditeur de niveaux (réglages en direct, TESTER, bot, EXPORTER → `src/data/tuning.js`) : `http://localhost:8080/editor.html`, voir `docs/editeur-niveaux.md`. Les réglages du tuto vivent dans `TUTO_TUNE` (`data/tuning-*.js`), pas en dur dans `tuto.js`.
 - `build.py` : génère `dist/space-shooter-x.html` (prod) et `dist/space-shooter-x-dev.html` (DEV) en un seul fichier + vérif de syntaxe (Node). Option `--inline-phaser`.
 - `smoke_test.py` : test headless (playwright + Chrome) — lance une partie, échoue si erreur JS. À lancer avant tout push. `--dist` pour tester le fichier unique.
 - Autres tests : `node tools/check_worlds.js` (format/déblocages des mondes), `python3 tools/level_test.py` (victoire/défaite par objectif), `python3 tools/home_test.py` (accueil, carte, arbre, hangar), `python3 tools/sim_balance.py grid|campaign|tune` (joueur auto en avance rapide, équilibrage). Pas de lanceur de test unique : lancer le script voulu directement.

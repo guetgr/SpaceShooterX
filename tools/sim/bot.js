@@ -41,6 +41,10 @@
       en.push([e.x, e.y, e.body.velocity.x, e.body.velocity.y, r]);
       if (e.y < py - 20){ const d = Math.abs(e.x - px) + (py - e.y)*0.35; if (d < aimD){ aimD = d; aimX = e.x; } }
     });
+    if (sc.tuto){                              // tuto : satellites et boss ne sont pas dans sc.enemies
+      (sc.tutoSats || []).forEach(t=>{ if (t.dead) return; const e = t.sp; nEnemies++; en.push([e.x, e.y, 0, t.vy, 30]); if (e.y < py - 20){ const d = Math.abs(e.x - px) + (py - e.y)*0.35; if (d < aimD){ aimD = d; aimX = e.x; } } });
+      if (sc.tutoBoss && !sc.tutoBoss.dead){ const e = sc.tutoBoss.sp; en.push([e.x, e.y, 0, 0, 85]); aimX = e.x; aimD = 0; }
+    }
     sc.gems.children.iterate(g=>{ if (g && g.active) gems.push([g.x, g.y]); });
     // danger immédiat → esquive
     if (sc.dodgeCharges > 0 && bl.some(b=> Math.hypot(b[0] + b[2]*0.1 - px, b[1] + b[3]*0.1 - py) < 20)) sc.tryDodge();
@@ -103,6 +107,27 @@
         score: Math.floor(sc.score), minHp: Math.round(minHp*100)/100, progress: res ? res.progress : sc.levelProgress().frac,
         frags: getMeta().fragments - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
       };
+    },
+
+    // joue le tuto jusqu'à la victoire, la défaite ou la limite de temps (temps simulé)
+    runTuto(seed, opts){
+      opts = Object.assign({ sens:1, noise:0.12, react:6, cap:420 }, opts || {});
+      seedState = seed >>> 0 || 1;
+      ['tutoEnd', 'tutoGuide', 'tutoPct', 'tutoHint'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); });
+      const sc0 = SC(), g = sc0.game, t0 = clock;
+      sc0.scene.restart({ autoStart:true, tuto:true });
+      const step = ()=>{ clock += DT; g.step(clock, DT); };
+      for (let i = 0; i < 400; i++){ step(); const s = SC(); if (s.tuto && s.running && !s.tutoDone && s.tutoStepLog && s.tutoStepLog.length) break; }
+      const sc = SC(); let tick = 0, minHp = 1;
+      while (!(sc.tutoDone && sc._tutoRec) && (clock - t0)/1000 < opts.cap){
+        if (sc.introActive) sc.introT = 99999;
+        if (sc.running && tick % opts.react === 0) bot(sc, opts);
+        if (sc.running) minHp = Math.min(minHp, sc.hp/sc.stats.maxHp);
+        step(); tick++;
+      }
+      const comp = sc.tutoComp(), rec = sc._tutoRec;
+      return { win: !!(sc.tutoBoss && sc.tutoBoss.dead), timeout: !sc.tutoDone, time: Math.round((clock - t0)/100)/10, hits: sc.tutoHits, kills: sc.tutoKills,
+               pct: rec ? rec.runPct : completionPct('w1-tuto', comp), comp, steps: sc.tutoStepLog, minHp: Math.round(minHp*100)/100 };
     },
 
     // dépense les fragments : un joueur raisonnable prend d'abord ce qui rend plus solide / plus puissant, puis le moins cher

@@ -152,16 +152,26 @@ mixin(HomeScene, {
       b.onclick = ()=> this.selectHomeLevel(l.id);
       // un niveau tout juste débloqué apparaît avec un petit éclat (une seule fois)
       if (unl && !done && !(w.order === 1 && l.index === 0) && !DEV_SEE_ALL && !wasWorldSeen('l:' + l.id)){ b.classList.add('pop'); markWorldSeen('l:' + l.id); setTimeout(()=> b.classList.remove('pop'), 900); }
-      slot.appendChild(b); orb.appendChild(slot);
+      const cp = completionDefs(l.id) ? completionPct(l.id, p.comp[l.id] || {}) : 0;      // % de finition sous le niveau
+      if (cp > 0){ const bp = document.createElement('span'); bp.className = 'node-pct' + (cp >= 100 ? ' full' : ''); bp.textContent = cp + '%'; slot.appendChild(b); slot.appendChild(bp); } else slot.appendChild(b);
+      orb.appendChild(slot);
     });
     const l = levelById(this.homeSel) && levelById(this.homeSel).world === w.id ? levelById(this.homeSel) : w.levels[0];
     if (l.id !== this.homeSel) this.homeSel = l.id;
     const unl = isLevelUnlocked(l.id, p), rec = p.levels[l.id];
     $('levelCard').innerHTML = '<div class="lc-name"></div><div class="lc-line">' + levelGoalText(l) + '</div><div class="lc-line">MENACE <b>' + l.threat + '</b> · ◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · Record <b>' + rec.best + '</b>' : ' (1re : <b>+' + (l.reward.first || 0) + '</b>)') + '</div>' +
-      (!rec && !unl ? '<div class="lc-line lock">Termine le niveau précédent.</div>' : '');
+      (!rec && !unl ? '<div class="lc-line lock">Termine le niveau précédent.</div>' : '') + this.finitionLine(l, p);
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'NIV.' + l.num + ' — ') + (unl ? l.name : '? ? ?');
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REJOUER' : 'DECOLLER') : 'VERROUILLE';
     this.setHomeVanTier(l.threat);
+  },
+
+  // ligne « FINITION n% » de la fiche d'un niveau + le prochain objectif à faire (donne envie de rejouer)
+  finitionLine(l, p){
+    if (!completionDefs(l.id)) return '';
+    const comp = p.comp[l.id] || {}, pct = completionPct(l.id, comp), nx = completionNext(l.id, comp);
+    return '<div class="lc-line lc-comp">FINITION <b>' + pct + '%</b><i><u style="width:' + pct + '%"></u></i></div>' +
+      (nx ? '<div class="lc-line">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line">★ FINITION 100% ★</div>');
   },
 
   // hangar : palier, apparence (teintes) et contenu du bas — STATS du vaisseau ou MODULES installés (compétences de l'arbre possédées)
