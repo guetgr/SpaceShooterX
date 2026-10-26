@@ -616,6 +616,8 @@ body.at-home #comboTxt, body.at-home #styleHud, body.at-home #odBtn, body.at-hom
 #btnDevHome{ position:absolute; top:14px; left:50%; transform:translateX(-50%); z-index:3; font-size:8px; padding:5px 8px; background:rgba(30,0,0,.6); border:2px solid #ff3a3a; color:#ffe14a; }
 @media (prefers-reduced-motion: reduce){ #home, .node.open, .home-tab.buy::after{ animation:none !important; } #homeTrack{ transition:none; } }
 
+#vfxCover{ position:absolute; inset:0; z-index:90; pointer-events:none; opacity:0; visibility:hidden; background:radial-gradient(ellipse at 50% 62%, #1b2c5a 0%, #070614 62%, #05040c 100%); }
+
 /* ---------- TUTO : étapes pédagogiques + finition (%) ---------- */
 #tutoGuide{ position:absolute; top:11%; left:50%; transform:translateX(-50%); z-index:40; width:min(78%, 300px); pointer-events:none; font-family:'Press Start 2P','PSP2E',monospace; text-align:center; background:rgba(5,8,24,.72); border:1px solid #2c4a7a; padding:6px 8px 7px; transition:border-color .2s, box-shadow .2s; }
 #tutoGuide .tg-top{ display:flex; flex-direction:column; gap:4px; margin-bottom:5px; }

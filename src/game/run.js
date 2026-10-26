@@ -44,6 +44,7 @@ mixin(GameScene, {
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
     sfx.launch();
+    Motion.uncover();                      // le rideau de transition (accueil → niveau) se rouvre
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
     music.start();

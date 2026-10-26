@@ -77,6 +77,7 @@
       g.loop.stop();                                              // plus de boucle temps réel : c'est nous qui avançons le jeu
       g.scene.render = function(){};                              // aucun dessin
       performance.now = ()=> clock;                               // ralenti, délais… suivent le temps simulé
+      if (typeof JUICE !== 'undefined'){ JUICE.hitstopMul = JUICE.shakeMul = JUICE.punchMul = JUICE.fireMul = JUICE.sparkMul = JUICE.numberMul = JUICE.magnetMul = JUICE.gemPitchMul = 0; }      // pas d'arrêt sur image : la simulation reste identique
       sfx.muted = true; try { music.muted = true; music.stop && music.stop(); } catch(e){ /* ignore */ }
       Math.random = rng;
     },

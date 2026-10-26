@@ -65,6 +65,25 @@ const Motion = {
     gsap.timeline().to(el, { scale:.9, duration:.08, ease:'power2.in' }).to(el, { scale:1.14, duration:.22, ease:'back.out(3)' });
   },
 
+  // TRANSITIONS : le rideau (#vfxCover) se ferme pendant que l'accueil s'éloigne, puis se rouvre à l'arrivée dans le niveau (uncover). Sans GSAP : rappel immédiat.
+  cover(done, s){
+    let o = document.getElementById('vfxCover');
+    if (!o){ o = document.createElement('div'); o.id = 'vfxCover'; document.getElementById('game-container').appendChild(o); }
+    if (!this.ok()){ o.style.opacity = 1; o.style.visibility = 'visible'; if (done) done(); return; }
+    gsap.killTweensOf(o); gsap.set(o, { visibility:'visible' });
+    const home = document.getElementById('home');
+    gsap.timeline({ onComplete:done })
+      .to(o, { opacity:1, duration:s || .45, ease:'power2.in' }, 0)
+      .to(home, { scale:1.06, duration:s || .45, ease:'power2.in', transformOrigin:'50% 62%' }, 0);
+  },
+  uncover(){
+    const o = document.getElementById('vfxCover'); if (!o) return;
+    const home = document.getElementById('home');
+    if (!this.ok()){ o.style.opacity = 0; o.style.visibility = 'hidden'; return; }
+    gsap.killTweensOf(o); gsap.set(home, { clearProps:'transform' });
+    gsap.to(o, { opacity:0, duration:.75, delay:.1, ease:'power2.out', onComplete:()=> gsap.set(o, { visibility:'hidden' }) });
+  },
+
   // compteur qui défile jusqu'à sa nouvelle valeur
   count(el, to, fmt){
     if (el._cnt){ el._cnt.kill(); el._cnt = null; }
