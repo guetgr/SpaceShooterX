@@ -73,19 +73,8 @@ mixin(HomeScene, {
     this.input.keyboard.on('keydown-ENTER', ()=>{ if (this.homeOn && this.page === 0 && !document.querySelector('.overlay:not(.hidden)')) this.launchLevel(); });
   },
 
-  // la camionnette de l'atelier est dessinée dans la zone de jeu (400x700, centrée) alors que le texte HTML couvre tout l'écran : sur un téléphone
-  // plus haut que 400x700 on décale le texte pour qu'il reste juste sous la camionnette
-  layoutHome(){
-    const cv = document.querySelector('#game-container canvas'), box = document.getElementById('game-container'), home = document.getElementById('home');
-    if (!cv || !home) return;
-    const c = cv.getBoundingClientRect(), b = box.getBoundingClientRect(), s = c.height / GAME_H;
-    home.style.setProperty('--hg', Math.max(120, Math.round((c.top - b.top) + 258*s - 108)) + 'px');
-  },
-
   enterHome(){
     this.homeOn = true; this._launching = false;
-    if (!this._layoutBound){ this._layoutBound = true; window.addEventListener('resize', ()=> setTimeout(()=> this.layoutHome(), 60)); }
-    this.layoutHome(); setTimeout(()=> this.layoutHome(), 400);
     Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');

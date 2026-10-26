@@ -24,7 +24,7 @@ Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de np
 - **Écran de chargement** : `src/boot.js` (image `loading/bg.webp`, hors `assets/` volontairement : elle doit s'afficher avant le manifeste ; barre lissée ; lignes de boot AGP).
 - **Icône d'écran d'accueil** (PWA) : `manifest.webmanifest` + `icons/` (iPhone 180 px, Android 192/512 + maskable). Pas de service worker : le jeu s'installe mais exige le réseau. HTTPS requis.
 - **Typographie** : définie dans `css/style.css` (`SSX Display` = Jersey 15, `SSX Label`/`SSX Text` = Chakra Petch), tailles calées sur l'ancien jeu (`size-adjust`).
-- **Mise en page tactile** : la zone de jeu est 400x700 centrée (FIT) alors que l'overlay HTML couvre tout l'écran ; `HomeScene.layoutHome()` recale l'atelier sur les téléphones plus hauts.
+- **Responsive (téléphone, tablette, PC)** : la zone de jeu fait toujours **400x700 logiques** (`#game-container`, Phaser en mode `NONE`) et est mise à l'échelle d'un bloc par `fitUi()` (`src/main.js`, variable CSS `--ui-s`) : canevas et HTML partagent le même repère, donc même mise en page et même lisibilité partout (bandes sombres autour). Ne pas utiliser d'unités `vw/vh` ni de mesures de fenêtre dans l'interface : tout se règle en px logiques sur 400x700. Détails : `docs/responsive.md`.
 - **Tests de l'interface** : `home_test.py` et `level_test.py` vérifient des libellés AGP (« INTERVENTION VALIDEE », « ACCIDENT DU TRAVAIL », « ORDRE ANNULE », « NOUVEAU SECTEUR ») : les mettre à jour si on change ces textes.
 
 ## Au début de chaque session / message
