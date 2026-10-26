@@ -84,38 +84,44 @@ const Motion = {
     gsap.to(o, { opacity:0, duration:.75, delay:.1, ease:'power2.out', onComplete:()=> gsap.set(o, { visibility:'hidden' }) });
   },
 
-  // écran de résultat : le titre claque, la barre se remplit, les chiffres défilent, les récompenses entrent une à une, puis les boutons
+  // rapport d'intervention : le document s'imprime ligne à ligne, les chiffres défilent, le tampon claque, N.O.R.M.A. commente, puis les boutons
   result(go, o){
     if (!this.ok() || !go) return;
     const q = s=> go.querySelector(s), all = s=> [...go.querySelectorAll(s)];
     if (this._goTl) this._goTl.kill();
     ['btnNext', 'btnRetry', 'btnGoMenu'].forEach(id=> this.stopBreath(document.getElementById(id)));
     const nb = q('#newBest'); if (nb._pulse){ nb._pulse.kill(); nb._pulse = null; gsap.set(nb, { clearProps:'transform' }); }
+    const doc = q('.rp-doc'), title = q('.go-title'), nm = q('#rpNorma');
+    const full = nm.textContent; nm.textContent = '';
     const tl = this._goTl = gsap.timeline();
-    const title = q('.go-title');
-    tl.from(title, { scale:o.victory ? 2.4 : 1.7, opacity:0, duration:.55, ease:'back.out(2.2)', clearProps:'transform,opacity' }, 0);
-    if (!o.victory) tl.fromTo(title, { x:-9 }, { x:0, duration:.55, ease:'elastic.out(1, 0.2)', clearProps:'transform' }, '>-0.1');
-    tl.from(q('#goLevel'), { y:-8, opacity:0, duration:.35, ease:'power2.out', clearProps:'transform,opacity' }, .25);
+    tl.fromTo(doc, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:1, ease:'steps(32)', clearProps:'clipPath' }, 0);
     const prog = q('#goProg');
     if (!prog.classList.contains('hidden')){
       const fill = q('#goProgFill'), w = fill.style.width, txt = q('#goProgTxt');
-      tl.fromTo(fill, { width:'0%' }, { width:w, duration:.9, ease:'power2.inOut' }, .45);
-      tl.call(()=>{ const to = parseInt(txt.textContent, 10) || 0; txt.textContent = '0%'; this.count(txt, to, v=> v + '%'); }, null, .45);
+      tl.fromTo(fill, { width:'0%' }, { width:w, duration:.9, ease:'power2.inOut' }, .5);
+      tl.call(()=>{ const to = parseInt(txt.textContent, 10) || 0; txt.textContent = '0%'; this.count(txt, to, v=> v + '%'); }, null, .5);
     }
-    tl.call(()=>{ ['finalScore', 'finalKills'].forEach(id=>{ const b = document.getElementById(id), to = parseInt(b.textContent, 10) || 0; b.textContent = '0'; this.count(b, to, v=> String(v)); }); }, null, .55);
+    tl.call(()=>{ ['finalScore', 'finalKills'].forEach(id=>{ const b = document.getElementById(id), to = parseInt(b.textContent, 10) || 0; b.textContent = '0'; this.count(b, to, v=> String(v)); }); }, null, .65);
     const rows = all('.go-rw');
-    if (rows.length) tl.from(rows, { x:-24, opacity:0, duration:.35, stagger:.12, ease:'power3.out', clearProps:'transform,opacity' }, .9);
+    if (rows.length) tl.from(rows, { x:-24, opacity:0, duration:.35, stagger:.12, ease:'power3.out', clearProps:'transform,opacity' }, 1);
     const tot = q('.go-rw.total b');
-    if (tot) tl.call(()=>{ const to = parseInt(tot.textContent.replace(/\D/g, ''), 10) || 0; tot.textContent = '+0 ◆'; this.count(tot, to, v=> '+' + v + ' ◆'); this.pop(tot, 1.25); }, null, .9 + .12*rows.length);
+    if (tot) tl.call(()=>{ const to = parseInt(tot.textContent.replace(/\D/g, ''), 10) || 0; tot.textContent = '+0 ◆'; this.count(tot, to, v=> '+' + v + ' ◆'); this.pop(tot, 1.25); }, null, 1 + .12*rows.length);
+    const t1 = 1.25 + .12*rows.length;
     const unl = all('.go-unlock');
-    if (unl.length) tl.from(unl, { scale:.5, opacity:0, duration:.7, stagger:.2, ease:'elastic.out(1, 0.5)', clearProps:'transform,opacity' }, 1.1 + .12*rows.length);
-    tl.from(q('#goExtra'), { opacity:0, y:8, duration:.4, clearProps:'transform,opacity' }, 1.2);
+    if (unl.length) tl.from(unl, { scale:.5, opacity:0, duration:.7, stagger:.2, ease:'elastic.out(1, 0.5)', clearProps:'transform,opacity' }, t1);
+    tl.from(q('.rp-eval'), { opacity:0, x:-16, duration:.4, clearProps:'transform,opacity' }, t1 + .1);
+    tl.from(q('#goExtra'), { opacity:0, y:8, duration:.4, clearProps:'transform,opacity' }, t1 + .2);
+    // le tampon claque sur le document
+    tl.from(title, { scale:3.4, opacity:0, duration:.28, ease:'power4.in', clearProps:'transform,opacity' }, t1 + .55);
+    tl.to(doc, { x:3, y:2, duration:.05, yoyo:true, repeat:5, ease:'none', clearProps:'transform' }, '>');
+    // N.O.R.M.A. commente, lettre par lettre
+    tl.call(()=>{ let n = 0; clearInterval(nm._ty); nm.classList.add('typing'); nm._ty = setInterval(()=>{ n += 2; nm.textContent = full.slice(0, n); if (n >= full.length){ clearInterval(nm._ty); nm.classList.remove('typing'); } }, 22); }, null, t1 + 1.05);
     if (!nb.classList.contains('hidden')){
-      tl.from(nb, { scale:2.2, opacity:0, duration:.5, ease:'back.out(2.5)', clearProps:'transform,opacity' }, 1.3);
-      tl.call(()=>{ nb._pulse = gsap.to(nb, { scale:1.08, duration:.6, yoyo:true, repeat:-1, ease:'sine.inOut' }); });
+      tl.from(nb, { scale:2.2, opacity:0, duration:.5, ease:'back.out(2.5)', clearProps:'transform,opacity' }, t1 + 1.2);
+      tl.call(()=>{ nb._pulse = gsap.to(nb, { scale:1.06, duration:.6, yoyo:true, repeat:-1, ease:'sine.inOut' }); });
     }
     const btns = all('.btn:not(.hidden)');
-    tl.from(btns, { y:26, opacity:0, duration:.4, stagger:.1, ease:'back.out(1.8)', clearProps:'transform,opacity' }, 1.4);
+    tl.from(btns, { y:26, opacity:0, duration:.4, stagger:.1, ease:'back.out(1.8)', clearProps:'transform,opacity' }, t1 + .9);
     tl.call(()=>{ const main = btns.find(b=> !b.classList.contains('secondary')); if (main) this.breath(main); });
   },
 

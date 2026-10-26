@@ -13,7 +13,7 @@ mixin(GameScene, {
     this.spawnBoss(undefined, { dx:-85, dbl:true });
     this.spawnBoss(undefined, { dx:85, dbl:true, twin:true });
     const bn = document.getElementById('boss-banner'), old = bn.textContent;
-    bn.textContent = '! DOUBLE BOSS !'; bn.classList.add('show');
+    bn.textContent = '! DOUBLE INCIDENT !'; bn.classList.add('show');
     this.time.delayedCall(1900, ()=>{ bn.classList.remove('show'); bn.textContent = old; });
   },
 
@@ -85,7 +85,7 @@ mixin(GameScene, {
     boss.summonedAtHalf = false;
     this.initBossParts(boss, def, ts);
 
-    sfx.bossAlert();
+    sfx.bossAlert(); this.normaBoss();
     document.getElementById('boss-banner').classList.add('show');
     this.bossEls(boss).label.textContent = def.name + ' NIV.' + (this.difficultyTier+1);
     this.setupBossTicks(boss);

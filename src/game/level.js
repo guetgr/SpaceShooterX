@@ -42,7 +42,7 @@ mixin(GameScene, {
     if (this.lvEnding || !this.running) return;
     this.lvEnding = true;
     this.hitCooldown = Math.max(this.hitCooldown, 6000);
-    this.notice('NIVEAU TERMINE', this.lvDef.name);
+    this.notice('INTERVENTION VALIDEE', this.lvDef.name);
     sfx.relicOpen();
     this.time.delayedCall(1100, ()=>{
       if (!this.running) return;

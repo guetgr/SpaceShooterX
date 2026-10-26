@@ -53,19 +53,19 @@ mixin(GameScene, {
         '<span class="tt-p">' + this.treeBranchPoints(x) + '/' + x.total + '</span>' + (buy ? '<i class="tt-dot"></i>' : '') + '</button>';
     }).join('');
     const got = this.treeBranchPoints(L);
-    document.getElementById('treeBName').textContent = String(br.name).toUpperCase();
-    document.getElementById('treeBProg').textContent = got + ' / ' + L.total + ' pts';
+    { const dp = AGP_LORE.depts[br.id] || { name:String(br.name).toUpperCase(), sub:'' }; document.getElementById('treeBName').textContent = 'DPT ' + dp.name; document.getElementById('treeBSub').textContent = dp.sub; }
+    document.getElementById('treeBProg').textContent = got + ' / ' + L.total;
     document.getElementById('treeBBar').style.width = (100*got/L.total) + '%';
 
     let h = '';
     L.tiers.forEach((tier, t)=>{
       const open = tier.some(n=> this.treeCardInfo(n).st !== 'locked');
-      h += '<div class="ttier' + (open ? '' : ' locked') + '">PALIER ' + (t + 1) + (open ? '' : '<span>🔒 achète une compétence du palier précédent</span>') + '</div>' +
+      h += '<div class="ttier' + (open ? '' : ' locked') + '">HABILITATION ' + (t + 1) + (open ? '' : '<span>🔒 habilitation précédente requise</span>') + '</div>' +
         '<div class="tgrid n' + tier.length + '">' + tier.map(n=> this.treeCardHtml(n, br, false)).join('') + '</div>';
     });
     if (L.lanes.length){
       const sum = treeBranchStemSum(this.treeState, br.id), need = br.forkThreshold || 0, ok = sum >= need;
-      h += '<div class="ttier' + (ok ? '' : ' locked') + '">VOIES SPÉCIALISÉES' + (ok ? '' : '<span>🔒 ' + sum + '/' + need + ' pts dans la tige</span>') + '</div>' +
+      h += '<div class="ttier' + (ok ? '' : ' locked') + '">PROJETS HORS CATALOGUE' + (ok ? '' : '<span>🔒 ' + sum + '/' + need + ' pts d\'habilitation</span>') + '</div>' +
         '<div class="tlanes n' + L.lanes.length + '">' + L.lanes.map(lane=> '<div class="tlane">' + lane.map(n=> this.treeCardHtml(n, br, true)).join('') + '</div>').join('') + '</div>';
     }
     scroll.innerHTML = h; scroll.scrollTop = y;
@@ -98,8 +98,8 @@ mixin(GameScene, {
     const node = this.selectedTreeNode, btn = document.getElementById('treeInvestBtn');
     if (!node){
       document.getElementById('treeInfoIcon').innerHTML = pxImg('👆', 30);
-      document.getElementById('treeInfoName').textContent = String((treeLayout().find(L=> L.br.id === this.treeBranch) || treeLayout()[0]).br.name).toUpperCase();
-      document.getElementById('treeInfoDesc').textContent = 'Touche une carte pour voir son détail et l\'acheter.';
+      document.getElementById('treeInfoName').textContent = 'DPT ' + ((AGP_LORE.depts[this.treeBranch] || {}).name || 'CATALOGUE');
+      document.getElementById('treeInfoDesc').textContent = 'Touchez une fiche pour consulter le catalogue et passer commande.';
       document.getElementById('treeInfoMeta').textContent = '';
       btn.disabled = true; btn.textContent = '—'; btn.onclick = null;
       return;
@@ -109,12 +109,12 @@ mixin(GameScene, {
     document.getElementById('treeInfoName').textContent = node.name + (node.max > 1 ? ' · ' + i.r + '/' + node.max : '');
     document.getElementById('treeInfoDesc').textContent = node.desc.replace(/\s*\/\s*niveau/i, ' par rang');
     let meta;
-    if (i.st === 'max') meta = node.max > 1 ? 'Rang maximum atteint.' : 'Possédée.';
+    if (i.st === 'max') meta = node.max > 1 ? 'Rang maximum atteint. Budget épuisé.' : 'Installé.';
     else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ◆ ' + i.v.cost() + (i.can ? '' : ' (il manque ◆ ' + (i.v.cost() - this.meta.fragments) + ')');
     else if (node.isKey && node.forkThreshold && node.requires.some(p => (state[p] || 0) > 0))
-      meta = 'Verrouillée · Investis ' + node.forkThreshold + ' pts dans la tige de cette branche (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
-    else if (node.isKey) meta = "Verrouillée · Ouvre d'abord le dernier palier de cette branche.";
-    else meta = "Verrouillée · Achète d'abord la compétence qui la précède.";
+      meta = 'Non habilité · ' + node.forkThreshold + ' pts d\'habilitation requis dans ce département (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
+    else if (node.isKey) meta = "Non habilité · terminez d'abord la dernière habilitation du département.";
+    else meta = "Non habilité · commandez d'abord le module précédent.";
     document.getElementById('treeInfoMeta').textContent = meta;
     btn.disabled = !i.can;
     btn.textContent = i.st === 'max' ? '✓' : '+';

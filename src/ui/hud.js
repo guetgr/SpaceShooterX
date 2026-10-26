@@ -42,7 +42,8 @@ mixin(GameScene, {
     const hpPct = Math.max(0, this.hp/this.stats.maxHp*100);
     document.getElementById('hpFill').style.width = hpPct + '%';
     Motion.hudHp(hpPct);
-    document.querySelector('.hp-wrap').classList.toggle('hp-low', hpPct > 0 && hpPct < 30);
+    { const hw = document.querySelector('.hp-wrap'); hw.classList.toggle('hp-low', hpPct > 0 && hpPct < 30); hw.classList.toggle('hp-mid', hpPct >= 30 && hpPct < 60);
+      if (hpPct > 0 && hpPct < 30 && !this._normaLow){ this._normaLow = true; this.normaLow(); } }
     const shieldTrack = document.getElementById('shieldTrack');
     if (this.stats.shieldMax > 0){
       shieldTrack.style.display = '';
@@ -53,10 +54,10 @@ mixin(GameScene, {
     const sv = document.getElementById('scoreVal'), sc = Math.floor(this.score);
     if (this._scShown !== sc){ this._scShown = sc; sv.textContent = sc; Motion.tick(sv); }
     const lb = document.getElementById('lvlBadge');
-    if (this._lvShown !== this.level){ if (this._lvShown !== undefined) Motion.pop(lb, 1.6); this._lvShown = this.level; lb.textContent = 'LV.'+this.level; }
+    if (this._lvShown !== this.level){ if (this._lvShown !== undefined) Motion.pop(lb, 1.6); this._lvShown = this.level; lb.textContent = 'GR.'+this.level; }
     document.getElementById('xpFill').style.width = Math.min(100,(this.xp/this.xpToNext*100)) + '%';
     const m = Math.floor(this.elapsed/60), s = Math.floor(this.elapsed%60);
-    document.getElementById('waveNote').textContent = this.lvDef ? ('NIV.' + this.lvDef.num + ' · ' + this.levelProgress().label) : ('T+' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ' · ALERTE ' + this.alertLevel);
+    document.getElementById('waveNote').textContent = this.lvDef ? ('ORDRE ' + String(this.lvDef.num).padStart(2, '0') + ' · ' + this.levelProgress().label) : ('T+' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ' · RISQUE ' + this.alertLevel);
     { const wn = document.getElementById('waveNote'), cap = this.alertLevel >= ALERT_CAP;
       const f = cap ? 1 : Math.min(1, (this.alertTimer||0) / ALERT_RISE_SECONDS), k = f*f;                       // le rouge s'installe lentement puis s'accélère
       const blink = (!cap && f > 0.93) ? (0.55 + 0.45*Math.sin(this.time.now/110)) : 1;

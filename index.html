@@ -7,7 +7,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
-<meta name="theme-color" content="#05040c">
+<meta name="theme-color" content="#070a09">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Shooter X">
@@ -18,6 +18,7 @@
 <script src="vendor/phaser.min.js"></script>
 <script src="vendor/gsap.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/agp.css">
 </head>
 <body>
 <div id="stage">
@@ -28,18 +29,18 @@
     <div id="hud">
       <div id="hud-top">
         <div class="hp-wrap">
-          <div class="hp-label">VAISSEAU</div>
+          <div class="hp-label">COQUE</div>
           <div class="hp-bar-track" id="hpTrack"><div class="hp-bar-ghost" id="hpGhost"></div><div class="hp-bar-fill" id="hpFill"></div></div>
           <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
         </div>
         <button class="mute-btn" id="pauseBtn">⏸</button>
         <div class="score-wrap">
-          <div class="score-label">SCORE</div>
+          <div class="score-label">RENDEMENT</div>
           <div class="score-val" id="scoreVal">0</div>
         </div>
       </div>
       <div class="xp-wrap">
-        <div class="lvl-badge" id="lvlBadge">LV.1</div>
+        <div class="lvl-badge" id="lvlBadge">GR.1</div>
         <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
       </div>
       <div class="wave-note" id="waveNote">T+00:00</div>
@@ -61,45 +62,46 @@
       <div class="boss-hp-track"><div class="boss-hp-fill" id="bossHpFill"></div></div>
       <div class="boss-sh-track" id="bossShTrack"><div class="boss-sh-fill" id="bossShFill"></div></div>
     </div>
-    <div id="boss-banner">! ALERTE BOSS !</div>
+    <div id="boss-banner">! INCIDENT MAJEUR !</div>
 
     <div id="home" class="hidden">
       <div id="homeTop">
-        <div class="home-frag" id="homeFrag">◆ 0</div>
-        <button class="home-ico" id="homeSettings" aria-label="Paramètres">⚙</button>
+        <div class="agp-id"><i class="agp-logo">AGP</i><span class="agp-who"><b>EMPLOYE N° 4 471 902</b><u>AGP-OS 9.4 · ATELIER 7</u></span></div>
+        <div class="home-right"><div class="home-frag" id="homeFrag">◆ 0</div><button class="home-ico" id="homeSettings" aria-label="Paramètres">⚙</button></div>
       </div>
+      <div id="homeTicker"><div class="tk-line"><span class="tk-tag"></span><span class="tk-win"><span class="tk-txt"></span></span></div></div>
       <div id="homeTrack">
         <section class="home-page" id="pageHangar">
-          <div class="hp-title">HANGAR</div>
+          <div class="hp-title">ATELIER</div>
           <div class="hangar-gap"></div>
           <div class="hangar-tier" id="hangarTier"></div>
           <div class="skin-row" id="skinRow"></div>
-          <div class="hangar-seg"><button id="segStats" class="on">STATS</button><button id="segMods">MODULES</button></div>
+          <div class="hangar-seg"><button id="segStats" class="on">FICHE TECHNIQUE</button><button id="segMods">MODULES</button></div>
           <div class="hangar-body" id="hangarBody"></div>
         </section>
         <section class="home-page" id="pageMap" data-mode="world">
           <div class="map-world world-only">
-            <button class="map-arrow" id="btnGalaxy" aria-label="Carte stellaire">✦</button>
+            <button class="map-arrow" id="btnGalaxy" aria-label="Répartition des secteurs">✦</button>
             <div class="mw-mid"><div class="mw-n" id="mwNum"></div><div class="mw-name" id="mwName"></div><div class="mw-prog" id="mwProg"></div></div>
             <span class="map-arrow ghost"></span>
           </div>
           <div class="map-gap world-only"></div>
           <div class="level-card world-only" id="levelCard"></div>
-          <button class="btn world-only" id="btnLaunch">DECOLLER</button>
+          <button class="btn world-only" id="btnLaunch">PRENDRE LE SERVICE</button>
           <div id="mapOrbit" class="world-only"></div>
-          <div class="gx-title galaxy-only">CARTE STELLAIRE</div>
-          <div class="gx-hint galaxy-only">Glisse pour explorer · touche un monde</div>
-          <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU MONDE</button>
+          <div class="gx-title galaxy-only">REPARTITION DES SECTEURS</div>
+          <div class="gx-hint galaxy-only">Glisse pour parcourir · touche un secteur</div>
+          <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU SECTEUR</button>
         </section>
         <section class="home-page" id="pageTree">
           <div class="tree-tabs" id="treeTabs"></div>
-          <div class="tree-bhead"><span id="treeBName"></span><span id="treeBProg"></span></div>
+          <div class="tree-bhead"><div class="tb-l"><span id="treeBName"></span><u id="treeBSub"></u></div><span id="treeBProg"></span></div>
           <div class="tree-bbar"><i id="treeBBar"></i></div>
           <div class="tree-scroll" id="treeScroll"></div>
           <div class="tree-info" id="treeInfo">
             <div class="tree-info-icon" id="treeInfoIcon"></div>
             <div class="tree-info-body">
-              <div class="tree-info-name" id="treeInfoName">ARBRE DE COMPÉTENCES</div>
+              <div class="tree-info-name" id="treeInfoName">CATALOGUE TECHNIQUE</div>
               <div class="tree-info-desc" id="treeInfoDesc">Touche une carte pour voir son détail et l'acheter.</div>
               <div class="tree-info-meta" id="treeInfoMeta"></div>
             </div>
@@ -108,9 +110,9 @@
         </section>
       </div>
       <nav id="homeTabs">
-        <button class="home-tab" id="tabHangar">HANGAR</button>
-        <button class="home-tab" id="tabMap">CARTE</button>
-        <button class="home-tab" id="tabTree">ARBRE</button>
+        <button class="home-tab" id="tabHangar">ATELIER</button>
+        <button class="home-tab" id="tabMap">MISSIONS</button>
+        <button class="home-tab" id="tabTree">R&amp;D</button>
       </nav>
       <div id="homeToast"></div>
       <button id="btnDevHome" class="hidden">DEV</button>
@@ -237,8 +239,10 @@
 
     <div id="levelup" class="overlay hidden">
       <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;">⏸</button>
-      <div class="lu-title">AMELIORATION — CHOISIS UN MODULE</div>
+      <div class="lu-title">REQUISITION DE MODULE</div>
+      <div class="lu-sub">Choisir un (1) module. Aucun remboursement.</div>
       <div class="cards" id="cardsWrap"></div>
+      <div class="lu-norma" id="luNorma"></div>
       <button class="btn secondary" id="rerollBtn">RELANCER (2)</button>
     </div>
 
@@ -247,16 +251,27 @@
     <button id="odBtn"><span>OD</span></button>
     <div id="redVig"></div>
     <div id="gameover" class="overlay hidden">
-      <div class="go-title">VAISSEAU DETRUIT</div>
-      <div class="go-level" id="goLevel"></div>
-      <div class="go-prog hidden" id="goProg"><div class="go-prog-bar"><i id="goProgFill"></i></div><span id="goProgTxt"></span></div>
-      <div class="go-stats">Score : <b id="finalScore">0</b><br>Ennemis éliminés : <b id="finalKills">0</b><br>Niveau atteint : <b id="finalLvl">1</b><br>Temps : <b id="finalTime">0:00</b></div>
-      <div class="go-rewards" id="goRewards"></div>
-      <div class="go-extra" id="goExtra"></div>
-      <div class="new-best hidden" id="newBest">★ NOUVEAU RECORD ★</div>
-      <button class="btn hidden" id="btnNext">NIVEAU SUIVANT</button>
-      <button class="btn" id="btnRetry">REJOUER</button>
-      <button class="btn secondary" id="btnGoMenu">ACCUEIL</button>
+      <div class="rp-doc">
+        <div class="rp-head"><i class="agp-logo">AGP</i><span class="rp-h1">RAPPORT D'INTERVENTION</span><span class="rp-no" id="rpNo">N° 00000</span></div>
+        <div class="go-level" id="goLevel"></div>
+        <div class="go-title">INTERVENTION VALIDEE</div>
+        <div class="go-prog hidden" id="goProg"><span class="rp-lab">EXECUTION</span><div class="go-prog-bar"><i id="goProgFill"></i></div><span id="goProgTxt"></span></div>
+        <div class="go-stats">
+          <div class="rp-f"><span>ELEMENTS NEUTRALISES</span><b id="finalKills">0</b></div>
+          <div class="rp-f"><span>RENDEMENT</span><b id="finalScore">0</b></div>
+          <div class="rp-f"><span>GRADE ATTEINT</span><b id="finalLvl">1</b></div>
+          <div class="rp-f"><span>DUREE</span><b id="finalTime">0:00</b></div>
+        </div>
+        <div class="rp-sec">COMPOSANTS RECUPERES</div>
+        <div class="go-rewards" id="goRewards"></div>
+        <div class="rp-eval"><span class="rp-lab">EVALUATION</span><b class="rp-grade" id="rpGrade">D</b><span class="rp-mention" id="rpMention"></span></div>
+        <div class="go-extra" id="goExtra"></div>
+        <div class="rp-norma"><span class="rp-lab">N.O.R.M.A</span><p id="rpNorma"></p></div>
+        <div class="new-best hidden" id="newBest">★ RENDEMENT RECORD ★</div>
+      </div>
+      <button class="btn hidden" id="btnNext">ORDRE SUIVANT</button>
+      <button class="btn" id="btnRetry">REFAIRE L'INTERVENTION</button>
+      <button class="btn secondary" id="btnGoMenu">RETOUR AU BUREAU</button>
     </div>
 
   </div>

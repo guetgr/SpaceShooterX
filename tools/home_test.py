@@ -81,7 +81,7 @@ with sync_playwright() as pw:
     p.evaluate("localStorage.setItem('ssx_worlds_v1', JSON.stringify({v:1,levels:{'w1-l1':{clears:1,best:5},'w1-l2':{clears:1,best:5},'w1-l3':{clears:1,best:5},'w1-l4':{clears:1,best:5},'w1-l5':{clears:1,best:5}},seen:{},last:'w1-l5'}))")
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(500)
     p.wait_for_function("window.__ssxScene.scene.get('home').mapMode==='galaxy'", timeout=30000); p.wait_for_timeout(500)
-    ck(p.evaluate("wasWorldSeen('w:w2')") and p.evaluate("document.getElementById('homeToast').textContent").startswith('NOUVEAU MONDE'),'nouveau monde : animation de déblocage jouée une fois')
+    ck(p.evaluate("wasWorldSeen('w:w2')") and p.evaluate("document.getElementById('homeToast').textContent").startswith('NOUVEAU SECTEUR'),'nouveau monde : animation de déblocage jouée une fois')
     pos=p.evaluate("(()=>{const h=window.__ssxScene.scene.get('home'); return h.galWorlds.map(g=>[g.pos.x,g.pos.y+h.galY]) })()")
     p.mouse.click(pos[1][0],pos[1][1]); p.wait_for_timeout(2200)
     ck(mode()=='world' and p.evaluate("document.getElementById('mwName').textContent")=='NEBULEUSE ROUGE','le monde 2 est maintenant ouvert')
