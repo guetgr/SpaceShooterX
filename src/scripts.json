@@ -51,6 +51,7 @@
   "home/ui.js",
   "world/background.js",
   "ui/dom.js",
+  "ui/motion.js",
   "ui/pages.js",
   "systems/achievements.js",
   "fx/effects.js",

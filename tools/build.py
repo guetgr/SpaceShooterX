@@ -43,6 +43,9 @@ head, rest = shell.split('<link rel="stylesheet" href="css/style.css">')
 head = head.replace('<script src="vendor/phaser.min.js"></script>',
                     '<script>' + read('vendor/phaser.min.js') + '</script>' if INLINE_PHASER
                     else '<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>')
+head = head.replace('<script src="vendor/gsap.min.js"></script>',
+                    '<script>' + read('vendor/gsap.min.js') + '</script>' if INLINE_PHASER
+                    else '<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>')
 body = rest.split('<script src="src/boot.js"></script>')[0].replace('</head>\n', '', 1)
 page = head + '<style>\n' + css + '\n</style>\n</head>\n' + body.lstrip('\n') + '<script>\n' + js + '\n</script>\n</body>\n</html>\n'
 

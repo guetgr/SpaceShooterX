@@ -79,6 +79,7 @@ mixin(GameScene, {
       const t = e.target.closest('.ttab'); if (!t || t.dataset.id === this.treeBranch) return;
       sfx.uiSelect(); this.treeBranch = t.dataset.id; this.selectedTreeNode = null;
       document.getElementById('treeScroll').scrollTop = 0; this.renderTree();
+      Motion.cards([...document.querySelectorAll('#treeScroll .tcard')]);
     };
     document.getElementById('treeScroll').onclick = e=>{
       const c = e.target.closest('.tcard'); if (!c) return;
@@ -136,6 +137,7 @@ mixin(GameScene, {
     setMeta(this.meta);
     this._treeFlash = node.id;
     this.renderTree();
+    Motion.pop(document.querySelector('#treeScroll .tcard[data-id="' + node.id + '"]'));
     { const h = this.scene.get('home'); if (h && h.homeOn) h.refreshHomeStats(); }          // fragments, stats du hangar et point doré de l'onglet
   },
 });

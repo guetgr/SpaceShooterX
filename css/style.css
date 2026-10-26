@@ -581,8 +581,7 @@ body.at-home #comboTxt, body.at-home #styleHud, body.at-home #odBtn, body.at-hom
 .tlane{ display:flex; flex-direction:column; gap:8px; position:relative; }
 .tlane .tcard + .tcard::before{ content:''; position:absolute; left:50%; top:-8px; width:2px; height:8px; background:#2c3552; }
 .tcard{ position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:5px; min-height:98px; padding:9px; text-align:left; color:var(--ink);
-  background:rgba(14,20,38,.92); border:2px solid #232c40; transition:transform .1s; }
-.tcard:active{ transform:scale(.97); }
+  background:rgba(14,20,38,.92); border:2px solid #232c40; }
 .tc-ic .pxi{ display:block; image-rendering:pixelated; }
 .tc-nm{ font-size:8px; line-height:1.35; letter-spacing:.3px; }
 .tc-pips{ display:flex; gap:3px; flex-wrap:wrap; }
@@ -594,6 +593,8 @@ body.at-home #comboTxt, body.at-home #styleHud, body.at-home #odBtn, body.at-hom
 .tcard.max{ border-color:var(--c); background:linear-gradient(160deg, color-mix(in srgb, var(--c) 32%, #0e1426), #0e1426); box-shadow:0 0 14px color-mix(in srgb, var(--c) 35%, transparent); }
 .tcard.max .tc-cost{ color:var(--c); }
 .tcard.aff::before{ content:''; position:absolute; inset:-3px; border:2px solid #ffd76a; animation:tcAff 1.3s ease-in-out infinite; pointer-events:none; }
+/* GSAP anime le transform des boutons : on retire la transition CSS qui se battrait avec lui */
+.mo{ transition-property:filter, box-shadow, border-color, background, opacity !important; }
 @keyframes tcAff{ 50%{ opacity:.25; } }
 .tcard.cant .tc-cost{ color:#8a5a6a; }
 .tcard.locked{ opacity:.4; filter:grayscale(.7); }
