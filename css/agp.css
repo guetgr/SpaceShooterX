@@ -41,18 +41,18 @@
 .agp-who u{ font-family:var(--vt); font-size:14px; text-decoration:none; color:var(--agp-steel); line-height:.9; }
 .home-right{ display:flex; align-items:center; gap:8px; }
 .home-frag{ position:relative; font-size:24px; line-height:.95; color:var(--agp-yellow); padding:9px 11px 1px; border:1px solid var(--agp-line); background:rgba(6,9,8,.62); text-shadow:0 0 8px rgba(255,194,26,.35); }
-.home-frag::before{ content:'COMPOSANTS'; position:absolute; top:2px; left:4px; font-family:var(--px); font-size:5px; letter-spacing:1px; color:var(--agp-steel); text-shadow:none; }
+.home-frag::before{ content:'COMPOSANTS'; position:absolute; top:2px; left:4px; font-family:var(--px); font-size:6px; letter-spacing:1px; color:var(--agp-steel); text-shadow:none; }
 .home-ico{ border-color:var(--agp-line); color:var(--agp-steel); width:38px; height:38px; }
 
 #homeTicker{ position:absolute; top:50px; left:12px; right:12px; z-index:3; height:19px; overflow:hidden; pointer-events:none;
   border-top:1px solid var(--agp-line); border-bottom:1px solid var(--agp-line); background:linear-gradient(90deg, rgba(255,194,26,.10), rgba(6,9,8,.45) 70%); }
 #homeTicker .tk-line{ display:flex; align-items:center; height:100%; gap:7px; padding-left:5px; font-family:var(--vt); font-size:16px; line-height:1; white-space:nowrap; color:#e6d9a8; }
-#homeTicker .tk-tag{ flex:none; font-family:var(--px); font-size:5px; letter-spacing:0; color:#130f03; background:var(--agp-yellow); padding:2px 4px 1px; }
+#homeTicker .tk-tag{ flex:none; font-family:var(--px); font-size:6px; letter-spacing:0; color:#130f03; background:var(--agp-yellow); padding:2px 4px 1px; }
 #homeTicker .tk-win{ flex:1; min-width:0; overflow:hidden; }
 #homeTicker .tk-txt{ display:inline-block; }
 
 .home-page{ padding-top:76px; }
-.hangar-gap{ flex-basis:var(--hg, 178px); }
+.hangar-gap{ flex-basis:150px; }          /* la camionnette de l'atelier est dessinée dans le canevas 400x700 : même repère que le HTML */
 #pageTree{ padding-top:76px; }
 .hp-title{ font-size:14px; letter-spacing:3px; color:var(--ink); text-shadow:none; margin-top:2px; }
 .hp-title::after{ content:''; display:block; height:5px; width:84px; margin:6px auto 0; background:var(--hazard); }
@@ -105,7 +105,7 @@
 .lc-comp i{ border-color:var(--agp-line); background:#0d1411; } .lc-comp i u{ background:linear-gradient(90deg,#ffa31a,#ffd75a); }
 .lc-line{ font-size:17px; color:#c3d2c8; }
 .om-brief{ margin-top:6px; padding:4px 7px 5px; font-family:var(--vt); font-size:16px; line-height:1.02; color:#9fe8c0; background:rgba(93,255,160,.06); border-left:2px solid var(--agp-green); }
-.om-brief span{ display:block; font-family:var(--px); font-size:5px; letter-spacing:1px; color:var(--agp-green); margin-bottom:2px; }
+.om-brief span{ display:block; font-family:var(--px); font-size:6px; letter-spacing:1px; color:var(--agp-green); margin-bottom:2px; }
 
 /* bouton d'engagement */
 #btnLaunch{ min-width:0; width:100%; max-width:340px; padding:14px 12px; margin-bottom:10px; font-size:12px; letter-spacing:2px; }
@@ -164,7 +164,7 @@
 /* ===================================================================
    HUD EN COMBAT — systèmes de bord discrets (rien d'opaque, rien au milieu de l'écran)
    =================================================================== */
-.hp-label, .score-label{ display:block; font-family:var(--px); font-size:5px; letter-spacing:1px; color:var(--agp-steel); opacity:.85; margin-bottom:2px; text-shadow:0 1px 0 #000; }
+.hp-label, .score-label{ display:block; font-family:var(--px); font-size:6px; letter-spacing:1px; color:var(--agp-steel); opacity:.85; margin-bottom:2px; text-shadow:0 1px 0 #000; }
 .score-label{ text-align:right; }
 .hp-bar-track{ border-color:#1f2d26; background:rgba(8,12,10,.62); }
 .hp-bar-fill{ background:linear-gradient(90deg,#27c46d,#7dffa8); }
@@ -205,7 +205,7 @@
 @keyframes nmScan{ from{ transform:translateX(0); } to{ transform:translateX(8px); } }
 @keyframes nmTalk{ 50%{ transform:scaleX(.55); } }
 .nm-body{ background:rgba(6,9,8,.62); border-left:3px solid var(--agp-yellow); padding:3px 8px 4px; }
-.nm-head{ font-family:var(--px); font-size:5px; letter-spacing:1px; color:var(--agp-yellow); margin-bottom:2px; }
+.nm-head{ font-family:var(--px); font-size:6px; letter-spacing:1px; color:var(--agp-yellow); margin-bottom:2px; }
 .nm-head u{ text-decoration:none; color:var(--agp-steel); }
 .nm-txt{ font-family:var(--vt); font-size:17px; line-height:1; color:#eaf2ec; text-shadow:0 1px 0 #000, 0 0 6px rgba(0,0,0,.8); }
 .nm-txt:empty::after{ content:'█'; }
@@ -221,10 +221,10 @@
 #levelup .lu-title::after{ content:''; display:block; height:5px; width:96px; margin:7px auto 0; background:var(--hazard); }
 .lu-sub{ font-family:var(--vt); font-size:17px; color:var(--agp-steel); margin:6px 0 16px; }
 .lu-norma{ font-family:var(--vt); font-size:17px; line-height:1; color:#9fe8c0; max-width:300px; margin-top:16px; padding:5px 8px; border-left:3px solid var(--agp-green); background:rgba(93,255,160,.06); text-align:left; }
-.lu-norma::before{ content:'N.O.R.M.A  '; font-family:var(--px); font-size:5px; letter-spacing:1px; color:var(--agp-green); }
+.lu-norma::before{ content:'N.O.R.M.A  '; font-family:var(--px); font-size:6px; letter-spacing:1px; color:var(--agp-green); }
 #cardsWrap{ counter-reset:rq; }
 .card{ counter-increment:rq; position:relative; background:linear-gradient(180deg, rgba(16,24,20,.96), rgba(8,12,10,.96)); border:1px solid #2f4238; border-left:1px solid #2f4238; padding-top:6px; }
-.card::before{ content:'REQ. 0' counter(rq); display:block; margin:-6px -10px 9px; padding:3px 8px 2px; font-family:var(--px); font-size:5px; letter-spacing:1px; color:#130f03; background:var(--agp-yellow); }
+.card::before{ content:'REQ. 0' counter(rq); display:block; margin:-6px -10px 9px; padding:3px 8px 2px; font-family:var(--px); font-size:6px; letter-spacing:1px; color:#130f03; background:var(--agp-yellow); }
 .cards.many .card::before{ margin:-6px -6px 7px; }
 .card-name{ font-size:8px; letter-spacing:.5px; } .card-desc{ color:#b5c6bb; }
 .card:hover{ border-color:var(--agp-yellow); box-shadow:0 0 14px rgba(255,194,26,.2); }
@@ -244,11 +244,11 @@
 }
 .rp-doc::before, .rp-doc::after{ content:''; position:absolute; top:0; bottom:0; width:14px; background:radial-gradient(circle at 7px 9px, #0b100d 3.2px, transparent 3.8px) 0 0/14px 17px repeat-y; opacity:.85; }
 .rp-doc::before{ left:0; } .rp-doc::after{ right:0; }
-.rp-lab{ font-family:var(--px); font-size:5.5px; letter-spacing:1px; color:#5b6558; }
+.rp-lab{ font-family:var(--px); font-size:6px; letter-spacing:1px; color:#5b6558; }
 .rp-head{ display:flex; align-items:center; gap:7px; padding-bottom:6px; border-bottom:2px solid var(--agp-ink); }
 .rp-head .agp-logo{ font-size:8px; background:var(--agp-ink); color:var(--agp-yellow); }
 .rp-h1{ flex:1; font-family:var(--px); font-size:8px; letter-spacing:.5px; line-height:1.3; color:var(--agp-ink); }
-.rp-no{ font-family:var(--px); font-size:5.5px; color:#5b6558; text-align:right; line-height:1.4; }
+.rp-no{ font-family:var(--px); font-size:6px; color:#5b6558; text-align:right; line-height:1.4; }
 #gameover .go-level{ font-family:var(--vt); font-size:17px; line-height:1; letter-spacing:0; color:#3b463e; margin:6px 0 2px; }
 #gameover .go-title{
   display:block; width:fit-content; margin:6px auto 7px; padding:6px 10px 5px; font-size:12px; letter-spacing:2px; line-height:1.2; text-align:center; text-shadow:none;
@@ -261,9 +261,9 @@
 .go-prog-bar > i{ background:var(--agp-ink); box-shadow:none; }
 .go-stats{ margin:0; font-size:inherit; line-height:1; }
 .rp-f{ display:flex; align-items:baseline; gap:6px; padding:2px 0; border-bottom:1px dotted #8b8f7c; }
-.rp-f span{ font-family:var(--px); font-size:5.5px; letter-spacing:1px; color:#5b6558; flex:1; }
+.rp-f span{ font-family:var(--px); font-size:6px; letter-spacing:1px; color:#5b6558; flex:1; }
 .go-stats b, .rp-f b{ font-family:var(--vt); font-weight:normal; font-size:21px; color:var(--agp-ink); }
-.rp-sec{ margin:8px 0 2px; font-family:var(--px); font-size:5.5px; letter-spacing:2px; color:#fff; background:var(--agp-ink); padding:3px 6px 2px; }
+.rp-sec{ margin:8px 0 2px; font-family:var(--px); font-size:6px; letter-spacing:2px; color:#fff; background:var(--agp-ink); padding:3px 6px 2px; }
 .go-rewards{ max-width:none; margin:0; font-size:19px; line-height:1; }
 .go-rw{ padding:2px 0; color:#3b463e; border-bottom:1px dotted #8b8f7c; }
 .go-rw b{ color:#8a4a00; }
@@ -272,7 +272,7 @@
 .go-unlock{ margin-top:4px; padding:1px 5px; text-align:left; font-size:17px; color:#14110a; background:#ffd75a; text-shadow:none; }
 .rp-eval{ display:flex; align-items:center; gap:9px; margin:7px 0 2px; padding-top:6px; border-top:2px solid var(--agp-ink); }
 .rp-grade{ font-family:var(--px); font-weight:normal; font-size:17px; line-height:1; min-width:36px; text-align:center; padding:6px 4px 5px; color:#111; background:var(--gc, #9db0a4); border:2px solid var(--agp-ink); box-shadow:3px 3px 0 var(--agp-ink); }
-.rp-mention{ flex:1; font-family:var(--px); font-size:6.5px; letter-spacing:1px; line-height:1.5; color:var(--agp-ink); }
+.rp-mention{ flex:1; font-family:var(--px); font-size:7px; letter-spacing:1px; line-height:1.5; color:var(--agp-ink); }
 .go-extra{ margin:4px 0 0; font-size:16px; line-height:1; text-align:left; color:#3b463e; }
 .go-extra div{ padding:1px 0; }
 .go-extra .go-near{ color:#8a4a00; } .go-extra .go-boss{ color:#a02a20; }
@@ -302,3 +302,11 @@
 .sheet-overlay{ background:rgba(4,7,6,.78) !important; }
 .sheet{ background:linear-gradient(180deg,#121a16,#080c0a); border:2px solid #2f4238; box-shadow:0 0 0 2px #070a09, 0 18px 50px rgba(0,0,0,.65), inset 0 0 34px rgba(255,194,26,.07); }
 .sheet::before{ left:-2px; right:-2px; top:-8px; height:6px; background:var(--hazard); }
+
+/* ---------- fenêtre plus large que la zone de jeu (PC, tablette) : la zone 400x700 reste centrée, le fond de poste de travail l'entoure ---------- */
+#stage{
+  background:
+    linear-gradient(to right, rgba(255,194,26,.035) 1px, transparent 1px) 0 0/44px 44px,
+    linear-gradient(to bottom, rgba(255,194,26,.035) 1px, transparent 1px) 0 0/44px 44px,
+    radial-gradient(ellipse at 50% 40%, #12261c 0%, #070a09 62%);
+}
