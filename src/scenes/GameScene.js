@@ -49,7 +49,7 @@ class GameScene extends Phaser.Scene{
     });
     applyAchvBuffs(this.stats, this.achv);   // buffs permanents des succès
     applyAscension(this.stats, this.meta.asc);   // bonus permanents d'ascension
-    if (this.tuto){ this.stats = makeDefaultStats(); this.stats.damage = 14; this.alertLevel = 1; this.weaponTier = 1; this.treeState = {}; }   // TUTO: vaisseau de base, sans arbre ni succès
+    if (this.tuto){ this.alertLevel = 1; this.weaponTier = 1; this.stats.damage = Math.max(this.stats.damage, 14); }   // TUTO: menace 1 ; le vaisseau garde les compétences déjà achetées dans l'arbre (et au moins 14 de dégâts pour un joueur débutant)
     // pactes choisis avant la partie: règles plus dures, plus de fragments à la fin
     const odUi = document.getElementById('odBtn');
     if (odUi){ odUi.classList.toggle('show', this.stats.overdrive > 0); odUi.classList.remove('ready','active'); odUi.style.setProperty('--deg','0deg'); }   // le bouton n'apparaît qu'une fois l'overdrive débloqué

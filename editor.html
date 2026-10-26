@@ -91,11 +91,10 @@ table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align
 const TUTO_SCHEMA = [
   { g:'Étapes pédagogiques', k:'steps', open:true, f:[
     ['moveNeed', 'Étape 1 · distance à parcourir', 100, 1500, 10, 'px', 'Distance que le joueur doit parcourir pour valider « déplace-toi »'],
-    ['dodgeKills', 'Étape 3 · satellites à détruire', 1, 6, 1, '', 'En plus du premier ; leurs débris sont à esquiver'],
-    ['satTarget', 'Étape 4 · satellites au total', 4, 40, 1, '', 'Fin des vagues. Sert aussi d\'objectif de finition (satellites détruits)'],
+    ['satTarget', 'Étape 2 · satellites à détruire', 4, 40, 1, '', 'Fin de l\'étape « tirer ». Sert aussi d\'objectif de finition (satellites détruits)'],
     ['bossWait', 'Délai avant le boss', 1, 10, 0.1, 's', 'Entre l\'alerte et l\'arrivée du boss'],
     ['maxMove', 'Durée max · étape 1', 5, 90, 1, 's', 'Au-delà, on passe à la suite même sans avoir réussi'],
-    ['maxShoot', 'Durée max · étape 2', 5, 90, 1, 's', ''], ['maxDodge', 'Durée max · étape 3', 5, 120, 1, 's', ''], ['maxWave', 'Durée max · étape 4', 10, 180, 1, 's', ''],
+    ['maxShoot', 'Durée max · étape 2', 10, 180, 1, 's', ''],
   ]},
   { g:'Satellites', k:'sats', open:true, f:[
     ['hp', 'Points de vie', 5, 200, 1, '', 'Un tir de base fait ~14 dégâts'],
@@ -198,7 +197,7 @@ function section(title, open){ const d = document.createElement('details'); d.op
 function renderForm(){
   const F = $('form'), l = lvl(S.sel); F.innerHTML = ''; if (!l) return;
   const h = document.createElement('div'); h.innerHTML = '<h2></h2><p class="sub"></p>'; h.querySelector('h2').textContent = l.worldName + ' · ' + (l.tuto ? 'TUTORIEL' : 'NIV.' + l.num + ' — ' + l.name);
-  h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 5 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
+  h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 3 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
   F.appendChild(h);
   const base = S.base[l.id] || {}, ovL = ()=> (S.ov.levels[l.id] = S.ov.levels[l.id] || {});
   // --- niveau (tous)
@@ -247,7 +246,7 @@ function renderResults(){
     '<div class="kv"><span>PV mini atteint (moy.)</span><b>' + Math.round(avg(hp) * 100) + '%</b></div>';
   if (l.tuto){
     html += '<div class="kv"><span>Coups reçus (moy.)</span><b>' + fx(avg(res.map(x=> x.hits)), 1) + '</b></div><div class="kv"><span>Finition d\'une partie (moy.)</span><b>' + Math.round(avg(res.map(x=> x.pct))) + '%</b></div>';
-    const ids = ['move', 'shoot', 'dodge', 'wave', 'boss'], names = { move:'1 · bouger', shoot:'2 · tirer', dodge:'3 · esquiver', wave:'4 · vagues', boss:'5 · boss' };
+    const ids = ['move', 'shoot', 'boss'], names = { move:'1 · bouger', shoot:'2 · tirer', boss:'3 · boss' };
     html += '<table style="margin-top:8px"><tr><th>Étape</th><th>début (s)</th><th>durée (s)</th></tr>' + ids.map((id, i)=>{
       const at = res.map(x=>{ const s = (x.steps || []).find(y=> y.id === id); return s ? s.at : null; }).filter(v=> v !== null);
       const nx = res.map(x=>{ const a = (x.steps || []).find(y=> y.id === id), b = (x.steps || []).find(y=> y.id === ids[i + 1]); return a && b ? b.at - a.at : (a && id === 'boss' ? x.time - a.at : null); }).filter(v=> v !== null);
