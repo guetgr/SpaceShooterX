@@ -43,7 +43,7 @@ mixin(GameScene, {
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
-    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this.normaStart();
+    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this.pgTab = null; this.normaStart();
     Motion.uncover();                      // le rideau de transition (accueil → niveau) se rouvre
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
@@ -95,6 +95,9 @@ mixin(GameScene, {
     const ex = document.getElementById('goExtra');
     ex.innerHTML = '';
     const addLine = (txt, cls)=>{ const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; ex.appendChild(d); };
+    { const gN = this.globalGearItems().length, mN = this.pauseGearItems().length;
+      addLine('ATOUTS GLOBAUX (R&D) : ' + gN + ' · conservés');
+      addLine('ATOUTS DE MISSION : ' + mN + ' · restitués en fin d\'ordre'); }
     if (this.pacts && this.pacts.length) addLine('CLAUSES SPECIALES (' + this.pacts.length + ') · composants x' + this.pactBonusMul.toFixed(2), 'go-near');
     addLine('SERIE MAXIMALE x' + this.runBestCombo + ' · RANG ' + STYLE_RANKS[this.runBestRank].l);
     addLine('CHAINE MAXIMALE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
