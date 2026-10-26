@@ -1,7 +1,7 @@
 "use strict";
 // Animations des menus (GSAP, vendor/gsap.min.js) : retour tactile des boutons, respiration du CTA, entrée des pages, cartes en cascade, compteurs.
 // Tout est sans effet si GSAP est absent ou si le joueur demande moins d'animations (prefers-reduced-motion) : les menus restent utilisables.
-const MOTION_PRESS = '#btnLaunch, .tcard, .ttab, #homeTabs button, .home-ico, .tree-invest-btn, .map-arrow, .hangar-seg button, .skin, .mod, #gameover .btn, #pauseBtn';
+const MOTION_PRESS = '#btnLaunch, .tcard, .ttab, #homeTabs button, .home-ico, .tree-invest-btn, .map-arrow, .hangar-seg button, .skin, .mod, #gameover .btn, #pauseBtn, .sheet .btn, .tile, .sw, .bk, .lnk, .acc-head';
 
 const Motion = {
   ok(){ return typeof gsap !== 'undefined' && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); },
@@ -143,6 +143,27 @@ const Motion = {
     if (!this.ok() || !el) return;
     const now = performance.now(); if (now - (el._tk || 0) < 140) return; el._tk = now;
     gsap.fromTo(el, { scale:k || 1.12 }, { scale:1, duration:.2, ease:'power2.out', overwrite:true, clearProps:'transform' });
+  },
+
+  // FEUILLES (pause, paramètres) : la carte (.sheet) jaillit en ressort sur un fond qui se floute, ses blocs [data-in] montent en cascade ; à la fermeture elle se replie vite.
+  // Sans GSAP : simple affichage / masquage. `done` est rappelé une fois la feuille masquée (pour enchaîner sur la suivante).
+  openSheet(id){
+    const el = document.getElementById(id); if (!el) return;
+    el.classList.remove('hidden');
+    if (!this.ok()) return;
+    const card = el.querySelector('.sheet'), parts = [...el.querySelectorAll('[data-in]')];
+    gsap.killTweensOf([el, card, ...parts]);
+    gsap.fromTo(el, { opacity:0 }, { opacity:1, duration:.22, ease:'power1.out', clearProps:'opacity' });
+    gsap.fromTo(card, { y:26, scale:.93, opacity:0 }, { y:0, scale:1, opacity:1, duration:.4, ease:'back.out(1.5)', clearProps:'transform,opacity' });
+    gsap.from(parts, { y:14, opacity:0, duration:.32, stagger:.05, delay:.1, ease:'power3.out', clearProps:'transform,opacity' });
+  },
+  closeSheet(id, done){
+    const el = document.getElementById(id);
+    if (!el || !this.ok() || el.classList.contains('hidden')){ if (el) el.classList.add('hidden'); if (done) done(); return; }
+    const card = el.querySelector('.sheet');
+    gsap.killTweensOf([el, card]);
+    gsap.to(card, { y:14, scale:.96, opacity:0, duration:.17, ease:'power2.in' });
+    gsap.to(el, { opacity:0, duration:.18, ease:'power1.in', onComplete:()=>{ el.classList.add('hidden'); gsap.set([el, card], { clearProps:'transform,opacity' }); if (done) done(); } });
   },
 
   // compteur qui défile jusqu'à sa nouvelle valeur

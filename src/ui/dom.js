@@ -41,18 +41,16 @@ mixin(GameScene, {
       this.running = false;
       this.physics.world.pause();
       music.stop();
-      this.renderPauseGear(false);
-      document.getElementById('pauseMenu').classList.remove('hidden');
+      this.openPauseMenu();
     };
     document.getElementById('luPause').onclick = ()=>{         // pause aussi pendant le choix d'amélioration / de relique (le jeu est déjà figé)
       sfx.uiPause();
-      this.renderPauseGear(false);
-      document.getElementById('pauseMenu').classList.remove('hidden');
+      this.openPauseMenu();
     };
     document.getElementById('btnResume').onclick = ()=>{
       sfx.uiResume();
-      if (!document.getElementById('levelup').classList.contains('hidden')){ document.getElementById('pauseMenu').classList.add('hidden'); return; }   // le choix de carte est encore ouvert: on ne relance pas le jeu derrière
-      document.getElementById('pauseMenu').classList.add('hidden');
+      if (!document.getElementById('levelup').classList.contains('hidden')){ Motion.closeSheet('pauseMenu'); return; }   // le choix de carte est encore ouvert: on ne relance pas le jeu derrière
+      Motion.closeSheet('pauseMenu');
       this.physics.world.resume();
       this.running = true;
       music.start();
@@ -60,16 +58,15 @@ mixin(GameScene, {
     document.getElementById('btnSettings').onclick = ()=>{
       sfx.uiOpen();
       this.settingsReturnTo = 'pause';
-      document.getElementById('pauseMenu').classList.add('hidden');
       this.updateSettingsLabels();
-      document.getElementById('settingsMenu').classList.remove('hidden');
+      Motion.closeSheet('pauseMenu', ()=> Motion.openSheet('settingsMenu'));
     };
     document.getElementById('btnOptionsMain').onclick = ()=>{
       sfx.uiOpen();
       this.settingsReturnTo = 'start';
       document.getElementById('start').classList.add('hidden');
       this.updateSettingsLabels();
-      document.getElementById('settingsMenu').classList.remove('hidden');
+      Motion.openSheet('settingsMenu');
     };
     document.getElementById('btnInfo').onclick = ()=>{
       sfx.uiOpen();
@@ -80,13 +77,12 @@ mixin(GameScene, {
     document.getElementById('btnPauseInfo').onclick = ()=>{
       sfx.uiOpen();
       this.infoReturnTo = 'pause';
-      document.getElementById('pauseMenu').classList.add('hidden');
-      document.getElementById('infoMenu').classList.remove('hidden');
+      Motion.closeSheet('pauseMenu', ()=> document.getElementById('infoMenu').classList.remove('hidden'));
     };
     document.getElementById('btnInfoBack').onclick = ()=>{
       sfx.uiBack();
       document.getElementById('infoMenu').classList.add('hidden');
-      if (this.infoReturnTo === 'pause') document.getElementById('pauseMenu').classList.remove('hidden');
+      if (this.infoReturnTo === 'pause') Motion.openSheet('pauseMenu');
       else this.showStartScreen();
     };
     // le pseudo se règle dans PARAMETRES ou en haut de STATS DU VAISSEAU (même valeur partout)
@@ -112,13 +108,13 @@ mixin(GameScene, {
     document.getElementById('btnStatsBack').onclick = ()=>{
       sfx.uiBack();
       document.getElementById('statsPage').classList.add('hidden');
-      if (this._statsFromPause){ this._statsFromPause = false; this.renderPauseGear(true); document.getElementById('pauseMenu').classList.remove('hidden'); }
+      if (this._statsFromPause){ this._statsFromPause = false; this.renderPauseGear(true); Motion.openSheet('pauseMenu'); }
       else document.getElementById('infoMenu').classList.remove('hidden');
     };
     document.getElementById('btnPauseStats').onclick = ()=>{
       sfx.uiOpen(); this.infoReturnTo = 'pause'; this._statsFromPause = true;
-      document.getElementById('pauseMenu').classList.add('hidden');
-      this.renderStatsPage(); document.getElementById('statsPage').classList.remove('hidden');
+      this.renderStatsPage();
+      Motion.closeSheet('pauseMenu', ()=> document.getElementById('statsPage').classList.remove('hidden'));
     };
     document.getElementById('pgPrev').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) - 1; this.renderPauseGear(true); };
     document.getElementById('pgNext').onclick = ()=>{ sfx.uiPage(); this.pgPageNo = (this.pgPageNo||0) + 1; this.renderPauseGear(true); };
@@ -179,30 +175,28 @@ mixin(GameScene, {
     };
     document.getElementById('btnSettingsBack').onclick = ()=>{
       sfx.uiBack();
-      document.getElementById('settingsMenu').classList.add('hidden');
-      if (this.settingsReturnTo === 'start'){
-        this.showStartScreen();
-      } else {
-        document.getElementById('pauseMenu').classList.remove('hidden');
-      }
+      Motion.closeSheet('settingsMenu', ()=>{
+        if (this.settingsReturnTo === 'start') this.showStartScreen();
+        else Motion.openSheet('pauseMenu');
+      });
     };
     [['volMaster','master'],['volMusic','music'],['volSfx','sfx']].forEach(([id,k])=>{
       const el = document.getElementById(id), lab = document.getElementById(id + 'V');
       const paint = ()=>{ el.value = VOL[k]; lab.textContent = VOL[k]; el.style.setProperty('--p', VOL[k] + '%'); };
       paint();
-      el.oninput = ()=>{ VOL[k] = +el.value; VOL.save(); paint(); sfx.resume(); sfx.applyVol(); music.applyVol(); };      // effet immédiat
+      el.oninput = ()=>{ VOL[k] = +el.value; VOL.save(); paint(); Motion.tick(lab, 1.18); sfx.resume(); sfx.applyVol(); music.applyVol(); };      // effet immédiat
       el.onchange = ()=>{ if (k !== 'music') sfx.uiSelect(); };                                                       // petit bip pour entendre le niveau des effets
       el.onpointerdown = (e)=> e.stopPropagation();
     });
     document.getElementById('btnSfxToggle').onclick = ()=>{
       sfx.resume();
       sfx.setMuted(!sfx.muted); sfx.uiToggle();
-      this.updateSettingsLabels();
+      this.updateSettingsLabels(); Motion.pop(document.getElementById('btnSfxToggle'), 1.22);
     };
     document.getElementById('btnMusicToggle').onclick = ()=>{
       sfx.resume();
       music.setMuted(!music.muted); sfx.uiToggle();
-      this.updateSettingsLabels();
+      this.updateSettingsLabels(); Motion.pop(document.getElementById('btnMusicToggle'), 1.22);
     };
     // sauvegarde manuelle: un code à copier ailleurs, et à recoller pour tout récupérer
     const box = document.getElementById('saveBox'), okb = document.getElementById('btnImportOk');
@@ -232,7 +226,7 @@ mixin(GameScene, {
       if (!this.resetArmed){
         this.resetArmed = true;
         sfx.uiError();
-        btn.textContent = 'RE-TAPE: ARBRE + SUCCES + BESTIAIRE';
+        btn.textContent = 'TOUCHE ENCORE : TOUT EFFACER';
         clearTimeout(this.resetArmTimer);
         this.resetArmTimer = setTimeout(()=>{
           this.resetArmed = false;
@@ -256,12 +250,33 @@ mixin(GameScene, {
       btn.textContent = 'RÉINITIALISER LA PROGRESSION';
       document.getElementById('fragStart').textContent = this.meta.fragments;
     };
-    document.getElementById('btnQuit').onclick = ()=>{            // abandonner le niveau : écran de résultat (les fragments gagnés sont gardés)
+    document.getElementById('btnQuit').onclick = ()=>{            // demande confirmation dans la feuille (plus de bouton « re-tape »)
+      sfx.uiOpen();
+      document.getElementById('btnQuit').classList.add('hidden');
+      const qc = document.getElementById('quitConfirm'); qc.classList.remove('hidden'); Motion.pop(qc, 1.06);
+    };
+    document.getElementById('btnQuitNo').onclick = ()=>{ sfx.uiBack(); this.resetQuitConfirm(); };
+    document.getElementById('btnQuitYes').onclick = ()=>{          // abandonner le niveau : écran de résultat (les fragments gagnés sont gardés)
       sfx.uiBack();
       if (this.tuto){ this.hasActiveRun = false; this.tutoFinish(); return; }
       document.getElementById('pauseMenu').classList.add('hidden');
       this.endRun(false, true);
     };
+    document.getElementById('btnGearToggle').onclick = ()=>{        // « ÉQUIPEMENT » se déplie / se replie
+      sfx.uiSelect();
+      const g = document.getElementById('pauseGear'), open = g.classList.toggle('open');
+      document.getElementById('btnGearToggle').setAttribute('aria-expanded', String(open));
+    };
+    if (!window._escBound){                                         // Échap : retour / reprise / pause
+      window._escBound = true;
+      window.addEventListener('keydown', e=>{
+        if (e.key !== 'Escape') return;
+        const vis = id=>{ const el = document.getElementById(id); return !!el && !el.classList.contains('hidden'); };
+        if (vis('settingsMenu')) document.getElementById('btnSettingsBack').click();
+        else if (vis('pauseMenu')) document.getElementById('btnResume').click();
+        else { const sc = window.__ssxScene; if (sc && sc.running && !vis('levelup') && !vis('gameover')) document.getElementById('pauseBtn').click(); }
+      });
+    }
 
     document.getElementById('btnSkills').onclick = ()=>{            // (ancien menu DEV) : l'arbre est la page de droite de l'accueil
       document.getElementById('start').classList.add('hidden');
@@ -277,6 +292,20 @@ mixin(GameScene, {
     this.setupTreeUi();
   },
 
+  // pause : feuille animée, sous-titre (niveau · temps), équipement replié, confirmation de sortie réinitialisée
+  openPauseMenu(){
+    this.renderPauseGear(false); this.fillPauseSub(); this.resetQuitConfirm();
+    document.getElementById('pauseGear').classList.remove('open'); document.getElementById('btnGearToggle').setAttribute('aria-expanded', 'false');
+    Motion.openSheet('pauseMenu');
+  },
+  fillPauseSub(){
+    const L = this.lvDef, t = Math.floor(this.elapsed || 0), time = Math.floor(t/60) + ':' + String(t%60).padStart(2, '0');
+    document.getElementById('pauseSub').textContent = (this.tuto ? 'TUTORIEL' : (L ? 'NIV.' + L.num + ' · ' + L.name : 'PARTIE LIBRE')) + ' · ' + time;
+    document.getElementById('btnQuit').textContent = (this.tuto || L) ? 'QUITTER LE NIVEAU' : 'TERMINER LA PARTIE';
+    document.getElementById('quitMsg').textContent = this.tuto ? 'Quitter le tuto ? Ta finition est enregistrée.' : 'Abandonner ? Les fragments gagnés sont gardés.';
+  },
+  resetQuitConfirm(){ document.getElementById('quitConfirm').classList.add('hidden'); document.getElementById('btnQuit').classList.remove('hidden'); },
+
   updateSettingsLabels(){
     if (this.syncNameInputs) this.syncNameInputs();
     const cs = document.getElementById('cloudStatus');
@@ -284,10 +313,9 @@ mixin(GameScene, {
       cs.textContent = CloudSave.ok
         ? (CloudSave.status === 'erreur' ? 'SAUVEGARDE CLOUD : ERREUR (copie locale gardée)' : 'SAUVEGARDE CLOUD : ACTIVE' + (CloudSave.restored ? ' (partie restaurée)' : ''))
         : 'SAUVEGARDE CLOUD : INDISPONIBLE (copie locale seulement)';
-      cs.style.color = CloudSave.ok && CloudSave.status !== 'erreur' ? '#7bff9a' : '#ffb35a';
+      cs.style.setProperty('--dot', CloudSave.ok && CloudSave.status !== 'erreur' ? '#7bff9a' : '#ffb35a');
     }
-    document.getElementById('btnSfxToggle').textContent = sfx.muted ? 'SON : COUPÉ' : 'SON : ACTIVÉ';
-    document.getElementById('btnMusicToggle').textContent = music.muted ? 'MUSIQUE : COUPÉE' : 'MUSIQUE : ACTIVÉE';
+    [['btnSfxToggle', sfx.muted], ['btnMusicToggle', music.muted]].forEach(([id, off])=>{ const b = document.getElementById(id); b.classList.toggle('off', !!off); b.setAttribute('aria-pressed', String(!off)); });
   },
 
   // retour à l'accueil (scène 'home') : l'ancien menu #start n'est plus affiché que par le bouton DEV

@@ -69,6 +69,7 @@ mixin(GameScene, {
       grid.appendChild(b);
     });
     if (!items.length) document.getElementById('pgDetail').textContent = "Aucune compétence prise pour l'instant : monte de niveau pour en choisir.";
+    document.getElementById('pgCount').textContent = items.length ? '(' + items.length + ')' : '';
     document.getElementById('pgPage').textContent = items.length ? ('PAGE ' + (this.pgPageNo+1) + '/' + pages + ' · ' + items.length) : '';
     document.querySelector('#pauseGear .pg-nav').style.display = pages > 1 ? 'flex' : 'none';
   },
