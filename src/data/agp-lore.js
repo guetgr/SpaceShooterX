@@ -88,9 +88,18 @@ const AGP_LINES = {
     "Bon courage. Ce message est automatique, comme votre contrat.",
     "Votre productivité est observée. Votre bien-être, beaucoup moins.",
   ],
-  startTuto: [
-    "Bienvenue à l'AGP. Détruisez les satellites hors service. Évitez les débris. Évitez de mourir (non couvert).",
-  ],
+  // tuto : une consigne à la fois dans la boîte N.O.R.M.A. (voir game/tuto.js). move/shoot/boss = consignes des 3 étapes ; le reste = remarques ponctuelles.
+  tuto: {
+    move:  "Formation obligatoire. Glissez le doigt pour déplacer la camionnette.",
+    shoot: "Tir automatique. Placez-vous sous les satellites hors service.",
+    boss:  "Incident majeur. Détruisez-le. Cette évaluation est notée.",
+    aim:   "Il vous vise. Bougez : l'immobilité est réservée à la pause café.",
+    ring:  "Anneau avec brèche. Passez par là. C'est un parcours qualifiant.",
+    p2:    "Il est endommagé. Vous aussi, probablement.",
+    p3:    "Fureur détectée. Rien d'anormal : c'est un lundi.",
+    win:   "Incident clos. Formation validée. Aucune prime associée.",
+    lose:  "Accident du travail enregistré. Retenue sur salaire à prévoir.",
+  },
   boss: [
     "Incident majeur détecté. Merci de ne pas le prendre personnellement.",
     "Ceci n'est pas un déchet : c'est un client. Nettoyez-le quand même.",
