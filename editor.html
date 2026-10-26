@@ -8,17 +8,20 @@
      Il pilote deux copies du jeu en iframe (?edit=play : aperçu jouable · ?edit=bot : joueur automatique) via src/dev/editor-hook.js, avec une sauvegarde en mémoire (?sandbox) :
      tes parties de test n'abîment pas ta progression. EXPORTER écrit src/data/tuning.js (serveur tools/serve.py). -->
 <style>
-@font-face{ font-family:'PSP2E'; src:url('assets/fonts/PSP2E.woff2') format('woff2'); }
-@font-face{ font-family:'VT323E'; src:url('assets/fonts/VT323E.woff2') format('woff2'); }
+/* Typographies : SSX Display = Jersey 15 (logo, titres, gros boutons) · SSX Label = Chakra Petch 600 (labels, boutons) · SSX Text = Chakra Petch 400 (descriptions, chiffres).
+   size-adjust cale leur taille sur l'ancien jeu (Press Start 2P / VT323), donc les tailles en px du reste du CSS restent valables. Hors ligne : tout est embarqué. */
+@font-face{ font-family:'SSX Display'; src:url('assets/fonts/Jersey15.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; size-adjust:185%; }
+@font-face{ font-family:'SSX Label'; src:url('assets/fonts/ChakraPetch-600.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; size-adjust:132%; }
+@font-face{ font-family:'SSX Text'; src:url('assets/fonts/ChakraPetch-400.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; size-adjust:78%; }
 :root{
   --bg:#07060f; --panel:#0e0c1e; --panel2:#14122b; --line:#2c2750; --ink:#eaf6ff; --dim:#7f8bb8; --cyan:#4ff2ff; --amber:#ffce4a; --green:#7bff9a; --red:#ff4f6d;
 }
 *{ box-sizing:border-box; }
-html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:'VT323E','VT323',monospace; font-size:18px; }
+html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:'SSX Text','SSX Text',monospace; font-size:18px; }
 button,input,select{ font:inherit; color:inherit; }
 body{ display:grid; grid-template-rows:auto 1fr; }
 header{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 14px; background:var(--panel); border-bottom:2px solid var(--line); }
-header h1{ margin:0; font:12px 'PSP2E',monospace; color:var(--cyan); letter-spacing:1px; margin-right:auto; }
+header h1{ margin:0; font:12px 'SSX Label',monospace; color:var(--cyan); letter-spacing:1px; margin-right:auto; }
 .btn{ background:var(--panel2); border:2px solid var(--line); padding:6px 12px; cursor:pointer; font-size:18px; }
 .btn:hover{ border-color:var(--cyan); } .btn:disabled{ opacity:.45; cursor:default; border-color:var(--line); }
 .btn.go{ background:var(--cyan); color:#04121a; border-color:var(--cyan); } .btn.save{ border-color:var(--amber); color:var(--amber); } .btn.save.dirty{ background:var(--amber); color:#1a1200; }
@@ -26,12 +29,12 @@ header h1{ margin:0; font:12px 'PSP2E',monospace; color:var(--cyan); letter-spac
 main{ display:grid; grid-template-columns:230px minmax(320px,1fr) 400px; min-height:0; }
 aside,section,.right{ min-height:0; overflow-y:auto; }
 aside{ background:var(--panel); border-right:2px solid var(--line); padding:8px; }
-aside h3{ font:9px 'PSP2E',monospace; color:var(--dim); margin:12px 4px 6px; } aside h3:first-child{ margin-top:2px; }
+aside h3{ font:9px 'SSX Label',monospace; color:var(--dim); margin:12px 4px 6px; } aside h3:first-child{ margin-top:2px; }
 .lv{ display:flex; align-items:center; gap:6px; padding:6px 8px; cursor:pointer; border:2px solid transparent; } .lv:hover{ background:var(--panel2); }
 .lv.sel{ border-color:var(--cyan); background:var(--panel2); } .lv .n{ color:var(--dim); width:20px; } .lv .t{ margin-left:auto; font-size:14px; color:var(--dim); } .lv i{ width:8px; height:8px; border-radius:50%; background:var(--amber); visibility:hidden; } .lv.mod i{ visibility:visible; }
 section{ padding:12px 16px 40px; }
-section h2{ margin:0 0 4px; font:13px 'PSP2E',monospace; color:var(--amber); } .sub{ color:var(--dim); margin:0 0 12px; }
-details{ background:var(--panel); border:2px solid var(--line); margin-bottom:10px; } summary{ cursor:pointer; padding:8px 12px; font:10px 'PSP2E',monospace; color:var(--cyan); list-style:none; } summary::before{ content:'▸ '; } details[open] summary::before{ content:'▾ '; }
+section h2{ margin:0 0 4px; font:13px 'SSX Label',monospace; color:var(--amber); } .sub{ color:var(--dim); margin:0 0 12px; }
+details{ background:var(--panel); border:2px solid var(--line); margin-bottom:10px; } summary{ cursor:pointer; padding:8px 12px; font:10px 'SSX Label',monospace; color:var(--cyan); list-style:none; } summary::before{ content:'▸ '; } details[open] summary::before{ content:'▾ '; }
 details .body{ padding:4px 12px 10px; }
 .f{ display:grid; grid-template-columns:1fr 92px; gap:2px 10px; align-items:center; padding:5px 0; border-top:1px solid #1d1a38; } .f:first-child{ border-top:none; }
 .f label{ line-height:1.05; } .f label small{ display:block; color:var(--dim); font-size:15px; }
@@ -43,9 +46,9 @@ details .body{ padding:4px 12px 10px; }
 .frame{ position:relative; width:100%; max-width:360px; aspect-ratio:9/16; align-self:center; border:2px solid var(--line); background:#000; } .frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 .frame .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--dim); text-align:center; padding:20px; pointer-events:none; }
 #botFrame{ position:fixed; left:-2000px; top:0; width:420px; height:760px; border:0; }
-.card{ background:var(--panel2); border:2px solid var(--line); padding:10px 12px; } .card h4{ margin:0 0 6px; font:9px 'PSP2E',monospace; color:var(--dim); }
+.card{ background:var(--panel2); border:2px solid var(--line); padding:10px 12px; } .card h4{ margin:0 0 6px; font:9px 'SSX Label',monospace; color:var(--dim); }
 .bar{ height:10px; background:#05040c; border:1px solid var(--line); position:relative; margin:4px 0 8px; } .bar i{ position:absolute; top:0; bottom:0; left:0; background:var(--cyan); } .bar u{ position:absolute; top:-3px; bottom:-3px; background:rgba(123,255,154,.28); border:1px solid var(--green); }
-.big{ font:22px 'PSP2E',monospace; } .kv{ display:flex; justify-content:space-between; } .kv b{ color:var(--amber); font-weight:normal; }
+.big{ font:22px 'SSX Label',monospace; } .kv{ display:flex; justify-content:space-between; } .kv b{ color:var(--amber); font-weight:normal; }
 .verdict{ margin-top:6px; padding:6px 8px; border-left:4px solid var(--dim); } .verdict.ok{ border-color:var(--green); color:var(--green); } .verdict.easy{ border-color:var(--cyan); color:var(--cyan); } .verdict.hard{ border-color:var(--red); color:var(--red); }
 .opts{ display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; } .opts select,.opts input{ background:#05040c; border:2px solid var(--line); padding:2px 6px; } .opts input{ width:80px; }
 table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align:right; padding:1px 4px; border-top:1px solid #1d1a38; } td:first-child,th:first-child{ text-align:left; } th{ color:var(--dim); font-weight:normal; }
