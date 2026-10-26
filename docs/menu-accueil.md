@@ -13,7 +13,7 @@ Pour le voir : `python3 tools/serve.py 8080` puis <http://localhost:8080/> (ou `
 | Hangar | Arbre de compétences |
 |---|---|
 | ![](img/03-hangar.png) | ![](img/04-arbre.png) |
-| La camionnette, son palier, **3 apparences** (teintes), et STATS / MODULES (compétences installées). | L'arbre existant, sur une page permanente (onglet en bas à droite) : un doigt déplace, deux doigts zooment. Il ne s'ouvre plus tout seul à la mort. |
+| La camionnette, son palier, **3 apparences** (teintes), et STATS / MODULES (compétences installées). | Page permanente (onglet en bas à droite) : un onglet par branche, une carte par compétence (rangs en pastilles), paliers puis voies spécialisées, fiche + ACHETER en bas. Il ne s'ouvre plus tout seul à la mort. L'image ci-contre montre l'ancien arbre radial. |
 
 | Victoire | Défaite |
 |---|---|
@@ -23,7 +23,7 @@ Pour le voir : `python3 tools/serve.py 8080` puis <http://localhost:8080/> (ou `
 ## Parcours
 **Le tuto est le niveau 1 du monde 1** (`w1-tuto`, nœud « ? », type `tuto`) : satellites à détruire, débris à esquiver, boss satellite (`src/game/tuto.js`). Toujours visible et rejouable ; sa 1re victoire donne des fragments et ouvre DECOLLAGE, puis retour à l'accueil. Parcours normal :
 Accueil (page CARTE) → choisir un niveau → DECOLLER → niveau (objectif : survivre X s, éliminer N ennemis, récolter N cristaux, ou vaincre le boss du monde) → écran de résultat → SUIVANT / REJOUER / ACCUEIL.
-Navigation : glisser le doigt gauche/droite (ou onglets du bas, ou flèches du clavier) entre HANGAR · CARTE · ARBRE. Sur l'arbre, un glissement déplace la vue : pour changer de page, glisser depuis le bord gauche ou toucher un onglet.
+Navigation : glisser le doigt gauche/droite (ou onglets du bas, ou flèches du clavier) entre HANGAR · CARTE · ARBRE. Sur l'arbre, les onglets de branche défilent à l'horizontale : pour changer de page depuis eux, glisser depuis le bord gauche ou toucher un onglet du bas.
 Victoire sur un niveau = niveau suivant débloqué ; boss vaincu = monde suivant débloqué (animation : la camionnette voyage jusqu'au nouveau monde). QUITTER dans la pause = niveau abandonné (fragments gagnés gardés).
 
 ## Où est le code

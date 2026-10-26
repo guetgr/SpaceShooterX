@@ -1,154 +1,123 @@
 "use strict";
-// Méthodes de GameScene — arbre de compétences : affichage, sélection, investissement.
+// Méthodes de GameScene — arbre de compétences : une page par branche, une carte par compétence (les rangs sont des pastilles),
+// fiche en bas pour le détail et l'achat. Les données (rangs sauvegardés, coûts, déblocages) viennent de data/skill-tree.js.
+const TREE_BRANCH_ICONS = { arme:'🔫', missile:'🚀', defense:'🛡️', util:'⚡', savoir:'📖', tempete:'🌩️', gravite:'🌌', furie:'🔥' };
+
+// disposition par branche, calculée une fois : tiers de la tige (rangées de cartes) + voies d'embranchement (colonnes keystone → … → cap)
+let _treeLayout = null;
+function treeLayout(){
+  if (_treeLayout) return _treeLayout;
+  _treeLayout = TREE_BRANCHES.map(br=>{
+    const nodes = ALL_TREE_NODES.filter(n=> n.branch === br.id && !n.isHub);
+    const tiers = br.stem.map(pair=> pair.map(d=> TREE_NODE_BY_ID[d.id]));
+    const lanes = nodes.filter(n=> n.isKey).map(key=>{
+      const lane = [key], after = last=> nodes.find(n=> n.requires.includes(last.id) && !lane.includes(n));
+      for (let nx = after(key); nx; nx = after(nx)) lane.push(nx);
+      return lane;
+    });
+    return { br, tiers, lanes, total: nodes.reduce((a, n)=> a + n.max, 0) };
+  });
+  return _treeLayout;
+}
+
 mixin(GameScene, {
+  // état d'une carte : rang, prochain nœud à acheter, achetable maintenant ?
+  treeCardInfo(n){
+    const r = this.treeState[n.id] || 0;
+    if (r >= n.max) return { r, st:'max' };
+    const v = TREE_VIS_BY_ID[visId(n.id, r + 1)], avail = treeVisStatus(this.treeState, v) === 'avail';
+    return { r, v, avail, can: avail && this.meta.fragments >= v.cost(), st: r > 0 ? 'owned' : (avail ? 'avail' : 'locked') };
+  },
+
+  treeBranchPoints(L){ return L.tiers.flat().concat(L.lanes.flat()).reduce((a, n)=> a + (this.treeState[n.id] || 0), 0); },
+
+  treeCardHtml(n, br, compact){
+    const i = this.treeCardInfo(n), cls = ['tcard', i.st, i.can ? 'aff' : '', (i.avail && !i.can) ? 'cant' : '', n.isKey ? 'key' : '', n.isCap ? 'cap' : '', compact ? 'compact' : '',
+      this.selectedTreeNode === n ? 'sel' : '', this._treeFlash === n.id ? 'flash' : ''].join(' ');
+    let pips = ''; for (let k = 0; k < n.max; k++) pips += '<i class="' + (k < i.r ? 'f' : '') + '"></i>';
+    const cost = i.st === 'max' ? 'MAX' : '◆ ' + i.v.cost();
+    return '<button class="' + cls + '" style="--c:' + br.color + '" data-id="' + n.id + '"><span class="tc-ic">' + pxImg(n.icon, compact ? 22 : 26) + '</span>' +
+      '<span class="tc-nm">' + n.name + '</span>' + (n.max > 1 ? '<span class="tc-pips">' + pips + '</span>' : '') +
+      '<span class="tc-cost">' + cost + (i.can ? '<b>+</b>' : '') + '</span></button>';
+  },
+
   renderTree(){
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const linksG = document.getElementById('treeLinks');
-    const nodesG = document.getElementById('treeNodes');
-    linksG.innerHTML = ''; nodesG.innerHTML = '';
-    const state = this.treeState;
-    const stt = treeVisRevealed(state); this._visStatus = stt;
+    const all = treeLayout();
+    if (!this.treeBranch || !all.some(L=> L.br.id === this.treeBranch)) this.treeBranch = all[0].br.id;
+    const L = all.find(x=> x.br.id === this.treeBranch), br = L.br, scroll = document.getElementById('treeScroll'), y = scroll.scrollTop;
+    document.getElementById('pageTree').style.setProperty('--c', br.color);
 
-    // liens: seulement entre des nœuds visibles
-    TREE_VIS.forEach(node=>{
-      const sN = stt[node.id]; if (!sN) return;
-      // un nœud relié à plusieurs voies (embranchement) ne se dessine que vers les plus proches: pas de long trait en travers de l'arbre
-      const parents = node.requires.map(pid => pid === 'hub' ? TREE_HUB : TREE_VIS_BY_ID[pid]).filter(q => q && (q.isHub || stt[q.id]));
-      const dmin = Math.min(...parents.map(q => Math.hypot(q.x-node.x, q.y-node.y)));
-      parents.filter(q => Math.hypot(q.x-node.x, q.y-node.y) <= dmin*1.3).forEach(parent=>{
-        const active = sN === 'owned';
-        const line = document.createElementNS(svgNS,'line');
-        line.setAttribute('x1',parent.x); line.setAttribute('y1',parent.y);
-        line.setAttribute('x2',node.x); line.setAttribute('y2',node.y);
-        line.setAttribute('stroke', active ? node.color : (sN === 'hint' ? '#1a2036' : '#2b3550'));
-        line.setAttribute('stroke-width', active ? 3 : 2);
-        if (sN === 'hint') line.setAttribute('stroke-dasharray', '3 5');
-        if (this.treeFocus && node.branch !== this.treeFocus) line.setAttribute('stroke-opacity', '0.12');
-        linksG.appendChild(line);
-      });
+    document.getElementById('treeTabs').innerHTML = all.map(x=>{
+      const buy = x.tiers.flat().concat(x.lanes.flat()).some(n=> this.treeCardInfo(n).can);
+      return '<button class="ttab' + (x === L ? ' on' : '') + '" style="--c:' + x.br.color + '" data-id="' + x.br.id + '">' + pxImg(TREE_BRANCH_ICONS[x.br.id], 20) +
+        '<span class="tt-p">' + this.treeBranchPoints(x) + '/' + x.total + '</span>' + (buy ? '<i class="tt-dot"></i>' : '') + '</button>';
+    }).join('');
+    const got = this.treeBranchPoints(L);
+    document.getElementById('treeBName').textContent = String(br.name).toUpperCase();
+    document.getElementById('treeBProg').textContent = got + ' / ' + L.total + ' pts';
+    document.getElementById('treeBBar').style.width = (100*got/L.total) + '%';
+
+    let h = '';
+    L.tiers.forEach((tier, t)=>{
+      const open = tier.some(n=> this.treeCardInfo(n).st !== 'locked');
+      h += '<div class="ttier' + (open ? '' : ' locked') + '">PALIER ' + (t + 1) + (open ? '' : '<span>🔒 achète une compétence du palier précédent</span>') + '</div>' +
+        '<div class="tgrid n' + tier.length + '">' + tier.map(n=> this.treeCardHtml(n, br, false)).join('') + '</div>';
     });
-
-    [TREE_HUB].concat(TREE_VIS).forEach(node=>{
-      const s = node.isHub ? 'owned' : stt[node.id];
-      if (!s) return;                                           // caché: pas encore découvert
-      const owned = s === 'owned', hint = s === 'hint', avail = s === 'avail';
-      const r = node.isHub ? 28 : (hint ? 6 : (node.isKey ? 21 : (node.isCap ? 24 : 15)));
-      const color = node.color;
-
-      const g = document.createElementNS(svgNS,'g');
-      g.setAttribute('transform', `translate(${node.x},${node.y})`);
-      g.setAttribute('class', 'tree-node' + ((owned || avail) ? '' : ' locked') + (owned && !node.isHub ? ' owned' : '') + (hint ? ' hint' : '') + (this.treeFocus && !node.isHub && node.branch !== this.treeFocus ? ' dim' : ''));
-
-      if (hint){                                                // petit point: on devine qu'il y a quelque chose plus loin
-        const dot = document.createElementNS(svgNS,'circle');
-        dot.setAttribute('r', r); dot.setAttribute('fill', '#141a2c'); dot.setAttribute('stroke', '#303a58'); dot.setAttribute('stroke-width', 1.5);
-        g.appendChild(dot); nodesG.appendChild(g); return;
-      }
-
-      // achetable maintenant: anneau jaune qui pulse + petit "+" au-dessus
-      if (avail && this.meta.fragments >= node.cost()){
-        const halo = document.createElementNS(svgNS,'circle');
-        halo.setAttribute('r', r+4); halo.setAttribute('class','tree-aff-ring'); g.appendChild(halo);
-        g.classList.add('aff');
-      }
-      const bg = document.createElementNS(svgNS,'circle');
-      bg.setAttribute('r', r); bg.setAttribute('fill', '#0e1524'); bg.setAttribute('stroke', owned ? color : '#232c40'); bg.setAttribute('stroke-width', owned ? 3 : 2);
-      g.appendChild(bg);
-      if (owned && !node.isHub){
-        const core = document.createElementNS(svgNS,'circle');
-        core.setAttribute('r', r-6); core.setAttribute('fill', color); core.setAttribute('opacity','0.85');
-        g.appendChild(core);
-      }
-
-      const isz = node.isHub ? 24 : ((node.isKey||node.isCap) ? 20 : 15);
-      const icon = document.createElementNS(svgNS,'image');
-      icon.setAttribute('href', pxEmoji(node.icon)); icon.setAttribute('x', -isz/2); icon.setAttribute('y', -isz/2 + 1);
-      icon.setAttribute('width', isz); icon.setAttribute('height', isz); icon.setAttribute('pointer-events', 'none');
-      icon.style.imageRendering = 'pixelated';
-      g.appendChild(icon);
-
-      if (!node.isHub){
-        // le nom (et le prix) part vers l'EXTERIEUR en s'éloignant du cœur: les voisins ne se marchent plus dessus
-        const dd = Math.hypot(node.x, node.y) || 1, ux = node.x/dd, uy = node.y/dd;
-        const label = document.createElementNS(svgNS,'text');
-        label.setAttribute('class','tree-node-label');
-        label.setAttribute('x', ux*(r+8)); label.setAttribute('y', uy*(r+8) + (uy > 0.35 ? 10 : (uy < -0.35 ? -2 : 4)));
-        label.style.textAnchor = ux > 0.3 ? 'start' : (ux < -0.3 ? 'end' : 'middle');
-        label.textContent = node.name + (owned ? '' : '  ◆' + node.cost());
-        g.appendChild(label);
-      }
-
-      if (g.classList.contains('aff')){
-        const pl = document.createElementNS(svgNS,'text');
-        pl.setAttribute('class','tree-aff-plus'); pl.setAttribute('y', -r-6); pl.textContent = '+'; g.appendChild(pl);
-      }
-      g.onclick = ()=> this.selectTreeNode(node);
-      nodesG.appendChild(g);
-    });
-
-    if (this._treeApplyTransform) this._treeApplyTransform();
-    document.querySelectorAll('#treeChips .tree-chip').forEach(c=> c.classList.toggle('on', (c.dataset.id || '') === (this.treeFocus || '')));
-    this.selectTreeNode(this.selectedTreeNode || TREE_HUB);
+    if (L.lanes.length){
+      const sum = treeBranchStemSum(this.treeState, br.id), need = br.forkThreshold || 0, ok = sum >= need;
+      h += '<div class="ttier' + (ok ? '' : ' locked') + '">VOIES SPÉCIALISÉES' + (ok ? '' : '<span>🔒 ' + sum + '/' + need + ' pts dans la tige</span>') + '</div>' +
+        '<div class="tlanes n' + L.lanes.length + '">' + L.lanes.map(lane=> '<div class="tlane">' + lane.map(n=> this.treeCardHtml(n, br, true)).join('') + '</div>').join('') + '</div>';
+    }
+    scroll.innerHTML = h; scroll.scrollTop = y;
+    this._treeFlash = null;
+    this.refreshTreeSheet();
   },
 
-  // un bouton par branche: il zoome dessus et atténue les autres (le bouton TOUT revient à la vue d'ensemble)
-  buildTreeChips(){
-    const box = document.getElementById('treeChips');
-    if (!box || box.childElementCount) return;
-    const mk = (id, label, color)=>{
-      const b = document.createElement('button');
-      b.className = 'tree-chip'; b.dataset.id = id || ''; b.textContent = label; b.style.setProperty('--c', color);
-      b.onclick = ()=>{ sfx.uiSelect(); this.focusTreeBranch(id || null); };
-      box.appendChild(b);
+  // un bouton par branche (les onglets sont reconstruits à chaque rendu, on délègue les événements au conteneur)
+  setupTreeUi(){
+    document.getElementById('treeTabs').onclick = e=>{
+      const t = e.target.closest('.ttab'); if (!t || t.dataset.id === this.treeBranch) return;
+      sfx.uiSelect(); this.treeBranch = t.dataset.id; this.selectedTreeNode = null;
+      document.getElementById('treeScroll').scrollTop = 0; this.renderTree();
     };
-    mk('', 'TOUT', '#cfd6ff');
-    TREE_BRANCHES.forEach(br=> mk(br.id, String(br.name).toUpperCase(), br.color));
-  },
-
-  // cadre la vue sur ce qui est visible (toute la partie découverte, ou seulement une branche)
-  fitTreeView(branchId){
-    const stt = this._visStatus || treeVisRevealed(this.treeState);
-    const pts = [];
-    TREE_VIS.forEach(v=>{ if (stt[v.id] && (!branchId || v.branch === branchId)) pts.push([v.x, v.y]); });
-    if (!branchId || !pts.length) pts.push([0, 0]);
-    const xs = pts.map(q=>q[0]), ys = pts.map(q=>q[1]);
-    const minx = Math.min(...xs), maxx = Math.max(...xs), miny = Math.min(...ys), maxy = Math.max(...ys);
-    const cx = (minx+maxx)/2, cy = (miny+maxy)/2, dim = Math.max(maxx-minx, maxy-miny) + 200;
-    const sc = Math.min(2.4, Math.max(0.55, 1000/dim));
-    this.treeScale = sc; this.treeTx = -sc*cx; this.treeTy = -sc*cy;
-    if (this._treeApplyTransform) this._treeApplyTransform();
-  },
-
-  focusTreeBranch(id){
-    this.treeFocus = id;
-    this.renderTree();
-    this.fitTreeView(id || null);
+    document.getElementById('treeScroll').onclick = e=>{
+      const c = e.target.closest('.tcard'); if (!c) return;
+      sfx.uiSelect(); this.selectTreeNode(TREE_NODE_BY_ID[c.dataset.id]);
+    };
   },
 
   selectTreeNode(node){
     this.selectedTreeNode = node;
-    const state = this.treeState;
-    document.getElementById('treeInfoIcon').innerHTML = pxImg(node.icon, 30);
-    document.getElementById('treeInfoName').textContent = node.name;
-    document.getElementById('treeInfoDesc').textContent = node.desc;
-    const investBtn = document.getElementById('treeInvestBtn');
-    if (node.isHub){
+    document.querySelectorAll('#treeScroll .tcard').forEach(c=> c.classList.toggle('sel', c.dataset.id === node.id));
+    this.refreshTreeSheet();
+  },
+
+  // fiche en bas : détail de la carte touchée + bouton d'achat
+  refreshTreeSheet(){
+    const node = this.selectedTreeNode, btn = document.getElementById('treeInvestBtn');
+    if (!node){
+      document.getElementById('treeInfoIcon').innerHTML = pxImg('👆', 30);
+      document.getElementById('treeInfoName').textContent = String((treeLayout().find(L=> L.br.id === this.treeBranch) || treeLayout()[0]).br.name).toUpperCase();
+      document.getElementById('treeInfoDesc').textContent = 'Touche une carte pour voir son détail et l\'acheter.';
       document.getElementById('treeInfoMeta').textContent = '';
-      investBtn.disabled = true; investBtn.textContent = '—'; investBtn.onclick = null;
+      btn.disabled = true; btn.textContent = '—'; btn.onclick = null;
       return;
     }
-    const s = treeVisStatus(state, node);
-    let meta, canBuy = false;
-    if (s === 'owned') meta = 'Possédée.';
-    else if (s === 'avail'){ meta = 'Coût : ◆ ' + node.cost(); canBuy = this.meta.fragments >= node.cost(); }
-    else if (node.isKey && node.forkThreshold && node.requires.some(p => (state[(TREE_VIS_BY_ID[p]||{}).nid]||0) > 0))
-      meta = 'Verrouillée · Investis ' + node.forkThreshold + ' pts dans les stats de cette branche (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
-    else if (node.k > 1) meta = "Verrouillée · Achète d'abord le niveau précédent.";
-    else meta = "Verrouillée · Achète d'abord une compétence connectée.";
+    const i = this.treeCardInfo(node), state = this.treeState;
+    document.getElementById('treeInfoIcon').innerHTML = pxImg(node.icon, 30);
+    document.getElementById('treeInfoName').textContent = node.name + (node.max > 1 ? ' · ' + i.r + '/' + node.max : '');
+    document.getElementById('treeInfoDesc').textContent = node.desc.replace(/\s*\/\s*niveau/i, ' par rang');
+    let meta;
+    if (i.st === 'max') meta = node.max > 1 ? 'Rang maximum atteint.' : 'Possédée.';
+    else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ◆ ' + i.v.cost() + (i.can ? '' : ' (il manque ◆ ' + (i.v.cost() - this.meta.fragments) + ')');
+    else if (node.isKey && node.forkThreshold && node.requires.some(p => (state[p] || 0) > 0))
+      meta = 'Verrouillée · Investis ' + node.forkThreshold + ' pts dans la tige de cette branche (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
+    else if (node.isKey) meta = "Verrouillée · Ouvre d'abord le dernier palier de cette branche.";
+    else meta = "Verrouillée · Achète d'abord la compétence qui la précède.";
     document.getElementById('treeInfoMeta').textContent = meta;
-    investBtn.disabled = !canBuy;
-    investBtn.textContent = s === 'owned' ? '✓' : '+';
-    investBtn.onclick = ()=> this.investTreeNode(node);
+    btn.disabled = !i.can;
+    btn.textContent = i.st === 'max' ? '✓' : '+';
+    btn.onclick = ()=> this.investTreeNode(node);
   },
 
   // enregistre un élément dans la collection (une seule écriture par nouvel élément)
@@ -158,20 +127,15 @@ mixin(GameScene, {
   },
 
   investTreeNode(node){
-    const state = this.treeState;
-    if (treeVisStatus(state, node) !== 'avail') return;
-    const cost = node.cost();
-    if (this.meta.fragments < cost) return;
+    const i = this.treeCardInfo(node);
+    if (!i.can) return;
     sfx.skillBuy();
-    this.meta.fragments -= cost;
-    state[node.nid] = node.k;                       // acheter le niveau k = passer le rang de la compétence à k
-    this.codexMark('skills', node.nid);
+    this.meta.fragments -= i.v.cost();
+    this.treeState[node.id] = i.v.k;                // acheter le rang k = passer le rang de la compétence à k
+    this.codexMark('skills', node.id);
     setMeta(this.meta);
-    this.selectedTreeNode = node;
+    this._treeFlash = node.id;
     this.renderTree();
     { const h = this.scene.get('home'); if (h && h.homeOn) h.refreshHomeStats(); }          // fragments, stats du hangar et point doré de l'onglet
-    // la vue suit l'avancée: on recentre sur la compétence qu'on vient d'acheter (les nouvelles apparaissent autour)
-    this.treeTx = -this.treeScale*node.x; this.treeTy = -this.treeScale*node.y;
-    if (this._treeApplyTransform) this._treeApplyTransform();
   },
 });

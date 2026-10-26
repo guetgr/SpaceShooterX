@@ -55,8 +55,8 @@ mixin(HomeScene, {
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
       if (pts.size === 2){ pinch0 = pinchDist(); down = false; return; }                  // 2e doigt : pincement, plus un glissement de page
       down = true; sx = e.clientX; sy = e.clientY; st = performance.now();
-      // sur l'arbre, un glissement sert à déplacer la vue : on ne change de page que depuis le bord gauche de l'écran
-      if (e.target.closest && e.target.closest('#treeStage') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
+      // les onglets de l'arbre défilent à l'horizontale : on ne change de page depuis eux que depuis le bord gauche de l'écran
+      if (e.target.closest && e.target.closest('#treeTabs') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
     });
     box.addEventListener('pointerup', e=>{
       pinchEnd(e);
@@ -217,7 +217,7 @@ mixin(HomeScene, {
   showHomeTree(){
     const gs = this.scene.get('game');
     gs.meta = getMeta(); gs.treeState = gs.meta.tree;               // relit la sauvegarde (fragments gagnés au dernier niveau)
-    gs.renderTree(); gs.fitTreeView(gs.treeFocus || undefined);
+    gs.renderTree();
   },
 
   launchLevel(){
