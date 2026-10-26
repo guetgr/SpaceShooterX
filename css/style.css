@@ -149,6 +149,7 @@
   #redVig.show{ animation:redVig 1.6s ease-out forwards; }
   @keyframes redVig{ 0%{opacity:1;} 30%{opacity:.35;} 45%{opacity:.9;} 100%{opacity:0;} }
   #gameover.fadein{ animation:goFade .7s ease-out; }
+  #gameover > *{ animation:none !important; }      /* l'entrée des éléments est jouée par GSAP (Motion.result) */
   @keyframes goFade{ from{ opacity:0; } to{ opacity:1; } }
   .go-extra{ font-family:'VT323','VT323E',monospace; font-size:17px; color:#9fb0ff; text-align:center; line-height:1.15; margin:6px 0 8px; }
   .go-extra .go-boss{ color:#ff7088; } .go-extra .go-near{ color:#ffd76a; }
@@ -177,6 +178,11 @@
     background: linear-gradient(90deg, var(--neon-magenta), var(--danger));
     transition: width 0.18s steps(8);
   }
+  .hp-bar-ghost{ position:absolute; left:0; top:0; height:100%; width:100%; background:#fff; opacity:.6; }
+  .hp-bar-fill{ position:relative; }
+  .hp-low .hp-bar-fill{ animation:hpLow .55s ease-in-out infinite alternate; }
+  @keyframes hpLow{ from{ filter:brightness(1); } to{ filter:brightness(1.9) saturate(1.4); } }
+  .score-val{ display:inline-block; transform-origin:right center; }
   .shield-bar-track{
     width:130px; height:7px; background:#1a1730; border:2px solid #17324a;
     position:relative; overflow:hidden; margin-top:3px;

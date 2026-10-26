@@ -39,7 +39,10 @@ mixin(GameScene, {
 
   /* ---------- HUD ---------- */
   updateHud(force){
-    document.getElementById('hpFill').style.width = Math.max(0,(this.hp/this.stats.maxHp*100)) + '%';
+    const hpPct = Math.max(0, this.hp/this.stats.maxHp*100);
+    document.getElementById('hpFill').style.width = hpPct + '%';
+    Motion.hudHp(hpPct);
+    document.querySelector('.hp-wrap').classList.toggle('hp-low', hpPct > 0 && hpPct < 30);
     const shieldTrack = document.getElementById('shieldTrack');
     if (this.stats.shieldMax > 0){
       shieldTrack.style.display = '';
@@ -47,8 +50,10 @@ mixin(GameScene, {
     } else {
       shieldTrack.style.display = 'none';
     }
-    document.getElementById('scoreVal').textContent = Math.floor(this.score);
-    document.getElementById('lvlBadge').textContent = 'LV.'+this.level;
+    const sv = document.getElementById('scoreVal'), sc = Math.floor(this.score);
+    if (this._scShown !== sc){ this._scShown = sc; sv.textContent = sc; Motion.tick(sv); }
+    const lb = document.getElementById('lvlBadge');
+    if (this._lvShown !== this.level){ if (this._lvShown !== undefined) Motion.pop(lb, 1.6); this._lvShown = this.level; lb.textContent = 'LV.'+this.level; }
     document.getElementById('xpFill').style.width = Math.min(100,(this.xp/this.xpToNext*100)) + '%';
     const m = Math.floor(this.elapsed/60), s = Math.floor(this.elapsed%60);
     document.getElementById('waveNote').textContent = this.lvDef ? ('NIV.' + this.lvDef.num + ' · ' + this.levelProgress().label) : ('T+' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ' · ALERTE ' + this.alertLevel);
