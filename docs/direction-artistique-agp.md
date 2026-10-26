@@ -18,7 +18,7 @@ Branche : `direction-agp` (l'ancienne interface reste sur `main`). Aucune mécan
 | Papier `#e9e2c8` + encre `#1c211d` | documents imprimés | rapport d'intervention |
 | Graphite `#070a09` | fond | partout |
 
-**Typographie** (les deux polices déjà dans le jeu, hiérarchie nouvelle) : *Press Start 2P* 5-12 px, majuscules, espacées, pour les **étiquettes et titres** (« OBJECTIF », « RISQUE ») · *VT323* 15-24 px pour les **valeurs et le texte** (ce qu'on lit vraiment).
+**Typographie** (celle du jeu, définie dans `style.css` : *Jersey 15* pour le logo et les gros titres, *Chakra Petch* pour le reste) : *SSX Label* (Chakra Petch 600) 5-12 px, majuscules espacées, pour les **étiquettes et titres** (« OBJECTIF », « RISQUE ») · *SSX Text* (Chakra Petch 400) 15-24 px pour les **valeurs et le texte** (ce qu'on lit vraiment).
 **Motifs** : rayures de chantier jaune/noir (séparateurs, onglet actif, bouton, bandeau d'incident) · lignes de formulaire pointillées · coins de cadre · tampon · papier listing à perforations · curseur de terminal.
 **Ton** : l'humour est dans les *détails* (contrôle technique « EXPIRÉ », « ASSURANCE DOMMAGES 0 % », département « Physique fondamentale — 1 stagiaire »), jamais dans la mise en page : tout reste lisible.
 
@@ -127,5 +127,5 @@ Tests mis à jour (nouveaux libellés) : `home_test.py`, `level_test.py`, `smoke
 
 ## 11. À retenir pour la suite
 - La **lisibilité en combat** passe avant : toute nouvelle info va dans la bande du haut et reste semi-transparente.
-- Les textes accentués sont en VT323 ; les titres en Press Start sont **sans accents** (convention du jeu).
+- Les titres en majuscules sont écrits **sans accents** (convention du jeu) ; le texte courant peut en avoir.
 - Ajouter un secteur = ajouter ses lignes dans `AGP_LORE.files` (dossier, note de service) ; sans entrée, une note par type d'ordre est utilisée.
