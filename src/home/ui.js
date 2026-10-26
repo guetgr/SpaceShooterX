@@ -77,7 +77,7 @@ mixin(HomeScene, {
     Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');
-    this.cameras.main.resetFX(); this.cameras.main.fadeIn(350, 5, 4, 12);
+    this.cameras.main.resetFX(); this.cameras.main.fadeIn(350, 5, 4, 12); Motion.uncover();
     const p = getWorldProgress(), last = p.last && levelById(p.last);
     const nxt = last ? (nextLevelOf(p.last) || last) : firstOpenLevel(p);                  // on se place sur le niveau qui suit le dernier joué
     this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
@@ -237,12 +237,13 @@ mixin(HomeScene, {
     const l = levelById(this.homeSel);
     if (!l || !isLevelUnlocked(l.id) || this._launching) return;
     this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
-    this.cameras.main.fadeOut(380, 5, 4, 12);
-    this.cameras.main.once('camerafadeoutcomplete', ()=>{
+    const go = ()=>{
       const gs = this.scene.get('game');
       this.scene.setVisible(true, 'game'); gs.input.enabled = true;
       gs.meta = getMeta();
       gs.scene.restart(l.tuto ? { autoStart:true, tuto:true } : { autoStart:true, levelId:l.id });      // le tuto est un niveau comme les autres (w1-tuto) ; il ramène ensuite à l'accueil
-    });
+    };
+    if (Motion.ok()) Motion.cover(go, .45);                                                          // rideau GSAP (rouvert par Motion.uncover au démarrage du niveau)
+    else { this.cameras.main.fadeOut(380, 5, 4, 12); this.cameras.main.once('camerafadeoutcomplete', go); }
   },
 });

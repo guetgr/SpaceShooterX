@@ -58,6 +58,7 @@ class Sfx{
     const src = c.createBufferSource(); src.buffer = bufs[(Math.random()*bufs.length)|0];
     let rate = 1 + (Math.random()*2-1) * 0.05;
     if (F.tier && p && p.tier) rate *= 1 + 0.07*(p.tier-1);
+    if (p && p.rate) rate *= p.rate;                                  // hauteur imposée par l'appelant (ex. cristaux ramassés en chaîne)
     src.playbackRate.value = rate;
     const g = c.createGain(); g.gain.value = F.pk; src.connect(g); let last = g;
     if (p && p.pan){ const pn = c.createStereoPanner(); pn.pan.value = Math.max(-1, Math.min(1, p.pan)); g.connect(pn); last = pn; }

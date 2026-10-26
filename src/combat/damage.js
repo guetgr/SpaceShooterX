@@ -9,6 +9,7 @@ mixin(GameScene, {
     if (enemy.phased) return; // ghost is intangible mid-phase — shots pass through
     if (!this.enemyOnScreen(enemy)) return;   // pas encore entré dans l'écran: les tirs le traversent
     this.applyDamageToEnemy(enemy, bullet.damage);
+    this.juiceHit(enemy); this.juiceImpact(bullet, enemy);
     if (this.stats.chainLightning > 0 && !bullet._arc) this.chainLightning(enemy, bullet.damage);
     this.spawnHitParticles(bullet.x, bullet.y, 4);
     sfx.hitEnemy();
@@ -160,7 +161,7 @@ mixin(GameScene, {
       }
     }
     this.spawnHitParticles(enemy.x, enemy.y, isBoss?26:10);
-    this.cameras.main.shake(isBoss?260:60, isBoss?0.01:0.003);
+    this.juiceKill(enemy, isBoss);
     // SANGSUE: un kill à proximité du vaisseau soigne une petite zone autour de lui
     if (this.sangsueOwned && this.player.active){
       const radius = 90 + (this.stats.sangsueRadiusBonus||0);

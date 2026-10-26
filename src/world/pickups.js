@@ -43,7 +43,8 @@ mixin(GameScene, {
     this.spawnGemBurst(gem.x, gem.y, gem.gemKind || 'gemS');
     gem.destroy();
     this.lvGems += 1;
-    if ((gem.xpValue || 2) >= 6) sfx.gemBig(); else sfx.gem();
+    const rate = this.juiceGemRate();
+    if ((gem.xpValue || 2) >= 6) sfx.gemBig({ rate }); else sfx.gem({ rate });
     if (this.xp >= this.xpToNext){
       this.levelUp();
     }
