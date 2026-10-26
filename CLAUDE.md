@@ -4,6 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 # Space Shooter X
 
+> **CONTEXTE NARRATIF À LIRE EN PREMIER (tout agent, toute tâche touchant à l'interface, aux textes ou au ton)** : `docs/brief-univers-agp.md` (brief d'origine). En résumé : an 2247, le joueur est un employé de l'**AGP (Agence Galactique de Propreté)** qui nettoie la galaxie avec une camionnette pourrie ; il découvre que l'agence a intérêt à garder la galaxie polluée. Ton : SF rétro-industrielle, humour noir et absurdité administrative, satire du travail, **subtil et lisible** (jamais une caricature). L'interface = logiciel de bord de l'AGP (AGP-OS) ; assistante embarquée **N.O.R.M.A.** (froide, polie, sarcastique, jamais bloquante en combat). Vocabulaire : mondes = secteurs, niveaux = ordres de mission, boss = incidents majeurs, fragments = composants, écran de fin = rapport d'intervention. **Lisibilité du combat prioritaire** (HUD léger, rien d'opaque). **Ne jamais modifier mécaniques, équilibrage, sauvegardes ni logique des compétences** pour de l'habillage ; toute idée de gameplay se présente à part. Réalisation : `docs/direction-artistique-agp.md`.
+
+
 Jeu de tir spatial type Raiden / Archero / Vampire Survivors (endless + boss), Phaser 3, destiné à Android / Google Play (wrapper Android à faire).
 **Le code est découpé en modules** (`src/`, scripts classiques, pas de bundler) — voir `README.md` pour l'organisation, le lancement, l'ajout de fichiers/assets et le travail Git à deux. Lire aussi `PASSATION.md` (état complet) et `docs/space-shooter-x-gameplay.md` (boucle de gameplay détaillée).
 L'ancien monolithe (un seul `index.html` de 16 Mo) est conservé dans `backups/index_monolithe_avant_split.html` (non versionné).
@@ -14,6 +17,15 @@ En niveau, `alertLevel` = menace fixée par le niveau (`threat`), plus par l'arb
 Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de npm/bundler/lint : Python 3 (+ `pip install playwright numpy`), Node (vérif syntaxe du build) et Chrome suffisent. `file://` ne marche pas : toujours passer par le serveur.
 
 **Habillage AGP (branche `direction-agp`)** : l'interface est le logiciel de bord de l'Agence Galactique de Propreté (AGP-OS). Palette, composants et écrans : `docs/direction-artistique-agp.md` ; couche CSS : `css/agp.css` (chargée après `style.css`) ; textes et voix de N.O.R.M.A. : `src/data/agp-lore.js` + `src/ui/norma.js`. Les libellés de l'interface suivent ce vocabulaire (secteurs, ordres de mission, composants, rapport d'intervention).
+
+## Interface : où est quoi (accueil, arbre, animations, chargement, icône)
+- **Animations de menus** : GSAP (`vendor/gsap.min.js`, gratuit) via `src/ui/motion.js` (objet `Motion` : retour tactile des boutons, CTA qui respire, pages/cartes en cascade, compteurs, rapport de fin, HUD). Sans effet si GSAP absent ou `prefers-reduced-motion`. Le build l'embarque (`--inline-phaser`) ou le charge depuis cdnjs.
+- **Arbre de compétences** (page R&D) : une page par branche, une carte par compétence, rangs en pastilles, fiche + achat en bas (`src/ui/tree-ui.js`). Données/coûts/déblocages inchangés (`data/skill-tree.js`). Fonctionnement et pistes d'amélioration : `docs/arbre-competences.md`.
+- **Écran de chargement** : `src/boot.js` (image `loading/bg.webp`, hors `assets/` volontairement : elle doit s'afficher avant le manifeste ; barre lissée ; lignes de boot AGP).
+- **Icône d'écran d'accueil** (PWA) : `manifest.webmanifest` + `icons/` (iPhone 180 px, Android 192/512 + maskable). Pas de service worker : le jeu s'installe mais exige le réseau. HTTPS requis.
+- **Typographie** : définie dans `css/style.css` (`SSX Display` = Jersey 15, `SSX Label`/`SSX Text` = Chakra Petch), tailles calées sur l'ancien jeu (`size-adjust`).
+- **Mise en page tactile** : la zone de jeu est 400x700 centrée (FIT) alors que l'overlay HTML couvre tout l'écran ; `HomeScene.layoutHome()` recale l'atelier sur les téléphones plus hauts.
+- **Tests de l'interface** : `home_test.py` et `level_test.py` vérifient des libellés AGP (« INTERVENTION VALIDEE », « ACCIDENT DU TRAVAIL », « ORDRE ANNULE », « NOUVEAU SECTEUR ») : les mettre à jour si on change ces textes.
 
 ## Au début de chaque session / message
 **Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
