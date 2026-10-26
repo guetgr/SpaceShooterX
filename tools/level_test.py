@@ -75,7 +75,7 @@ with sync_playwright() as pw:
     check(vis('#btnNext') and vis('#btnRetry') and vis('#btnGoMenu'), 'victoire : boutons SUIVANT, REJOUER, ACCUEIL')
     check(not vis('#home'), "l'arbre de compétences (page de l'accueil) ne s'ouvre pas tout seul : l'accueil reste fermé")
     check('ORBITE TERRESTRE' in p.evaluate("document.getElementById('goLevel').textContent"), 'le niveau est affiché')
-    check(p.evaluate("document.getElementById('goRewards').textContent").count('◆') >= 3, 'détail des récompenses')
+    check(p.evaluate("document.querySelectorAll('#goRewards .uii').length") >= 3, 'détail des récompenses')
     shot('victoire')
     check('w1-l1' in prog() and 'w1-l2' not in prog(), 'victoire enregistrée')
     check(p.evaluate("isLevelUnlocked('w1-l2')"), 'niveau 2 débloqué')

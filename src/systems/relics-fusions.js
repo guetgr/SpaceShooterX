@@ -21,7 +21,7 @@ mixin(GameScene, {
     list.forEach(r=>{
       const div = document.createElement('div');
       div.className = 'card fusion';
-      div.innerHTML = '<div class="card-icon">' + pxImg(r.icon, 32) + '</div><div class="card-name">' + (r.legendary ? '★ ' : '') + r.name + '</div><div class="card-desc">' + (r.legendary ? 'LEGENDAIRE — ' : '') + r.desc + '</div>';
+      div.innerHTML = '<div class="card-icon">' + pxImg(r.icon, 32) + '</div><div class="card-name">' + (r.legendary ? uiIco('star') + ' ' : '') + r.name + '</div><div class="card-desc">' + (r.legendary ? 'LEGENDAIRE — ' : '') + r.desc + '</div>';
       div.onclick = ()=>{
         sfx.cardPick();
         if (r.legendary){                                       // arme légendaire: remplace l'arme actuelle

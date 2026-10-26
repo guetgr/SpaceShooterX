@@ -84,6 +84,8 @@ Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` +
 | Style de l'interface | `css/style.css` puis `css/agp.css`, `docs/direction-artistique-agp.md` |
 | Sons / musiques | `audio/`, `assets/audio/` |
 | Assets (images, polices) | `assets/` + `assets/manifest.json` (régénérer : `tools/gen_manifest.py`) |
+| Icônes de niveaux, planètes, nuages, objet en orbite (carte du monde) | `LEVEL_ICONS` et `*_B64` dans `data/image-assets.js`, `theme` des mondes (`photo`, `clouds`, `orbiter`), rendu dans `home/ui.js` (médaillons, trace) et `home/background.js` (nuages, orbite) ; import des PNG : `tools/import_sprites_niveaux.py` (icônes) et `tools/import_decors_carte.py` (planètes, nuages, satellite) |
+| Icônes d'interface (cadenas, coche, composants, étoile, pause…) | `ui/ui-icons.js` (`uiIco('nom', 12 ou 24)`, `<i data-ico>` dans `index.html`), dessinées par `tools/gen_ui_icons.py` (grilles 12x12, aperçu `docs/img/ui-icons.png`) |
 | Écran de chargement | `src/boot.js`, `loading/bg.webp` |
 | Icône PWA | `manifest.webmanifest`, `icons/` |
 | Build fichier unique | `tools/build.py` |
@@ -99,6 +101,7 @@ Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` +
 - **Titres en majuscules sans accents** dans l'interface AGP (« INTERVENTION VALIDEE »). Les tests vérifient ces libellés.
 - **Animations de menus** via `Motion` (GSAP), jamais en CSS concurrent sur `transform`. Sans effet si GSAP absent ou `prefers-reduced-motion`.
 - **Image de chargement** `loading/bg.webp` **hors manifeste** : elle doit s'afficher avant le chargement des assets.
+- **Pas d'émojis ni de glyphes (◆ ★ ✔ 🔒…) pour les symboles de l'interface** : sprites pixel `uiIco(...)`. Restent en émojis (réduits en pixel par `pxImg`) : les icônes de compétences, cartes, reliques et pactes.
 - Pas de plafond artificiel en gameplay ; ne jamais modifier mécaniques, équilibrage, sauvegardes ou compétences pour de l'habillage.
 
 ## 5. Pièges connus

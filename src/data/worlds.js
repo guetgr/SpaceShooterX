@@ -2,7 +2,7 @@
 // Mondes et niveaux : registre + validation.
 // Un monde = un fichier dans data/worlds/, qui s'enregistre avec registerWorld(). Ajouter un monde = ajouter un fichier + une ligne dans scripts.json.
 //
-// Monde : { id, order, name, sub, boss, theme:{ glow, rim, seed, freq, bands?, palette:[couleurs sombre→clair] }, levels:[ niveau… ] }   (le DERNIER niveau est le boss du monde)
+// Monde : { id, order, name, sub, boss, theme:{ glow, rim, seed, freq, bands?, palette:[couleurs sombre→clair], photo?:texture de la planète (sinon générée en code), clouds?:texture de nuages qui défilent, orbiter?:texture d'un objet en orbite }, levels:[ niveau… ] }   (le DERNIER niveau est le boss du monde)
 // Niveau : { id, name, type, threat, goal, reward, spawns?, events?, boss?, zoom? }
 //   type    : 'tuto' (tutoriel scripté, game/tuto.js ; flag tuto:true, sans objectif ni lvDef) · 'survive' (goal:{seconds}) · 'kill' (goal:{count}) · 'collect' (goal:{gems}) · 'boss' (boss:'<id>') · 'endless' (ancien mode infini, DEV)
 //   threat  : niveau de menace 1..ALERT_CAP — c'est l'ancien « niveau d'alerte » (docs/niveaux-alerte.md), fixé par le niveau et non plus par l'arbre

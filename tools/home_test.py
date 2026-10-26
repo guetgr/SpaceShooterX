@@ -44,7 +44,7 @@ with sync_playwright() as pw:
     p.evaluate("document.querySelector('#treeScroll .tcard.aff').dispatchEvent(new MouseEvent('click',{bubbles:true}))"); p.wait_for_timeout(300)
     ck(p.evaluate("!document.getElementById('treeInvestBtn').disabled"),'nœud abordable sélectionné : bouton + actif')
     p.evaluate("document.getElementById('treeInvestBtn').click()"); p.wait_for_timeout(500)
-    ck(p.evaluate("getMeta().fragments")<500 and p.evaluate("document.getElementById('homeFrag').textContent")=='◆ '+str(p.evaluate("getMeta().fragments")),'achat : fragments débités et affichage mis à jour')
+    ck(p.evaluate("getMeta().fragments")<500 and p.evaluate("document.getElementById('homeFrag').textContent").strip()==str(p.evaluate("getMeta().fragments")),'achat : fragments débités et affichage mis à jour')
     # hangar : apparence + modules
     p.evaluate("document.getElementById('tabHangar').click()"); p.wait_for_timeout(700)
     ck(p.evaluate("document.querySelectorAll('#skinRow .skin').length")==3,'3 apparences proposées')
