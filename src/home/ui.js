@@ -217,8 +217,8 @@ mixin(HomeScene, {
       return;
     }
     const owned = ALL_TREE_NODES.filter(n=> (meta.tree[n.id] || 0) > 0 && !n.isHub);
-    if (!owned.length){ body.innerHTML = '<div class="mod-empty">Aucun module installé.<br>Commandez du matériel au catalogue R&D.</div>'; return; }
-    body.innerHTML = '<div class="mod-grid"></div><div class="mod-detail" id="modDetail">Touche un module pour voir ce qu\'il fait.</div>';
+    if (!owned.length){ body.innerHTML = '<div class="mod-empty">Aucun atout global installé.<br>Commandez du matériel au catalogue R&D : il s\'active à chaque mission.</div>'; return; }
+    body.innerHTML = '<div class="mod-head">ATOUTS GLOBAUX · R&D · permanents</div><div class="mod-grid"></div><div class="mod-detail" id="modDetail">Touche un module pour voir ce qu\'il fait.</div>';
     const grid = body.querySelector('.mod-grid');
     owned.forEach(n=>{
       const b = document.createElement('button'), lvl = meta.tree[n.id];
