@@ -42,14 +42,20 @@ class GameScene extends Phaser.Scene{
     // toiles des araignées: un seul calque de dessin + un cycle commun (repos -> annonce -> actif)
     this.webGfx = this.add.graphics(); this.webGfx.setDepth(4.4); this.webGfx.setBlendMode(Phaser.BlendModes.ADD);
     this.web = { state:'idle', t:2200 };
-    this.treeState = this.meta.tree;
-    ALL_TREE_NODES.forEach(node=>{
-      const lvl = this.treeState[node.id] || 0;
-      if (lvl > 0 && node.apply) node.apply(this.stats, lvl);
-    });
+    // atouts GLOBAUX : les modules R&D achetés s'appliquent aux caractéristiques de départ (niveaux ET tutoriel)
+    const applyTree = ()=>{
+      this.treeState = this.meta.tree;
+      const t0 = { dmg:this.stats.damage, hp:this.stats.maxHp, sh:this.stats.shieldMax };
+      ALL_TREE_NODES.forEach(node=>{
+        const lvl = this.treeState[node.id] || 0;
+        if (lvl > 0 && node.apply) node.apply(this.stats, lvl);
+      });
+      this.treeBonus = { dmg:this.stats.damage/t0.dmg - 1, hp:this.stats.maxHp - t0.hp, shield:this.stats.shieldMax - t0.sh };      // ce que les atouts globaux apportent, pour l'affichage
+    };
+    applyTree();
     applyAchvBuffs(this.stats, this.achv);   // buffs permanents des succès
     applyAscension(this.stats, this.meta.asc);   // bonus permanents d'ascension
-    if (this.tuto){ this.alertLevel = 1; this.weaponTier = 1; this.stats.damage = Math.max(this.stats.damage, 14); }   // TUTO: menace 1 ; le vaisseau garde les compétences déjà achetées dans l'arbre (et au moins 14 de dégâts pour un joueur débutant)
+    if (this.tuto){ this.stats = makeDefaultStats(); this.stats.damage = 14; this.alertLevel = 1; this.weaponTier = 1; applyTree(); }   // TUTO: vaisseau de base + atouts globaux (R&D), sans succès ni ascension
     // pactes choisis avant la partie: règles plus dures, plus de fragments à la fin
     const odUi = document.getElementById('odBtn');
     if (odUi){ odUi.classList.toggle('show', this.stats.overdrive > 0); odUi.classList.remove('ready','active'); odUi.style.setProperty('--deg','0deg'); }   // le bouton n'apparaît qu'une fois l'overdrive débloqué

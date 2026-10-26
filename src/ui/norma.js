@@ -99,7 +99,11 @@ mixin(GameScene, {
     const ev = this.time.addEvent({ delay:300, loop:true, callback:()=>{
       if (this.introActive || !this.running) return;
       ev.remove(false);
-      this.time.delayedCall(2200, ()=>{ if (this.running) Norma.say(Norma.pick(pool), { prio:true }); });
+      this.time.delayedCall(2200, ()=>{
+        if (!this.running) return;
+        Norma.say(Norma.pick(pool), { prio:true });
+        const g = this.globalGearSummary(); if (g) Norma.say(g, { gap:0 });         // 2e transmission : les atouts globaux (R&D) actifs
+      });
     } });
   },
   normaBoss(){ if (!this.tuto) Norma.say(Norma.pick('boss'), { prio:true }); },

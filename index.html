@@ -211,9 +211,10 @@
         <div id="pauseGear" class="acc" data-in>
           <button class="acc-head" id="btnGearToggle" aria-expanded="false"><span>ÉQUIPEMENT <b id="pgCount"></b></span><i aria-hidden="true"></i></button>
           <div class="acc-body"><div class="acc-in">
-            <div class="pg-head"><span>COMPÉTENCES DE LA PARTIE</span><span id="pgPage"></span></div>
+            <div class="pg-seg" role="tablist"><button id="pgTabG" data-t="global">ATOUTS GLOBAUX <b id="pgNG"></b></button><button id="pgTabM" data-t="mission">ATOUTS DE MISSION <b id="pgNM"></b></button></div>
+            <div class="pg-head"><span id="pgTitle"></span><span id="pgPage"></span></div>
             <div id="pgGrid"></div>
-            <div id="pgDetail">Ces bonus sont actifs automatiquement. Touche une icône pour voir ce qu'elle fait (x2, x3... = son niveau).</div>
+            <div id="pgDetail">Touchez une icône pour voir ce qu'elle fait (x2, x3… = son niveau).</div>
             <div class="pg-nav"><button class="btn secondary" id="pgPrev">◀</button><button class="btn secondary" id="pgNext">▶</button></div>
           </div></div>
         </div>
@@ -260,7 +261,7 @@
     <div id="levelup" class="overlay hidden">
       <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;">⏸</button>
       <div class="lu-title">REQUISITION DE MODULE</div>
-      <div class="lu-sub">Choisir un (1) module. Aucun remboursement.</div>
+      <div class="lu-sub">Atout de MISSION : valable pour cette intervention uniquement.</div>
       <div class="cards" id="cardsWrap"></div>
       <div class="lu-norma" id="luNorma"></div>
       <button class="btn secondary" id="rerollBtn">RELANCER (2)</button>
