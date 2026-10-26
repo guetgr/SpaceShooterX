@@ -162,6 +162,7 @@ mixin(GameScene, {
     }
     this.spawnHitParticles(enemy.x, enemy.y, isBoss?26:10);
     this.juiceKill(enemy, isBoss);
+    if (enemy.enemyType === 'sat' || enemy.enemyType === 'satgun') this.satDebris(enemy);
     // SANGSUE: un kill à proximité du vaisseau soigne une petite zone autour de lui
     if (this.sangsueOwned && this.player.active){
       const radius = 90 + (this.stats.sangsueRadiusBonus||0);

@@ -1,4 +1,5 @@
 "use strict";
+const PLANET_BIG = 384;      // grande version de la planète d'un monde (fond de l'accueil + décollage) ; le décollage la réutilise : créée à l'accueil, rien à calculer au lancement
 const HOME_ORBIT = { cx:GAME_W/2, cy:252, rx:150, ry:58 };      // orbite des niveaux autour de la planète du monde
 // Méthodes de HomeScene — décor : étoiles en parallaxe, nébuleuses, étoiles filantes, planète du monde, camionnette qui flotte.
 mixin(HomeScene, {
@@ -63,9 +64,28 @@ mixin(HomeScene, {
 
   setHomePlanet(world, locked){
     const th = world.theme || {};
-    const key = makePlanetTexture(this, 'planet_' + world.id, { size:96, seed:th.seed || 1, freq:th.freq || 1.6, bands:th.bands || 0, rim:th.rim, palette:th.palette || [0x222244, 0x44448a, 0x8888cc] });
+    const key = worldPlanetTexture(this, world, 96);
+    this.setHomeBackPlanet(world, locked);
     this.planet.setTexture(key).setVisible(true).setTint(locked ? 0x2c3050 : 0xffffff);
     this.planetGlow.setVisible(true).setTint(locked ? 0x30345a : (th.glow || 0x4fa8ff));
+  },
+
+  // grande planète du monde en fond des pages HANGAR et ARBRE (la carte a déjà la sienne au centre) : coin bas, lente rotation, glisse avec les pages
+  setHomeBackPlanet(world, locked){
+    const key = worldPlanetTexture(this, world, PLANET_BIG);
+    if (!this.backPlanet){
+      this.backPlanet = this.add.image(0, 0, key).setDepth(-1.8);
+      this.backGlow = this.add.image(0, 0, 'shockRing').setDepth(-1.9).setBlendMode(Phaser.BlendModes.ADD);
+    }
+    this.backPlanet.setTexture(key).setTint(locked ? 0x2c3050 : 0xb8c0d8);
+    this.backGlow.setTint(locked ? 0x30345a : ((world.theme || {}).glow || 0x4fa8ff));
+  },
+  updateHomeBackPlanet(time){
+    if (!this.backPlanet) return;
+    const W = GAME_W, side = this.pageX < 0 ? -1 : 1, a = Math.min(1, Math.abs(this.pageX)*1.4), d = 2.5;       // 2,5 écrans de rayon visible
+    const x = side < 0 ? W*0.2 : W*0.82, y = GAME_H + 40 + 30*(1 - a), s = 2.0;                                     // en bas à gauche (hangar) / à droite (arbre), à moitié coupée
+    this.backPlanet.setPosition(x - this.pageX*W*0.18 + (side < 0 ? 0 : 0), y).setScale(s*256/PLANET_BIG).setAlpha(0.5*a).setAngle(time/900);
+    this.backGlow.setPosition(this.backPlanet.x, this.backPlanet.y).setScale(s*1.15).setAlpha(0.22*a);
   },
 
   buildHomeVan(){
@@ -104,6 +124,7 @@ mixin(HomeScene, {
     const b = this.vanBase, bob = Math.sin(time/700)*5*Math.max(0.4, b.s*2);
     this.van.setPosition(b.x + Math.sin(time/1900)*3, b.y + bob).setScale(b.s).setAlpha(b.a).setAngle(Math.sin(time/1500)*2);
     this.exhaust.setPosition(this.van.x, this.van.y + 118*b.s).setAlpha(b.a);
+    this.updateHomeBackPlanet(time);
     // la planète et ses éléments suivent la page (glissement horizontal)
     const pp = this.planetPos, px = pp.x - this.pageX*GAME_W, pa = Math.max(0, 1 - Math.abs(this.pageX)*1.6), pulse = 1 + 0.012*Math.sin(time/1600);
     this.planet.setPosition(px, pp.y).setScale(pp.s*pulse).setAlpha(pa);

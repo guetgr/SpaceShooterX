@@ -41,7 +41,7 @@ mixin(GameScene, {
     if (this.enemies.countActive(true) >= ENEMY_HARD_CAP) return null;   // plafond absolu (fluidité)
     // certains ennemis se balancent latéralement après leur spawn — on leur laisse
     // assez de marge pour que le wobble ne les sorte pas de la zone visible (zoom)
-    const wobbleMargin = { drone:46, swarmer:70, bomber:40 }[type] || 0;
+    const wobbleMargin = { drone:46, swarmer:70, bomber:40, sat:40, satgun:34 }[type] || 0;
     const vis = this.visibleXRange(30 + wobbleMargin);
     let x = (xOverride !== undefined) ? Phaser.Math.Clamp(xOverride, vis.min, vis.max) : Phaser.Math.Between(vis.min, vis.max);
     const art = ENEMY_ART[type];
@@ -139,6 +139,21 @@ mixin(GameScene, {
       e.body.velocity.y = 18;
       e.scoreValue = 10;
       e.contactDamage = 22;
+    } else if (type === 'sat'){
+      e.hp = 22*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = Phaser.Math.Between(55, 90)*speedScale;
+      e.baseX = x; e.driftX = Phaser.Math.Between(-18, 18); e.ph = Math.random()*6.28; e.wobble = 0;
+      e.scoreValue = 12;
+      e.contactDamage = 9;
+    } else if (type === 'satgun'){
+      e.hp = 32*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = 42*speedScale;
+      e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
+      e.stopY = Phaser.Math.Between(120, 200);
+      e.fireCd = Phaser.Math.Between(1500, 2200);
+      e.charging = false;
+      e.scoreValue = 26;
+      e.contactDamage = 8;
     } else if (type === 'bomber'){
       e.hp = 16*hpScale; e.maxHp = e.hp;
       e.body.velocity.y = 40*speedScale;

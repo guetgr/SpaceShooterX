@@ -4,12 +4,20 @@ mixin(GameScene, {
   /* ---------- BOSS ---------- */
   // traînée du décollage: flammes cyan et orange + traits de vitesse (s'estompent vers le bas)
   // ---------- DECOLLAGE DEPUIS LA TERRE ----------
+  // planète du décollage = celle du monde du niveau (le tuto et le monde 1 : la Terre ; ailleurs, la planète générée du monde, la même qu'à l'accueil)
+  introPlanet(){
+    const w = worldById(this.lvDef ? this.lvDef.world : 'w1');
+    if (!w || (w.theme && w.theme.photo === 'earth')) return { key:'earth', tw:768, ax:480, ay:300, smooth:true };      // ax/ay : le point de la planète sous le camion (côte africaine)
+    return { key:worldPlanetTexture(this, w, PLANET_BIG), tw:PLANET_BIG, ax:PLANET_BIG*0.625, ay:PLANET_BIG*0.39, smooth:true };      // lissée : très zoomée, la trame de points ne doit pas apparaître en gros carrés
+  },
+
   introEarthInit(){
-    try { this.textures.get('earth').setFilter(Phaser.Textures.FilterMode.LINEAR); } catch(err){ /* ignore */ }      // la Terre est une image lisse (pas du pixel art): très zoomée, elle ne doit pas se pixelliser
-    const e = this.add.image(0, 0, 'earth').setDepth(1.4);
+    const P = this.introPlanet();
+    if (P.smooth){ try { this.textures.get(P.key).setFilter(Phaser.Textures.FilterMode.LINEAR); } catch(err){ /* ignore */ } }      // la Terre est une image lisse (pas du pixel art): très zoomée, elle ne doit pas se pixelliser
+    const e = this.add.image(0, 0, P.key).setDepth(1.4);
     const glow = this.add.image(0, 0, 'shockRing').setDepth(1.45).setBlendMode(Phaser.BlendModes.ADD).setTint(0x4fa8ff).setAlpha(0);
     const veil = this.add.rectangle(GAME_W/2, GAME_H/2, GAME_W*3, GAME_H*3, 0xffffff, 0).setDepth(30);
-    this._ie = { e, glow, veil, ring: 0, sndGo: false };
+    this._ie = { e, glow, veil, ring: 0, sndGo: false, P };
     this.player.setScale(PLAYER_SHIP_SCALE * 0.92);
     this.introEarthUpdate(0);
   },
@@ -18,7 +26,7 @@ mixin(GameScene, {
     const ie = this._ie, T = this.introT, A = INTRO_E_A, B = INTRO_E_B, C = INTRO_E_C;
     if (!ie) return;
     const sx = this.player.x, sy = this.introEndY;
-    const S0 = 9, S1 = 0.32, S2 = 0.18, TW = 768, AX = 480, AY = 300, CX = 384, CY = 384;      // AX/AY: le point de la Terre (côte africaine) sous le camion
+    const P = ie.P, pk = 768 / P.tw, S0 = 9*pk, S1 = 0.32*pk, S2 = 0.18*pk, TW = P.tw, AX = P.ax, AY = P.ay, CX = P.tw/2, CY = P.tw/2;      // tailles réglées pour la Terre (768 px) ; pk les adapte à une planète plus petite
     const eio = k => k < 0.5 ? 4*k*k*k : 1 - Math.pow(-2*k + 2, 3)/2;
     let S, ax = AX, ay = AY, offY = 0, rot = 0, shipK = 1, power = 1;
     if (T < A){

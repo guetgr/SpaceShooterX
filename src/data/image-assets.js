@@ -270,5 +270,6 @@ const TUTO_BOSS_B64 = asset('sprites/tuto_boss.webp');
 const TUTO_BOSSX_B64 = asset('sprites/tuto_bossx.webp');
 const TUTO_PANEL_B64 = asset('sprites/tuto_panel.webp');
 const TUTO_DEBRIS_B64 = asset('sprites/tuto_debris.webp');
+const SATGUN_SHEET_B64 = asset('sprites/satgun_sheet.webp');      // satellite armé : 26 images de 200x200 (idle 0-4 · charge 5-6 · recul 7-8 · dégâts 9-17 · explosion 18-25)
 const TUTO_NDEB = 8;
 const TUTO_BOSS_AT = 70, TUTO_BOSS_WARN = 66, TUTO_SAT_END = 64;   // secondes après le décollage

@@ -48,6 +48,7 @@ class BootScene extends Phaser.Scene{
       { key:'tutoBossX',    src:TUTO_BOSSX_B64,    fw:200, fh:170, n:5 },
       { key:'tutoPanel',    src:TUTO_PANEL_B64,    fw:90,  fh:60,  n:2 },
       { key:'tutoDebris',   src:TUTO_DEBRIS_B64,   fw:48,  fh:48,  n:TUTO_NDEB },
+      { key:'satgunSheet',  src:SATGUN_SHEET_B64,  fw:200, fh:200, n:26 },
       { key:'bossBullet2',  src:BOSS2_BULLET_B64,  fw:0,   fh:0,   n:0 },
       { key:'shieldedGrunt2', src:SHIELDEDGRUNT2_B64, fw:0, fh:0,  n:0 },
       { key:'shieldedGruntExpl', src:SHIELDEDGRUNT2_EXPL_B64, fw:180, fh:180, n:3 },
@@ -188,6 +189,11 @@ class BootScene extends Phaser.Scene{
     this.anims.create({ key:'charoFly', frames:this.anims.generateFrameNumbers('charoSheet', {start:0,end:3}), frameRate:11, repeat:-1 });
     this.anims.create({ key:'explodeCharo', frames:this.anims.generateFrameNumbers('charoExpl', {start:0,end:4}), frameRate:16, repeat:0 });
     this.anims.create({ key:'bomberFly', frames:this.anims.generateFrameNumbers('bomberSheet', {start:0,end:3}), frameRate:9, repeat:-1 });
+    this.anims.create({ key:'satgunIdle', frames:this.anims.generateFrameNumbers('satgunSheet', {start:0,end:4}), frameRate:6, repeat:-1 });
+    this.anims.create({ key:'satgunCharge', frames:this.anims.generateFrameNumbers('satgunSheet', {start:5,end:6}), frameRate:9, repeat:-1 });
+    this.anims.create({ key:'satgunRecoil', frames:this.anims.generateFrameNumbers('satgunSheet', {start:7,end:8}), frameRate:10, repeat:0 });
+    this.anims.create({ key:'explodeSatgun', frames:this.anims.generateFrameNumbers('satgunSheet', {start:18,end:25}), frameRate:14, repeat:0 });
+    this.anims.create({ key:'explodeSat', frames:this.anims.generateFrameNumbers('tutoSat', {start:6,end:14}), frameRate:12, repeat:0 });
     this.anims.create({ key:'explodeBomber', frames:this.anims.generateFrameNumbers('bomberExpl', {start:0,end:4}), frameRate:16, repeat:0 });
     this.anims.create({ key:'swarmerFly', frames:this.anims.generateFrameNumbers('swarmerSheet', {start:0,end:3}), frameRate:13, repeat:-1 });
     this.anims.create({ key:'explodeSwarmer', frames:this.anims.generateFrameNumbers('swarmerExpl', {start:0,end:3}), frameRate:16, repeat:0 });

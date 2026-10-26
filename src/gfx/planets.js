@@ -21,6 +21,19 @@ function _fbm(x, y, z, s){
   return t / 0.9375;
 }
 
+// planète d'un monde, à la taille voulue : les mondes avec `theme.photo` (la Terre) réduisent cette image en pixel art, les autres sont générés en code.
+// Même planète à l'accueil (carte, galaxie, fond des pages) et au décollage (game/intro.js).
+function worldPlanetTexture(scene, world, size){
+  const th = world.theme || {}, key = 'planet_' + world.id + (size === 96 ? '' : '_' + size);
+  if (scene.textures.exists(key)) return key;
+  if (th.photo && scene.textures.exists(th.photo)){
+    const src = scene.textures.get(th.photo).getSourceImage(), tex = scene.textures.createCanvas(key, size, size), ctx = tex.getContext();
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; ctx.drawImage(src, 0, 0, size, size); tex.refresh();
+    return key;
+  }
+  return makePlanetTexture(scene, key, { size, seed:th.seed || 1, freq:th.freq || 1.6, bands:th.bands || 0, rim:th.rim, palette:th.palette || [0x222244, 0x44448a, 0x8888cc] });
+}
+
 function makePlanetTexture(scene, key, o){
   if (scene.textures.exists(key)) return key;
   const S = o.size || 96, pal = o.palette.map(c=> [(c >> 16) & 255, (c >> 8) & 255, c & 255]);

@@ -26,6 +26,18 @@ mixin(GameScene, {
     } else if (this.levelProgress().frac >= 1) this.levelWin();
   },
 
+  // DÉZOOM PROGRESSIF d'un niveau : on démarre serré sur le vaisseau, puis la caméra recule au fil du niveau (le plus lent des deux : objectif atteint ou temps écoulé).
+  // Plus on avance dans le monde, plus le niveau se termine large (davantage d'espace pour davantage d'ennemis) ; le monde suivant va encore plus loin.
+  // Réglable par niveau : `zoom:{ start, end, seconds }` dans data/worlds/*.js.
+  levelZoom(){
+    const d = this.lvDef, zc = d.zoom || {}, w = worldById(d.world), g = d.goal || {};
+    const start = zc.start != null ? zc.start : ZOOM_START - 0.02 * d.index;
+    const end = Math.max(0.6, zc.end != null ? zc.end : ZOOM_END - 0.045 * d.index - 0.035 * ((w ? w.order : 1) - 1));
+    const dur = zc.seconds != null ? zc.seconds : (d.type === 'survive' && g.seconds ? g.seconds * 0.9 : 70);
+    const t = Math.min(1, Math.max(this.levelProgress().frac, this.lvT / dur));
+    return start + (end - start) * (t * t * (3 - 2 * t));      // départ et arrivée en douceur
+  },
+
   // { frac 0..1, label } — avancement vers l'objectif
   levelProgress(){
     const d = this.lvDef; if (!d) return { frac:0, label:'' };
