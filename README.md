@@ -37,7 +37,8 @@ src/
   gfx/              sprites dessinés en code, textures procédurales, constructeurs de textures
   audio/            moteur de sons, sons enregistrés, bibliothèque synthétique, musique
   ui/               icônes pixel, interface HTML, pages de menu, arbre, HUD
-  scenes/           BootScene (chargement) et GameScene (la scène principale)
+  scenes/           BootScene (chargement), GameScene (la scène de jeu) et HomeScene (l'accueil)
+  home/             méthodes de HomeScene : décor, carte stellaire, panneaux (voir docs/menu-accueil.md)
   game/ player/ enemies/ bosses/ combat/ events/ systems/ world/ fx/ dev/
                     les méthodes de GameScene, rangées par sujet
 ```
@@ -82,7 +83,8 @@ pip install playwright
 python tools/smoke_test.py          # lance le jeu en dev, démarre une partie, échoue s'il y a une erreur JS
 python tools/smoke_test.py --dist   # pareil sur le fichier unique de dist/
 ```
-À lancer avant chaque push.
+À lancer avant chaque push. Autres tests : `node tools/check_worlds.js`, `python tools/level_test.py`, `python tools/home_test.py`.
+Équilibrage : `python tools/sim_balance.py grid|campaign|tune` (joueur automatique en avance rapide, voir l'en-tête du fichier).
 
 ## Travailler à deux avec Git
 
@@ -110,4 +112,5 @@ Les fichiers lourds (`sources/`, ~50 Mo d'images et mp3) sont versionnés ; `dis
 
 ## Documentation
 - `CLAUDE.md` / `PASSATION.md` : contexte du projet pour Claude Code et état d'avancement.
+- `docs/menu-accueil.md` : l'accueil, les mondes, la progression (avec captures d'écran).
 - `docs/` : conception (boucle de gameplay, niveaux d'alerte, équilibrage, sons, prompts d'assets).

@@ -1,13 +1,9 @@
 "use strict";
-// Méthodes de GameScene — TUTO (1re partie / bouton DEV) : décollage, satellites à détruire, débris à esquiver, boss satellite.
+// Méthodes de GameScene — TUTO (niveau 1 du monde 1, `w1-tuto`, / bouton DEV) : décollage, satellites à détruire, débris à esquiver, boss satellite.
 mixin(GameScene, {
   /* ================= TUTO (bouton dans les PARAMETRES DEV et le menu DEV) =================
      Décollage depuis la Terre, petits satellites à exploser (leurs débris sont à ESQUIVER), boss satellite à ~1:15, puis retour au menu.
      Tout est géré ici: pas de spawn normal, pas d'XP, pas de classement, pas d'événements. Vaisseau de base (stats par défaut). */
-  tutoPending(){          // le tuto est la 1re partie tant qu'il n'a pas été fini ET que la progression est vide (nouvelle install ou réinitialisation)
-    try { if (localStorage.getItem('ssx_tuto_v1') === '1') return false; } catch(e){ return false; }
-    const m = this.meta || getMeta(); return !(m.fragments > 0 || (m.asc || 0) > 0 || Object.keys(m.tree || {}).some(k=> m.tree[k] > 0));
-  },
   tutoInit(){
     if (!this.textures.exists('tutoOrb')){ const c = this.textures.createCanvas('tutoOrb', 26, 26), g = c.context, gr = g.createRadialGradient(13,13,1,13,13,12); gr.addColorStop(0,'#ffffff'); gr.addColorStop(0.4,'#ffe0c0'); gr.addColorStop(0.75,'rgba(255,150,90,0.8)'); gr.addColorStop(1,'rgba(255,80,40,0)'); g.fillStyle = gr; g.fillRect(0,0,26,26); c.refresh(); }
     this.tutoSats = []; this.tutoT = 0; this.tutoSpawnCd = 700; this.tutoBoss = null; this.tutoDone = false; this.tutoPhase = 'sats'; this.tutoWarned = false; this._tutoH = {};
@@ -155,7 +151,11 @@ mixin(GameScene, {
       B.sp.destroy(); this.score += 500;
     });
     this.time.delayedCall(3400, ()=>{ this.tutoSfx('tutoDone', GAME_W/2); this.tutoHint('TUTO TERMINÉ — BIEN JOUÉ !', 2600); });
-    this.time.delayedCall(6200, ()=>{ try { localStorage.setItem('ssx_tuto_v1', '1'); } catch(e){ /* ignore */ } this.tutoFinish(); });
+    this.time.delayedCall(6200, ()=>{ try { localStorage.setItem('ssx_tuto_v1', '1'); } catch(e){ /* ignore */ } this.tutoReward(); this.tutoFinish(); });
+  },
+  tutoReward(){        // le tuto est un niveau du monde 1 : victoire enregistrée (ouvre le niveau suivant) + récompense de la 1re victoire
+    const d = levelById('w1-tuto'), rec = recordLevelClear('w1-tuto', this.score);
+    if (rec && rec.first){ const m = getMeta(); m.fragments += d.reward.clear + (d.reward.first || 0); setMeta(m); }
   },
   tutoCleanup(){
     (this.tutoSats || []).forEach(s=>{ if (s.sp && s.sp.active) s.sp.destroy(); }); this.tutoSats = [];

@@ -42,6 +42,7 @@ mixin(GameScene, {
     this.xp += (gem.xpValue || 2) * (1 + this.stats.xpBonus) * (1 + 0.12*(this.alertLevel-1)) * this.xpMul();
     this.spawnGemBurst(gem.x, gem.y, gem.gemKind || 'gemS');
     gem.destroy();
+    this.lvGems += 1;
     if ((gem.xpValue || 2) >= 6) sfx.gemBig(); else sfx.gem();
     if (this.xp >= this.xpToNext){
       this.levelUp();

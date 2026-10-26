@@ -31,10 +31,10 @@ mixin(GameScene, {
 
   hpScaleNow(){
     const t = this.difficultyTier;
-    return (1 + t*0.2) * Math.pow(LATE_HP_GROWTH, Math.max(0, t - 30)) * (1 + Math.max(0, this.alertLevel-4)*0.15);
+    return (1 + t*0.2) * Math.pow(LATE_HP_GROWTH, Math.max(0, t - 30)) * (1 + Math.max(0, this.alertLevel-4)*0.15) * ((this.lvDef && this.lvDef.hpMul) || 1);
   },
 
   enemyDmgMul(){
-    return (1 + ENEMY_DMG_PER_ALERT*(this.alertLevel-1)) * (1 + ENEMY_DMG_TIME_MAX*Math.min(1, this.elapsed/600)) * this.lateDmgMul();
+    return (1 + ENEMY_DMG_PER_ALERT*(this.alertLevel-1)) * (1 + ENEMY_DMG_TIME_MAX*Math.min(1, this.elapsed/600)) * this.lateDmgMul() * ((this.lvDef && this.lvDef.dmgMul) || 1);
   },
 });

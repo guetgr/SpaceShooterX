@@ -60,11 +60,12 @@ mixin(GameScene, {
 
     this.elapsed += delta/1000;
     if (this.tuto) this.tutoUpdate(delta);
-    if (!this.bossActive && this.alertLevel < ALERT_CAP && !this.tuto){
+    if (!this.bossActive && !this.lvDef && this.alertLevel < ALERT_CAP && !this.tuto){
       this.alertTimer += delta/1000;
       if (this.alertTimer >= ALERT_RISE_SECONDS) this.raiseAlert();
     }
     this.updateDifficulty();
+    this.levelUpdate(delta);
 
     // progressively dezoom from a close-in start to the full field, revealing
     // more room for enemies as the run goes on
@@ -207,7 +208,7 @@ mixin(GameScene, {
     }
 
     // spawn
-    if (!this.bossActive && !this.sandbox && !this.tuto){
+    if (!this.bossActive && !this.sandbox && !this.lvEnding && !this.tuto){
       this.spawnTimer -= delta;
       if (this.spawnTimer <= 0){
         this.spawnTimer = this.getSpawnInterval();

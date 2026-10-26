@@ -51,7 +51,7 @@ mixin(GameScene, {
     document.getElementById('lvlBadge').textContent = 'LV.'+this.level;
     document.getElementById('xpFill').style.width = Math.min(100,(this.xp/this.xpToNext*100)) + '%';
     const m = Math.floor(this.elapsed/60), s = Math.floor(this.elapsed%60);
-    document.getElementById('waveNote').textContent = 'T+' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ' · ALERTE ' + this.alertLevel;
+    document.getElementById('waveNote').textContent = this.lvDef ? ('NIV.' + this.lvDef.num + ' · ' + this.levelProgress().label) : ('T+' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0') + ' · ALERTE ' + this.alertLevel);
     { const wn = document.getElementById('waveNote'), cap = this.alertLevel >= ALERT_CAP;
       const f = cap ? 1 : Math.min(1, (this.alertTimer||0) / ALERT_RISE_SECONDS), k = f*f;                       // le rouge s'installe lentement puis s'accélère
       const blink = (!cap && f > 0.93) ? (0.55 + 0.45*Math.sin(this.time.now/110)) : 1;

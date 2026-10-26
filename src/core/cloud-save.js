@@ -1,7 +1,7 @@
 "use strict";
 // Clés de sauvegarde et copie de secours dans la base privée de la plateforme (CloudSave).
 
-const SAVE_KEYS = ['ssx_tuto_v1','ssx_highscore_v1','ssx_meta_v2','ssx_bestiary_v1','ssx_muted','ssx_music_muted','ssx_leaderboard_v1','ssx_playername_v1','ssx_achv_v1','ssx_codex_v1','ssx_pacts_v1','ssx_bossbag_v1'];
+const SAVE_KEYS = ['ssx_tuto_v1','ssx_highscore_v1','ssx_meta_v2','ssx_bestiary_v1','ssx_muted','ssx_music_muted','ssx_leaderboard_v1','ssx_playername_v1','ssx_achv_v1','ssx_codex_v1','ssx_pacts_v1','ssx_bossbag_v1','ssx_worlds_v1','ssx_skin_v1'];
 
 const _lsSet = Storage.prototype.setItem, _lsRem = Storage.prototype.removeItem;
 

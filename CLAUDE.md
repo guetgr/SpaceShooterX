@@ -1,8 +1,17 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Space Shooter X
 
 Jeu de tir spatial type Raiden / Archero / Vampire Survivors (endless + boss), Phaser 3, destiné à Android / Google Play (wrapper Android à faire).
 **Le code est découpé en modules** (`src/`, scripts classiques, pas de bundler) — voir `README.md` pour l'organisation, le lancement, l'ajout de fichiers/assets et le travail Git à deux. Lire aussi `PASSATION.md` (état complet) et `docs/space-shooter-x-gameplay.md` (boucle de gameplay détaillée).
 L'ancien monolithe (un seul `index.html` de 16 Mo) est conservé dans `backups/index_monolithe_avant_split.html` (non versionné).
+
+## Structure du jeu (depuis l'accueil à mondes)
+Plus de partie infinie comme mode principal : **accueil (HomeScene) → carte des mondes → niveau (GameScene avec `lvDef`) → écran de résultat**. Détails, fichiers et tests : `docs/menu-accueil.md`.
+En niveau, `alertLevel` = menace fixée par le niveau (`threat`), plus par l'arbre ; la partie infinie reste accessible en `?dev` (bouton DEV). Mondes/niveaux : `src/data/worlds/*.js` (brouillons). Le tuto est le niveau 1 du monde 1 (`w1-tuto`, type `tuto`, `src/game/tuto.js`) : sans `lvDef`, lancé par `tuto:true`. Le revenu de combat en niveau est réduit par `LEVEL_FRAG_MUL` (`data/balance.js`).
+Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de npm/bundler/lint : Python 3 (+ `pip install playwright numpy`), Node (vérif syntaxe du build) et Chrome suffisent. `file://` ne marche pas : toujours passer par le serveur.
 
 ## Au début de chaque session / message
 **Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
@@ -29,10 +38,14 @@ L'ancien monolithe (un seul `index.html` de 16 Mo) est conservé dans `backups/i
 - Sauvegarde : `SAVE_KEYS` (`core/cloud-save.js`, localStorage `ssx_*`).
 - Mode DEV : `?dev` dans l'URL (ou build `-dev`) → `DEV_SEE_ALL = true`, expose `window.__game` et `window.__T` (`ALL_TREE_NODES, UPGRADE_POOL, RELICS, FUSIONS, sfx`). Les `const` de haut niveau sont aussi utilisables directement dans `page.evaluate`.
 
+- Mixins : `mixin(GameScene, {…})` plante au démarrage si une méthode est définie deux fois (voulu) — ne pas redéfinir, chercher d'abord avec Grep. L'accueil suit le même principe : `HomeScene` + méthodes dans `src/home/` (voir `docs/menu-accueil.md`).
+- Hooks de test (`?dev`) : scène de jeu = `window.__game.scene.scenes.find(s=>s.startRun)` ; lancer une run = clic `#btnStart` ; bac à sable = `#btnSandbox` ; finir l'intro = `sc.introT=99999`. Tests headless : dt clampé, FPS bas faussent la vitesse.
+
 ## Outils (dossier tools/)
 - `serve.py` / `serve.bat` : serveur local sans cache (`http://localhost:8080/?dev`).
 - `build.py` : génère `dist/space-shooter-x.html` (prod) et `dist/space-shooter-x-dev.html` (DEV) en un seul fichier + vérif de syntaxe (Node). Option `--inline-phaser`.
 - `smoke_test.py` : test headless (playwright + Chrome) — lance une partie, échoue si erreur JS. À lancer avant tout push. `--dist` pour tester le fichier unique.
+- Autres tests : `node tools/check_worlds.js` (format/déblocages des mondes), `python3 tools/level_test.py` (victoire/défaite par objectif), `python3 tools/home_test.py` (accueil, carte, arbre, hangar), `python3 tools/sim_balance.py grid|campaign|tune` (joueur auto en avance rapide, équilibrage). Pas de lanceur de test unique : lancer le script voulu directement.
 - `gen_manifest.py` : régénère `assets/manifest.json` après ajout/suppression d'un asset.
 - `cut.py … cut4.py` : pipeline de découpe des sons (ffmpeg + numpy) ; les sources mp3 sont dans `sources/sons-sources/` (chemins des scripts à adapter). `skills3.py`, `drift2.py`, `intro2.py`, `prof.py`, `sfxtest.py` : exemples de tests ponctuels écrits pour l'ancien monolithe (chemins `/tmp/...` à adapter).
 - Machine de test à 1 cœur / WebGL logiciel : les FPS ne sont pas représentatifs d'un téléphone.

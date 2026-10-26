@@ -159,8 +159,9 @@ mixin(GameScene, {
 
   endIce(){
     const ic = this._ice; this._ice = null; this._iceVx = 0;
+    this._shipTintStep = -1;                  // les dégâts du vaisseau se re-teintent au prochain tour
     if (ic){ this.tweens.add({ targets:ic.veil, alpha:0, duration:700, onComplete:()=> ic.veil.destroy() }); }
-    this.player.clearTint();
+    this.applyShipSkin();
     this.enemies.children.iterate(e=>{ if (e && e.active && e._iceT){ e._iceT = false; e.clearTint(); } });
   },
 

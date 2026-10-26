@@ -14,6 +14,9 @@ Seuls changements de comportement : `DEV_SEE_ALL` vient de `?dev` dans l'URL (au
 - Dérapage du vaisseau aux virages, de moins en moins marqué quand on améliore les réacteurs (vue de dessus uniquement ; les autres vues de la planche sont des vues iso de face, inutilisables sans vues 3/4 arrière).
 - **Sons enregistrés** (47) intégrés en 4 lots : voir §4.
 
+### Refonte accueil / mondes (25 oct. 2026, branche `menu-accueil`)
+Accueil animé à 3 pages (Hangar · Carte · Arbre), carte stellaire, mondes → niveaux → boss, écran de résultat, arbre intégré à l'accueil, 3 apparences de la camionnette. **Voir `docs/menu-accueil.md`** (captures, fichiers, tests). Mondes 1-3 = brouillons à équilibrer (simulateur : `tools/sim_balance.py`). La partie infinie n'est plus qu'en `?dev` (bouton DEV). L'ascension et les anneaux d'alerte de l'arbre sont retirés de l'interface.
+
 ## 2. Contexte utilisateur
 Bio, francophone, ne code pas. Veut un jeu agréable pour un petit revenu passif (Google Play), éventuellement d'autres jeux ensuite. Style pixel art rétro, contrôles au glissement du doigt. Assets graphiques via ChatGPT (prompts dans `docs/prompts-chatgpt-*.md`), musique via Suno (`docs/suno-prompts.md`, `docs/musique-suno.md`), sons enregistrés/générés par lui (gratuits uniquement). Philosophie d'équilibrage : voir CLAUDE.md (pas de plafonds artificiels).
 Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran transparent par-dessus les autres applis, bouton pause).
@@ -52,7 +55,8 @@ Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran
 - Wrapper Android (Capacitor ou TWA), leaderboard en ligne, publication Play Store, éventuel mode overlay.
 - Deux artifacts doublons sur claude.ai (Uq3ke5XSPyaaHafGWrUmw7, 5kSZAsLoNthzAzStBFxLrr) à supprimer si Bio confirme.
 - Taille du build fichier unique : ~16 Mo (limite 16 Mo des artifacts claude.ai). Gérer en local selon besoin.
-- Git : le dépôt n'est pas encore initialisé (Git n'était pas installé sur la machine) — étapes dans `README.md`.
+- Git : le dépôt est sur GitHub (`guetgr/SpaceShooterX`) ; travail par branches (voir `README.md`).
+- Équilibrage des niveaux (courbe de difficulté, économie, `hpMul`/`dmgMul`) : voir `docs/menu-accueil.md` § État.
 
 ## 7. Contenu du dossier
 - `index.html` + `css/` + `src/` — **le jeu** (source de vérité, voir README.md).

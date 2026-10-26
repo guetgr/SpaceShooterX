@@ -9,8 +9,8 @@ mixin(GameScene, {
     const step = Math.round((1 - ratio) * 20);
     if (step !== this._shipTintStep){
       this._shipTintStep = step;
-      if (step === 0) this.player.clearTint();
-      else { const k = 1 - ratio; this.player.setTint(Phaser.Display.Color.GetColor(255 - Math.round(70*k), 255 - Math.round(140*k), 255 - Math.round(150*k))); }
+      if (step === 0) this.applyShipSkin();
+      else { const k = 1 - ratio; this.player.setTint(this.mulSkin(255 - Math.round(70*k), 255 - Math.round(140*k), 255 - Math.round(150*k))); }
     }
     const g = this.shipDmgGfx;
     g.clear();

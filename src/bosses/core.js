@@ -71,9 +71,9 @@ mixin(GameScene, {
     const baseA = Math.min(this.alertLevel, this.baseAlert || this.alertLevel);
     const bossTime = Math.pow(BOSS_RUN_ALERT_HP, Math.max(0, this.alertLevel - baseA)) * Math.pow(LATE_HP_GROWTH, Math.max(0, this.difficultyTier - 30));   // le boss suit la montée du niveau d'alerte en partie
     const tierStep = Math.min(BOSS_TIER_HP, 0.25 + 0.05*(this.alertLevel-1));        // aux bas niveaux les boss suivants gonflent moins vite (+25% par boss au niveau 1, +65% dès le niveau 9)
-    const ts = (opts.dbl ? DOUBLE_BOSS_HP_MUL : 1) * bossTime * (1 + (this.bossesDefeated + 1)*tierStep) * BOSS_HP_BY_ALERT[Math.min(BOSS_HP_BY_ALERT.length-1, Math.max(0, baseA-1))];
+    const ts = (opts.dbl ? DOUBLE_BOSS_HP_MUL : 1) * bossTime * (1 + (this.bossesDefeated + 1)*tierStep) * BOSS_HP_BY_ALERT[Math.min(BOSS_HP_BY_ALERT.length-1, Math.max(0, baseA-1))] * ((this.lvDef && this.lvDef.hpMul) || 1);      // hpMul : réglage fin du niveau
     boss.ts = ts;
-    this.bossDmgMul = Math.min(BOSS_DMG_CAP, (1 + this.difficultyTier*BOSS_TIER_DMG) * (1 + (this.alertLevel-1)*BOSS_ALERT_DMG)) * this.lateDmgMul();
+    this.bossDmgMul = Math.min(BOSS_DMG_CAP, (1 + this.difficultyTier*BOSS_TIER_DMG) * (1 + (this.alertLevel-1)*BOSS_ALERT_DMG)) * this.lateDmgMul() * ((this.lvDef && this.lvDef.dmgMul) || 1);
     boss.hp = def.hp*ts;
     boss.maxHp = boss.hp;
     boss.scoreValue = 300;
@@ -270,6 +270,11 @@ mixin(GameScene, {
     }
     if (this.bosses.length > 0) this.currentBoss = this.bosses[0];                          // il ne reste qu'un boss bonus: le combat continue, mais la suite est déjà programmée
     else { this.bossActive = false; this.currentBoss = null; }
+    if (this.lvDef){                                                                        // boss du monde vaincu : le niveau est gagné
+      this.cameras.main.flash(300, 255, 206, 74, false); this.startSlowmo(650, 0.35); this.galaxyBlast(bx, by);
+      this.levelWin();
+      return;
+    }
     this.nextBossAt = this.elapsed + Math.min(90, 45 + this.bossesDefeated*5);   // ~1 boss toutes les 1 min 30 au plus
     if (this.sandbox) this.nextBossAt = 1e9; else this.planEvents();
     if (this.stats.odBossCharge > 0) this.addOverdrive(this.stats.odBossCharge);   // SECOND SOUFFLE

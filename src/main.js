@@ -13,7 +13,7 @@ const config = {
   pixelArt: true,
   physics: { default:'arcade', arcade: { gravity:{ y:0 }, debug:false } },
   scale: { mode: Phaser.Scale.FIT, autoCenter: Phaser.Scale.CENTER_BOTH },
-  scene: [BootScene, GameScene]
+  scene: [BootScene, GameScene, HomeScene]
 };
 
 // boot.js charge ce fichier en dernier, souvent après l'événement "load" : on démarre tout de suite dans ce cas
