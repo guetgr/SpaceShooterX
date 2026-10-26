@@ -133,6 +133,7 @@ mixin(GameScene, {
     this.cameras.main.shake(320, hot ? 0.013 : 0.008);
     sfx.phaseUp();
     this.startSlowmo(420, 0.5);
+    this.juiceStop('bossPhase');
     const bn = document.getElementById('boss-banner');
     if (bn){
       const old = bn.textContent; bn.textContent = hot ? 'PHASE 3 : FUREUR !' : 'PHASE 2'; bn.classList.add('show');
@@ -309,6 +310,7 @@ mixin(GameScene, {
     this.cameras.main.shake(380, 0.012);
     sfx.secondForm();
     this.startSlowmo(700, 0.4);
+    this.juiceStop('bossSecond');
     const bn = document.getElementById('boss-banner');
     const old = bn.textContent;
     bn.textContent = 'SECONDE FORME !';

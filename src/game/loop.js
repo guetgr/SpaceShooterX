@@ -160,7 +160,7 @@ mixin(GameScene, {
     this.fireTimer -= delta;
     if (this.fireTimer <= 0){
       this.fireTimer = this.getEffectiveFireRate();
-      this.firePlayerBullets();
+      this.firePlayerBullets(); this.juiceFire();
     }
 
     // missiles (secondary weapon, auto-guided)
@@ -238,7 +238,7 @@ mixin(GameScene, {
       if (this.gems.getLength() <= 70) g.setScale((1/GEM_SS) * (1 + 0.05*Math.sin(time/260 + g.ph)));
       const d = Phaser.Math.Distance.Between(g.x,g.y,this.player.x,this.player.y);
       if (d < this.stats.magnetRadius || this.elapsed < (this._magnetUntil||0)){
-        this.physics.moveToObject(g, this.player, this.elapsed < (this._magnetUntil||0) ? 430 : 260);       // TEMPETE MAGNETIQUE: tout vient à toi
+        this.juiceMagnet(g, delta, this.elapsed < (this._magnetUntil||0));       // TEMPETE MAGNETIQUE: tout vient à toi (mouvement dans fx/juice.js)
       }
     });
     this.heals.children.iterate(h=>{

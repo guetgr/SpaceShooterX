@@ -87,5 +87,6 @@
   "player/skin.js",
   "player/progression.js",
   "fx/particles.js",
+  "fx/juice.js",
   "main.js"
 ]

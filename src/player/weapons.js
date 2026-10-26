@@ -16,7 +16,7 @@ mixin(GameScene, {
         b.setScale(0.34);
         b.pierceLeft = this.stats.pierce;
         b.isShotgunPellet = true;
-        b.damage = this.rollDamage(this.stats.damage*0.7);
+        b.damage = this.rollDamage(this.stats.damage*0.7); b.crit = this._lastCrit;
         this.physics.velocityFromRotation(rad, this.stats.bulletSpeed*0.9, b.body.velocity);
       }
       sfx.laser();
@@ -33,7 +33,7 @@ mixin(GameScene, {
         const b = this.playerBullets.create(this.player.x, this.player.y-20, 'laser');
         b.setDepth(5);
         b.pierceLeft = 999;
-        b.damage = this.rollDamage(this.getLaserDamage());
+        b.damage = this.rollDamage(this.getLaserDamage()); b.crit = this._lastCrit;
         this.physics.velocityFromRotation(angle, this.getLaserSpeed(), b.body.velocity);
         if (target && this.stats.laserLockBonus > 0){ b.lockTgt = target; b.lockTurn = 1.4*this.stats.laserLockBonus; b.lockSpd = this.getLaserSpeed(); }       // VERROUILLAGE+: le tir corrige sa trajectoire vers sa cible
       }
@@ -53,7 +53,7 @@ mixin(GameScene, {
       b.setDepth(5);
       if (!isLaser) b.setScale(0.34);
       b.pierceLeft = isLaser ? 999 : this.stats.pierce;
-      b.damage = this.rollDamage(isLaser ? this.getLaserDamage() : this.stats.damage);
+      b.damage = this.rollDamage(isLaser ? this.getLaserDamage() : this.stats.damage); b.crit = this._lastCrit;
       const spd = isLaser ? this.getLaserSpeed() : this.stats.bulletSpeed;
       this.physics.velocityFromRotation(rad, spd, b.body.velocity);
     }
@@ -80,8 +80,8 @@ mixin(GameScene, {
 
   rollDamage(base){
     if (this.odActive > 0) base *= 1 + (this.stats.odDmgMul - 1)*this.odPower();     // overdrive: dégâts x2 (plus avec SURCHAUFFE)
-    if (Math.random() < this.stats.critChance) return base*2;
-    return base;
+    this._lastCrit = Math.random() < this.stats.critChance;       // lu par juiceImpact (chiffre doré)
+    return this._lastCrit ? base*2 : base;
   },
 
   findNearestEnemies(x, y, count){

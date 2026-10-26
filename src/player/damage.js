@@ -113,7 +113,7 @@ mixin(GameScene, {
     if (this.combo.n > 0) this.bankCombo(true);
     if (!this.lastStandUsed && this.hp > 0 && this.hp <= this.stats.maxHp*0.12 && this.shield <= 0 && !(this.odShield > 0)) this.lastStand();    // seulement quand il ne reste que 12% de VIE et plus aucun bouclier
     this.shakeHud('hpTrack', this.hp < this.stats.maxHp*0.25);
-    this.cameras.main.shake(120, 0.008);
+    this.juiceHurt(finalAmount);
     this.cameras.main.flash(90, 255, 79, 109, false);
     sfx.hurt();
     this.updateHud(false);
