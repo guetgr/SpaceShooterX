@@ -39,15 +39,31 @@ mixin(HomeScene, {
     }
     // glisser le doigt (ou la souris) d'une page à l'autre : écouté sur le conteneur, donc même au-dessus des boutons
     const box = $('game-container'); let sx = 0, sy = 0, st = 0, down = false;
+    // carte du monde → carte stellaire : pincer à deux doigts (dans un sens ou l'autre), glisser vers le bas, ou molette vers le bas
+    const pts = new Map(); let pinch0 = 0;
+    const canGalaxy = ()=> this.homeOn && this.page === 0 && this.mapMode === 'world' && !document.querySelector('.overlay:not(.hidden)');
+    const pinchDist = ()=>{ const [a, b] = [...pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
+    box.addEventListener('pointermove', e=>{
+      if (!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
+      if (pts.size === 2 && pinch0 && Math.abs(pinchDist() - pinch0) > 60){ pinch0 = 0; if (canGalaxy()) this.enterGalaxy(); }
+    });
+    const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; };
+    box.addEventListener('pointercancel', pinchEnd);
+    box.addEventListener('wheel', e=>{ if (e.deltaY > 20 && canGalaxy()) this.enterGalaxy(); }, { passive:true });
     box.addEventListener('pointerdown', e=>{
+      pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
+      if (pts.size === 2){ pinch0 = pinchDist(); down = false; return; }                  // 2e doigt : pincement, plus un glissement de page
       down = true; sx = e.clientX; sy = e.clientY; st = performance.now();
       // sur l'arbre, un glissement sert à déplacer la vue : on ne change de page que depuis le bord gauche de l'écran
       if (e.target.closest && e.target.closest('#treeStage') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
     });
     box.addEventListener('pointerup', e=>{
+      pinchEnd(e);
       if (!down) return; down = false;
       if (!this.homeOn || document.querySelector('.overlay:not(.hidden)')) return;
       const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (dy > 90 && dy > Math.abs(dx)*1.5 && performance.now() - st < 700 && canGalaxy()){ this.enterGalaxy(); return; }
       if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5 && performance.now() - st < 700) this.goHomePage(this.page + (dx < 0 ? 1 : -1));
     });
     this.input.keyboard.on('keydown-LEFT', ()=>{ if (this.homeOn && !document.querySelector('.overlay:not(.hidden)')) this.goHomePage(this.page - 1); });
