@@ -38,10 +38,10 @@ with sync_playwright() as pw:
     p.evaluate("localStorage.setItem('ssx_meta_v2', JSON.stringify({fragments:500,tree:{},asc:0}))")
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(600)
     p.evaluate("document.getElementById('tabTree').click()"); p.wait_for_timeout(900)
-    ck(page()==1 and p.evaluate("document.querySelectorAll('#treeNodes .tree-node').length")>1,"l'arbre s'affiche dans la page de droite")
+    ck(page()==1 and p.evaluate("document.querySelectorAll('#treeScroll .tcard').length")>1,"l'arbre s'affiche dans la page de droite")
     ck(p.evaluate("document.getElementById('tabTree').classList.contains('buy')"),'point doré : un achat est possible')
     ck(p.evaluate("!!(document.getElementById('btnAscend') || document.getElementById('alertRowSkills') || document.querySelector('#treeRings'))")==False,"plus d'ascension ni d'anneaux d'alerte")
-    p.evaluate("document.querySelector('#treeNodes .tree-node.aff').dispatchEvent(new MouseEvent('click',{bubbles:true}))"); p.wait_for_timeout(300)
+    p.evaluate("document.querySelector('#treeScroll .tcard.aff').dispatchEvent(new MouseEvent('click',{bubbles:true}))"); p.wait_for_timeout(300)
     ck(p.evaluate("!document.getElementById('treeInvestBtn').disabled"),'nœud abordable sélectionné : bouton + actif')
     p.evaluate("document.getElementById('treeInvestBtn').click()"); p.wait_for_timeout(500)
     ck(p.evaluate("getMeta().fragments")<500 and p.evaluate("document.getElementById('homeFrag').textContent")=='◆ '+str(p.evaluate("getMeta().fragments")),'achat : fragments débités et affichage mis à jour')
@@ -59,10 +59,10 @@ with sync_playwright() as pw:
     ck(len(p.evaluate("document.getElementById('modDetail').textContent"))>10,'toucher un module affiche son détail')
     p.evaluate("document.getElementById('segStats').click()")
     p.evaluate("document.getElementById('tabTree').click()"); p.wait_for_timeout(700)
-    # glisser dans l'arbre = déplacer la vue (pas de changement de page) ; depuis le bord gauche = changer de page
-    tx0=p.evaluate("window.__ssxScene.treeTx")
-    swipe(300,120,y=300); ck(page()==1 and p.evaluate("window.__ssxScene.treeTx")!=tx0,"glisser dans l'arbre déplace la vue")
-    swipe(8,300,y=300); ck(page()==0,'glisser depuis le bord gauche -> retour à la carte')
+    # arbre : glisser sur les onglets de branche = les faire défiler (pas de changement de page) ; ailleurs = changer de page
+    ty=p.evaluate("(()=>{const r=document.getElementById('treeTabs').getBoundingClientRect(); return Math.round(r.top+r.height/2)})()")
+    swipe(300,120,y=ty); ck(page()==1,"glisser sur les onglets de l'arbre ne change pas de page")
+    swipe(80,330,y=500); ck(page()==0,"glisser vers la droite sur les cartes -> retour à la carte")
     # carte stellaire
     mode=lambda: p.evaluate("window.__ssxScene.scene.get('home').mapMode")
     p.evaluate("document.getElementById('tabMap').click()"); p.wait_for_timeout(500)

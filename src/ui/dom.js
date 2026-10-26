@@ -274,50 +274,7 @@ mixin(GameScene, {
       this.hasActiveRun = false;
       this.showStartScreen();
     };
-    this.setupTreeInteraction();
-  },
-
-  setupTreeInteraction(){
-    const stage = document.getElementById('treeStage');
-    const viewport = document.getElementById('treeViewport');
-    if (this.treeScale === undefined){ this.treeTx=0; this.treeTy=0; this.treeScale=0.95; }
-    const svgEl = document.getElementById('treeSvg');
-    const applyT = ()=>{
-      viewport.setAttribute('transform', `translate(${this.treeTx},${this.treeTy}) scale(${this.treeScale})`);
-      if (svgEl) svgEl.classList.toggle('tree-far', this.treeScale < 1.15);   // dézoomé: les noms des compétences non possédées disparaissent
-    };
-    this.buildTreeChips();
-    this._treeApplyTransform = applyT;
-    const pts = new Map(); let pinch0 = 0, scale0 = 1;                  // pointeurs actifs : 1 doigt = déplacer, 2 doigts = zoomer
-    stage.onpointerdown = (e)=>{
-      // ne pas voler le toucher au nœud visé (son propre clic doit partir)
-      if (pts.size === 0 && e.target.closest && e.target.closest('.tree-node')) return;
-      pts.set(e.pointerId, { x:e.clientX, y:e.clientY }); stage.setPointerCapture(e.pointerId);
-      if (pts.size === 2){ const [a, b] = [...pts.values()]; pinch0 = Math.hypot(a.x - b.x, a.y - b.y); scale0 = this.treeScale; }
-    };
-    stage.onpointermove = (e)=>{
-      const p = pts.get(e.pointerId); if (!p) return;
-      if (pts.size === 2){
-        p.x = e.clientX; p.y = e.clientY;
-        const [a, b] = [...pts.values()], dist = Math.hypot(a.x - b.x, a.y - b.y);
-        if (pinch0 > 0) this.treeScale = Math.min(3.2, Math.max(0.32, scale0*dist/pinch0));
-        applyT(); return;
-      }
-      this.treeTx += (e.clientX - p.x); this.treeTy += (e.clientY - p.y);
-      p.x = e.clientX; p.y = e.clientY;
-      applyT();
-    };
-    const endDrag = (e)=>{ pts.delete(e.pointerId); if (pts.size < 2) pinch0 = 0; };
-    stage.onpointerup = endDrag;
-    stage.onpointercancel = endDrag;
-    stage.onpointerleave = endDrag;
-    stage.onwheel = (e)=>{
-      e.preventDefault();
-      const delta = e.deltaY>0 ? -0.08 : 0.08;
-      this.treeScale = Math.min(3.2, Math.max(0.32, this.treeScale+delta));
-      applyT();
-    };
-    applyT();
+    this.setupTreeUi();
   },
 
   updateSettingsLabels(){
