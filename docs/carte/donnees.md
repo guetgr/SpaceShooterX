@@ -24,9 +24,9 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `r_blindage`, `r_canon`, `r_braise`, `r_faux`, `r_frenesie`, `r_vent`, `r_nanites`, `r_miel`, `r_reine`, `r_refract`, `r_cristal`, `r_lentille`, `r_encre`, `r_ventouse`, `r_tentacule`, `r_voile`, `r_phase`, `r_eclipse`, `r_regen`, `r_tetes`, `r_venin`
 
-## `src/data/ship-skins.js` (3)
+## `src/data/ship-skins.js` (12)
 
-`base`, `ember`, `void`
+`base`, `ember`, `void`, `none`, `beacon`, `rack`, `none`, `hazard`, `agp`, `none`, `guards`, `stripes`
 
 ## `src/data/skill-tree.js` (111)
 
@@ -48,4 +48,4 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `w3`, `w3-l1`, `w3-l2`, `w3-l3`, `w3-l4`, `w3-l5`
 
-214 ids au total.
+223 ids au total.

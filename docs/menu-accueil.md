@@ -34,7 +34,7 @@ Victoire sur un niveau = niveau suivant débloqué ; boss vaincu = monde suivant
 | `src/game/level.js` | Moteur de niveau : objectif, événements du niveau, victoire. La menace du niveau remplace l'ancien « niveau d'alerte ». |
 | `src/scenes/HomeScene.js`, `src/home/` | Accueil : décor + pages (`background.js`), carte stellaire (`galaxy.js`), panneaux (`ui.js`). Panneaux HTML dans `index.html` (`#home`). |
 | `src/gfx/planets.js` | Planètes en pixel art générées en code, une palette par monde. |
-| `src/data/ship-skins.js`, `src/player/skin.js` | Apparences de la camionnette (teintes). |
+| `src/data/ship-skins.js`, `src/player/skin.js` | Livrées et pièces cosmétiques de la camionnette ; la couche d'accessoires est affichée dans l'atelier et en mission. |
 
 ## Tests
 `node tools/check_worlds.js` (format + déblocages) · `python3 tools/level_test.py` (victoire/défaite par type d'objectif, récompenses) · `python3 tools/home_test.py` (pages, carte, arbre, hangar) · `python3 tools/smoke_test.py` (le jeu démarre). Prérequis : `pip install playwright`.
@@ -43,4 +43,12 @@ Victoire sur un niveau = niveau suivant débloqué ; boss vaincu = monde suivant
 - **Les mondes 1 à 3 sont des brouillons** : durées, menaces et récompenses sont provisoires.
 - Un simulateur d'équilibrage existe (`tools/sim_balance.py`, voir son en-tête) : un joueur automatique joue les niveaux ~60× plus vite que le temps réel. Premier constat : avec les valeurs de départ le jeu était trop facile (l'arbre entier s'achetait au début du monde 3) → le revenu de combat en niveau est réduit (`LEVEL_FRAG_MUL` dans `src/data/balance.js`). Le réglage fin niveau par niveau (`hpMul` / `dmgMul`) reste à faire.
 - Sons à ajouter (demandés à l'équipe son) : glissement de pages, zoom sur un monde, hyperespace, déblocage d'un monde, jingle « niveau terminé » (aujourd'hui `relicOpen`).
-- Le hangar n'a qu'un seul vaisseau ; les apparences sont des teintes (pas de sprites dédiés).
+- L'atelier garde une seule camionnette, personnalisable avec trois livrées et trois postes de pièces (toit, marquage, flancs). Les choix sont purement visuels et sauvegardés séparément des modules R&D.
+
+### Garage illustré (27 octobre 2026)
+
+L’atelier utilise désormais `src/home/garage.js`, `css/atelier.css` et les images de `assets/atelier/`. Il remplace l’ancien atelier sans sélecteur de version. Le sprite Phaser de navigation est masqué sur cette page uniquement et revient sur la carte.
+
+Le véhicule et son module partagent le même repère 768 × 820 et la même animation. Placements validés : aimant (349, 273, largeur 310), canon (413, 342, largeur 215). Les sélections restent des apparences du garage, sans effet sur les compétences de mission. Peinture et carrosserie présentent les illustrations du catalogue ; leurs variantes montées restent à produire avec l’utilisateur. La préférence de module est locale (`ssx_atelier_preview_module`). Les sauvegardes précédentes de peinture et d’accessoires restent intactes.
+
+Vérification : affichage mobile, choix/retrait des deux modules, catégories, retour carte, visibilité du sprite de navigation et lancement de mission sans erreur JavaScript.

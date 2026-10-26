@@ -123,6 +123,7 @@ class GameScene extends Phaser.Scene{
     this.player.setDepth(10);
     this.player.setScale(PLAYER_SHIP_SCALE);
     this.skinTint = shipSkinTint(getShipSkin()); this.applyShipSkin();      // apparence choisie au hangar
+    this.playerParts = this.add.image(this.player.x, this.player.y, shipPartsTexture(this, getShipParts())).setDepth(10.1).setScale(PLAYER_SHIP_SCALE);
     this.player.body.setSize(150, 170);
     this.playerTarget = { x: this.player.x, y: this.player.y };
     this.dragging = false;

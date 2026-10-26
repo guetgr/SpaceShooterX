@@ -50,6 +50,7 @@
   "scenes/HomeScene.js",
   "home/background.js",
   "home/galaxy.js",
+  "home/garage.js",
   "home/ui.js",
   "world/background.js",
   "ui/dom.js",

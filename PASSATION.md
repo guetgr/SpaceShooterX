@@ -2,6 +2,8 @@
 
 > Lire d'abord `CLAUDE.md` (règles), `docs/brief-univers-agp.md` (univers et ton), puis `docs/carte-du-code.md` (où est quoi).
 
+> **Garage en pause (27 octobre 2026)** : lire [docs/REPRISE-GARAGE.md](docs/REPRISE-GARAGE.md) pour l’état de la branche `codex/atelier-personnalisation`, les assets validés et la suite prévue.
+
 ## 1. Où on en est
 Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers AGP. Boucle : **accueil → carte des secteurs → ordre de mission → rapport d'intervention**, avec catalogue R&D (arbre), cartes de montée de niveau, reliques, fusions, boss, événements, succès, pactes, bestiaire. **3 secteurs, 16 niveaux** (tuto + 5 par secteur), encore à équilibrer. La partie infinie n'existe plus qu'en `?dev`.
 

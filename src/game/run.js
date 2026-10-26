@@ -162,6 +162,7 @@ mixin(GameScene, {
     const px = this.player.x, py = this.player.y;
     const kz = Phaser.Math.Clamp(1/this.cameras.main.zoom, 1, 2.2);       // les effets grossissent quand on dézoome
     this.player.setVisible(false);
+    if (this.playerParts) this.playerParts.setVisible(false);
     if (this.shieldAura) this.shieldAura.setVisible(false);
     if (this.shipDmgGfx) this.shipDmgGfx.clear();
     this.startSlowmo(1200, 0.35);
