@@ -535,7 +535,7 @@ body.at-home #comboTxt, body.at-home #styleHud, body.at-home #odBtn, body.at-hom
 .level-card{ width:100%; min-height:70px; padding:8px 12px; text-align:left; border:2px solid #28362f; border-left:4px solid var(--neon-cyan); background:linear-gradient(90deg, rgba(255,194,26,.12), rgba(10,8,24,.8) 60%); margin-bottom:10px; }
 .lc-name{ font-size:11px; color:#fff; margin-bottom:5px; }
 .lc-line{ font-family:'SSX Text',monospace; font-size:18px; color:#c3d2c8; line-height:1.1; }
-.lc-line b{ color:var(--neon-amber); font-weight:normal; } .lc-line.lock{ color:#ff7088; }
+.lc-line b{ color:var(--neon-amber); font-weight:normal; }
 #btnLaunch{ min-width:230px; padding:15px 22px; margin-bottom:12px; } #btnLaunch:disabled{ opacity:.35; filter:grayscale(1); cursor:default; }
 .gx-title{ font-size:15px; color:var(--neon-cyan); text-shadow:0 0 10px rgba(255,194,26,.5); margin-top:8px; }
 .gx-hint{ position:absolute; left:0; right:0; bottom:66px; font-family:'SSX Text',monospace; font-size:18px; color:var(--ink-dim); }

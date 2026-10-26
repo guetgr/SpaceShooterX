@@ -27,6 +27,10 @@ Accueil animé à 3 pages (Hangar · Carte · Arbre), carte stellaire, mondes �
 - Assets encore provisoires (CSS/texte) : logo AGP, visage de N.O.R.M.A., tampons, sons de transmission/impression/tampon (liste au §9 du doc AGP). Idées touchant au gameplay (primes/retenues, notation RH, syndicat…) : §10 du doc, non faites.
 - Points d'attention : le build « fichier unique » n'a pas l'écran de chargement (il reste noir pendant l'analyse du fichier, ~21 Mo) ; pas de service worker (pas de mode hors ligne).
 
+### Carte du code (26 oct. 2026, branche `carte-du-code`)
+- `docs/carte-du-code.md` (écrit à la main : flux de démarrage, accueil ↔ niveau, stats, atouts, sauvegardes, N.O.R.M.A., audio, éditeur, conventions, pièges, tests) + `docs/carte/*.md` **générés** par `tools/gen_codemap.py` (Python 3 seul, regex ; sans numéros de ligne ni tailles pour éviter les conflits de merge). `--check` signale une carte périmée ; à lancer avant de pousser.
+- `docs/carte/audit.md` liste des candidats au code mort et des restes de l'ancien arbre radial : ce sont des heuristiques, à vérifier avant toute suppression (aucun nettoyage fait).
+
 ## 2. Contexte utilisateur
 Bio, francophone, ne code pas. Veut un jeu agréable pour un petit revenu passif (Google Play), éventuellement d'autres jeux ensuite. Style pixel art rétro, contrôles au glissement du doigt. Assets graphiques via ChatGPT (prompts dans `docs/prompts-chatgpt-*.md`), musique via Suno (`docs/suno-prompts.md`, `docs/musique-suno.md`), sons enregistrés/générés par lui (gratuits uniquement). Philosophie d'équilibrage : voir CLAUDE.md (pas de plafonds artificiels).
 Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran transparent par-dessus les autres applis, bouton pause).
@@ -44,14 +48,14 @@ Idée à rediscuter plus tard : mode overlay façon « Deskrawl » (plein écran
 - Lot 4 : kamiCharge, motherCharge, goldenSpawn (pk .10 volontairement bas ; fichier « goldenSpwan » de 47 s → 2,5 s), gemBig, gem, mineDrop.
 - Toujours synthétiques : slowField (Bio dit « c'est le son des tirs ennemis qui te ralentissent » — aucun fichier reçu, à clarifier) et le reste des 110.
 - Les niveaux (`pk`) ont été réglés **à l'aveugle** : Bio dira « trop fort / pas assez ». Ajuster `pk` dans `SFX_FILES`.
-- Pipeline : `tools/cut*.py` (découpe start/end/fade, normalise, mp3 mono → base64 → json). Les json `tools/sfx_files*.json` contiennent les data-URI d'origine (historique). **Depuis le découpage, les sons sont des fichiers `assets/audio/sfx/<nom>[_n].mp3`** : pour modifier un son, remplacer le fichier mp3 (plus besoin de base64 ni de toucher au code) ; le niveau `pk` etc. se règle dans `src/audio/sfx-files.js`.
+- Ancien pipeline (`tools/cut*.py`, supprimé, voir l'historique Git : découpe start/end/fade, normalise, mp3 mono → base64 → json). Les json `tools/sfx_files*.json` contiennent les data-URI d'origine (historique). **Depuis le découpage, les sons sont des fichiers `assets/audio/sfx/<nom>[_n].mp3`** : pour modifier un son, remplacer le fichier mp3 (plus besoin de base64 ni de toucher au code) ; le niveau `pk` etc. se règle dans `src/audio/sfx-files.js`.
 - Chemins des scripts : écrits pour le conteneur (`/mnt/user-data/attachments/...`, `/tmp/snd`) → **adapter `A=` et les dossiers `out/`** ; sources mp3 dans `sources/sons-sources/` (nommées `<hash>-<nom>.mp3`).
 - Idée possible : mode `jit` (variation par prise) non implémenté dans `playFile`.
 
 ## 5. Tests
 - Mode DEV (`?dev` ou build `-dev`) : expose `window.__T = {ALL_TREE_NODES, UPGRADE_POOL, RELICS, FUSIONS, sfx}` et `window.__game`.
 - Scène : `window.__game.scene.scenes.find(s=>s.startRun)`. Lancer une run : clic `#btnStart`. Bac à sable : `#btnSandbox` (DEV seulement ; `sc.introActive=false`, `sc.sbAI=true`). Finir l'intro : `sc.introT=99999`.
-- Test de fumée : `python tools/smoke_test.py` (ou `--dist`). Il sert de modèle pour d'autres tests. Autres exemples ponctuels dans `tools/` (skills3.py = audit compétences, drift2.py = dérapage, intro2.py = intro Terre, prof.py = profilage, sfxtest.py) : écrits pour l'ancien monolithe, chemins à adapter.
+- Test de fumée : `python tools/smoke_test.py` (ou `--dist`). Il sert de modèle pour d'autres tests.
 - Vérif syntaxe : faite automatiquement par `tools/build.py` (`node --check`).
 
 ## 6. À faire / questions ouvertes

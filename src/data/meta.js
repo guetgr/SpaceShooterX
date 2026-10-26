@@ -19,7 +19,6 @@ function setMeta(meta){
 // points investis dans l'arbre pour atteindre les niveaux 2, 3, 4... (l'arbre complet vaut ~333 points)
 const ALERT_THRESHOLDS = [6, 14, 24, 36, 50, 90, 140, 170, 200, 230, 260, 290, 342, 381];   // le niveau 15 = l'arbre complet
 
-const ALERT_MAX = ALERT_THRESHOLDS.length + 1;
 
 // chaque ASCENSION ajoute +1 niveau d'alerte (jusqu'à 20) en plus de celui de l'arbre, et des bonus permanents
 const ALERT_CAP = 20;

@@ -116,7 +116,7 @@ const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 
 const musicLen = key => MUSIC_BOSS_KEYS.includes(key) ? 56 : 48;
 
-const MUSIC_LOOP_S = 48, MUSIC_BAR_S = 2, MUSIC_GAIN = 1.0;
+const MUSIC_BAR_S = 2, MUSIC_GAIN = 1.0;
 
 class FileMusic{
   constructor(owner){

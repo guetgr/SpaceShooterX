@@ -28,6 +28,9 @@ Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de np
 - **Responsive (téléphone, tablette, PC)** : la zone de jeu fait toujours **400x700 logiques** (`#game-container`, Phaser en mode `NONE`) et est mise à l'échelle d'un bloc par `fitUi()` (`src/main.js`, variable CSS `--ui-s`) : canevas et HTML partagent le même repère, donc même mise en page et même lisibilité partout (bandes sombres autour). Ne pas utiliser d'unités `vw/vh` ni de mesures de fenêtre dans l'interface : tout se règle en px logiques sur 400x700. Détails : `docs/responsive.md`.
 - **Tests de l'interface** : `home_test.py` et `level_test.py` vérifient des libellés AGP (« INTERVENTION VALIDEE », « ACCIDENT DU TRAVAIL », « ORDRE ANNULE », « NOUVEAU SECTEUR ») : les mettre à jour si on change ces textes.
 
+## Carte du code (où est quoi)
+Point d'entrée : `docs/carte-du-code.md` (flux, table « où trouver quoi », conventions, pièges, tests). Index générés dans `docs/carte/` (`symboles.md` : nom → fichier, à consulter en premier ; `fichiers.md`, `donnees.md`, `interface.md`, `audit.md`). Générés par `python3 tools/gen_codemap.py` ; `--check` échoue si la carte est périmée. **Règle : après tout ajout/suppression de fichier ou de fonction, et avant de pousser, relancer le script** (en cas de conflit sur `docs/carte/`, le relancer).
+
 ## Au début de chaque session / message
 **Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
 
@@ -66,7 +69,7 @@ Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de np
 - `smoke_test.py` : test headless (playwright + Chrome) — lance une partie, échoue si erreur JS. À lancer avant tout push. `--dist` pour tester le fichier unique.
 - Autres tests : `node tools/check_worlds.js` (format/déblocages des mondes), `python3 tools/level_test.py` (victoire/défaite par objectif), `python3 tools/home_test.py` (accueil, carte, arbre, hangar), `python3 tools/sim_balance.py grid|campaign|tune` (joueur auto en avance rapide, équilibrage). Pas de lanceur de test unique : lancer le script voulu directement.
 - `gen_manifest.py` : régénère `assets/manifest.json` après ajout/suppression d'un asset.
-- `cut.py … cut4.py` : pipeline de découpe des sons (ffmpeg + numpy) ; les sources mp3 sont dans `sources/sons-sources/` (chemins des scripts à adapter). `skills3.py`, `drift2.py`, `intro2.py`, `prof.py`, `sfxtest.py` : exemples de tests ponctuels écrits pour l'ancien monolithe (chemins `/tmp/...` à adapter).
+- Anciens scripts ponctuels (découpe des sons `cut*.py`, `skills3.py`, `drift2.py`, `intro2.py`, `prof.py`, `sfxtest.py`, `gen_doc.py`) supprimés ; récupérables dans l'historique Git. Les sources mp3 des sons restent dans `sources/sons-sources/`.
 - Machine de test à 1 cœur / WebGL logiciel : les FPS ne sont pas représentatifs d'un téléphone.
 
 ## Contrainte de taille
