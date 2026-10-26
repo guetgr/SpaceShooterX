@@ -28,6 +28,7 @@ mixin(HomeScene, {
     $('btnGalaxy').onclick = ()=> this.enterGalaxy();
     $('btnBackWorld').onclick = ()=> this.enterWorldView(this.homeWorld);
     $('btnLaunch').onclick = ()=> this.launchLevel();
+    Motion.bindPress();
     this.hangarSeg = 'stats';
     $('segStats').onclick = ()=>{ this.hangarSeg = 'stats'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
     $('segMods').onclick = ()=>{ this.hangarSeg = 'mods'; sfx.uiSelect(); this.renderHomeHangar(getMeta()); };
@@ -73,6 +74,7 @@ mixin(HomeScene, {
 
   enterHome(){
     this.homeOn = true; this._launching = false;
+    Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');
     this.cameras.main.resetFX(); this.cameras.main.fadeIn(350, 5, 4, 12);
@@ -119,6 +121,7 @@ mixin(HomeScene, {
     document.getElementById('tabMap').classList.toggle('on', p === 0);
     document.getElementById('tabTree').classList.toggle('on', p === 1);
     this.tweens.add({ targets:this, pageX:p, duration: instant ? 1 : 450, ease:'Cubic.easeInOut' });
+    if (!instant) Motion.enter(document.querySelectorAll('.home-page')[p + 1]);
     if (p === 1) this.showHomeTree();
     this.moveHomeVan(p);
   },
@@ -162,7 +165,7 @@ mixin(HomeScene, {
     $('levelCard').innerHTML = '<div class="lc-name"></div><div class="lc-line">' + levelGoalText(l) + '</div><div class="lc-line">MENACE <b>' + l.threat + '</b> · ◆ <b>+' + l.reward.clear + '</b>' + (rec ? ' · Record <b>' + rec.best + '</b>' : ' (1re : <b>+' + (l.reward.first || 0) + '</b>)') + '</div>' +
       (!rec && !unl ? '<div class="lc-line lock">Termine le niveau précédent.</div>' : '') + this.finitionLine(l, p);
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'NIV.' + l.num + ' — ') + (unl ? l.name : '? ? ?');
-    const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REJOUER' : 'DECOLLER') : 'VERROUILLE';
+    const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REJOUER' : 'DECOLLER') : 'VERROUILLE'; Motion.syncBreath(lb);
     this.setHomeVanTier(l.threat);
   },
 
@@ -220,7 +223,7 @@ mixin(HomeScene, {
   // fragments, stats du hangar, point doré : après un achat dans l'arbre
   refreshHomeStats(){
     const meta = getMeta();
-    document.getElementById('homeFrag').textContent = '◆ ' + meta.fragments;
+    Motion.count(document.getElementById('homeFrag'), meta.fragments, v=> '◆ ' + v);
     this.renderHomeHangar(meta); this.renderHomeTree(meta);
   },
 
@@ -233,7 +236,7 @@ mixin(HomeScene, {
   launchLevel(){
     const l = levelById(this.homeSel);
     if (!l || !isLevelUnlocked(l.id) || this._launching) return;
-    this._launching = true; sfx.resume(); sfx.uiStart();
+    this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
     this.cameras.main.fadeOut(380, 5, 4, 12);
     this.cameras.main.once('camerafadeoutcomplete', ()=>{
       const gs = this.scene.get('game');

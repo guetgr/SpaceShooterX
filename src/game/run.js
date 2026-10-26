@@ -43,7 +43,7 @@ mixin(GameScene, {
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
-    sfx.launch();
+    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined;
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
     music.start();
@@ -145,6 +145,7 @@ mixin(GameScene, {
     this.deathTimer = setTimeout(()=>{
       const go = document.getElementById('gameover');
       go.classList.remove('hidden'); go.classList.remove('fadein'); void go.offsetWidth; go.classList.add('fadein');
+      Motion.result(go, { victory:!!victory });
     }, victory ? 700 : (abandon ? 150 : 1800));
   },
 
