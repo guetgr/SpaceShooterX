@@ -70,6 +70,15 @@ with sync_playwright() as pw:
     start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
     check(p.evaluate("%s.lvDef.id" % SC) == 'w1-l1', 'le niveau est chargé')
     check(p.evaluate("%s.alertLevel" % SC) == 1, 'menace = celle du niveau')
+    print('composants en mission')
+    check(p.evaluate("%s.runComposants" % SC) == 0 and p.evaluate("%s.comps.getLength()" % SC) == 0, 'composants : compteur à 0 au départ')
+    n = p.evaluate("(()=>{ const sc = %s; const e = sc.spawnOneEnemy('tank', 200); sc.killEnemy(e); return sc.comps.getLength(); })()" % SC)
+    check(n >= 3, 'un ennemi lourd lâche 3 composants (%s)' % n)
+    check(p.evaluate("%s.comps.getChildren().every(c=> c.depth === 3)" % SC), 'composants sous les tirs ennemis (profondeur 3)')
+    p.evaluate("(()=>{ const sc = %s; sc.spawnComposantAt(sc.player.x, sc.player.y, 'compL', 0); return 0; })()" % SC); p.wait_for_timeout(400)
+    check(p.evaluate("%s.runComposants" % SC) >= 5, 'ramassage : +5 pour un gros composant')
+    check(p.evaluate("document.getElementById('compVal').textContent") == str(p.evaluate("%s.runComposants" % SC)), 'compteur du HUD = composants ramassés')
+    check(p.evaluate("(()=>{ const sc = %s; const k = sc.comps.getLength(); sc.tuto = 1; sc.composantDrop({ enemyType:'tank', x:200, y:200 }); sc.tuto = 0; return sc.comps.getLength() - k; })()" % SC) == 0, 'tutoriel : aucun composant')
     p.wait_for_timeout(5500)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par survie -> écran de fin')
     check(vis('#btnNext') and vis('#btnRetry') and vis('#btnGoMenu'), 'victoire : boutons SUIVANT, REJOUER, ACCUEIL')
@@ -83,6 +92,7 @@ with sync_playwright() as pw:
 
     print('rejeu : pas de nouveau bonus de 1re victoire')
     start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
+    check(p.evaluate("%s.runComposants" % SC) == 0, 'rejeu : le compteur repart de 0')
     p.wait_for_timeout(5500)
     f2 = p.evaluate("getMeta().fragments"); check(0 < f2 - f1 < 60, 'rejeu : bonus réduit (+%s)' % (f2 - f1))
 

@@ -43,7 +43,7 @@ mixin(GameScene, {
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
-    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this.pgTab = null; this.normaStart();
+    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this._cpShown = undefined; this.pgTab = null; this.normaStart();
     Motion.uncover();                      // le rideau de transition (accueil → niveau) se rouvre
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });

@@ -54,3 +54,5 @@ body.at-home #norma{ display:none; }
 @media(prefers-reduced-motion:reduce){ #hud *, #norma{ animation:none!important; transition:none!important; } }
 
 #hud .hp-bar-track::after{ display:none; }
+/* composants ◆ ramassés pendant la mission (sous le rendement) */
+#hud .comp-val{ display:flex; align-items:center; justify-content:flex-end; gap:3px; margin-top:2px; font:normal 13px/1 'SSX Display',monospace; font-variant-numeric:tabular-nums; color:#ffd76a; text-shadow:0 1px #000; }

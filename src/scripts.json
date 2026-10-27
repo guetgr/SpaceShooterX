@@ -94,6 +94,7 @@
   "systems/overdrive.js",
   "systems/relics-fusions.js",
   "world/pickups.js",
+  "world/composants.js",
   "world/meteors.js",
   "events/core.js",
   "events/types.js",

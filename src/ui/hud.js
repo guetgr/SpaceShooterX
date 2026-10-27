@@ -61,6 +61,7 @@ mixin(GameScene, {
     }
     const sv = document.getElementById('scoreVal'), sc = Math.floor(this.score);
     if (this._scShown !== sc){ this._scShown = sc; sv.textContent = sc; Motion.tick(sv); }
+    if (this._cpShown !== this.runComposants){ this._cpShown = this.runComposants; document.getElementById('compVal').textContent = this.runComposants; }
     const lb = document.getElementById('lvlBadge');
     if (this._lvShown !== this.level){
       if (this._lvShown !== undefined){ Motion.pop(lb, 1.6); this.hudFlash('xpTrack', 'lvup', 750); }

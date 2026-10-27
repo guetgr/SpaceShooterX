@@ -247,6 +247,7 @@ mixin(GameScene, {
         this.juiceMagnet(g, delta, this.elapsed < (this._magnetUntil||0));       // TEMPETE MAGNETIQUE: tout vient à toi (mouvement dans fx/juice.js)
       }
     });
+    this.updateComposants(time, delta);
     this.heals.children.iterate(h=>{
       if (!h) return;
       const d = Phaser.Math.Distance.Between(h.x,h.y,this.player.x,this.player.y);
@@ -263,6 +264,7 @@ mixin(GameScene, {
         this.gems.children.iterate(g=>{
           if (g && g.active) this.physics.moveToObject(g, this.player, 420);
         });
+        this.comps.children.iterate(c=>{ if (c && c.active) this.physics.moveToObject(c, this.player, 420); });
         this.spawnHitParticles(this.player.x, this.player.y, 10);
       }
     }
@@ -281,6 +283,7 @@ mixin(GameScene, {
     this.cleanupGroup(this.enemyBullets, 40);
     this.cleanupGroup(this.enemies, 60, true);
     this.cleanupGroup(this.gems, 80);
+    this.cleanupGroup(this.comps, 80);
     this.cleanupGroup(this.heals, 80);
 
     // enemy behaviours
@@ -325,6 +328,7 @@ mixin(GameScene, {
         this.enemies.children.iterate(e=>{ if (e && e.active && e.enemyType !== 'boss' && !e.isBossPart) e.y += dy * 0.8; });
         this.enemyBullets.children.iterate(b=>{ if (b && b.active) b.y += dy; });
         this.gems.children.iterate(g=>{ if (g && g.active) g.y += dy; });
+        this.comps.children.iterate(c=>{ if (c && c.active) c.y += dy; });
         this.heals.children.iterate(h=>{ if (h && h.active) h.y += dy; });
       } }
     this._bLoad = this.enemyBullets.getLength();
