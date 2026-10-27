@@ -8,6 +8,7 @@
   "data/bestiary.js",
   "data/achievements.js",
   "data/balance.js",
+  "data/composants.js",
   "data/events.js",
   "ui/pixel-icons.js",
   "ui/ui-icons.js",
