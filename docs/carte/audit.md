@@ -24,8 +24,9 @@ En portée globale, la dernière définition écrase les autres (ou plante pour 
 Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.html, tools) n'est appelé nulle part. Sauf appel par nom construit dynamiquement ou depuis la console.
 
 
-## Candidats « code mort » : méthodes jamais référencées par leur nom (0)
+## Candidats « code mort » : méthodes jamais référencées par leur nom (1)
 
+- `GameScene.startMagVortex` — `src/events/types.js`
 
 ## Outils (`tools/`)
 

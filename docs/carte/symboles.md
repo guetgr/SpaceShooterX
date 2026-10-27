@@ -69,6 +69,46 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ALERT_RISE_SECONDS` | const | `src/data/balance.js` |  |
 | `ALERT_THRESHOLDS` | const | `src/data/meta.js` |  |
 | `ALL_TREE_NODES` | const | `src/data/skill-tree.js` |  |
+| `AN` | const | `src/bosses/anneau.js` |  |
+| `AN_FX_B64` | const | `src/data/image-assets.js` |  |
+| `AN_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `anBoom` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anBreakLimbs` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anClearAttacks` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anDamage` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anDead` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anDeathPieces` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anDie` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anDoors` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anFlames` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anFx` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anHits` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anHullPoint` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anLaunch` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anLights` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anOrb` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anPieceCanvas` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anPix` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anPlace` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anS` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anSfx` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anShard` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anShards` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anSmoke` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anSolid` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anSpark` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anSrc` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anStageOf` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anStart` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anStartAtk` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anStep` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anTex` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anThrow` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anTurAlive` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anUpdate` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anUpdateAttack` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anW` | méthode | `src/bosses/anneau.js` | `GameScene` |
+| `anWound` | méthode | `src/bosses/anneau.js` | `GameScene` |
 | `applyAchvBuffLive` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `applyAchvBuffs` | fonction | `src/data/achievements.js` |  |
 | `applyAscension` | fonction | `src/data/meta.js` |  |
@@ -78,6 +118,45 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `applyTuning` | fonction | `src/data/tuning-apply.js` |  |
 | `applyVol` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `applyVol` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
+| `AR` | const | `src/bosses/araignee.js` |  |
+| `AR_FX_B64` | const | `src/data/image-assets.js` |  |
+| `AR_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `arBayAlive` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arBayDir` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arBoom` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arBreakLimbs` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arCloseBays` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDamage` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDead` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDeathPieces` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDie` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDoors` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDrawBays` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arDrawBeam` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arFlames` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arHits` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arHullPoint` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arLaunch` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arPieceCanvas` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arPix` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arPlace` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arS` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arSfx` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arShard` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arShards` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arSmoke` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arSolid` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arSpark` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arStageOf` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arStart` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arStartAttack` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arStep` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arThrow` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arUpdate` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arUpdateAttack` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arUpdateShots` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arW` | méthode | `src/bosses/araignee.js` | `GameScene` |
+| `arWound` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `ASCEND_MIN` | const | `src/data/meta.js` |  |
 | `ASHIELD_EXCL` | const | `src/core/constants.js` |  |
 | `AURA_PAD` | const | `src/gfx/procedural.js` |  |
@@ -134,7 +213,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BESTIARY_LIST` | const | `src/data/bestiary.js` |  |
 | `bestiaryKeyFor` | fonction | `src/data/achievements.js` |  |
 | `BG_ZONES` | const | `src/gfx/procedural.js` |  |
+| `blDestroy` | méthode | `src/fx/boss-lights.js` | `GameScene` |
+| `blInit` | méthode | `src/fx/boss-lights.js` | `GameScene` |
 | `blinkHit` | méthode | `src/bosses/core.js` | `GameScene` |
+| `blUpdate` | méthode | `src/fx/boss-lights.js` | `GameScene` |
 | `BOMB_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BOMB_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `BOMBER2_BULLET_B64` | const | `src/data/image-assets.js` |  |
@@ -151,6 +233,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BOSS_DEFS` | const | `src/data/bosses.js` |  |
 | `BOSS_DMG_CAP` | const | `src/data/bosses.js` |  |
 | `BOSS_HP_BY_ALERT` | const | `src/data/bosses.js` |  |
+| `BOSS_LIGHTS` | const | `src/data/boss-lights.js` |  |
 | `BOSS_ORDER` | const | `src/data/bosses.js` |  |
 | `BOSS_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BOSS_PHASE2_FROM` | const | `src/data/bosses.js` |  |
@@ -172,6 +255,23 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `bossPhaseThresholds` | fonction | `src/data/bosses.js` |  |
 | `bossSecondForm` | méthode | `src/bosses/core.js` | `GameScene` |
 | `bossShot` | méthode | `src/bosses/core.js` | `GameScene` |
+| `BR_FX_B64` | const | `src/data/image-assets.js` |  |
+| `BRAS` | const | `src/enemies/bras.js` |  |
+| `BRAS_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `brasDeath` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasHullPoint` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasInit` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasLaunch` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasOrb` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasPiece` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasPix` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasPlan` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasPort` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasPortAlive` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasShards` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasShooter` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasUpdate` | méthode | `src/enemies/bras.js` | `GameScene` |
+| `brasWound` | méthode | `src/enemies/bras.js` | `GameScene` |
 | `buildBackgroundTextures` | fonction | `src/gfx/builders.js` |  |
 | `buildBossPlaceholders` | fonction | `src/gfx/builders.js` |  |
 | `buildGalaxy` | méthode | `src/home/galaxy.js` | `HomeScene` |
@@ -260,6 +360,27 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `dropBomb` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `drum` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `EARTH_B64` | const | `src/data/image-assets.js` |  |
+| `EC` | const | `src/enemies/eclaireur.js` |  |
+| `EC_FX_B64` | const | `src/data/image-assets.js` |  |
+| `EC_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `ecDeath` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecDraw` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecFx` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecInit` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecLaunch` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecLockUpdate` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecP` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecPiece` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecPix` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecSfx` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecShards` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecSolid` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecStep` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecSummon` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecUpdate` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecVolley` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecWAlive` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
+| `ecWound` | méthode | `src/enemies/eclaireur.js` | `GameScene` |
 | `effectiveAlert` | fonction | `src/data/meta.js` |  |
 | `eligibleFusions` | méthode | `src/systems/relics-fusions.js` | `GameScene` |
 | `ELITE2_BULLET_B64` | const | `src/data/image-assets.js` |  |
@@ -341,6 +462,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `galaxyPos` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `GAME_W` | const | `src/core/constants.js` |  |
 | `GameScene` | classe | `src/scenes/GameScene.js` |  |
+| `GD_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `GEM_CAP` | const | `src/core/constants.js` |  |
 | `GEM_KINDS` | const | `src/gfx/procedural.js` |  |
 | `GEM_SPARK` | const | `src/gfx/procedural.js` |  |
@@ -453,6 +575,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `levelZoom` | méthode | `src/game/level.js` | `GameScene` |
 | `load` | méthode | `src/audio/music.js` | `FileMusic` |
 | `loadFiles` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
+| `loopSet` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
+| `LT_B64` | const | `src/data/image-assets.js` |  |
 | `makeBossPart` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `makeDefaultStats` | fonction | `src/data/player-stats.js` |  |
 | `makePlanetTexture` | fonction | `src/gfx/planets.js` |  |
@@ -477,6 +601,53 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `Motion` | const | `src/ui/motion.js` |  |
 | `MOTION_PRESS` | const | `src/ui/motion.js` |  |
 | `moveHomeVan` | méthode | `src/home/background.js` | `HomeScene` |
+| `MT` | const | `src/bosses/meteo.js` |  |
+| `MT_FX_B64` | const | `src/data/image-assets.js` |  |
+| `MT_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `mtArcFx` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtAtkType` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtAvailable` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtBolt` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtBoom` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtBreakLimbs` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtClearAttacks` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtCurtain` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtDamage` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtDead` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtDeathPieces` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtDie` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtDrawStrikes` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtEndAttack` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtFlames` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtFx` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtHailStone` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtHailStonesClear` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtHits` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtHullPoint` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtPieceCanvas` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtPix` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtPlace` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtRodAlive` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtS` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtSfx` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtShard` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtShards` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtSmoke` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtSolid` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtSpark` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtStageOf` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtStart` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtStartAttack` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtStep` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtThrow` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtTubeAlive` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtUpdate` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtUpdateAttack` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtUpdateCurtains` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtUpdateStrikes` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtW` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtWingAlive` | méthode | `src/bosses/meteo.js` | `GameScene` |
+| `mtWound` | méthode | `src/bosses/meteo.js` | `GameScene` |
 | `mulSkin` | méthode | `src/player/skin.js` | `GameScene` |
 | `music` | const | `src/audio/music.js` |  |
 | `MUSIC_BAR_S` | const | `src/audio/music.js` |  |
@@ -518,9 +689,78 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `PARTICLE_PAL_LIST` | const | `src/gfx/builders.js` |  |
 | `PARTICLE_ROWS` | const | `src/gfx/builders.js` |  |
 | `pauseGearItems` | méthode | `src/ui/pages.js` | `GameScene` |
+| `PD` | const | `src/bosses/pdg.js` |  |
+| `PD_FX_B64` | const | `src/data/image-assets.js` |  |
+| `PD_SHEET` | const | `src/bosses/pdg.js` |  |
+| `PD_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `pdBoom` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdBreakLimbs` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdBsol` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdDamage` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdDead` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdDeathPieces` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdDie` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdDrawEntities` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdFlames` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdFx` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdGuardShatter` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdHits` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdHullPoint` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdHurtGuard` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdHurtShip` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdKillGuardObj` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdKillShipObj` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdLights` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdLitter` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdOrb` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdPiece` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdPix` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdPlace` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdS` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSfx` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdShard` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdShards` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdShipDie` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSlotX` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSlotY` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSmoke` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSolidK` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSpark` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSrc` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdStageOf` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdStart` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdStartAtk` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdStep` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdSummonShips` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdTaken` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdThrow` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdUpdate` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdUpdateAttack` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdUpdateEntities` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdW` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdWingOn` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `pdWound` | méthode | `src/bosses/pdg.js` | `GameScene` |
+| `PG_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `pickBgZone` | méthode | `src/world/background.js` | `GameScene` |
 | `pickFusions` | méthode | `src/systems/relics-fusions.js` | `GameScene` |
 | `pickKey` | méthode | `src/audio/music.js` | `FileMusic` |
+| `PIL` | const | `src/enemies/pilleur.js` |  |
+| `pilDeath` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilDoor` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilDraw` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilFx` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilGulp` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilInit` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilLaunch` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilP` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilPiece` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilPix` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilShards` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilSolid` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilUpdate` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `pilWound` | méthode | `src/enemies/pilleur.js` | `GameScene` |
+| `PL_FX_B64` | const | `src/data/image-assets.js` |  |
+| `PL_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `PLANET_BIG` | const | `src/home/background.js` |  |
 | `planEvents` | méthode | `src/events/core.js` | `GameScene` |
 | `play` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
@@ -541,6 +781,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `playFile` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `playStep` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `playWorldUnlock` | méthode | `src/home/galaxy.js` | `HomeScene` |
+| `plLoopsApply` | méthode | `src/enemies/pilleur.js` | `GameScene` |
 | `pump` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `PX_CACHE` | const | `src/ui/pixel-icons.js` |  |
 | `pxEmoji` | fonction | `src/ui/pixel-icons.js` |  |
@@ -589,6 +830,50 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `RU_SPORE_B64` | const | `src/data/image-assets.js` |  |
 | `RU_TRANS_B64` | const | `src/data/image-assets.js` |  |
 | `ruBee` | méthode | `src/bosses/parts.js` | `GameScene` |
+| `RX` | const | `src/bosses/reacteur.js` |  |
+| `RX_FX_B64` | const | `src/data/image-assets.js` |  |
+| `RX_SHEET_B64` | const | `src/data/image-assets.js` |  |
+| `rxAngDiff` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxAvailable` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxBoom` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxBreakLimbs` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxCapAlive` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxClearAttacks` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxDamage` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxDead` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxDeathPieces` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxDie` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxEndAttack` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxFlames` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxFx` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxGlob` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxHeat` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxHits` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxHullPoint` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxLand` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxOrb` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxPieceCanvas` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxPix` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxPlace` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxS` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxSfx` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxShard` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxShards` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxSmoke` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxSolid` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxSpark` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxStageOf` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxStart` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxStartAttack` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxStep` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxStream` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxThrow` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxUpdate` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxUpdateAttack` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxUpdateShots` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxUpdateWaves` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxW` | méthode | `src/bosses/reacteur.js` | `GameScene` |
+| `rxWound` | méthode | `src/bosses/reacteur.js` | `GameScene` |
 | `sanitizeName` | fonction | `src/data/leaderboard.js` |  |
 | `satDebris` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `SATGUN_SHEET_B64` | const | `src/data/image-assets.js` |  |
@@ -847,4 +1132,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-840 symboles.
+1125 symboles.

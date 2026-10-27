@@ -149,7 +149,6 @@ Un événement démarre toutes les 55 à 100 s (80 % de ce délai à partir du n
 | Pluie de cristaux | 1 | cristaux d'XP qui tombent | 7 s |
 | Tempête de météorites | 1 | rochers qui se divisent en 3 (plus fréquent aux hauts niveaux) | 9 à 14 s |
 | Frénésie | 1 | XP ×2, apparitions presque 2× plus rapides | 15 s |
-| Tempête magnétique | 1 | 22 cristaux sur l'écran, tout est aspiré vers toi | 10 s |
 | Marée d'essaims | 2 | paquets d'essaims en continu | 11 s |
 | Ciel de Trésorins | 2 | 3 Trésorins à la suite | 5 s |
 | Champ de mines | 3 | mines posées dans la moitié haute | 9 s |

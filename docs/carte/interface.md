@@ -33,9 +33,9 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `bossHpFill3` | — | — |
 | `bossShTrack3` | — | — |
 | `bossShFill3` | — | — |
-| `boss-hp-wrap` | `bosses/core.js`, `game/level.js`, `game/tuto.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
-| `bossLabel` | `bosses/core.js`, `game/tuto.js` | — |
-| `bossHpFill` | `bosses/core.js`, `game/tuto.js` | — |
+| `boss-hp-wrap` | `bosses/anneau.js`, `bosses/araignee.js`, `bosses/core.js`, `bosses/meteo.js`, `bosses/pdg.js`, `bosses/reacteur.js`, `game/level.js`, `game/tuto.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
+| `bossLabel` | `bosses/anneau.js`, `bosses/araignee.js`, `bosses/core.js`, `bosses/meteo.js`, `bosses/pdg.js`, `bosses/reacteur.js`, `game/tuto.js` | — |
+| `bossHpFill` | `bosses/anneau.js`, `bosses/araignee.js`, `bosses/core.js`, `bosses/meteo.js`, `bosses/pdg.js`, `bosses/reacteur.js`, `game/tuto.js` | — |
 | `bossShTrack` | `bosses/core.js` | — |
 | `bossShFill` | `bosses/core.js` | — |
 | `boss-banner` | `bosses/core.js`, `game/tuto.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
@@ -273,14 +273,14 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`audio/music/` : 23, `audio/sfx/` : 81, `fonts/` : 3, `sprites/` : 148
+`audio/music/` : 23, `audio/sfx/` : 233, `fonts/` : 3, `sprites/` : 233
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 
 —
 
-### Assets dont le nom n'apparaît nulle part dans le code (13 candidats)
+### Assets dont le nom n'apparaît nulle part dans le code (88 candidats)
 
 Les sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.
 
-`sprites/ac_boss0.webp`, `sprites/ac_boss1.webp`, `sprites/ac_boss2.webp`, `sprites/ac_boss3.webp`, `sprites/ac_fx_boom.webp`, `sprites/ac_fx_charge.webp`, `sprites/ac_fx_flame.webp`, `sprites/ac_fx_impact.webp`, `sprites/ac_fx_muzzle.webp`, `sprites/ac_fx_orb.webp`, `sprites/ac_fx_shock.webp`, `sprites/ac_fx_smoke.webp`, `sprites/ac_fx_spark.webp`
+`sprites/ac_boss0.webp`, `sprites/ac_boss1.webp`, `sprites/ac_boss2.webp`, `sprites/ac_boss3.webp`, `sprites/ac_fx_boom.webp`, `sprites/ac_fx_charge.webp`, `sprites/ac_fx_flame.webp`, `sprites/ac_fx_impact.webp`, `sprites/ac_fx_muzzle.webp`, `sprites/ac_fx_orb.webp`, `sprites/ac_fx_shock.webp`, `sprites/ac_fx_smoke.webp`, `sprites/ac_fx_spark.webp`, `sprites/an_fx_beam.webp`, `sprites/an_fx_boomL.webp`, `sprites/an_fx_boomM.webp`, `sprites/an_fx_charge.webp`, `sprites/an_fx_glow.webp`, `sprites/an_fx_glowHot.webp`, `sprites/an_fx_impact.webp`, `sprites/an_fx_muzzle.webp`, `sprites/an_fx_orb.webp`, `sprites/an_fx_orbHot.webp`, `sprites/an_fx_rotor.webp`, `sprites/an_fx_shock.webp`, `sprites/an_fx_spark.webp`, `sprites/ar_fx_boomL.webp`, `sprites/ar_fx_missile.webp`, `sprites/ar_fx_shock.webp`, `sprites/br_fx_boom.webp`, `sprites/br_fx_charge.webp`, `sprites/br_fx_impact.webp`, `sprites/br_fx_muzzle.webp`, `sprites/br_fx_orb.webp`, `sprites/ec_fx_cone.webp`, `sprites/ec_fx_coneHot.webp`, `sprites/ec_fx_reticle.webp`, `sprites/lt_beacon.webp`, `sprites/lt_radar.webp`, `sprites/lt_rotor_amber.webp`, `sprites/lt_rotor_fire.webp`, `sprites/lt_rotor_hot.webp`, `sprites/lt_rotor_toxic.webp`, `sprites/mt_fx_arc.webp`, `sprites/mt_fx_bolt.webp`, `sprites/mt_fx_boomL.webp`, `sprites/mt_fx_boomM.webp`, `sprites/mt_fx_charge.webp`, `sprites/mt_fx_fcharge.webp`, `sprites/mt_fx_fmuzzle.webp`, `sprites/mt_fx_glow.webp`, `sprites/mt_fx_hail.webp`, `sprites/mt_fx_iceb.webp`, `sprites/mt_fx_impact.webp`, `sprites/mt_fx_muzzle.webp`, `sprites/mt_fx_shock.webp`, `sprites/mt_fx_spark.webp`, `sprites/pd_fx_beam.webp`, `sprites/pd_fx_boomL.webp`, `sprites/pd_fx_boomM.webp`, `sprites/pd_fx_charge.webp`, `sprites/pd_fx_flame.webp`, `sprites/pd_fx_frost.webp`, `sprites/pd_fx_glow.webp`, `sprites/pd_fx_ice.webp`, `sprites/pd_fx_impact.webp`, `sprites/pd_fx_muzzle.webp`, `sprites/pd_fx_orb.webp`, `sprites/pd_fx_shock.webp`, `sprites/pd_fx_spark.webp`, `sprites/pl_fx_beam.webp`, `sprites/pl_fx_charge.webp`, `sprites/pl_fx_glow.webp`, `sprites/pl_fx_impact.webp`, `sprites/pl_fx_muzzle.webp`, `sprites/pl_fx_spark.webp`, `sprites/pl_fx_suction.webp`, `sprites/rx_fx_arc.webp`, `sprites/rx_fx_boomL.webp`, `sprites/rx_fx_boomM.webp`, `sprites/rx_fx_charge.webp`, `sprites/rx_fx_flame.webp`, `sprites/rx_fx_glow.webp`, `sprites/rx_fx_impact.webp`, `sprites/rx_fx_muzzle.webp`, `sprites/rx_fx_orb.webp`, `sprites/rx_fx_shock.webp`, `sprites/rx_fx_spark.webp`
