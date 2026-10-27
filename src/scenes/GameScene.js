@@ -58,11 +58,12 @@ class GameScene extends Phaser.Scene{
     if (this.pacts.indexOf('p_sansshield') >= 0) this.stats.shieldMax = 0;
     this.achv.maxAlert = Math.max(this.achv.maxAlert || 0, this.alertLevel);
     // technologies (data/techs.js) : le chargement est lu ici, mais RIEN n'est actif au départ — chaque technologie s'assemble par une carte (techAssemble)
-    // qui pose l'arme, les missiles, le drone… et les indicateurs ci-dessous. Le tutoriel se joue sans chargement.
+    // qui pose l'arme, les missiles, le drone… et les indicateurs ci-dessous. Le tutoriel aussi : la toute 1re fois, rien n'est encore équipé (chargement vide) ;
+    // une fois qu'on a progressé en R&D, rejouer le tuto reflète le chargement en cours, comme les autres ordres (décision de Guet, 27 oct. 2026).
     this.laserDestructeurOwned = this.reticuleOmniscientOwned = this.fragmentationOwned = this.nukeOwned = this.swarmMissilesOwned = false;
     this.phoenixOwned = this.doublePhoenixOwned = this.droneOwned = this.droneSwarmOwned = this.sangsueOwned = false;
     this.techState = {};
-    if (!this.tuto) loadoutSanitize(this.meta, slotsOpen()).forEach(id=>{ const e = rdEntry(this.meta, id); this.techState[id] = { rang:e.rang, assembled:false, spe:e.spe, picks:0 }; });
+    loadoutSanitize(this.meta, slotsOpen()).forEach(id=>{ const e = rdEntry(this.meta, id); this.techState[id] = { rang:e.rang, assembled:false, spe:e.spe, picks:0 }; });
     this.laserBeamTimer = 0;
     this.phoenixCharges = 0;
     this.dodgeCharges = this.stats.dodgeCharges;
@@ -114,7 +115,7 @@ class GameScene extends Phaser.Scene{
 
     // moments forts: mob doré, événements, stats de fin de partie, ralenti, dernier souffle
     this.goldCd = 30000; this.eventCd = 55000; this.curEvent = null; this.curSmall = null; this._wells = []; this._corr = null; this._ecl = null; this._ice = null; this._empOn = false; this._empUntil = 0; this._plasma = null; this.smallCd = 25000; this._wave1 = false; this.baseAlert = this.alertLevel; this.alertTimer = 0; this.alertRises = 0; this._double1 = false; this._frenzyUntil = 0; this._magnetUntil = 0; this.cameras.main.setRotation(0); this.bosses = []; this._relicQueue = []; this._relicNext = [];
-    this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runComposants = 0; this._compVacuum = false;
+    this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runComposants = 0; this._compVacuum = false; this.runHits = 0;
     clearTimeout(this.deathTimer);
     this.slowmo = null; this.lastStandUsed = false; this.tweens.timeScale = 1; this.time.timeScale = 1; this.anims.globalTimeScale = 1; if (this.physics && this.physics.world) this.physics.world.timeScale = 1;      // un redémarrage en plein arrêt sur image ne doit pas rester figé
     this.combo = { n:0, t:0, pts:0 }; this.comboRank = 0; this.runBestCombo = 0; this.runBestRank = 0; this._styleDirty = false; this._styleT = 0;

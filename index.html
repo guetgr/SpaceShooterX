@@ -86,16 +86,19 @@
           <div class="level-card world-only" id="levelCard"></div>
           <button class="btn world-only" id="btnLaunch">PRENDRE LE SERVICE</button>
           <div id="mapOrbit" class="world-only"></div>
-          <nav class="orbit-controls world-only" aria-label="Parcours des ordres"><button id="orbitPrev" aria-label="Ordre précédent">‹</button><span id="orbitIndex" aria-live="polite"></span><button id="orbitNext" aria-label="Ordre suivant">›</button></nav>
           <div class="gx-title galaxy-only">REPARTITION DES SECTEURS</div>
           <div class="gx-hint galaxy-only">Glisse pour parcourir · touche un secteur</div>
           <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU SECTEUR</button>
         </section>
         <section class="home-page" id="pageTree">
+          <svg class="rd-tree-lines" viewBox="0 0 400 700" aria-hidden="true"><path d="M41 158V524 M41 225H52 M41 345H52 M41 465H52"></path><circle cx="41" cy="225" r="3"></circle><circle cx="41" cy="345" r="3"></circle><circle cx="41" cy="465" r="3"></circle></svg>
+          <aside class="rd-page-note rd-note-plan" aria-hidden="true"><b>1 · PLAN</b><span>à récupérer pendant une mission</span></aside>
+          <aside class="rd-page-note rd-note-proto" aria-hidden="true"><b>2 · PROTO</b><span>à financer avec les composants</span></aside>
+          <aside class="rd-page-note rd-note-ranks" aria-hidden="true"><b>3 · RANGS</b><span>un essai après l’autre</span></aside>
+          <aside class="rd-page-note rd-note-spe" aria-hidden="true"><b>4 · SPE</b><span>après validation des rangs</span></aside>
           <div class="tree-tabs" id="treeTabs"></div>
-          <div class="tree-bhead"><div class="tb-l"><span id="treeBName"></span><u id="treeBSub"></u></div><span id="treeBProg"></span></div>
-          <div class="tree-bbar"><i id="treeBBar"></i></div>
           <div class="tree-scroll" id="treeScroll"></div>
+          <div class="tree-bhead"><u id="treeBSub"></u><div class="tree-sector"><span id="treeBName"></span><strong id="treeBProg"></strong></div><div class="tree-bbar"><i id="treeBBar"></i></div></div>
         </section>
       </div>
       <nav id="homeTabs">

@@ -42,6 +42,7 @@ mixin(GameScene, {
       this.achvDirty = true;
       this.achvCheck(null);
     }
+    this.normaTick(delta);
 
     if (this.xp >= this.xpToNext) this.levelUp();   // XP créditée directement (cristaux au-delà du plafond)
 

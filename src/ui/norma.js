@@ -17,7 +17,7 @@ const Norma = {
     if (!e){
       const host = document.getElementById('game-container'); if (!host) return null;
       e = document.createElement('div'); e.id = 'norma';
-      e.innerHTML = '<div class="nm-body"><div class="nm-head">N.O.R.M.A.</div><div class="nm-txt"></div><div class="nm-prog"><i></i></div></div>';
+      e.innerHTML = '<div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A.</div><div class="nm-txt"></div><div class="nm-prog"><i></i></div></div>';
       host.appendChild(e);
     }
     return e;
@@ -92,7 +92,8 @@ const Norma = {
 // Méthodes de GameScene : déclencheurs des transmissions pendant une partie (aucun effet sur le jeu)
 mixin(GameScene, {
   normaStart(){
-    Norma.reset(); this._normaLow = false; { const e = Norma.el(); if (e){ e.classList.remove('low'); e.classList.toggle('tuto', !!this.tuto); } }
+    Norma.reset(); this._normaLow = false; this._normaCd = Phaser.Math.Between(28000, 38000); this._normaProg = 0;
+    { const e = Norma.el(); if (e){ e.classList.remove('low'); e.classList.toggle('tuto', !!this.tuto); } }
     if (this.tuto) return;                         // tuto : les consignes viennent de game/tuto.js (tutoSay)
     const pool = 'start';
     // la transmission part quelques secondes après la fin du décollage (jamais pendant l'intro, ni pendant un menu)
@@ -108,4 +109,15 @@ mixin(GameScene, {
   },
   normaBoss(){ if (!this.tuto) Norma.say(Norma.pick('boss'), { prio:true }); },
   normaLow(){ if (!this.tuto) Norma.say(Norma.pick('lowhp'), { gap:6000 }); },
+
+  // transmissions régulières en mission (hors tuto) : avancement de l'ordre (une fois par palier de 25%) sinon une vanne, environ toutes les 40-55 s
+  normaTick(delta){
+    if (this.tuto || !this.lvDef) return;
+    this._normaCd -= delta; if (this._normaCd > 0) return;
+    this._normaCd = Phaser.Math.Between(40000, 55000);
+    const frac = this.levelProgress().frac, steps = [0.25, 0.5, 0.75];
+    const si = steps.findIndex(s=> frac >= s && this._normaProg < s);
+    this._normaProg = Math.max(this._normaProg, frac);
+    Norma.say(si >= 0 ? AGP_LINES.progress[si] : Norma.pick('banter'));
+  },
 });

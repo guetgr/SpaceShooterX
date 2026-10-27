@@ -245,10 +245,9 @@ mixin(GameScene, {
     if (buffs.xp) parts.push('+' + Math.round(buffs.xp*100) + '% XP');
     if (buffs.frag) parts.push('+' + Math.round(buffs.frag*100) + '% fragments');
     if (buffs.hp) parts.push('+' + Math.round(buffs.hp*100) + '% PV');
-    const tiersDone = ACHV_TYPES.reduce((n,t)=> n + (a.tier[t]||0), 0);
     const globDone = ACHV_GLOBALS.filter(g=>a.glob[g.id]).length;
     document.getElementById('achvSummary').innerHTML =
-      '' + (tiersDone + globDone) + ' / ' + (ACHV_TYPES.length*3 + ACHV_GLOBALS.length) + ' succès<br>' +
+      '' + globDone + ' / ' + ACHV_GLOBALS.length + ' succès<br>' +
       (parts.length ? 'Buffs actifs : ' + parts.join(' · ') : 'Aucun buff pour l\'instant — tue des ennemis !');
 
     const addSec = (txt)=>{ const d = document.createElement('div'); d.className = 'ach-sec'; d.textContent = txt; list.appendChild(d); };
@@ -263,19 +262,6 @@ mixin(GameScene, {
       list.appendChild(d);
     };
 
-    addSec('DETONATEURS — leurs morts explosent');
-    ACHV_TYPES.forEach(type=>{
-      const entry = BESTIARY_LIST.find(e=>e.type === type);
-      const bdef = entry && entry.bossId ? BOSS_DEFS[entry.bossId] : null;
-      const img = entry ? this.getTextureFrameDataURL(entry.tex, entry.frame) : '';
-      const t = a.tier[type] || 0, w = achvWeighted(a, type);
-      const nextThr = t < 3 ? achvThreshold(type, t) : achvThreshold(type, 2);
-      const pct = t >= 3 ? 1 : Math.min(1, w / nextThr);
-      const desc = t === 0
-        ? 'Explosion à débloquer · ' + Math.floor(w) + ' / ' + nextThr + ' pts de kills'
-        : 'Explosion zone ' + ACHV_EXPLO[t-1].radius + ' · dégâts ' + Math.round(ACHV_EXPLO[t-1].frac*100) + '% de leurs PV' + (t < 3 ? ' · suivant ' + Math.floor(w) + ' / ' + nextThr : ' · MAX');
-      row(img, (entry ? entry.label : type), desc, pct, t >= 3, uiIco('pip_on').repeat(t) + uiIco('pip_off').repeat(3-t));
-    });
     addSec('GLOBAUX — buffs permanents');
     ACHV_GLOBALS.forEach(g=>{
       const prog = achvGlobalProgress(a, g), done = !!a.glob[g.id];

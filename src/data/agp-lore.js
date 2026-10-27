@@ -108,6 +108,19 @@ const AGP_LINES = {
     "Votre assurance ne couvre pas les incidents de cette taille.",
     "Un renfort a été demandé. Il est en réunion.",
   ],
+  // transmissions régulières en combat, hors événement particulier : avancement (une fois par palier) et vannes (le reste du temps)
+  progress: [
+    "Avancement noté. Votre dossier aussi.",
+    "Mi-parcours. La pause n'est toujours pas prévue au contrat.",
+    "Fin en vue. Le chronométrage, lui, reste individuel.",
+  ],
+  banter: [
+    "Aucune anomalie à signaler. C'est en soi une anomalie.",
+    "Votre entretien annuel a été reporté. Comme les trois précédents.",
+    "Un satellite vous observe. C'est du contrôle qualité, pas de la paranoïa.",
+    "Silence radio. Le silence aussi est documenté.",
+    "La galaxie ne se nettoiera pas toute seule. Ni vous, visiblement.",
+  ],
   lowhp: [
     "Votre état de santé est classé « non prioritaire ».",
     "Alerte coque : toute pièce remplacée vous sera facturée.",

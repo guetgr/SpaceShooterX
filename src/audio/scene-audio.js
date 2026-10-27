@@ -33,6 +33,10 @@ mixin(GameScene, {
     const low = this._lowMood ? clamp((0.5 - r) / 0.5, 0.25, 1) : 0;                              // 0 = en forme, 1 = presque mort
     music.setMood(clamp((1 + boost) * (1 - 0.18 * low) * (1 - (this._audRate||0)), 0.55, 1.11), Math.min(1, low * 0.85 + (this._audDim||0)));
     if (this.tuto) music.setScene({ mode:'game', alert:1, tutoLevel:!this.tutoBoss, boss:!!this.tutoBoss, bossId:(this.tutoBoss && this.tutoBoss.phase >= 2) ? 'tuto2' : 'tuto1' });      // tuto: niveau, puis boss (phase 1 = a, ensuite b/c/d)
-    else music.setScene({ mode:'game', alert:this.alertLevel, boss:this.bossActive, bossId:(this.currentBoss && this.currentBoss.bossId) || null });          // choix du morceau: niveau d'alerte, boss
+    else {
+      // boss autonomes du monde 1 (ar/mt/rx/an/pd) : ils ne passent pas par bosses/core.js, donc ni bossActive ni currentBoss ne sont posés tout seuls
+      const auto = this.ar || this.mt || this.rx || this.an || this.pd;
+      music.setScene({ mode:'game', alert:this.alertLevel, boss:this.bossActive || !!auto, bossId:(this.currentBoss && this.currentBoss.bossId) || (auto && this.lvDef && this.lvDef.finalBoss) || null });          // choix du morceau: niveau d'alerte, boss
+    }
   },
 });

@@ -36,7 +36,7 @@ mixin(GameScene, {
     this.introEndY = this.player.y; this.introStartY = vy0.max + 70/ZOOM_START; this.introMidY = (vy0.min + vy0.max)/2; this.player.y = this.introStartY;
     this.introActive = true; this.introT = 0; this._introFx = 0; this._introApex = false;
     this.hitCooldown = Math.max(this.hitCooldown, 3200); this.spawnTimer = Math.max(this.spawnTimer, 3200);
-    this._introEarth = !this.sandbox && this.textures.exists('earth') && (!this.lvDef || this.lvDef.intro === 'earth');          // DECOLLAGE DEPUIS LA TERRE (jeu normal); le bac à sable garde le décollage court
+    this._introEarth = !this.sandbox && !this.tuto && this.textures.exists('earth') && (!this.lvDef || this.lvDef.intro === 'earth');          // DECOLLAGE DEPUIS LA TERRE (jeu normal) ; le bac à sable et le tuto gardent le décollage court (le tuto montre déjà la Terre dans son fond, pas de doublon)
     if (this._introEarth){
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
@@ -75,6 +75,9 @@ mixin(GameScene, {
       if (rec && rec.plan) rdGrantPlan(this.meta, rec.plan);      // plan de technologie de l'ordre (data/techs.js), inscrit dans la meta de la partie avant son enregistrement
       prime = composantsPrime(this.lvDef.reward, !!(rec && rec.first));
     }
+    // FINITION de l'ordre (barre de l'accueil) : enregistrée victoire OU défaite, comme le tuto
+    const compRec = this.lvDef ? recordCompletion(this.lvDef.id, this.levelComp(victory)) : null;
+    if (compRec && compRec.fragments) this.meta.composants += compRec.fragments;
     const bank = composantsBank({ picked: this.runComposants + (victory ? this.composantsOnScreenValue() : 0), victory: !!victory, fragmentBonus: this.stats.fragmentBonus, pactMul: this.pactBonusMul || 1, prime });
     const nxt = (this.lvDef && victory) ? nextLevelOf(this.lvDef.id) : null;
     this.lvResult = { victory: !!victory, rec, bank, clearBonus: bank.prime, progress: this.lvDef ? (victory ? 1 : this.levelProgress().frac) : 0, next: nxt && isLevelUnlocked(nxt.id) ? nxt.id : null };
@@ -94,11 +97,10 @@ mixin(GameScene, {
     ex.innerHTML = '';
     const addLine = (txt, cls)=>{ const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; ex.appendChild(d); };
     { const gN = this.globalGearItems().length, mN = this.pauseGearItems().length;
-      addLine('ATOUTS GLOBAUX (R&D) : ' + gN + ' · conservés');
-      addLine('ATOUTS DE MISSION : ' + mN + ' · restitués en fin d\'ordre'); }
+      addLine('ATOUTS : ' + gN + ' GLOBAUX conservés · ' + mN + ' DE MISSION restitués'); }
     if (this.pacts && this.pacts.length) addLine('CLAUSES SPECIALES (' + this.pacts.length + ') · composants x' + this.pactBonusMul.toFixed(2), 'go-near');
     addLine('SERIE MAXIMALE x' + this.runBestCombo + ' · RANG ' + STYLE_RANKS[this.runBestRank].l);
-    addLine('CHAINE MAXIMALE x' + this.runMaxChain + (this.runGold ? ' · TRESORINS ' + this.runGold : ''));
+    if (this.runGold) addLine('TRESORINS x' + this.runGold);
     if (this.bossActive && this.currentBoss && this.currentBoss.active){
       const pc = Math.max(1, Math.round(this.currentBoss.hp / this.currentBoss.maxHp * 100));
       addLine('L\'incident majeur était encore actif à ' + pc + ' %...', 'go-boss');
@@ -108,7 +110,6 @@ mixin(GameScene, {
     const near = [];
     const achvA = this.achv;
     ACHV_GLOBALS.forEach(g=>{ if (!achvA.glob[g.id]){ const pr = achvGlobalProgress(achvA, g); if (pr/g.need >= 0.5 && pr < g.need) near.push({ name:g.name, pr:Math.floor(pr), need:g.need, ratio:pr/g.need, time:g.kind==='maxTime' }); } });
-    ACHV_TYPES.forEach(t=>{ const tier = achvA.tier[t]||0; if (tier < 3){ const w = achvWeighted(achvA, t), thr = achvThreshold(t, tier); if (w/thr >= 0.6) near.push({ name:'DETONATEUR ' + ((BESTIARY_LIST.find(e=>e.type===t)||{label:t}).label) + ' ' + ['I','II','III'][tier], pr:Math.floor(w), need:thr, ratio:w/thr }); } });
     near.sort((a,b)=> b.ratio - a.ratio).slice(0,3).forEach(n=>{
       const f = v => n.time ? Math.floor(v/60) + ':' + String(v%60).padStart(2,'0') : v;
       addLine('PRESQUE : ' + n.name + ' ' + f(n.pr) + ' / ' + f(n.need), 'go-near');
@@ -133,7 +134,7 @@ mixin(GameScene, {
       const rw = document.getElementById('goRewards'); rw.innerHTML = '';
       const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.innerHTML = val; rw.appendChild(d); };
       const bank = res.bank, ic = ' ' + uiIco('frag');
-      addRw('Composants récupérés', '+' + bank.gross + ic);
+      addRw('', '+' + bank.gross + ic);
       if (!victory) addRw('Franchise accident du travail (' + Math.round(COMP.franchise*100) + ' %)', '-' + bank.franchise + ic);
       if (bank.prime){
         addRw('Prime d\'intervention', '+' + composantsPrime(L.reward, false) + ic);
@@ -143,6 +144,7 @@ mixin(GameScene, {
       const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.innerHTML = txt; rw.appendChild(d); };
       if (rec && rec.unlockedLevel) unl(uiIco('next') + ' ORDRE SUIVANT ATTRIBUE');
       if (rec && rec.unlockedWorld) unl(uiIco('star') + ' NOUVEAU SECTEUR : ' + worldById(rec.unlockedWorld).name);
+      if (compRec && compRec.milestones.length) unl(uiIco('star') + ' FINITION ' + compRec.milestones.join(' + ') + ' % · +' + compRec.fragments + ic);
       if (victory && L && !nxt) unl('FIN DES ORDRES (pour l\'instant)');
       const bn = document.getElementById('btnNext'), br = document.getElementById('btnRetry');
       bn.classList.toggle('hidden', !res.next);

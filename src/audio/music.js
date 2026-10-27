@@ -184,7 +184,8 @@ class FileMusic{
     if (!this.on) return;
     this.on = false; clearTimeout(this.timer);
     const c = this.o.sfx.ctx, now = c ? c.currentTime : 0;
-    this.items.forEach(it=>{ try{ it.g.gain.cancelScheduledValues(now); it.g.gain.setTargetAtTime(0, now, 0.08); it.src.stop(now + 0.5); }catch(e){ /* ignore */ } });
+    // fondu court (pas de coupure sèche) mais resserré : un stop() suivi de près par un nouveau start() (ex. ORDRE SUIVANT) ne doit pas faire entendre les deux à la fois
+    this.items.forEach(it=>{ try{ it.g.gain.cancelScheduledValues(now); it.g.gain.setTargetAtTime(0, now, 0.03); it.src.stop(now + 0.15); }catch(e){ /* ignore */ } });
     this.items = []; this.cur = null; this.busy = false;
   }
   tick(){

@@ -52,54 +52,6 @@ mixin(GameScene, {
     });
   },
 
-  // explosion à la mort d'un ennemi dont le succès est débloqué: dégâts de zone sur ses voisins, en chaîne par vagues
-  deathExplosion(enemy){
-    if (enemy.isBossPart || enemy.enemyType === 'boss') return;
-    const tier = this.achv.tier[enemy.enemyType] || 0;
-    if (!tier) return;
-    const P = ACHV_EXPLO[tier-1];
-    const alertMul = 1 + 0.08*(this.alertLevel-1);
-    const dmg = (enemy.maxHp || 10) * P.frac * alertMul;
-    const x = enemy.x, y = enemy.y, r = P.radius;
-    this.explodeFx(x, y, r);
-    const victims = [];
-    this.enemies.children.iterate(v=>{
-      if (!v || !v.active || v === enemy || v.phased || v._doomed) return;
-      const d = Phaser.Math.Distance.Between(x, y, v.x, v.y);
-      if (d <= r + v.displayWidth*0.3) victims.push({ v, d });
-    });
-    victims.sort((m,n)=> m.d - n.d);
-    victims.forEach((e, i)=>{
-      const v = e.v;
-      let dm = dmg * (1 - 0.5*Math.min(1, e.d/r));        // 100% au centre, 50% au bord
-      const bossish = v.enemyType === 'boss' || v.isBossPart;
-      if (bossish){
-        if (v.invuln || v.partRole === 'decoy' || v.partRole === 'mirror' || v.partRole === 'seg') return;
-        dm *= EXPLO_BOSS_FACTOR;
-      }
-      this.applyDamageToEnemy(v, dm);
-      if (v.hp <= 0){
-        v._doomed = true;
-        // vague suivante: la réaction en chaîne se propage avec un léger décalage (lisible, et sans geler le jeu)
-        this.time.delayedCall(70 + Math.min(i*6, 180), ()=>{
-          if (!v.active) return;
-          // longueur de la chaîne en cours (une chaîne = kills par explosions séparés de moins de 0,7 s)
-          const now = this.time.now;
-          if (now - this._chainT > 700) this._chainN = 0;
-          this._chainT = now; this._chainN++;
-          this.runMaxChain = Math.max(this.runMaxChain, this._chainN);
-          this.showCombo(this._chainN);
-          if (this._chainN > (this.achv.maxChain || 0)){ this.achv.maxChain = this._chainN; this.achvDirty = true; this.achvCheck(null); }
-          this.killEnemy(v);
-        });
-      }
-    });
-    if (this.alertLevel >= EXPLO_HURTS_PLAYER_ALERT && this.player.active){
-      const dp = Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y);
-      if (dp <= r*0.9) this.damagePlayer(Math.min(30, dmg*0.12 + 4));
-    }
-  },
-
   explodeFx(x, y, r){
     // plafond d'effets visuels par 100 ms: pendant un wipe massif, seuls les premiers anneaux sont dessinés
     const now = this.time.now;

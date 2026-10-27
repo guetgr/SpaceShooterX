@@ -5,7 +5,7 @@
 // 1 = patrouille, verrouille, tire une salve de trois par canon · 2 = après la salve, appelle un renfort · 3 = faisceau plus large, balayage plus rapide, verrouillage plus long, salve de cinq · 4 = en plus, arrive avec un second éclaireur en tandem.
 // La logique est celle de la page validée : elle tourne en « images » de 1/60 s et en unités de cette page (S de la page = 0,45) ; `U` convertit les distances de la page en pixels du jeu.
 const EC = {
-  frame:512, scale:0.27, pageS:0.45, hp:80,
+  frame:512, scale:0.27, pageS:0.45, hp:80, reach:1000,                          // reach : portée du faisceau (en unités de page) ; doit couvrir tout l'écran, un joueur planqué en bas ne doit pas pouvoir s'y soustraire
   lamp:[256, 276], weapons:[[36, 270], [476, 270]],                              // lentille du projecteur et bouches des deux canons latéraux, dans le sprite 512
   states:[0.7, 0.45, 0.2],                                                       // fraction de vie sous laquelle on passe à l'état suivant
   dmg:{ orb:9 },
@@ -54,7 +54,7 @@ mixin(GameScene, {
       e.x = Phaser.Math.Clamp(e.baseX + Math.sin(e.f*0.011 + e.ph)*110*U, vis.min, vis.max); e.rot = Math.sin(e.f*0.021*(T >= 3 ? 1.5 : 1) + e.ph)*0.5;
       if (pl && pl.active){
         const vx = pl.x - lx, vy = pl.y - ly, along = vx*Math.cos(dir) + vy*Math.sin(dir), perp = Math.abs(vx*Math.sin(dir) - vy*Math.cos(dir)), half = Math.tan(0.33)*wide;
-        const inCone = along > 30*U && along < 560*U && perp < along*half*0.9; e.detT = inCone ? e.detT + 1 : Math.max(0, e.detT - 2);
+        const inCone = along > 30*U && along < EC.reach*U && perp < along*half*0.9; e.detT = inCone ? e.detT + 1 : Math.max(0, e.detT - 2);
         if (e.detT > (T >= 3 ? 20 : 28)){ e.state = 'alert'; e.stT = 0; e.reticleF = 0; this.ecSfx('ecLock', e); this.ecSfx('ecCharge', e); [0, 1].forEach(i=>{ if (this.ecWAlive(e, i)){ const [x, y] = this.ecP(e, EC.weapons[i][0], EC.weapons[i][1]); this.ecFx('anFxCharge', 'anCharge', x, y, 0.5*U*1.4, 8); } }); }
       }
     } else if (e.state === 'alert'){
@@ -82,7 +82,7 @@ mixin(GameScene, {
     e.summoned = true; const c = this.spawnOneEnemy('eclaireur', Phaser.Math.Clamp(e.x + (e.x < GAME_W/2 ? 110 : -110), 40, GAME_W - 40)); if (c){ c.summoned = true; c.tier = Math.max(1, e.tier - 1); }
   },
   ecDraw(e, k){
-    const U = k/EC.pageS, [lx, ly] = this.ecP(e, EC.lamp[0], EC.lamp[1]), red = e.lockOn, stopped = e.body.velocity.y === 0, wide = e.tier >= 3 ? 1.3 : 1, len = 560*U;
+    const U = k/EC.pageS, [lx, ly] = this.ecP(e, EC.lamp[0], EC.lamp[1]), red = e.lockOn, stopped = e.body.velocity.y === 0, wide = e.tier >= 3 ? 1.3 : 1, len = EC.reach*U;
     const sc = 1.5*U*wide*(e.state === 'alert' ? 1.1 : 1), a = red ? 0.9 : 0.78;
     e.cone.setVisible(stopped && !red).setPosition(lx, ly).setRotation(e.rot).setScale(sc, len/256).setAlpha(a); e.coneHot.setVisible(stopped && red).setPosition(lx, ly).setRotation(e.rot).setScale(sc, len/256).setAlpha(a);
     e.lampG.setVisible(!red).setPosition(lx, ly).setScale(0.8*U*1.6); const p = 0.6 + 0.4*Math.sin(e.f*0.5); e.lampH.setVisible(red).setPosition(lx, ly).setScale(1.0*U*1.6*p);

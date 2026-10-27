@@ -30,7 +30,7 @@ def run(tree, tuto=False, atelier=None, v2=False, rd=None, chargement=None):
         out['errs']=errs; b.close()
     return out
 AT={'coque':2,'canon':2}; RD={'laser_continu':{'plan':True,'proto':True}}; CH=['laser_continu']
-GA=['CANON DE SERIE MK II','COQUE MK II']; GL=GA+['LASER CONTINU · NON ASSEMBLEE']
+GA=['CANON DE SERIE MK II','COQUE MK II']; GL=GA+['LASER CONTINU · NON ASSEMBLEE']; GT=GA+['LASER CONTINU · ASSEMBLEE']
 base=run({}); rd=run({}, atelier=AT, rd=RD, chargement=CH)
 ck(rd['stats']['dmg']>base['stats']['dmg'] and rd['stats']['hp']>base['stats']['hp'],'l\'atelier est appliqué au décollage (dégâts %s -> %s, coque %s -> %s)'%(base['stats']['dmg'],rd['stats']['dmg'],base['stats']['hp'],rd['stats']['hp']))
 ck(sorted(rd['G'])==sorted(GL),'atouts globaux listés (atelier + technologie du chargement) : %s'%rd['G'])
@@ -41,7 +41,7 @@ ck(not base['errs'] and not rd['errs'],'pas d\'erreur JS')
 tb=run({}, True); tr=run({}, True, atelier=AT, rd=RD, chargement=CH)
 ck(tb['tuto'] and tr['tuto'],'le départ sur compte neuf lance bien le tutoriel')
 ck(tr['stats']['dmg']>tb['stats']['dmg'] and tr['stats']['hp']>tb['stats']['hp'],'tutoriel : l\'atelier est utilisé (dégâts %s -> %s, coque %s -> %s)'%(tb['stats']['dmg'],tr['stats']['dmg'],tb['stats']['hp'],tr['stats']['hp']))
-ck(sorted(tr['G'])==sorted(GA),'tutoriel : atelier seul listé (le chargement est ignoré) : %s'%tr['G'])
+ck(sorted(tr['G'])==sorted(GT),'tutoriel : atelier + chargement en cours (assemblé directement, pas de cartes dans le tuto) : %s'%tr['G'])
 ck(not tb['errs'] and not tr['errs'],'tutoriel : pas d\'erreur JS')
 # ancienne sauvegarde v2 : les nœuds repris par l'atelier sont remboursés (plus d'atout global), le jeu démarre sans erreur
 m2=run({'t_puissance':3,'t_vitalite':3}, v2=True)

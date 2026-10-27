@@ -1,6 +1,6 @@
 "use strict";
-// Méthodes de GameScene — TUTO (niveau 1 du monde 1, `w1-tuto`, / bouton DEV) : 3 étapes pédagogiques (bouger, tirer, boss), satellites + débris, boss satellite. Une seule boîte de consigne : N.O.R.M.A. (ui/norma.js).
-// La FINITION (%) du niveau (objectifs pondérés, meilleur de chaque objectif gardé) est définie dans data/completion.js ; ici on la mesure, on l'affiche en direct et on montre le bilan.
+// Méthodes de GameScene — TUTO (`w1-tuto`, avant le niveau 1 / bouton DEV) : 3 étapes pédagogiques (bouger, tirer, boss), satellites + débris, boss satellite. Une seule boîte de consigne : N.O.R.M.A. (ui/norma.js).
+// La FINITION (%) du niveau (objectifs pondérés, meilleur de chaque objectif gardé) est définie dans data/completion.js ; ici on la mesure et on montre le bilan en fin de partie.
 const TUTO_ID = 'w1-tuto';
 const TUTO_STEPS = [          // 3 étapes : se déplacer, tirer sur les ennemis, le boss. Les consignes sont dans AGP_LINES.tuto (boîte N.O.R.M.A.)
   { id:'move',  line:'move',  max:()=> TUTO_TUNE.steps.maxMove },
@@ -14,23 +14,18 @@ mixin(GameScene, {
   tutoInit(){
     if (!this.textures.exists('tutoOrb')){ const c = this.textures.createCanvas('tutoOrb', 26, 26), g = c.context, gr = g.createRadialGradient(13,13,1,13,13,12); gr.addColorStop(0,'#ffffff'); gr.addColorStop(0.4,'#ffe0c0'); gr.addColorStop(0.75,'rgba(255,150,90,0.8)'); gr.addColorStop(1,'rgba(255,80,40,0)'); g.fillStyle = gr; g.fillRect(0,0,26,26); c.refresh(); }
     this.tutoSats = []; this.tutoStepLog = []; this.tutoT = 0; this.tutoSpawnCd = 600; this.tutoBoss = null; this.tutoDone = false; this.tutoPhase = 'sats'; this.tutoWarned = false; this._tutoH = {}; this._tutoFin = false; this._tutoWave0 = null; this._tutoSaid = false;
-    this.tutoStep = 0; this.tutoStepT = 0; this.tutoKills = 0; this.tutoHits = 0; this.tutoMoved = 0; this.tutoLast = null; this.tutoBossWait = 0;
-    this.tutoBest = completionPct(TUTO_ID); this.tutoPctShown = -1; this.tutoRecordBeaten = false; this._tutoRec = null;
-    this.tutoUiInit(); this.tutoStepEnter(true);
+    this.tutoStep = 0; this.tutoStepT = 0; this.tutoKills = 0; this.tutoMoved = 0; this.tutoLast = null; this.tutoBossWait = 0;
+    this._tutoRec = null;
+    // pas de cartes de montée de niveau dans le tuto (pas d'XP) : le chargement en cours (s'il y en a un) s'assemble directement, comme à la 1re carte « ASSEMBLAGE » d'une mission normale
+    Object.keys(this.techState || {}).forEach(id=> this.techAssemble(id));
+    this.tutoUiClear(); this.tutoStepEnter(true);
   },
   // une transmission de N.O.R.M.A. (la seule boîte de texte du tuto). hold : la consigne reste affichée ; sinon elle s'efface après lecture.
   tutoSay(key, hold){ Norma.say(AGP_LINES.tuto[key], { prio:true, hold:!!hold }); },
   tutoSfx(name, x){ try { sfx.play(name, { pan: this.panOf(x) }); } catch(e){ /* ignore */ } },
 
   /* ---------- ÉTAPES PÉDAGOGIQUES ---------- */
-  tutoUiInit(){
-    this.tutoUiClear();
-    const host = document.getElementById('boss-hp-wrap').parentNode;
-    const p = document.createElement('div'); p.id = 'tutoPct';
-    p.innerHTML = '<div class="tp-row"><span class="tp-lab">FINITION</span><b class="tp-n">0%</b><span class="tp-rec"></span></div><div class="tp-bar"><i class="tp-fill"></i><u class="tp-best"></u><s style="left:25%"></s><s style="left:50%"></s><s style="left:75%"></s></div>';
-    host.appendChild(p);
-  },
-  tutoUiClear(){ ['tutoPct', 'tutoEnd'].forEach(id=>{ const e = document.getElementById(id); if (e) e.remove(); }); },
+  tutoUiClear(){ const e = document.getElementById('tutoEnd'); if (e) e.remove(); },
   tutoStepEnter(first){
     const S = TUTO_STEPS[this.tutoStep]; this.tutoStepT = 0;
     this.tutoStepLog.push({ id:S.id, at:Math.round(this.tutoT*10)/10 });
@@ -52,21 +47,10 @@ mixin(GameScene, {
   },
   tutoComp(){        // valeurs 0..1 de chaque objectif de finition pour la partie en cours (voir LEVEL_COMPLETION)
     const B = this.tutoBoss, won = !!(B && B.dead);
-    return { sats: Math.min(1, this.tutoKills / Math.max(1, TUTO_TUNE.steps.satTarget)), boss: B ? Math.max(0, Math.min(1, 1 - B.hp / B.max)) : 0, win: won ? 1 : 0, clean: won ? Math.max(0, 1 - this.tutoHits * TUTO_TUNE.comp.hitPenalty) : 0 };
+    return { sats: Math.min(1, this.tutoKills / Math.max(1, TUTO_TUNE.steps.satTarget)), boss: B ? Math.max(0, Math.min(1, 1 - B.hp / B.max)) : 0, win: won ? 1 : 0, clean: won ? Math.max(0, 1 - this.runHits * TUTO_TUNE.comp.hitPenalty) : 0 };
   },
   tutoUiUpdate(){
-    const p = document.getElementById('tutoPct'); if (!p) return;
     Norma.progress(this.tutoStepProgress());
-    const pct = completionPct(TUTO_ID, this.tutoComp());
-    if (pct === this.tutoPctShown) return;
-    const prev = this.tutoPctShown; this.tutoPctShown = pct;
-    p.querySelector('.tp-n').textContent = pct + '%'; p.querySelector('.tp-fill').style.width = pct + '%';
-    p.querySelector('.tp-best').style.left = this.tutoBest + '%'; p.querySelector('.tp-best').style.display = this.tutoBest > 0 ? 'block' : 'none';
-    if (prev < 0) { p.querySelector('.tp-rec').textContent = this.tutoBest > 0 ? 'RECORD ' + this.tutoBest + '%' : ''; return; }
-    p.classList.remove('tick'); void p.offsetWidth; p.classList.add('tick');
-    if (!this.tutoRecordBeaten && this.tutoBest > 0 && pct > this.tutoBest){ this.tutoRecordBeaten = true; p.classList.add('rec'); p.querySelector('.tp-rec').textContent = 'NOUVEAU RECORD !'; this.tutoSfx('tutoBossPhase', GAME_W/2); }
-    const st = COMPLETION_STEPS.find(s=> prev < s && pct >= s);
-    if (st){ p.classList.remove('mile'); void p.offsetWidth; p.classList.add('mile'); this.tutoSfx('tutoDone', GAME_W/2); }
   },
 
   /* ---------- SATELLITES ---------- */
@@ -157,8 +141,8 @@ mixin(GameScene, {
     const vy = this.visibleYRange(0), vx = this.visibleXRange(0);
     const sp = this.acBossBuild(GAME_W/2, vy.min - 200);       // Antenne-Mère : habillage dans game/tuto-boss-fx.js (les valeurs de jeu restent ci-dessous)
     this.tutoBoss = { sp, hp:TUTO_TUNE.boss.hp, max:TUTO_TUNE.boss.hp, state:'enter', t:0, ty:vy.min + 175, cx:GAME_W/2, amp:Math.max(20, Math.min(80, (vx.max - vx.min)/2 - 150)), phase:1, aimCd:1800, ringCd:TUTO_TUNE.boss.ringCd, rainCd:2600, spCd:0, spA:0, dead:false, hitT:0 };
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = AC.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = AC.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (state 'fight')
   },
   tutoBossShot(x, y, ang, spd, tint, dmg){
     return this.acShot(x, y, ang, spd, tint, dmg);       // boule d'énergie animée (même zone de collision que l'ancienne orbe)
@@ -167,7 +151,14 @@ mixin(GameScene, {
     const B = this.tutoBoss; if (B.dead) return;
     B.t += dt; const sp = B.sp, px = this.player.x, py = this.player.y;
     this.acBossUpdate(delta);
-    if (B.state === 'enter'){ sp.y += 80*dt; if (sp.y >= B.ty){ sp.y = B.ty; B.state = 'fight'; B.t = 0; } }
+    if (B.state === 'enter'){
+      sp.y += 80*dt;
+      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+      const feel = b=>{ this.juiceImpact(b, B); this.spawnHitParticles(b.x, b.y, 3); this.tutoSfx('tutoBossHit', b.x); };
+      this.tutoHitBox(this.playerBullets, { x:sp.x, y:sp.y }, 130, 118, feel, B);
+      this.tutoHitBox(this.missiles, { x:sp.x, y:sp.y }, 135, 122, b=>{ this.explodeFx(b.x, b.y, 50); feel(b); }, B);
+      if (sp.y >= B.ty){ sp.y = B.ty; B.state = 'fight'; B.t = 0; const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); }
+    }
     else {
       sp.x = B.cx + Math.sin(B.t*0.55)*B.amp; sp.y = B.ty + Math.sin(B.t*0.9)*10;
       const BT = TUTO_TUNE.boss, f = B.hp / B.max, ph = f > BT.p2 ? 1 : f > BT.p3 ? 2 : 3;
@@ -230,13 +221,16 @@ mixin(GameScene, {
       const pc = Math.round(r.best * r.w), gain = Math.round((r.best - r.prev) * r.w), ok = r.best >= 0.999;
       return '<div class="te-row' + (ok ? ' ok' : '') + '" style="animation-delay:' + (0.5 + i*0.18) + 's"><span class="te-l">' + (ok ? uiIco('check') + ' ' : '') + r.label + '</span><span class="te-v">' + pc + '/' + r.w + (gain > 0 ? ' <em>+' + gain + '</em>' : '') + '</span><div class="te-b"><i style="width:' + Math.round(r.best*100) + '%"></i></div></div>';
     }).join('');
-    el.innerHTML = '<div class="go-title">' + (victory ? 'FORMATION VALIDEE' : 'ACCIDENT DU TRAVAIL') + '</div>' +
+    el.innerHTML = '<div class="rp-doc">' +
+      '<div class="rp-head"><i class="agp-logo">AGP</i><span class="rp-h1">BILAN DE FORMATION</span></div>' +
+      '<div class="go-title">' + (victory ? 'FORMATION VALIDEE' : 'ACCIDENT DU TRAVAIL') + '</div>' +
       '<div class="te-big"><b id="teN">' + rec.before + '</b>%</div><div class="te-sub">TAUX DE FINITION DE LA FORMATION' + (d > 0 ? ' <em>+' + d + '%</em>' : '') + '</div>' +
       '<div class="te-bar"><i class="te-old" style="width:' + rec.before + '%"></i><i class="te-new" id="teFill" style="width:' + rec.before + '%"></i><s style="left:25%"></s><s style="left:50%"></s><s style="left:75%"></s></div>' +
       '<div class="te-rows">' + rows + '</div>' +
       (rec.milestones.length ? '<div class="go-unlock">' + uiIco('star') + ' PALIER ' + rec.milestones.join(' + ') + '% · +' + rec.fragments + ' ' + uiIco('frag') + '</div>' : '') +
       (full ? '<div class="go-unlock">' + uiIco('star') + ' FINITION 100% — PARFAIT ' + uiIco('star') + '</div>' : (nx ? '<div class="te-next">IL TE MANQUE <b>' + (100 - rec.after) + '%</b> · ' + nx.tip.toUpperCase() + ' <em>+' + nx.missing + '%</em></div>' : '')) +
       (d <= 0 ? '<div class="te-next">Cette partie : ' + rec.runPct + '% · record ' + rec.after + '%</div>' : '') +
+      '</div>' +
       '<button class="btn" id="teRetry">' + (full ? 'REFAIRE LA FORMATION' : 'REFAIRE · VISER ' + (COMPLETION_STEPS.find(s=> s > rec.after) || 100) + '%') + '</button><button class="btn secondary" id="teHome">RETOUR AU BUREAU</button>';
     host.appendChild(el);
     el.querySelector('#teRetry').onclick = ()=>{ sfx.resume(); this.tutoCleanup(); this.scene.restart({ autoStart:true, tuto:true }); };

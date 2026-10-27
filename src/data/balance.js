@@ -25,7 +25,3 @@ const LATE_HP_GROWTH = 1.035;       // passé la 10e minute, les PV des ennemis 
 const ENEMY_DMG_LATE = 0.03;        // passé la 10e minute, les dégâts ennemis gagnent en plus 3% par minute (cumulé)
 
 const ENEMY_DMG_TIME_MAX = 0.40;    // +40% max avec le temps de partie (atteint à 10 min)
-
-const EXPLO_HURTS_PLAYER_ALERT = 8;                        // à partir de ce niveau, les explosions blessent aussi le joueur
-
-const EXPLO_BOSS_FACTOR = 0.25;                            // les boss n'encaissent que 25% des dégâts d'explosion

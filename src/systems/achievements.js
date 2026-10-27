@@ -21,15 +21,6 @@ mixin(GameScene, {
 
   achvCheck(type){
     const a = this.achv;
-    if (type && ACHV_TYPES.indexOf(type) >= 0){
-      const t = achvTierFor(a, type), old = a.tier[type] || 0;
-      if (t > old){
-        a.tier[type] = t;
-        const label = (BESTIARY_LIST.find(e=>e.type===type) || {label:type}).label;
-        this.achvToast('DETONATEUR ' + label + ' ' + ['I','II','III'][t-1], 'Ils explosent à leur mort · zone ' + ACHV_EXPLO[t-1].radius);
-        setAchv(a);
-      }
-    }
     ACHV_GLOBALS.forEach(g=>{
       if (!a.glob[g.id] && achvGlobalProgress(a, g) >= g.need){
         a.glob[g.id] = true;

@@ -2,8 +2,7 @@
 // Succès : paliers, poids, progression et bonus.
 
 /* =========================================================
-   SUCCES — kills comptés par ennemi ET par niveau d'alerte. Les paliers par ennemi débloquent son explosion
-   en chaîne (permanente) ; plus on en tue à haut niveau d'alerte, plus vite ça monte (kills pondérés).
+   SUCCES — kills comptés par ennemi ET par niveau d'alerte, plus on en tue à haut niveau d'alerte, plus vite ça monte (kills pondérés).
    Les succès globaux donnent des buffs permanents, façon Cookie Clicker.
 ========================================================= */
 const ACHV_KEY = 'ssx_achv_v1';
@@ -11,13 +10,6 @@ const ACHV_KEY = 'ssx_achv_v1';
 const ACHV_W = [1, 1.5, 2.2, 3.2, 4.5, 6, 8, 10, 12.5, 15, 18, 21, 25, 29, 34, 40, 47, 55, 64, 74];   // poids d'un kill selon le niveau d'alerte (1..15)
 
 function newKillArr(){ return ACHV_W.map(()=>0); }
-
-const ACHV_TIERS = [100, 500, 2000];                       // points pondérés pour les paliers I / II / III
-
-const ACHV_RARE = { mothership:0.2, vortex:0.2, elite:0.3, healer:0.4, ghost:0.4, sniper:0.4, bomber:0.5, tank:0.5, mine:0.5,
-                    shieldedGrunt:0.6, charo:0.6, turret:0.6, drone:0.7, splitter:0.7, kamikaze:0.8, spider:0.8 };   // ennemis rares: seuils plus bas
-
-const ACHV_EXPLO = [ { radius:70, frac:0.45 }, { radius:95, frac:0.9 }, { radius:125, frac:1.6 } ];   // explosion par palier (dégâts = % des PV max de l'ennemi qui meurt)
 
 const ACHV_TYPES = ['grunt','diver','shooter','charo','turret','drone','splitter','shieldedGrunt','mine','tank','bomber','sniper','swarmer','healer','ghost','elite','mothership','vortex','kamikaze','spider','meteor'];
 
@@ -63,12 +55,6 @@ const ACHV_GLOBALS = [
 ];
 
 function achvRaw(a, type){ const k = a.killsAlert[type]; return k ? k.reduce((x,y)=>x+(y||0),0) : 0; }
-
-function achvWeighted(a, type){ const k = a.killsAlert[type]; if (!k) return 0; let w = 0; for (let i=0;i<k.length;i++) w += (k[i]||0)*ACHV_W[i]; return w; }
-
-function achvThreshold(type, tierIdx){ return Math.max(10, Math.round(ACHV_TIERS[tierIdx]*(ACHV_RARE[type]||1))); }
-
-function achvTierFor(a, type){ const w = achvWeighted(a, type); let t = 0; for (let i=0;i<3;i++) if (w >= achvThreshold(type,i)) t = i+1; return t; }
 
 function achvGlobalProgress(a, g){
   switch (g.kind){
@@ -120,7 +106,6 @@ function getAchv(){
     a.rawTotal += n;
     if (ACHV_TYPES.indexOf(k) >= 0){ a.killsAlert[k] = newKillArr(); a.killsAlert[k][0] = n; }
   });
-  ACHV_TYPES.forEach(t=>{ a.tier[t] = achvTierFor(a, t); });
   ACHV_GLOBALS.forEach(g=>{ if (achvGlobalProgress(a,g) >= g.need) a.glob[g.id] = true; });
   setAchv(a);
   return a;

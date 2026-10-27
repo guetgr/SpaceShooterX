@@ -31,8 +31,8 @@ mixin(GameScene, {
     mt.sp = this.add.image(mt.cx, mt.y0 - 300, 'mtSheet', 0).setDepth(5).setScale(S);
     mt.gfx = this.add.graphics().setDepth(7);
     this.mtPlace(); mt.lights = this.blInit('meteo', 5.5);
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = MT.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = MT.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (mode 'play')
     this.mtSfx('mtRoar', GAME_W/2);
   },
   mtSfx(name, x){ try { sfx[name]({ pan:this.panOf(x) }); } catch(e){ /* ignore */ } },
@@ -143,9 +143,11 @@ mixin(GameScene, {
   mtStageOf(pct){ return pct > MT.thresh[0] ? 0 : pct > MT.thresh[1] ? 1 : pct > MT.thresh[2] ? 2 : 3; },
   mtDamage(x, y, d, crit){
     const mt = this.mt; if (mt.dead || mt.mode === 'dying') return;
-    mt.hp = Math.max(0, mt.hp - d); if (mt.hitT <= 0 || crit){ mt.flash = crit ? 2 : 0.5; mt.hitT = 24; }          // le flash blanc est espacé : sous un tir rapide, la coque ne doit pas rester blanche
+    if (mt.hitT <= 0 || crit){ mt.flash = crit ? 2 : 0.5; mt.hitT = 24; }          // le flash blanc est espacé : sous un tir rapide, la coque ne doit pas rester blanche
     this.mtFx('mtFxImpact', 'mtImpact', x, y, crit ? 0.9 : 0.55); this.mtSpark(x, y, crit ? 1.3 : 0.8); this.spawnHitParticles(x, y, crit ? 6 : 3);
     if (crit){ this.juiceShake(0.12); this.mtSfx('mtHitHeavy', x); } else this.mtSfx('mtHit', x);
+    if (mt.mode === 'enter') return;      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+    mt.hp = Math.max(0, mt.hp - d);
     if (crit || Math.random() < 0.3){ const op = this.mtPix(mt.st).op, o = op[Phaser.Math.Between(0, op.length - 1)]; const [wx, wy] = this.mtW(o[0], o[1]); this.mtThrow(this.mtShard(mt.st, o[0], o[1], Phaser.Math.Between(4, 7)), wx, wy, { vx:(wx - mt.cx)*1.1, vy:-Phaser.Math.Between(20, 80), fall:120, spin:Phaser.Math.Between(-300, 300), life:1000 }); }
     const ns = mt.hp <= 0 ? 3 : this.mtStageOf(mt.hp/mt.max*100);
     if (ns > mt.st) this.mtWound(ns);
@@ -302,7 +304,7 @@ mixin(GameScene, {
     const mt = this.mt; mt.f++; mt.hitT = Math.max(0, mt.hitT - 1);
     mt.strikes.forEach(s=> s.f++); mt.curtains.forEach(c=>{ c.f++; c.y += 3.1*mt.U*1.3; });          // le rideau descend de 3,1 px de page par image
     const ts = Math.floor(mt.t*10)/10; mt.jdy = Math.round(Math.sin(ts*1.9)*2);
-    if (mt.mode === 'enter'){ mt.enter += 0.012; this.cameras.main.shake(40, 0.002); if (mt.enter >= 1){ mt.mode = 'play'; this.cameras.main.shake(200, 0.006); } }
+    if (mt.mode === 'enter'){ mt.enter += 0.012; this.cameras.main.shake(40, 0.002); if (mt.enter >= 1){ mt.mode = 'play'; this.cameras.main.shake(200, 0.006); const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); } }
     if (mt.mode === 'play' || mt.mode === 'dying') mt.t += (1/60)*(mt.mode === 'dying' ? 0.5 : 1);
     if (mt.mode === 'play'){
       this.mtUpdateAttack();

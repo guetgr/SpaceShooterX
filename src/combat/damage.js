@@ -148,7 +148,6 @@ mixin(GameScene, {
       this.explodeFx(enemy.x, enemy.y, 55);
       if (this.player.active && Phaser.Math.Distance.Between(enemy.x, enemy.y, this.player.x, this.player.y) <= 55) this.damagePlayer(5 + this.alertLevel);
     }
-    if (!isBoss) this.deathExplosion(enemy);
     // ECLATS: l'ennemi abattu projette des éclats qui blessent ses voisins (limité pour rester fluide)
     if (!isBoss && this.stats.shardCount > 0 && this.playerBullets.getLength() < 150){
       const n = Math.min(8, Math.round(this.stats.shardCount));

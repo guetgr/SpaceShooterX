@@ -27,13 +27,16 @@ with sync_playwright() as pw:
     ck(vis('#settingsMenu'),'engrenage ouvre les paramètres')
     p.evaluate("document.getElementById('btnSettingsBack').click()"); p.wait_for_timeout(500)
     ck(vis('#home') and not vis('#settingsMenu') and not vis('#start'),'retour des paramètres -> accueil')
-    # glisser vers la droite (page ARBRE) puis vers la gauche x2 (HANGAR)
     def swipe(x0,x1,y=420):
         p.mouse.move(x0,y); p.mouse.down(); p.mouse.move((x0+x1)//2,y); p.mouse.move(x1,y); p.mouse.up(); p.wait_for_timeout(700)
     page=lambda: p.evaluate("window.__ssxScene.scene.get('home').page")
-    swipe(300,80); ck(page()==1,'glisser vers la gauche -> page ARBRE')
+    # sur la carte du monde (planète + niveaux en orbite) : glisser passe d'un niveau à l'autre, pas d'une page à l'autre
+    homeSel=lambda: p.evaluate("window.__ssxScene.scene.get('home').homeSel")
+    sel0=homeSel()
+    swipe(300,80); ck(page()==0 and homeSel()!=sel0,'glisser sur la planète -> niveau suivant')
+    swipe(80,320); ck(page()==0 and homeSel()==sel0,'glisser dans l\'autre sens -> niveau précédent')
+    p.evaluate("document.getElementById('tabTree').click()"); p.wait_for_timeout(700)
     swipe(6,320); ck(page()==0,'glisser vers la droite depuis le bord (arbre) -> CARTE')
-    swipe(80,320); ck(page()==-1,'glisser vers la droite -> HANGAR')
     # R&D : page de droite, une fiche par technologie, achat du prototype, rangs, spécialisation verrouillée
     p.evaluate("localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3,composants:500,rd:{laser_continu:{plan:true}}}))")
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(600)

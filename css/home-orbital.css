@@ -1,8 +1,9 @@
 /* Hublot : illustration transparente au premier plan, interface et scène indépendantes. */
+/* header EMPLOYE N° unifié (atelier, missions, R&D) sur le format compact de la page missions */
+#home #homeTop{top:0;left:0;right:0;height:48px;padding:6px 12px;background:#0b1416;border-bottom:2px solid #405248}
+#home .agp-who u{display:none}
+#home .home-frag{text-shadow:none}
 #home.orbital-home #homeTicker{display:none}
-#home.orbital-home #homeTop{top:0;left:0;right:0;height:48px;padding:6px 12px;background:#0b1416;border-bottom:2px solid #405248}
-#home.orbital-home .agp-who u{display:none}
-#home.orbital-home .home-frag{text-shadow:none}
 #pageMap .home-window{position:absolute;inset:48px 0 -16px;z-index:1;background:url('../assets/home/hangar-window.png') center/100% 100% no-repeat;pointer-events:none}
 #pageMap[data-mode=world]{padding:0}
 #pageMap[data-mode=world] .map-world{position:absolute;top:84px;left:29px;right:25px;width:auto;z-index:2;justify-content:flex-start;gap:8px;text-align:left}
@@ -21,30 +22,27 @@
 #mapOrbit .nd-num{font-size:7px;left:auto;right:-6px;top:-8px;bottom:auto;padding:3px;background:#101a17;color:#cbd4c9;border:1px solid #405248}
 #mapOrbit .node.sel .nd-num{color:#ffce27;border-color:#ffce27}
 #mapOrbit .node-pct{display:none}
-.orbit-controls{position:absolute;top:396px;left:88px;right:88px;display:flex;align-items:center;justify-content:space-between;z-index:3;background:#0c1410d9;border:1px solid #405248;color:#c7b477}
-#home .orbit-controls button{width:40px;height:30px;background:none;border:0;color:#eef1e7;font:24px/1 'SSX Text',monospace}
-#home .orbit-controls button:disabled{opacity:.25}
-#orbitIndex{font-size:6px;letter-spacing:1px}
-#pageMap #levelCard{position:absolute;top:430px;left:22px;right:22px;bottom:50px;width:auto;min-height:0;padding:9px 12px;margin:0;border:1px solid #405248;background:#0c171af5;z-index:2;pointer-events:auto;overflow-y:auto;touch-action:pan-y;scrollbar-width:thin;overscroll-behavior:contain}
+#pageMap #levelCard{position:absolute;top:412px;left:22px;right:22px;bottom:48px;width:auto;min-height:0;padding:7px 12px;margin:0;border:1px solid #405248;background:#0c171af5;z-index:2;pointer-events:auto;overflow:hidden;display:flex;flex-direction:column}
+#pageMap[data-mode=galaxy] #levelCard{display:none}
 #pageMap #levelCard:before{display:none}
-#levelCard .om-top{margin-bottom:4px;gap:3px}
+#levelCard .om-top{margin-bottom:3px;gap:3px;flex:none}
 #levelCard .om-no,#levelCard .om-tag{font-size:5px;letter-spacing:.3px}
 #levelCard .om-tag{background:#c7b477}
-#levelCard .lc-name{font-size:9px;margin-bottom:5px;color:#eef1e7}
-#levelCard .om-row{padding:3px 0;gap:5px;border-color:#34433b}
+#levelCard .lc-name{font-size:9px;margin-bottom:3px;color:#eef1e7;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#levelCard .om-row{padding:2px 0;gap:5px;border-color:#34433b;flex:none}
 #levelCard .om-row>span{flex:0 0 51px;font-size:5px}
-#levelCard .om-row>em{font-size:15px;line-height:1.1}
+#levelCard .om-row>em{font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #levelCard .om-pips u{width:5px;height:6px}
-#levelCard .lc-line{font-size:13px;line-height:1.25}
-#levelCard .lc-comp{display:flex;align-items:center;gap:5px;margin-top:5px;font-size:14px;color:#a9bdb0}
+#levelCard .lc-line{font-size:13px;line-height:1.25;flex:none}
+#levelCard .lc-comp{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:14px;color:#a9bdb0}
 #levelCard .lc-comp b{color:#eef1e7;white-space:nowrap}
 #levelCard .lc-comp i{flex:1;height:4px;position:relative;background:#263b32}
 #levelCard .lc-comp i u{display:block;height:100%;background:#43a86b}
 #levelCard .completion-tip{font-size:12px;color:#a9bdb0;margin:3px 0}
 #levelCard .completion-na{font-size:11px;color:#a9bdb0}
-#levelCard .om-details{margin-top:5px}
-#levelCard .om-details summary{cursor:pointer;font-size:6px;min-height:24px;display:flex;align-items:center;color:#c7b477}
-#levelCard .om-brief{font-size:15px;color:#cbd4c9;border-color:#7c8b74;background:#101a17}
+#levelCard .om-details{margin-top:3px;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+#levelCard .om-details summary{cursor:pointer;font-size:6px;min-height:20px;display:flex;align-items:center;color:#c7b477;flex:none}
+#levelCard .om-brief{font-size:15px;color:#cbd4c9;border-color:#7c8b74;background:#101a17;overflow-y:auto}
 #pageMap #btnLaunch{position:absolute;bottom:3px;left:22px;right:22px;width:auto;min-width:0;height:42px;margin:0;padding:10px 6px;z-index:2;font-size:10px;color:#152019;background:#ffce27;border:1px solid #c7b477;box-shadow:none;animation:none;clip-path:polygon(3% 0,100% 0,100% 85%,97% 100%,0 100%,0 15%)}
 #pageMap #btnLaunch:disabled{opacity:.7;color:#a9bdb0;background:#1a2925}
 #home button:focus-visible,#home summary:focus-visible{outline:2px solid #eef1e7;outline-offset:2px}

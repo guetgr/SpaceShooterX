@@ -12,12 +12,11 @@ function homeOrbitPoint(t, rotation = 0){
 mixin(HomeScene, {
   initOrbitalUi(){
     this.orbitRotation = 0;
-    const step = direction=>{
-      const levels=WORLDS[this.homeWorld].levels, i=levels.findIndex(l=>l.id===this.homeSel);
-      const next=levels[i+direction]; if(next) this.selectHomeLevel(next.id);
-    };
-    document.getElementById('orbitPrev').onclick=()=>step(-1);
-    document.getElementById('orbitNext').onclick=()=>step(1);
+  },
+  // passe au niveau précédent/suivant du monde affiché (direction -1/1) : swipe sur la planète, ou clic direct sur un niveau visible (renderHomeMap)
+  stepOrbitLevel(direction){
+    const levels=WORLDS[this.homeWorld].levels, i=levels.findIndex(l=>l.id===this.homeSel);
+    const next=levels[i+direction]; if(next) this.selectHomeLevel(next.id);
   },
   focusOrbitalLevel(){
     if(this.orbitTween) this.orbitTween.stop();

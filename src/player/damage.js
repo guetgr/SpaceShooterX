@@ -72,7 +72,7 @@ mixin(GameScene, {
     }
     amount *= this.enemyDmgMul();
     if (this.dodgeInvuln > 0) return; // mid-dash immunity from ESQUIVE
-    if (this.tuto) this.tutoHits = (this.tutoHits || 0) + 1;      // objectif de finition « sans te faire toucher »
+    this.runHits = (this.runHits || 0) + 1;      // objectif de finition « sans te faire toucher » (tous les niveaux, y compris le tuto)
     this.hitCooldown = 350 + (this.stats.hitGrace || 0); // short cooldown — damage still feels continuous under sustained contact (RESILIENCE l'allonge)
     this.shieldRegenDelay = 2600 * this.stats.shieldRegenDelayMul; // any hit (shield or hp) resets the regen delay
 

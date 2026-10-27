@@ -35,8 +35,8 @@ mixin(GameScene, {
     rx.lights = this.blInit('reacteur', 5.6);
     rx.core = this.add.image(0, 0, 'lightDot').setDepth(5.5).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.28);
     this.rxPlace();
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = RX.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = RX.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (rxStep, mode 'play')
     this.rxSfx('rxRoar', GAME_W/2);
   },
   rxSfx(name, x){ try { sfx[name]({ pan:this.panOf(x) }); } catch(e){ /* ignore */ } },
@@ -139,9 +139,11 @@ mixin(GameScene, {
   rxStageOf(pct){ return pct > RX.thresh[0] ? 0 : pct > RX.thresh[1] ? 1 : pct > RX.thresh[2] ? 2 : 3; },
   rxDamage(x, y, d, crit){
     const rx = this.rx; if (rx.dead || rx.mode === 'dying') return;
-    rx.hp = Math.max(0, rx.hp - d); if (rx.hitT <= 0 || crit){ rx.flash = crit ? 2 : 0.5; rx.hitT = 24; }
+    if (rx.hitT <= 0 || crit){ rx.flash = crit ? 2 : 0.5; rx.hitT = 24; }
     this.rxFx('rxFxImpact', 'rxImpact', x, y, crit ? 0.9 : 0.55); this.rxSpark(x, y, crit ? 1.3 : 0.8); this.spawnHitParticles(x, y, crit ? 6 : 3);
     if (crit){ this.juiceShake(0.12); this.rxSfx('rxHitHeavy', x); } else this.rxSfx('rxHit', x);
+    if (rx.mode === 'enter') return;      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+    rx.hp = Math.max(0, rx.hp - d);
     if (crit || Math.random() < 0.3){ const op = this.rxPix(rx.st).op, o = op[Phaser.Math.Between(0, op.length - 1)]; const [wx, wy] = this.rxW(o[0], o[1]); this.rxThrow(this.rxShard(rx.st, o[0], o[1], Phaser.Math.Between(4, 7)), wx, wy, { vx:(wx - rx.cx)*1.1, vy:-Phaser.Math.Between(20, 80), fall:120, spin:Phaser.Math.Between(-300, 300), life:1000 }); }
     const ns = rx.hp <= 0 ? 3 : this.rxStageOf(rx.hp/rx.max*100);
     if (ns > rx.st) this.rxWound(ns);
@@ -282,7 +284,7 @@ mixin(GameScene, {
     const rx = this.rx; rx.f++; rx.hitT = Math.max(0, rx.hitT - 1);
     rx.waves.forEach(w=>{ w.f++; w.r += 3.6*(1 + (this.rxHeat() - 1)*0.5); }); rx.patches.forEach(q=> q.f++);
     const ts = Math.floor(rx.t*10)/10; rx.jdy = Math.round(Math.sin(ts*1.9)*2);
-    if (rx.mode === 'enter'){ rx.enter += 0.012; this.cameras.main.shake(40, 0.002); if (rx.enter >= 1){ rx.mode = 'play'; this.cameras.main.shake(200, 0.006); } }
+    if (rx.mode === 'enter'){ rx.enter += 0.012; this.cameras.main.shake(40, 0.002); if (rx.enter >= 1){ rx.mode = 'play'; this.cameras.main.shake(200, 0.006); const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); } }
     if (rx.mode === 'play' || rx.mode === 'dying') rx.t += (1/60)*(rx.mode === 'dying' ? 0.5 : 1);
     if (rx.mode === 'play'){
       this.rxUpdateAttack();

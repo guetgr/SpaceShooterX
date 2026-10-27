@@ -30,8 +30,8 @@ mixin(GameScene, {
     pd.thr = PD.flame.map(()=> { const s = this.add.sprite(0, 0, 'pdFxFlame').setDepth(5.4).setOrigin(0.5, 0.93).setBlendMode(Phaser.BlendModes.ADD); s.play('pdFlame'); return s; });
     pd.beams = Array.from({ length:4 }, ()=> { const s = this.add.sprite(0, 0, 'pdFxBeam').setDepth(5.3).setOrigin(0.5, 0).setBlendMode(Phaser.BlendModes.ADD).setVisible(false); s.play('pdBeam'); return s; });
     this.pdPlace();
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = PD.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = PD.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (mode 'play')
     this.pdSfx('pdRoar', GAME_W/2);
   },
   pdSfx(name, x){ try { sfx[name]({ pan:this.panOf(x) }); } catch(e){ /* ignore */ } },
@@ -139,9 +139,11 @@ mixin(GameScene, {
   pdStageOf(pct){ return pct > PD.thresh[0] ? 0 : pct > PD.thresh[1] ? 1 : pct > PD.thresh[2] ? 2 : 3; },
   pdDamage(x, y, d, crit){
     const pd = this.pd; if (pd.dead || pd.mode === 'dying') return;
-    pd.hp = Math.max(0, pd.hp - d); if (pd.hitT <= 0 || crit){ pd.flash = crit ? 2 : 0.5; pd.hitT = 24; }
+    if (pd.hitT <= 0 || crit){ pd.flash = crit ? 2 : 0.5; pd.hitT = 24; }
     this.pdFx('pdFxImpact', 'pdImpact', x, y, crit ? 0.9 : 0.55); this.pdSpark(x, y, crit ? 1.3 : 0.8); this.spawnHitParticles(x, y, crit ? 6 : 3);
     if (crit){ this.juiceShake(0.12); this.pdSfx('pdHitHeavy', x); } else this.pdSfx('pdHit', x);
+    if (pd.mode === 'enter') return;      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+    pd.hp = Math.max(0, pd.hp - d);
     if (crit || Math.random() < 0.3){ const op = this.pdPix('b', pd.st).op, o = op[Phaser.Math.Between(0, op.length - 1)]; const [wx, wy] = this.pdW(o[0], o[1]); this.pdThrow(this.pdShard('b', pd.st, o[0], o[1], Phaser.Math.Between(4, 7)), wx, wy, pd.S, { vx:(wx - pd.wx)*1.1, vy:-Phaser.Math.Between(20, 80), fall:120, spin:Phaser.Math.Between(-300, 300), life:1000 }); }
     const ns = pd.hp <= 0 ? 3 : this.pdStageOf(pd.hp/pd.max*100);
     if (ns > pd.st) this.pdWound(ns);
@@ -297,7 +299,7 @@ mixin(GameScene, {
   },
   pdStep(){        // une image de 1/60 s, comme sur la page
     const pd = this.pd; pd.f++; pd.hitT = Math.max(0, pd.hitT - 1);
-    if (pd.mode === 'enter'){ pd.enter += 0.012; this.cameras.main.shake(40, 0.002); if (pd.enter >= 1){ pd.mode = 'play'; this.cameras.main.shake(200, 0.006); } }
+    if (pd.mode === 'enter'){ pd.enter += 0.012; this.cameras.main.shake(40, 0.002); if (pd.enter >= 1){ pd.mode = 'play'; this.cameras.main.shake(200, 0.006); const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); } }
     if (pd.mode === 'play' || pd.mode === 'dying') pd.t += (1/60)*(pd.mode === 'dying' ? 0.5 : 1);
     if (pd.mode === 'play'){
       this.pdUpdateAttack(); this.pdUpdateEntities();

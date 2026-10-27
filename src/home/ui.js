@@ -55,7 +55,7 @@ mixin(HomeScene, {
     box.addEventListener('pointerdown', e=>{
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
       if (pts.size === 2){ pinch0 = pinchDist(); down = false; return; }                  // 2e doigt : pincement, plus un glissement de page
-      if(e.target.closest('#levelCard,.orbit-controls')){down=false;return;}
+      if(e.target.closest('#levelCard')){down=false;return;}
       down = true; sx = e.clientX; sy = e.clientY; st = performance.now();
       // les onglets de l'arbre défilent à l'horizontale : on ne change de page depuis eux que depuis le bord gauche de l'écran
       if (e.target.closest && e.target.closest('#treeTabs') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
@@ -66,7 +66,11 @@ mixin(HomeScene, {
       if (!this.homeOn || document.querySelector('.overlay:not(.hidden)')) return;
       const dx = e.clientX - sx, dy = e.clientY - sy;
       if (dy > 90 && dy > Math.abs(dx)*1.5 && performance.now() - st < 700 && canGalaxy()){ this.enterGalaxy(); return; }
-      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5 && performance.now() - st < 700) this.goHomePage(this.page + (dx < 0 ? 1 : -1));
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5 && performance.now() - st < 700){
+        // sur la carte du monde (planète + niveaux en orbite) : glisser passe d'un niveau à l'autre, pas d'une page à l'autre
+        if (canGalaxy()) this.stepOrbitLevel(dx < 0 ? 1 : -1);
+        else this.goHomePage(this.page + (dx < 0 ? 1 : -1));
+      }
     });
     this.input.keyboard.on('keydown-LEFT', ()=>{ if (this.homeOn && !document.querySelector('.overlay:not(.hidden)')) this.goHomePage(this.page - 1); });
     this.input.keyboard.on('keydown-RIGHT', ()=>{ if (this.homeOn && !document.querySelector('.overlay:not(.hidden)')) this.goHomePage(this.page + 1); });
@@ -180,9 +184,6 @@ mixin(HomeScene, {
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
     if ($('btnLoadout')) $('btnLoadout').onclick = ()=>{ sfx.uiSelect(); this.goHomePage(-1); AtelierGarage.openSection('baies'); };
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
-    const selectedIndex = w.levels.findIndex(x=>x.id===l.id);
-    $('orbitIndex').textContent='ORDRE '+String(selectedIndex+1).padStart(2,'0')+' / '+n;
-    $('orbitPrev').disabled=selectedIndex===0; $('orbitNext').disabled=selectedIndex===n-1;
     const tip=$('levelCard').querySelector('.completion-tip');
     if(tip) $('levelCard').querySelector('.om-details').appendChild(tip);
     this.focusOrbitalLevel();

@@ -27,6 +27,28 @@ Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers
 - **Avant** : atouts globaux / de mission séparés ; responsive (zone 400x700 mise à l'échelle d'un bloc) ; direction artistique AGP-OS et N.O.R.M.A. ; pause et paramètres en feuille modale ; écran de chargement ; icône PWA ; animations GSAP ; arbre en cartes par branche ; accueil à 3 pages et mondes ; découpage du monolithe en modules (25 oct.).
 
 ## 3. À faire / questions ouvertes
+**Testing humain du 27 oct. 2026 — répartition Mac (Guet) / Windows (Bio)**
+> Rappel de vocabulaire décidé ce jour-là : le **tuto n'est pas un niveau** — « niveau 1 » (ou « ordre 1 ») désigne le premier ordre de mission *après* le tuto.
+
+- **Bio (sprites/sons, usine à sprite)** : refaire le sprite des satellites endommagés en fond de `w1-l2` (rendu gris/noir raté) ; refaire la lune + le fond de `w1-l1` ; jeu de lumières du hangar/menu principal + petits SFX de lumière ; logo/icône pour le dézoom de la carte ; sprite des composants (collectible ◆) ; sons « différents » demandés en test.
+- **Guet (ici, Mac) — fait et testé** (`smoke_test.py`, `home_test.py`, `level_test.py`, `perks_test.py`, `gen_codemap.py --check` verts) :
+  - Menu missions : fiche d'ordre compacte sans scroll, format stable quel que soit le texte ; barre « ORDRE X/6 » + flèches retirée, sélection par clic direct ou **swipe sur la planète** (`stepOrbitLevel`, `src/home/orbital.js`) — le swipe ailleurs continue de changer de page.
+  - **FINITION sur tous les niveaux** : `LEVEL_COMPLETION` (`data/completion.js`) génère désormais des objectifs génériques par type de niveau (survie/kill/collecte + boss), « sans te faire toucher » = 20 % (`GameScene.levelComp`, `runHits`) ; enregistrée à chaque `endRun`, victoire ou défaite.
+  - Header EMPLOYE N° 0042 unifié entre Atelier / Missions / R&D (`css/home-orbital.css`).
+  - Boss (les 5 autonomes + tuto) : dégâts visuels sans perte de PV réelle pendant la mise en position ; jauge de vie masquée jusqu'à la position de combat.
+  - Tuto : écran de fin au format calepin (`.rp-doc`) ; zoom cinématique du décollage retiré (doublon avec la Terre du fond) ; le chargement R&D en cours s'assemble désormais au tuto (niveau 0 la 1re fois, reflète la progression ensuite).
+  - N.O.R.M.A. en mission : le visage carré (`.nm-av`, CSS déjà là, balisage manquant) est de retour ; zone text fixée sous la jauge d'ordre (ne chevauche plus `#waveNote` ni la jauge de boss) ; transmissions régulières ajoutées (`normaTick`, pools `progress`/`banter` dans `agp-lore.js`) en plus de début/boss/PV bas.
+  - % de finition retiré de l'affichage pendant le niveau (gardé accueil + fin).
+  - Rapport d'intervention : scroll réduit (boutons et marges resserrés, ligne CHAINE MAXIMALE retirée), label « Composants récupérés » retiré (redondant avec l'en-tête).
+  - Mécanique DETONATEUR (explosion à la mort liée aux paliers de succès par ennemi) supprimée à la demande de Guet : effet, succès, toasts et section de la page succès retirés ; conséquence : le succès « RÉACTION EN CHAÎNE » est désormais inatteignable (laissé tel quel, inoffensif).
+  - Éclaireur (`w1-l4`) : portée du faisceau doublée (`EC.reach`), ne peut plus être esquivé en restant en bas de l'écran.
+  - Musique : les 5 boss autonomes du monde 1 ne faisaient jamais basculer la musique sur le thème boss (`bossActive`/`currentBoss` jamais posés pour eux) — corrigé dans `audio/scene-audio.js`. Fenêtre de chevauchement entre un `music.stop()` et un nouveau `start()` (ex. ORDRE SUIVANT) resserrée de 500 ms à 150 ms (`audio/music.js`).
+  - Terminologie tuto ≠ niveau ajoutée à `CLAUDE.md`.
+- **Guet — diagnostiqué, pas encore corrigé** :
+  - Réacteur (`w1-l3`) : le son du tir de feu sur place est un seul coup (`rxSfx('rxPatchBurn', ...)`) alors que la flaque dure plus longtemps — semble la cause du « sfx coupé » signalé, mais corriger proprement (boucle `Sfx.loopSet`) demande l'oreille de Bio pour juger le rendu. L'accélération du fond/dézoom pendant le combat vient probablement de `levelZoom()` qui réutilise `levelProgress().frac` (progression de l'objectif) même une fois le boss sorti, où `frac` reflète alors ses PV : à trancher si c'est voulu (toutes les fins de boss du monde 1 sont concernées, pas que le Réacteur) ou pas.
+  - Rebonds des ennemis (Bio) : aucun mécanisme de rebond trouvé dans `enemies/*.js` (pas de `setBounce`, pas de code de rebond manuel) — à clarifier avec Bio ce qu'il a vu.
+- **À part, pas dans ce sprint** : outil de game design (bestiaire, niveaux d'alerte, test live + import) à spécifier séparément, probablement en extension de `editor.html`.
+
 **Prochaines étapes proposées**
 - **Refonte de la progression** : étapes 4 et 5 du design (plans et pièces de secteur lâchés en mission, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : vagues des secteurs 2 et 3 selon la bible, boss Broyeur et Directeur (images à générer), planètes à échanger (la Casse lunaire affiche aujourd'hui une géante rouge, Mars une planète violette).
 - **Simulateur** : `sim_balance.py campaign` saute désormais le tutoriel (le bot ne sait pas le jouer depuis le boss Antenne-Mère).

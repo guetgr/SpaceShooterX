@@ -30,8 +30,8 @@ mixin(GameScene, {
     an.tg = AN.turrets.map(()=> glow(5.7, 0)); an.bayG = AN.bays.map(()=> glow(5.7, 0)); an.hubG = glow(5.5, 0); an.strobe = [0, 1, 2].map(()=> { const s = this.add.sprite(0, 0, 'anFxGlowHot').setDepth(5.7).setBlendMode(Phaser.BlendModes.ADD).setVisible(false); s.play('anGlowHot'); return s; });
     an.beams = []; for (let k = 0; k < 8; k++){ const s = this.add.sprite(0, 0, 'anFxBeam').setDepth(5.3).setOrigin(0.5, 0).setBlendMode(Phaser.BlendModes.ADD).setVisible(false); s.play('anBeam'); an.beams.push(s); }
     this.anPlace();
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = AN.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = AN.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (mode 'play')
     this.anSfx('anRoar', GAME_W/2);
   },
   anSfx(name, x){ try { sfx[name]({ pan:this.panOf(x) }); } catch(e){ /* ignore */ } },
@@ -137,9 +137,11 @@ mixin(GameScene, {
   anStageOf(pct){ return pct > AN.thresh[0] ? 0 : pct > AN.thresh[1] ? 1 : pct > AN.thresh[2] ? 2 : 3; },
   anDamage(x, y, d, crit){
     const an = this.an; if (an.dead || an.mode === 'dying') return;
-    an.hp = Math.max(0, an.hp - d); if (an.hitT <= 0 || crit){ an.flash = crit ? 2 : 0.5; an.hitT = 24; }
+    if (an.hitT <= 0 || crit){ an.flash = crit ? 2 : 0.5; an.hitT = 24; }
     this.anFx('anFxImpact', 'anImpact', x, y, crit ? 0.9 : 0.55); this.anSpark(x, y, crit ? 1.3 : 0.8); this.spawnHitParticles(x, y, crit ? 6 : 3);
     if (crit){ this.juiceShake(0.12); this.anSfx('anHitHeavy', x); } else this.anSfx('anHit', x);
+    if (an.mode === 'enter') return;      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+    an.hp = Math.max(0, an.hp - d);
     if (crit || Math.random() < 0.3){ const op = this.anPix(an.st).op, o = op[Phaser.Math.Between(0, op.length - 1)]; const [wx, wy] = this.anW(o[0], o[1]); this.anThrow(this.anShard(an.st, o[0], o[1], Phaser.Math.Between(4, 7)), wx, wy, { vx:(wx - an.cx)*1.1, vy:-Phaser.Math.Between(20, 80), fall:120, spin:Phaser.Math.Between(-300, 300), life:1000 }); }
     const ns = an.hp <= 0 ? 3 : this.anStageOf(an.hp/an.max*100);
     if (ns > an.st) this.anWound(ns);
@@ -233,7 +235,7 @@ mixin(GameScene, {
   anStep(){        // une image de 1/60 s, comme sur la page
     const an = this.an; an.f++; an.hitT = Math.max(0, an.hitT - 1);
     const spd = AN.spin[an.st]; let want = 0.03*spd; if (an.atk === 'spokes' && an.atT < 80) want += an.atT/80*0.05; an.rspeed += (want - an.rspeed)*0.05; an.ang += an.rspeed;
-    if (an.mode === 'enter'){ an.enter += 0.012; this.cameras.main.shake(40, 0.002); if (an.enter >= 1){ an.mode = 'play'; this.cameras.main.shake(200, 0.006); } }
+    if (an.mode === 'enter'){ an.enter += 0.012; this.cameras.main.shake(40, 0.002); if (an.enter >= 1){ an.mode = 'play'; this.cameras.main.shake(200, 0.006); const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); } }
     if (an.mode === 'play' || an.mode === 'dying') an.t += (1/60)*(an.mode === 'dying' ? 0.5 : 1);
     if (an.mode === 'play'){
       this.anUpdateAttack();

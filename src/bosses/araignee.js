@@ -35,8 +35,8 @@ mixin(GameScene, {
     ar.gfx = this.add.graphics().setDepth(7);
     ar.bays.forEach(b=>{ b.c = this.add.container(0, 0).setDepth(6); b.cav = this.add.graphics(); b.door = this.add.image(0, 0, 'arSheet').setOrigin(0, 0.5).setScale(S); b.load = this.add.sprite(0, 0, 'arFxMissile', 0).setVisible(false); b.c.add([b.cav, b.load, b.door]); });
     this.arDoors(0); this.arPlace(); ar.lights = this.blInit('araignee', 5.5);
-    const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = AR.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
+    if (lab) lab.textContent = AR.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; }      // la jauge n'apparaît qu'une fois le boss en position de combat (mode 'play')
     this.arSfx('arRoar', GAME_W/2);
   },
   arSfx(name, x, arg){ try { sfx[name]({ pan:this.panOf(x) }); } catch(e){ /* ignore */ } },
@@ -165,9 +165,11 @@ mixin(GameScene, {
   arStageOf(pct){ return pct > AR.thresh[0] ? 0 : pct > AR.thresh[1] ? 1 : pct > AR.thresh[2] ? 2 : 3; },
   arDamage(x, y, d, crit){
     const ar = this.ar; if (ar.dead || ar.mode === 'dying') return;
-    ar.hp = Math.max(0, ar.hp - d); if (ar.hitT <= 0 || crit){ ar.flash = crit ? 2 : 0.5; ar.hitT = 24; }          // le flash blanc est espacé : sous un tir rapide, la coque ne doit pas rester blanche
+    if (ar.hitT <= 0 || crit){ ar.flash = crit ? 2 : 0.5; ar.hitT = 24; }          // le flash blanc est espacé : sous un tir rapide, la coque ne doit pas rester blanche
     this.acFx('acFxImpact', 'acImpact', x, y, crit ? 0.9 : 0.55); this.arSpark(x, y, crit ? 1.3 : 0.8); this.spawnHitParticles(x, y, crit ? 6 : 3);
     if (crit){ this.juiceShake(0.12); this.arSfx('arHitHeavy', x); } else this.arSfx('arHit', x);
+    if (ar.mode === 'enter') return;      // en approche : dégâts visuels seulement (la jauge n'est pas encore affichée), pas de vraie perte de PV
+    ar.hp = Math.max(0, ar.hp - d);
     if (crit || Math.random() < 0.3){ const op = this.arPix(ar.st).op, o = op[Phaser.Math.Between(0, op.length - 1)]; const [wx, wy] = this.arW(o[0], o[1]); this.arThrow(this.arShard(ar.st, o[0], o[1], Phaser.Math.Between(4, 7)), wx, wy, { vx:(wx - ar.cx)*1.1, vy:-Phaser.Math.Between(20, 80), fall:120, spin:Phaser.Math.Between(-300, 300), life:1000 }); }
     const ns = ar.hp <= 0 ? 3 : this.arStageOf(ar.hp/ar.max*100);
     if (ns > ar.st) this.arWound(ns);
@@ -293,7 +295,7 @@ mixin(GameScene, {
     ar.bays.forEach(b=>{ b.open += Math.sign(b.tgt - b.open)*Math.min(Math.abs(b.tgt - b.open), 1/18); });
     ar.hitT = Math.max(0, ar.hitT - 1);
     const ts = Math.floor(ar.t*10)/10; ar.jdy = Math.round(Math.sin(ts*1.9)*2);
-    if (ar.mode === 'enter'){ ar.enter += 0.012; this.cameras.main.shake(40, 0.002); if (ar.enter >= 1){ ar.mode = 'play'; this.cameras.main.shake(200, 0.006); } }
+    if (ar.mode === 'enter'){ ar.enter += 0.012; this.cameras.main.shake(40, 0.002); if (ar.enter >= 1){ ar.mode = 'play'; this.cameras.main.shake(200, 0.006); const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.add('show'); } }
     if (ar.mode === 'play' || ar.mode === 'dying') ar.t += (1/60)*(ar.mode === 'dying' ? 0.5 : 1);
     if (ar.mode === 'play'){
       this.arUpdateAttack(); this.arUpdateShots();

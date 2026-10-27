@@ -83,7 +83,7 @@ with sync_playwright() as pw:
     check(p.evaluate("document.getElementById('compVal').textContent") == str(p.evaluate("%s.runComposants" % SC)), 'compteur du HUD = composants ramassés')
     check(p.evaluate("(()=>{ const sc = %s; const k = sc.comps.getLength(); sc.tuto = 1; sc.composantDrop({ enemyType:'tank', x:200, y:200 }); sc.tuto = 0; return sc.comps.getLength() - k; })()" % SC) == 0, 'tutoriel : aucun composant')
     c0 = p.evaluate("(()=>{ const sc = %s; sc.stats.magnetRadius = 60; for (let i=0;i<10;i++) sc.spawnComposantAt(20, sc.player.y - 300, 'compS', 0); return sc.runComposants; })()" % SC)
-    p.wait_for_timeout(5500)
+    p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par survie -> écran de fin')
     check(p.evaluate("%s.runComposants" % SC) - c0 >= 10, "victoire : les composants restés à l'écran sont aspirés vers la camionnette")
     check(vis('#btnNext') and vis('#btnRetry') and vis('#btnGoMenu'), 'victoire : boutons SUIVANT, REJOUER, ACCUEIL')
@@ -94,7 +94,8 @@ with sync_playwright() as pw:
     check('w1-l1' in prog() and 'w1-l2' not in prog(), 'victoire enregistrée')
     check(p.evaluate("isLevelUnlocked('w1-l2')"), 'niveau 2 débloqué')
     f1 = p.evaluate("getMeta().composants"); bk = bank()
-    check(bk.get('prime') == 30 and f1 - f0 == bk.get('total'), '1re victoire : composants + prime AGP de 30 (%s, +%s)' % (bk, f1 - f0))
+    # f1-f0 peut dépasser bk['total'] : les paliers de FINITION franchis ajoutent des composants à part (data/completion.js)
+    check(bk.get('prime') == 30 and f1 - f0 >= bk.get('total'), '1re victoire : composants + prime AGP de 30 (%s, +%s)' % (bk, f1 - f0))
 
     check(p.evaluate("!!(getMeta().rd.laser_auto && getMeta().rd.laser_auto.plan)"), '1re victoire de w1-l1 : le plan du LASER AUTO-CIBLEUR est acquis (R&D)')
 
@@ -200,7 +201,8 @@ with sync_playwright() as pw:
     p.wait_for_timeout(4500)
     check(p.evaluate("!!%s.ar" % SC), "le boss de fin arrive quand le temps est écoulé")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.evaluate("(()=>{ %s.arDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_timeout(9000)
+    p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.mode === 'play'", timeout=8000)      # en approche (mode 'enter') : dégâts visuels seulement, pas de vraie perte de PV
+    p.evaluate("(()=>{ %s.arDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du boss')
 
     print('boss de fin (w1-l1, La Météo)')
@@ -208,7 +210,8 @@ with sync_playwright() as pw:
     p.wait_for_timeout(4500)
     check(p.evaluate("!!%s.mt" % SC), "La Météo arrive quand le temps est écoulé")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.evaluate("(()=>{ %s.mtDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_timeout(9000)
+    p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.mode === 'play'", timeout=8000)
+    p.evaluate("(()=>{ %s.mtDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort de La Météo')
 
     print('boss de fin (w1-l3, Le Réacteur)')
@@ -216,7 +219,8 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(2500)
     check(p.evaluate("!!%s.rx" % SC), "Le Réacteur arrive quand les cristaux sont ramassés")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.evaluate("(()=>{ %s.rxDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_timeout(9000)
+    p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.mode === 'play'", timeout=8000)
+    p.evaluate("(()=>{ %s.rxDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du Réacteur')
     print('mob Pilleur (w1-l3)')
     start('w1-l3', "levelById('w1-l3').goal.gems = 999; levelById('w1-l3').finalBoss = null")

@@ -52,6 +52,20 @@ mixin(GameScene, {
     return { frac: (this.lvBossOut && b && b.maxHp) ? Math.max(0, 1 - b.hp / b.maxHp) : 0, label: 'BOSS' };
   },
 
+  // valeurs 0..1 des objectifs de FINITION de cette partie (voir data/completion.js) ; appelé par endRun, victoire ou défaite
+  levelComp(victory){
+    const d = this.lvDef; if (!d) return null;
+    const boss = this.ar || this.mt || this.rx || this.an || this.pd, bossOut = !!boss || this.lvBossOut;
+    const clean = Math.max(0, 1 - (this.runHits || 0) * 0.12);
+    if (d.type === 'boss'){
+      const b = this.currentBoss;
+      return { boss: (bossOut && b && b.maxHp) ? Math.max(0, 1 - b.hp / b.maxHp) : 0, win: victory ? 1 : 0, clean };
+    }
+    const goal = bossOut ? 1 : this.levelProgress().frac;
+    if (!d.finalBoss) return { goal, win: victory ? 1 : 0, clean };
+    return { goal, boss: boss ? Math.max(0, 1 - boss.hp / boss.max) : (victory ? 1 : 0), win: victory ? 1 : 0, clean };
+  },
+
   // objectif atteint : plus d'apparitions, vaisseau protégé, le décor se vide, puis écran de fin
   levelWin(){
     if (this.lvEnding || !this.running) return;
