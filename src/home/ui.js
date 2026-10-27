@@ -174,9 +174,11 @@ mixin(HomeScene, {
       '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
       '<div class="om-row om-risk"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
       '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
+      (l.type === 'tuto' ? '' : this.loadoutLine()) +
       this.finitionLine(l, p) +
       '<details class="om-details"><summary>DETAILS · N.O.R.M.A.</summary><div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div></details>';
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
+    if ($('btnLoadout')) $('btnLoadout').onclick = ()=>{ sfx.uiSelect(); this.goHomePage(-1); AtelierGarage.openSection('baies'); };
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
     const selectedIndex = w.levels.findIndex(x=>x.id===l.id);
     $('orbitIndex').textContent='ORDRE '+String(selectedIndex+1).padStart(2,'0')+' / '+n;
@@ -186,6 +188,12 @@ mixin(HomeScene, {
     this.focusOrbitalLevel();
     this.updateOrbitalUi();
     this.setHomeVanTier(l.threat);
+  },
+
+  // ligne « CHARGEMENT » de la fiche d'ordre : les technologies emportées + raccourci vers les baies du garage
+  loadoutLine(){
+    const names = loadoutSanitize(getMeta(), slotsOpen()).map(id=> TECH_BY_ID[id].name);
+    return '<div class="om-row om-load"><span>CHARGEMENT</span><em>' + (names.join(' · ') || 'AUCUN') + '</em><button id="btnLoadout" class="om-mod">MODIFIER</button></div>';
   },
 
   // ligne « FINITION n% » de la fiche d'un niveau + le prochain objectif à faire (donne envie de rejouer)

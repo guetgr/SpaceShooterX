@@ -8,3 +8,18 @@
 #atelierNext .apr-dev{margin-top:6px;width:100%;background:none;border:1px dashed #c5ac43;padding:8px;font-size:6px;color:#c5ac43}
 /* la scène reste visible quand la liste des postes défile : on voit l'aimant et le canon apparaître à l'achat */
 #atelierNext .an-scene{position:sticky;top:0;z-index:2;border-bottom:1px solid #405248}
+
+/* Baies d'équipement (garage) et ligne CHARGEMENT de la fiche d'ordre */
+.an-baies .bays{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
+.bay{ display:flex; flex-direction:column; gap:3px; padding:7px; background:#1a2925; border:1px solid #425a4b; min-height:46px; }
+.bay b{ font-size:6px; color:#ffce27; letter-spacing:1px; }
+.bay span{ font-family:var(--vt); font-size:15px; line-height:1; color:#cddbd1; }
+.bay.lock{ opacity:.6; border-style:dashed; }
+.bay small{ display:block; font-size:12px; color:#82978b; }
+.bay-tech{ display:flex; align-items:center; gap:8px; margin-bottom:6px; padding:6px 8px; background:#16211d; border:1px solid #33463b; }
+.bay-tech span{ flex:1; font-family:var(--vt); font-size:16px; line-height:1; color:#cddbd1; }
+.bay-tech i{ font-style:normal; font-size:12px; color:#ffce27; }
+#atelierNext .bay-tech button{ min-height:44px; min-width:84px; background:#ffce27; color:#152019; border:0; font-size:7px; }
+.bay-none{ font-family:var(--vt); font-size:15px; color:#82978b; }
+.om-load{ align-items:center; }
+.om-mod{ margin-left:8px; min-height:30px; padding:4px 8px; font-size:6px; background:none; border:1px solid var(--agp-yellow,#ffce27); color:var(--agp-yellow,#ffce27); }

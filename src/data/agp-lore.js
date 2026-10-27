@@ -66,6 +66,8 @@ const AGP_LORE = {
     plan: "Document technique récupéré. Il ne vous appartient pas. Moi non plus.",
     research: "Cette modification annule immédiatement la garantie constructeur.",
     loadoutFull: "Capacité de la baie atteinte. Veuillez renoncer à quelque chose.",
+    arme: "Une seule ARME par chargement. Le règlement est sans appel.",
+    rampe: "Une seule RAMPE de missiles par chargement. Le règlement est sans appel.",
   },
   // garage : achats d'atelier, verrous, restructuration du catalogue
   atelier: {
