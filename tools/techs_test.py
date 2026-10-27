@@ -114,5 +114,20 @@ with mission({'v':3,'composants':0,'rd':RD('arc_electrique','ricochets','pulsar'
     ck('fus_orage' in f and 'fus_vortex' not in f,'ORAGE disponible quand les deux sont assemblées, VORTEX jamais (trou noir indisponible) : %s'%f)
     ck(not errs,'(i) pas d\'erreur JS')
 
+# ---- (j) le DRONE apparaît à l'assemblage (et passe à 3 avec ESSAIM) ; (k) le bouton OVERDRIVE apparaît à l'assemblage
+with mission({'v':3,'composants':0,'rd':RD('drone',drone={'spe':True}),'chargement':['drone']}) as (p,errs):
+    ck(ev(p,"return s.droneSprites.length")==0,'drone : aucun sprite avant l\'assemblage')
+    ev(p,"s.techAssemble('drone'); return 0")
+    ck(ev(p,"return s.droneSprites.length")==1,'drone assemblé : le sprite du drone existe (%s)'%ev(p,"return s.droneSprites.length"))
+    DU='up_drone_t_drone_cadence'
+    take(p,DU); take(p,DU); take(p,'spe_drone')
+    ck(ev(p,"return s.droneSprites.length")==3 and ev(p,"return s.droneSprites.every(d=>d.active)"),'ESSAIM : trois drones actifs')
+    ck(not errs,'(j) pas d\'erreur JS')
+with mission({'v':3,'composants':0,'rd':RD('overdrive'),'chargement':['overdrive']}, worlds=W1) as (p,errs):
+    ck(ev(p,"return document.getElementById('odBtn').classList.contains('show')")==False,'overdrive : bouton masqué avant l\'assemblage')
+    ev(p,"s.techAssemble('overdrive'); return 0")
+    ck(ev(p,"return document.getElementById('odBtn').classList.contains('show')")==True,'overdrive assemblé : le bouton OVERDRIVE apparaît')
+    ck(not errs,'(k) pas d\'erreur JS')
+
 if fails: print('ÉCHEC : techs (%d)'%len(fails)); sys.exit(1)
 print('OK : techs')

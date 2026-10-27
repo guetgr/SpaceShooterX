@@ -1080,6 +1080,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `techEffect` | méthode | `src/player/progression.js` | `GameScene` |
 | `techMaxRang` | const | `src/data/techs.js` |  |
 | `TECHS` | const | `src/data/techs.js` |  |
+| `techSync` | méthode | `src/player/progression.js` | `GameScene` |
 | `throwEmp` | méthode | `src/events/types.js` | `GameScene` |
 | `tick` | méthode | `src/audio/music.js` | `FileMusic` |
 | `tickCorridor` | méthode | `src/events/types.js` | `GameScene` |
@@ -1194,4 +1195,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1187 symboles.
+1188 symboles.

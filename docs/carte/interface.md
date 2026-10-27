@@ -182,7 +182,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `styleCount` | `ui/hud.js` | `css/style.css` |
 | `styleXp` | `ui/hud.js` | `css/style.css` |
 | `styleFill` | `ui/hud.js` | — |
-| `odBtn` | `scenes/GameScene.js`, `systems/overdrive.js`, `ui/dom.js` | `css/style.css`, `css/agp.css` |
+| `odBtn` | `player/progression.js`, `scenes/GameScene.js`, `systems/overdrive.js`, `ui/dom.js` | `css/style.css`, `css/agp.css` |
 | `redVig` | `game/run.js`, `systems/skills.js` | `css/style.css` |
 | `gameover` | `game/run.js`, `game/tuto.js`, `scenes/GameScene.js`, `ui/dom.js`, `ui/motion.js` | `css/style.css`, `css/agp.css` |
 | `rpNo` | `game/run.js` | — |

@@ -48,6 +48,21 @@ mixin(GameScene, {
     if (this.stats.maxHp > hp0) this.hp = Math.min(this.stats.maxHp, this.hp + this.stats.maxHp - hp0);
     if (this.stats.shieldMax > sh0) this.shield = Math.min(this.stats.shieldMax, this.shield + this.stats.shieldMax - sh0);
     this.dodgeCharges += this.stats.dodgeCharges - dg0;
+    this.techSync();
+  },
+
+  // visuels qui dépendent d'un assemblage en cours de partie : sprites du drone (1, ou 3 avec ESSAIM) et bouton OVERDRIVE
+  techSync(){
+    const want = this.droneOwned ? (this.droneSwarmOwned ? 3 : 1) : 0;
+    if (this.droneSprites.length !== want){
+      this.droneSprites.forEach(d=> d.destroy()); this.droneSprites = [];
+      for (let i = 0; i < want; i++){
+        const d = this.add.image(this.player.x, this.player.y - 40, 'droneSat');
+        d.setDepth(11); d.angleOffset = (Math.PI*2/want)*i; d.fireTimer = Phaser.Math.Between(0, 300);
+        this.droneSprites.push(d);
+      }
+    }
+    const od = document.getElementById('odBtn'); if (od) od.classList.toggle('show', this.stats.overdrive > 0);
   },
 
   // assemble une technologie du chargement : effet de base, puis ses rangs de R&D

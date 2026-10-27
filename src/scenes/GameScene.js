@@ -138,17 +138,7 @@ class GameScene extends Phaser.Scene{
       this.shieldAura.setTexture('aura_' + startKey);
     }
 
-    this.droneSprites = [];
-    if (this.droneOwned){
-      const droneCount = this.droneSwarmOwned ? 3 : 1;
-      for (let i=0;i<droneCount;i++){
-        const d = this.add.image(this.player.x, this.player.y-40, 'droneSat');
-        d.setDepth(11);
-        d.angleOffset = (Math.PI*2/droneCount)*i;
-        d.fireTimer = Phaser.Math.Between(0,300);
-        this.droneSprites.push(d);
-      }
-    }
+    this.droneSprites = [];                 // créés à l'assemblage du DRONE SATELLITE (techSync)
 
     // input drag — worldX/Y tient compte du zoom de la caméra, contrairement à x/y bruts
     this.input.on('pointerdown', (p)=>{

@@ -519,7 +519,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`progression.js`** — Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau.
 
-- Méthodes ajoutées à `GameScene` (mixin) : `levelUp`, `cardPool`, `drawCards`, `showUpgradeCards`, `assemblyCards`, `techEffect`, `techAssemble`, `techCards`, `cardCount`, `renderCardChoices`, `rerollCards`, `updateShipTier`
+- Méthodes ajoutées à `GameScene` (mixin) : `levelUp`, `cardPool`, `drawCards`, `showUpgradeCards`, `assemblyCards`, `techEffect`, `techSync`, `techAssemble`, `techCards`, `cardCount`, `renderCardChoices`, `rerollCards`, `updateShipTier`
 
 ### `src/enemies/`
 
