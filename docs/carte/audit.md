@@ -19,11 +19,12 @@ En portée globale, la dernière définition écrase les autres (ou plante pour 
 - Ids demandés au DOM mais inexistants : aucun
 - `asset(...)` hors manifeste : aucun
 
-## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (2)
+## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (3)
 
 Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.html, tools) n'est appelé nulle part. Sauf appel par nom construit dynamiquement ou depuis la console.
 
 - `setShipPart` (fonction) — `src/data/ship-skins.js`
+- `HOME_ORBIT` (const) — `src/home/background.js`
 - `HOME_STAT_LINES` (const) — `src/home/ui.js`
 
 ## Candidats « code mort » : méthodes jamais référencées par leur nom (2)
@@ -33,6 +34,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 
 ## Outils (`tools/`)
 
+- `tools/atelier_test.js` — Vérifie les règles de l'atelier (postes, Mk I à V, coûts, achat), sans navigateur : node tools/atelier_test.js
 - `tools/build.py` — Fabrique les versions « un seul fichier HTML » du jeu (tout est embarqué : code, CSS, images, sons, polices).
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
@@ -44,6 +46,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/import_decors_carte.py` — Importe les décors de la carte du monde livrés en PNG à fond transparent : planètes des mondes 2 et 3, nuages de la Terre, satellite en orbite
 - `tools/import_sprites_niveaux.py` — Importe les icônes de niveaux livrées en PNG (256x256, fond transparent) : PNG RGBA -> assets/sprites/*.webp, puis relance gen_manifest.py. (Planètes,
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
+- `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
 - `tools/serve.py` — Serveur local de développement (sans cache : tu modifies un fichier, tu rafraîchis la page, c'est pris en compte).
 - `tools/sim/bot.js` — Simulateur d'équilibrage : joueur automatique + avance rapide, injecté dans la page par tools/sim_balance.py
@@ -63,6 +66,12 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/captures-prompt-2026-10-26/README.md` — Space Shooter X — captures de référence
 - `docs/carte-du-code.md` — Carte du code — point d'entrée
 - `docs/catalogue-sons.md` — Space Shooter X — catalogue des effets sonores (nouvelle bibliothèque)
+- `docs/charte-agp/charte-graphique.md` — Space Shooter X — Charte graphique AGP
+- `docs/concepts-accueil-2026-10-27/comparaison-et-sprites.md` — Accueil AGP — proposition et sprites
+- `docs/concepts-accueil-2026-10-27/plan-integration-hublot.md` — Plan de découpage et d'intégration — accueil hublot
+- `docs/concepts-accueil-2026-10-27/prompt-v2-hublot.md` — Accueil V2 — parcours orbital et hublot
+- `docs/concepts-accueil-2026-10-27/prompts-production.md` — Prompts de production — ImageGen intégré
+- `docs/concepts-accueil-2026-10-27/prompts.md` — Prompts — ImageGen intégré
 - `docs/concepts-atelier-2026-10-26/prompt-atelier-v2.md` — Atelier — révision visuelle V2
 - `docs/concepts-atelier-2026-10-26/prompts.md` — Concepts atelier AGP
 - `docs/concepts-atelier-2026-10-26/sprites/prompt-atelier-detaille.md` — Atelier détaillé
@@ -92,5 +101,6 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/space-shooter-x-analyse.md` — SPACE SHOOTER X — Analyse équilibrage, cohérence et pouvoir addictif
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée
 - `docs/suno-prompts.md` — Space Shooter X — les prompts Suno (version finale : 22 prompts = 44 morceaux pour 42 pistes)
+- `docs/superpowers/plans/2026-10-27-atelier-v3.md` — Étape 2 — sauvegarde v3 et atelier à six postes : plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées

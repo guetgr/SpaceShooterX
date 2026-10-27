@@ -12,7 +12,7 @@ import base64, json, mimetypes, os, re, subprocess, sys
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INLINE_PHASER = '--inline-phaser' in sys.argv
-MIME = {'svg': 'image/svg+xml', 'png': 'image/png', 'webp': 'image/webp', 'jpg': 'image/jpeg', 'mp3': 'audio/mpeg', 'woff2': 'font/woff2'}
+MIME = {'svg': 'image/svg+xml', 'png': 'image/png', 'webp': 'image/webp', 'jpg': 'image/jpeg', 'mp3': 'audio/mpeg', 'wav': 'audio/wav', 'woff2': 'font/woff2'}
 
 
 def read(rel, mode='r'):
@@ -25,7 +25,8 @@ def data_uri(rel):
 
 
 # --- CSS (polices embarquées en base64) ---
-css = re.sub(r"url\('\.\./assets/([^']+)'\)", lambda m: 'url(' + data_uri(m.group(1)) + ')', read('css/style.css') + '\n' + read('css/agp.css') + '\n' + read('css/hud.css'))
+stylesheets = re.findall(r'<link rel="stylesheet" href="(css/[^"]+)">', read('index.html'))
+css = re.sub(r"url\('\.\./assets/([^']+)'\)", lambda m: 'url(' + data_uri(m.group(1)) + ')', '\n'.join(read(path) for path in stylesheets))
 
 # --- assets ---
 manifest = json.loads(read('assets/manifest.json'))
@@ -39,7 +40,9 @@ js = '(function(){\n"use strict";\n' + asset_js + code + '\n})();'
 
 # --- page ---
 shell = read('index.html')
-head, rest = shell.replace('<link rel="stylesheet" href="css/agp.css">\n', '').replace('<link rel="stylesheet" href="css/hud.css">\n', '').split('<link rel="stylesheet" href="css/style.css">')
+for path in stylesheets[1:]:
+    shell = shell.replace('<link rel="stylesheet" href="' + path + '">\n', '')
+head, rest = shell.split('<link rel="stylesheet" href="' + stylesheets[0] + '">')
 head = head.replace('<script src="vendor/phaser.min.js"></script>',
                     '<script>' + read('vendor/phaser.min.js') + '</script>' if INLINE_PHASER
                     else '<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.70.0/phaser.min.js"></script>')

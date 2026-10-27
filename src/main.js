@@ -34,6 +34,7 @@ uiIconsInit();                                                       // icônes 
 function startGame(){
   CloudSave.boot(()=>{
     if (window.__ssxStarted) return; window.__ssxStarted = true;
+    migrateMeta();                                                    // sauvegarde v2 -> v3 (data/meta.js), une seule fois
     fitUi();
     const game = new Phaser.Game(config); window.__phaserGame = game; fitUi();
     if (DEV_SEE_ALL){                       // accès console / tests automatiques (tools/smoke_test.py)

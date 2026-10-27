@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="css/agp.css">
 <link rel="stylesheet" href="css/hud.css">
 <link rel="stylesheet" href="css/atelier.css">
+<link rel="stylesheet" href="css/home-orbital.css">
 </head>
 <body>
 <div id="stage">
@@ -74,6 +75,7 @@
         <section class="home-page" id="pageHangar">
         </section>
         <section class="home-page" id="pageMap" data-mode="world">
+          <div class="home-window world-only" aria-hidden="true"></div>
           <div class="map-world world-only">
             <button class="map-arrow" id="btnGalaxy" aria-label="Répartition des secteurs"><i data-ico="galaxy" data-s="24"></i></button>
             <div class="mw-mid"><div class="mw-n" id="mwNum"></div><div class="mw-name" id="mwName"></div><div class="mw-prog" id="mwProg"></div></div>
@@ -83,6 +85,7 @@
           <div class="level-card world-only" id="levelCard"></div>
           <button class="btn world-only" id="btnLaunch">PRENDRE LE SERVICE</button>
           <div id="mapOrbit" class="world-only"></div>
+          <nav class="orbit-controls world-only" aria-label="Parcours des ordres"><button id="orbitPrev" aria-label="Ordre précédent">‹</button><span id="orbitIndex" aria-live="polite"></span><button id="orbitNext" aria-label="Ordre suivant">›</button></nav>
           <div class="gx-title galaxy-only">REPARTITION DES SECTEURS</div>
           <div class="gx-hint galaxy-only">Glisse pour parcourir · touche un secteur</div>
           <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU SECTEUR</button>

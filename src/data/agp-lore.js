@@ -61,6 +61,11 @@ const AGP_LORE = {
     gravite: { name:'PHYSIQUE FONDAMENTALE', sub:"Département en sous-effectif (1 stagiaire)" },
     furie:   { name:'GESTION DU STRESS',    sub:"Méthodes non homologuées" },
   },
+  // garage : achats d'atelier, verrous, restructuration du catalogue
+  atelier: {
+    buy: "Modification non homologuée enregistrée. Votre véhicule n'est plus couvert.",
+    migration: "Le catalogue R&D a été restructuré. Vos dépenses vous ont été recréditées. Exceptionnellement.",
+  },
 };
 
 // transmissions de N.O.R.M.A. (assistante administrative embarquée) : courtes, froides, polies. Un seul message à la fois.

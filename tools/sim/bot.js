@@ -2,7 +2,7 @@
 // (chargé APRÈS le jeu ; pas du code du jeu). Expose window.__sim.
 //   __sim.prepare()                               figer le hasard / l'horloge, couper l'affichage et le son
 //   __sim.runLevel(levelId, seed, opts)           joue un niveau entier, renvoie le résultat
-//   __sim.buy(policy)                             dépense les fragments dans l'arbre (comme un joueur raisonnable)
+//   __sim.buy(policy)                             dépense les composants à l'atelier puis dans l'arbre (comme un joueur raisonnable)
 (function(){
   "use strict";
   const DT = 1000/60;
@@ -88,7 +88,7 @@
       seedState = seed >>> 0 || 1;
       const sc0 = SC(), g = sc0.game, L = levelById(levelId);
       const cap = opts.cap || (L.type === 'survive' ? L.goal.seconds*3 + 60 : 300);
-      const f0 = getMeta().fragments;
+      const f0 = getMeta().composants;
       sc0.scene.restart({ autoStart:true, levelId });
       let sc = null, tick = 0, t0 = clock, minHp = 1, cards = 0, introDone = false;
       const step = ()=>{ clock += DT; g.step(clock, DT); tick++; };
@@ -106,7 +106,7 @@
       return {
         win: !!(res && res.victory), timeout: !res, time: Math.round(simT*10)/10, kills: sc.runKills, level: sc.level, cards,
         score: Math.floor(sc.score), minHp: Math.round(minHp*100)/100, progress: res ? res.progress : sc.levelProgress().frac,
-        frags: getMeta().fragments - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
+        frags: getMeta().composants - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
       };
     },
 
@@ -131,19 +131,24 @@
                pct: rec ? rec.runPct : completionPct('w1-tuto', comp), comp, steps: sc.tutoStepLog, minHp: Math.round(minHp*100)/100 };
     },
 
-    // dépense les fragments : un joueur raisonnable prend d'abord ce qui rend plus solide / plus puissant, puis le moins cher
+    // dépense les composants comme un joueur raisonnable : l'atelier d'abord (le poste de Mk le plus bas, on met de côté pour le Mk suivant
+    // plutôt que de grignoter l'arbre), puis le reste de l'arbre ; jamais de Mk III à V sans pièces de secteur (le bot n'en gagne pas)
     buy(policy){
       const meta = getMeta(), st = meta.tree;
+      const ORDER = policy === 'defense' ? ['coque', 'bouclier', 'canon', 'propulseurs', 'aimant', 'ordinateur'] : ['canon', 'coque', 'bouclier', 'propulseurs', 'aimant', 'ordinateur'];
       const PREF = policy === 'defense' ? ['defense', 'arme', 'missile'] : ['arme', 'defense', 'missile'];
       let bought = 0;
       for (;;){
-        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.fragments);
+        const posts = ORDER.filter(id=> atelierCanBuy(meta, id).ok).sort((a, b)=> (atelierMk(meta.atelier, a) - atelierMk(meta.atelier, b)) || (ORDER.indexOf(a) - ORDER.indexOf(b)));
+        if (posts.length){ atelierBuy(meta, posts[0]); bought++; continue; }
+        if (ORDER.some(id=> atelierCanBuy(meta, id).reason === 'composants')) break;       // on économise pour un poste d'atelier
+        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.composants);
         if (!avail.length) break;
         avail.sort((a, b)=>{ const pa = PREF.indexOf(a.branch), pb = PREF.indexOf(b.branch); return ((pa < 0 ? 9 : pa) - (pb < 0 ? 9 : pb)) || (a.cost() - b.cost()); });
-        const n = avail[0]; meta.fragments -= n.cost(); st[n.nid] = n.k; bought++;
+        const n = avail[0]; meta.composants -= n.cost(); st[n.nid] = n.k; bought++;
       }
       setMeta(meta);
-      return { bought, fragments: meta.fragments, points: treeTotalPoints(st) };
+      return { bought, composants: meta.composants, points: metaPoints(meta) };
     },
   };
 })();
