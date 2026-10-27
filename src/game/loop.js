@@ -18,6 +18,7 @@ mixin(GameScene, {
       if (s.y > GAME_H+STAR_PAD_Y) { s.y = -STAR_PAD_Y; s.x = Phaser.Math.Between(-STAR_PAD_X,GAME_W+STAR_PAD_X); }
     });
     this.updateBgDecor(delta);
+    this.updateWorldBg(delta);
     if (this.bestiaryDirty){
       this.bestiarySaveCd = (this.bestiarySaveCd === undefined ? 2000 : this.bestiarySaveCd) - delta;
       if (this.bestiarySaveCd <= 0){ setBestiary(this.bestiary); this.bestiaryDirty = false; this.bestiarySaveCd = 2000; }

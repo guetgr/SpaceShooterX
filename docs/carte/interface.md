@@ -274,7 +274,7 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`atelier/` : 7, `audio/music/` : 23, `audio/sfx/` : 233, `fonts/` : 3, `hud/` : 1, `sprites/` : 260
+`atelier/` : 7, `audio/music/` : 23, `audio/sfx/` : 233, `fonts/` : 3, `hud/` : 1, `sprites/` : 261
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 

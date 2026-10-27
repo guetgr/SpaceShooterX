@@ -109,6 +109,7 @@ class GameScene extends Phaser.Scene{
     this.bgDecor = [];
     this.bgZoneIndex = -1;
     this.pickBgZone(true);
+    this.buildWorldBg();                           // fond propre au niveau (`bg` dans data/worlds), sinon le décor aléatoire ci-dessus
 
     // groups
     this.playerBullets = this.physics.add.group();
