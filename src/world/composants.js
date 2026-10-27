@@ -16,6 +16,11 @@ mixin(GameScene, {
     for (let i=0;i<n;i++) this.spawnComposantAt(enemy.x + Phaser.Math.Between(-16,16), enemy.y + Phaser.Math.Between(-16,16), 'compS');
   },
 
+  // pluie de gros composants (boss, Trésorin) : dispersés autour du point, ils descendent vers la camionnette comme la pluie de cristaux des boss
+  composantShower(x, y, nBig){
+    for (let i=0;i<nBig;i++) this.spawnComposantAt(x + Phaser.Math.Between(-70, 70), y + Phaser.Math.Between(-30, 40), 'compL', Phaser.Math.Between(60, 120));
+  },
+
   onCollectComposant(player, c){
     if (!c.active) return;
     this.runComposants += c.compValue || COMP.smallValue;
@@ -24,9 +29,9 @@ mixin(GameScene, {
     sfx.gem();
   },
 
-  // aimant : même règle que les cristaux (portée, tempête magnétique, collecte auto)
+  // aimant : même règle que les cristaux (portée, tempête magnétique, collecte auto) ; à la victoire (levelWin), tout est aspiré
   updateComposants(time, delta){
-    const storm = this.elapsed < (this._magnetUntil||0);
+    const storm = this.elapsed < (this._magnetUntil||0) || this._compVacuum;
     this.comps.children.iterate(c=>{
       if (!c) return;
       if (storm || Phaser.Math.Distance.Between(c.x, c.y, this.player.x, this.player.y) < this.stats.magnetRadius) this.juiceMagnet(c, delta, storm);

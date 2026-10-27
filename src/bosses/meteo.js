@@ -338,6 +338,7 @@ mixin(GameScene, {
     for (let k = 0; k < 20; k++) this.mtSpark(cx + Phaser.Math.Between(-50, 50), cy + Phaser.Math.Between(-50, 50), Phaser.Math.FloatBetween(0.7, 1.4));
     this.blDestroy(mt.lights); mt.sp.setVisible(false); mt.flames.forEach(f=> f.s.destroy()); mt.flames = [];
     this.time.delayedCall(300, ()=> this.mtSfx('mtLimb', cx)); this.time.delayedCall(250, ()=> this.mtSfx('mtThunder', cx));
+    this.composantShower(cx, cy, COMP.miniBossBig);
     this.score += MT.killScore;
     this.time.delayedCall(2200, ()=>{ if (this.running) this.levelWin(); });
   },

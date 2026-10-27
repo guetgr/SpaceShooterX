@@ -55,7 +55,7 @@ mixin(GameScene, {
   // objectif atteint : plus d'apparitions, vaisseau protégé, le décor se vide, puis écran de fin
   levelWin(){
     if (this.lvEnding || !this.running) return;
-    this.lvEnding = true;
+    this.lvEnding = true; this._compVacuum = true;          // les composants encore à l'écran filent vers la camionnette
     this.hitCooldown = Math.max(this.hitCooldown, 6000);
     this.notice('INTERVENTION VALIDEE', this.lvDef.name);
     sfx.relicOpen();

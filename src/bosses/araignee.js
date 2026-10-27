@@ -326,6 +326,7 @@ mixin(GameScene, {
     for (let k = 0; k < 20; k++) this.arSpark(cx + Phaser.Math.Between(-50, 50), cy + Phaser.Math.Between(-50, 50), Phaser.Math.FloatBetween(0.7, 1.4));
     this.blDestroy(ar.lights); ar.sp.setVisible(false); ar.bays.forEach(b=> b.c.setVisible(false)); ar.flames.forEach(f=> f.s.destroy()); ar.flames = []; ar.gfx.clear();
     this.time.delayedCall(300, ()=> this.arSfx('arLimb', cx)); this.time.delayedCall(700, ()=> this.arSfx('arLimb', cx));
+    this.composantShower(cx, cy, COMP.miniBossBig);
     this.score += AR.killScore;
     this.time.delayedCall(2200, ()=>{ if (this.running) this.levelWin(); });
   },

@@ -131,7 +131,7 @@ class GameScene extends Phaser.Scene{
 
     // moments forts: mob doré, événements, stats de fin de partie, ralenti, dernier souffle
     this.goldCd = 30000; this.eventCd = 55000; this.curEvent = null; this.curSmall = null; this._wells = []; this._corr = null; this._ecl = null; this._ice = null; this._empOn = false; this._empUntil = 0; this._plasma = null; this.smallCd = 25000; this._wave1 = false; this.baseAlert = this.alertLevel; this.alertTimer = 0; this.alertRises = 0; this._double1 = false; this._frenzyUntil = 0; this._magnetUntil = 0; this.cameras.main.setRotation(0); this.bosses = []; this._relicQueue = []; this._relicNext = [];
-    this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runFragBonus = 0; this.runComposants = 0;
+    this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runComposants = 0; this._compVacuum = false;
     clearTimeout(this.deathTimer);
     this.slowmo = null; this.lastStandUsed = false; this.tweens.timeScale = 1; this.time.timeScale = 1; this.anims.globalTimeScale = 1; if (this.physics && this.physics.world) this.physics.world.timeScale = 1;      // un redémarrage en plein arrêt sur image ne doit pas rester figé
     this.combo = { n:0, t:0, pts:0 }; this.comboRank = 0; this.runBestCombo = 0; this.runBestRank = 0; this._styleDirty = false; this._styleT = 0;
