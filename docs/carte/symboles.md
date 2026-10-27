@@ -539,6 +539,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `HOME_ORBIT` | const | `src/home/background.js` |  |
 | `HOME_ORBIT_VIEW` | const | `src/home/orbital.js` |  |
 | `HOME_STAT_LINES` | const | `src/home/ui.js` |  |
+| `homeMusic` | méthode | `src/home/ui.js` | `HomeScene` |
 | `homeOrbitPoint` | fonction | `src/home/orbital.js` |  |
 | `HomeScene` | classe | `src/scenes/HomeScene.js` |  |
 | `homeToast` | méthode | `src/home/galaxy.js` | `HomeScene` |
@@ -692,6 +693,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `MUSIC_BOSS` | const | `src/audio/music.js` |  |
 | `MUSIC_BOSS_KEYS` | const | `src/audio/music.js` |  |
 | `MUSIC_FILES` | const | `src/audio/music-data.js` |  |
+| `MUSIC_LEN` | const | `src/audio/music-data.js` |  |
+| `MUSIC_LEVEL` | const | `src/audio/music.js` |  |
+| `MUSIC_MENU_WORLD` | const | `src/audio/music.js` |  |
 | `MUSIC_SLOTS` | const | `src/audio/music.js` |  |
 | `musicLen` | const | `src/audio/music.js` |  |
 | `MusicLoop` | classe | `src/audio/music.js` |  |
@@ -1205,4 +1209,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1198 symboles.
+1202 symboles.

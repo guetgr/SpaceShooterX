@@ -126,7 +126,7 @@ mixin(HomeScene, {
   // vue d'ensemble : la planète du monde s'éloigne et prend sa place sur la route
   enterGalaxy(){
     if (this.mapMode !== 'world') return;
-    this.mapMode = 'moving'; sfx.uiOpen();
+    this.mapMode = 'moving'; sfx.uiOpen(); this.homeMusic(true);          // la carte des secteurs a sa propre musique
     this.refreshGalaxy();
     const i = this.homeWorld, pos = this.galaxyPos(i), g = this.galWorlds[i];
     this.galY = Phaser.Math.Clamp(360 - pos.y, this.galMin, this.galMax); this.galVel = 0;
@@ -144,7 +144,7 @@ mixin(HomeScene, {
   enterWorldView(i){
     if (this.mapMode !== 'galaxy') return;
     this.mapMode = 'moving'; sfx.uiStart();
-    this.homeWorld = i;
+    this.homeWorld = i; this.homeMusic(false);                          // le menu du monde choisi
     const w = WORLDS[i], p = getWorldProgress(), pos = this.galaxyPos(i), g = this.galWorlds[i];
     this.homeSel = (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
     this.setHomePlanet(w, !isWorldUnlocked(w.id, p));
