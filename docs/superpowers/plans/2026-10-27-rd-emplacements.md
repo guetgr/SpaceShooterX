@@ -91,7 +91,7 @@ Chaque ligne a son test dans la tâche indiquée.
 
 **Interfaces:**
 - Produces (globales, `"use strict"`) :
-  - `TECHS: Array<Tech>` avec `Tech = { id, name, sector:number, tag:'ARME'|'RAMPE'|null, icon, desc, plan:string|null (id d'ordre), assemble:(stats)=>void, upgrades:Array<{ id, name, desc, max:number, inc:(stats)=>void }>, spe:null|{ id, name, desc, flag:string|null, apply:(stats)=>void } }`. `inc` appelé *l* fois reproduit l'ancien `apply(stats, l)`.
+  - `TECHS: Array<Tech>` avec `Tech = { id, name, sector:number, tag:'ARME'|'RAMPE'|null, icon, desc, plan:string|null (id d'ordre), assemble:(stats, scene)=>void, upgrades:Array<{ id, name, desc, max:number, inc:(stats, scene)=>void }>, spe:null|{ id, name, desc, apply:(stats, scene)=>void } }`. `inc` appelé *l* fois reproduit l'ancien `apply(stats, l)`.
   - `TECH_BY_ID`, `TECH_PLAN_LEVEL: Object<levelId, techId>` (dérivé de `Tech.plan`).
   - `techAvailable(t): boolean` — `t.sector <= WORLDS.length` ou `DEV_SEE_ALL` ; faux pour les secteurs 4 et 5 tant que ces mondes n'existent pas.
   - `rdEntry(meta, techId): { plan:boolean, proto:boolean, rang:number, spe:boolean }` — valeurs bornées (`rang` ≤ somme des `max`).
