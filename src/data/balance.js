@@ -18,10 +18,6 @@ const SPAWN_TABLE = [
   { type:'mothership', at:140, w:8 }, { type:'vortex', at:150, w:7 }, { type:'charo', at:100, w:11 }, { type:'kamikaze', at:22, w:14 }, { type:'spider', at:30, w:11 },
 ];
 
-// Fragments gagnés en COMBAT dans un niveau de monde = (score/15…) × ce coefficient (les récompenses de niveau `reward` s'y ajoutent).
-// Les niveaux étant courts et rejouables, l'ancienne formule de la partie infinie rendait l'arbre complet accessible en quelques niveaux (voir docs/equilibrage-niveaux.md).
-const LEVEL_FRAG_MUL = 0.06;
-
 const BOSS_RUN_ALERT_HP = 1.4;      // chaque niveau gagné PENDANT la partie gonfle les PV des boss de 40% (en plus de leur table de départ)
 
 const LATE_HP_GROWTH = 1.035;       // passé la 10e minute, les PV des ennemis gagnent en plus 3,5% par palier de 20 s (exponentiel)

@@ -123,16 +123,19 @@ const AGP_LINES = {
     "Résultat conforme. Aucune félicitation ne sera émise.",
     "Bon travail. Un collègue moins performant a été libéré de ses obligations.",
     "Mission accomplie. Une nouvelle mission vous attend. Elle vous attendait déjà.",
+    "Prime de rendement versée. Elle ne sera pas renouvelée.",
   ],
   lose: [
     "Accident du travail constaté. Il sera requalifié en « imprudence personnelle ».",
     "Votre camionnette est détruite. Le montant sera retenu sur votre salaire.",
     "Vous êtes déclaré indisponible. Un remplaçant a été commandé (livraison : jamais).",
     "Le formulaire de réclamation est disponible. Il est fermé.",
+    "Franchise accident retenue : 30 %. Merci de votre compréhension.",
   ],
   abort: [
     "Ordre annulé. Merci de justifier votre absence par écrit.",
     "Abandon de poste enregistré. Il sera conservé dans votre dossier. Longtemps.",
+    "Franchise accident retenue : 30 %. Merci de votre compréhension.",
   ],
   hiGrade: [
     "Performance anormalement élevée. Un audit a été ouvert à titre préventif.",
