@@ -22,7 +22,7 @@ def run(tree, tuto=False, atelier=None, v2=False, rd=None, chargement=None):
         p.wait_for_function('window.__ssxScene && window.__ssxScene.scene.isActive("home")',timeout=90000); p.wait_for_timeout(1200)
         p.evaluate("document.getElementById('btnLaunch').click()"); p.wait_for_timeout(5000)
         out['tuto']=p.evaluate("!!window.__ssxScene.tuto")
-        out['stats']=p.evaluate("(()=>{const s=window.__ssxScene; return {dmg:s.stats.damage, hp:s.stats.maxHp, bonus:s.treeBonus, summary:s.globalGearSummary()}})()")
+        out['stats']=p.evaluate("(()=>{const s=window.__ssxScene; return {dmg:s.stats.damage, hp:s.stats.maxHp, bonus:s.gearBonus, summary:s.globalGearSummary()}})()")
         p.evaluate("(()=>{const s=window.__ssxScene; s.upgradeCounts[UPGRADE_POOL[0].id]=2;})()")
         p.evaluate("document.getElementById('pauseBtn').click()"); p.wait_for_timeout(700)
         out['G']=p.evaluate("(()=>{const s=window.__ssxScene; return s.globalGearItems().map(x=>x.name)})()")

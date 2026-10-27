@@ -53,7 +53,7 @@ def _init():
 def _fresh(budget, policy):
     """Remet à zéro toutes les sauvegardes qui fausseraient une mesure, puis dépense `budget` composants (atelier puis arbre)."""
     p = _W['p']
-    p.evaluate("(()=>{ %s.forEach(k=> localStorage.removeItem(k)); localStorage.removeItem('ssx_meta_v2'); localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3, composants:%d})); })()" % (json.dumps(RESET_KEYS), budget))
+    p.evaluate("(()=>{ %s.forEach(k=> localStorage.removeItem(k)); localStorage.removeItem('ssx_meta_v2'); localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3, composants:%d, rd:{}})); })()" % (json.dumps(RESET_KEYS), budget))
     return p.evaluate("__sim.buy(%s)" % json.dumps(policy))
 
 
@@ -71,7 +71,7 @@ def _grid_task(a):
 def _campaign_task(a):
     rep, skill, policy, max_attempts = a
     p = _W['p']
-    p.evaluate("(()=>{ %s.forEach(k=> localStorage.removeItem(k)); localStorage.removeItem('ssx_meta_v2'); localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3, composants:0})); })()" % json.dumps(RESET_KEYS))
+    p.evaluate("(()=>{ %s.forEach(k=> localStorage.removeItem(k)); localStorage.removeItem('ssx_meta_v2'); localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3, composants:0, rd:{}})); })()" % json.dumps(RESET_KEYS))
     levels = p.evaluate("WORLDS.flatMap(w=> w.levels.filter(l=> !l.tuto).map(l=> l.id))")      # le tuto est scripté (le bot ne sait pas le jouer) : on part du niveau 1
     out, total_frags, t_play = [], 0, 0.0
     for lv in levels:

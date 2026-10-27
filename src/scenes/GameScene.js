@@ -26,9 +26,7 @@ class GameScene extends Phaser.Scene{
     this.weaponTier = weaponTierFor(this.alertLevel);
     this.bestiary = getBestiary();
     this.achv = getAchv();
-    // collection: on y ajoute aussi les compétences déjà achetées dans l'arbre (anciennes sauvegardes)
     this.codex = getCodex();
-    { let changed = false; Object.keys(this.meta.tree||{}).forEach(k=>{ if (this.meta.tree[k] > 0 && !this.codex.skills[k]){ this.codex.skills[k] = 1; changed = true; } }); if (changed) setCodex(this.codex); }
     this.achvQueue = []; this.achvShowing = false; this.achvDirty = false; this.achvSaveCd = 4000;
     this.achvSecCd = 1000; this._chainN = 0; this._chainT = 0; this.bestiaryDirty = false;
     // à la fermeture/mise en arrière-plan de la page, on enregistre ce qui n'a pas encore été écrit
@@ -42,16 +40,15 @@ class GameScene extends Phaser.Scene{
     // toiles des araignées: un seul calque de dessin + un cycle commun (repos -> annonce -> actif)
     this.webGfx = this.add.graphics(); this.webGfx.setDepth(4.4); this.webGfx.setBlendMode(Phaser.BlendModes.ADD);
     this.web = { state:'idle', t:2200 };
-    // atouts GLOBAUX : l'atelier (postes Mk I à V) et le reste de l'arbre s'appliquent aux caractéristiques de départ (niveaux ET tutoriel)
-    const applyTree = ()=>{
-      this.treeState = this.meta.tree;
+    // atouts GLOBAUX : l'atelier (postes Mk I à V) s'applique aux caractéristiques de départ (niveaux ET tutoriel)
+    const applyGear = ()=>{
       const t0 = { dmg:this.stats.damage, hp:this.stats.maxHp, sh:this.stats.shieldMax };
       applyGlobalGear(this.stats, this.meta);
-      this.treeBonus = { dmg:this.stats.damage/t0.dmg - 1, hp:this.stats.maxHp - t0.hp, shield:this.stats.shieldMax - t0.sh };      // ce que les atouts globaux apportent, pour l'affichage
+      this.gearBonus = { dmg:this.stats.damage/t0.dmg - 1, hp:this.stats.maxHp - t0.hp, shield:this.stats.shieldMax - t0.sh };      // ce que les atouts globaux apportent, pour l'affichage
     };
-    applyTree();
+    applyGear();
     applyAchvBuffs(this.stats, this.achv);   // buffs permanents des succès
-    if (this.tuto){ this.stats = makeDefaultStats(); this.stats.damage = 14; this.alertLevel = 1; this.weaponTier = 1; applyTree(); }   // TUTO: vaisseau de base + atouts globaux (atelier, R&D), sans succès
+    if (this.tuto){ this.stats = makeDefaultStats(); this.stats.damage = 14; this.alertLevel = 1; this.weaponTier = 1; applyGear(); }   // TUTO: vaisseau de base + atouts globaux (atelier, R&D), sans succès
     // pactes choisis avant la partie: règles plus dures, plus de fragments à la fin
     const odUi = document.getElementById('odBtn');
     if (odUi){ odUi.classList.toggle('show', this.stats.overdrive > 0); odUi.classList.remove('ready','active'); odUi.style.setProperty('--deg','0deg'); }   // le bouton n'apparaît qu'une fois l'overdrive débloqué

@@ -5,6 +5,8 @@
 // `assemble(stats, scene)` et `spe.apply(stats, scene)` posent aussi des indicateurs sur la scène de jeu (droneOwned, laserDestructeurOwned…).
 // Prix et valeurs PROVISOIRES (réglés avec tools/sim_balance.py).
 
+const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+
 const up = (id, name, desc, max, inc)=> ({ id, name, desc, max, inc });
 const flag = (name)=> (s, scene)=>{ scene[name] = true; };
 

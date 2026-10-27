@@ -168,18 +168,6 @@
 #treeBName{ font-size:9px; letter-spacing:1px; }
 .tree-bhead u{ text-decoration:none; font-family:var(--vt); font-size:15px; line-height:.85; color:var(--agp-steel); }
 #treeBProg{ font-size:18px; color:var(--agp-yellow); }
-.ttier{ font-size:7px; letter-spacing:2px; }
-.ttier::before{ content:'//'; color:var(--c); }
-.tcard{ background:rgba(12,18,15,.94); border-color:#243029; }
-.tc-nm{ font-size:7px; }
-.tc-cost{ color:var(--agp-yellow); }
-.tc-cost b{ color:#130f03; background:var(--agp-yellow); border:0; }
-.tcard.aff::before{ border-color:var(--agp-yellow); }
-.tree-info{ background:rgba(10,15,12,.96); border-color:var(--agp-line); border-top:3px solid var(--c); }
-.tree-info-name{ font-size:8px; letter-spacing:1px; color:var(--agp-yellow); }
-.tree-info-meta{ color:var(--agp-orange); }
-.tree-invest-btn{ background:var(--agp-yellow); color:#130f03; }
-.tree-invest-btn:disabled{ background:#1b2823; color:var(--agp-steel); }
 
 /* ===================================================================
    HUD EN COMBAT — systèmes de bord discrets (rien d'opaque, rien au milieu de l'écran)

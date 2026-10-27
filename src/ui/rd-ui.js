@@ -69,6 +69,12 @@ mixin(GameScene, {
     };
   },
 
+  // enregistre un élément dans la collection (une seule écriture par nouvel élément)
+  codexMark(kind, id){
+    if (!this.codex) this.codex = getCodex();
+    if (!this.codex[kind][id]){ this.codex[kind][id] = 1; setCodex(this.codex); }
+  },
+
   rdBuyAction(techId, what){
     const m = getMeta();
     if (!rdBuy(m, techId, what)) return;

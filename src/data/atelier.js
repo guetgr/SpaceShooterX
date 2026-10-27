@@ -46,16 +46,6 @@ const ATELIER_POSTS = [
 const ATELIER_POST_BY_ID = {};
 ATELIER_POSTS.forEach(p=>{ ATELIER_POST_BY_ID[p.id] = p; });
 
-// nœuds de l'ancien arbre (data/skill-tree.js) dont l'effet est repris par l'atelier : retirés de l'arbre, remboursés à la migration
-const ATELIER_REPLACED = new Set([
-  't_vitalite','t_blindage','t_armure','t_resilience',
-  't_puissance','t_degats','t_celerite','t_cadence','t_critique',
-  't_boucliergrowth','t_bouclier','t_rechargebouclier',
-  't_reacteurs','t_vitessevaisseau','t_eclair','t_eclair_reactivite','t_eclair_cap','t_esquive','t_secondsouffle',
-  't_aimantgrowth','t_aimant','t_eclair_aimant',
-  't_intuition','t_relance','t_genie','t_butin','t_radar',
-]);
-
 // niveau Mk d'un poste lu dans une sauvegarde : entier de 0 à 5, 0 si absent ou invalide
 function atelierMk(atelier, postId){
   const v = atelier && atelier[postId];

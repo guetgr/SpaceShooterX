@@ -1,5 +1,4 @@
 /* Page R&D (page de droite de l'accueil) : fiches de technologies, dans le repère logique 400 × 700. */
-#pageTree .tree-info{ display:none; }
 .ttab .tt-s{ font-size:9px; letter-spacing:1px; }
 .ttab.locked{ opacity:.45; }
 .rdcard{ position:relative; display:flex; flex-direction:column; gap:6px; margin:0 0 8px; padding:9px; background:rgba(12,18,15,.94); border:1px solid #243029; }

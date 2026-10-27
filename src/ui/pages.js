@@ -71,7 +71,7 @@ mixin(GameScene, {
   // texte « atouts globaux actifs » (début de mission) : combien de modules R&D et ce qu'ils apportent aux caractéristiques de base
   globalGearSummary(){
     const g = this.globalGearItems(); if (!g.length) return '';
-    const b = this.treeBonus || {}, parts = [];
+    const b = this.gearBonus || {}, parts = [];
     if (b.dmg > 0.005) parts.push('+' + Math.round(b.dmg*100) + ' % de charge');
     if (b.hp >= 1) parts.push('+' + Math.round(b.hp) + ' de coque');
     if (b.shield >= 1) parts.push('+' + Math.round(b.shield) + ' de champ de sécurité');

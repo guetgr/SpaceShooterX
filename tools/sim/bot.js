@@ -2,7 +2,7 @@
 // (chargé APRÈS le jeu ; pas du code du jeu). Expose window.__sim.
 //   __sim.prepare()                               figer le hasard / l'horloge, couper l'affichage et le son
 //   __sim.runLevel(levelId, seed, opts)           joue un niveau entier, renvoie le résultat
-//   __sim.buy(policy)                             dépense les composants à l'atelier puis dans l'arbre (comme un joueur raisonnable)
+//   __sim.buy(policy)                             dépense les composants à l'atelier puis en R&D (comme un joueur raisonnable)
 (function(){
   "use strict";
   const DT = 1000/60;
@@ -19,7 +19,7 @@
     let best = null, bs = -1e9;
     cards.forEach(c=>{
       const name = c.querySelector('.card-name').textContent, u = UPGRADE_POOL.find(x=> x.name === name);
-      let s = u ? (u.id.indexOf('fus_') === 0 ? CAT.fusion : (CAT[u.category] || 1)) : 1;
+      let s = u ? (u.id.indexOf('fus_') === 0 ? CAT.fusion : (CAT[u.category] || 1)) : (name.indexOf('ASSEMBLAGE') === 0 ? 6 : (name.indexOf('SPECIALISATION') === 0 ? 5 : 2));      // hors pool de base : cartes de technologie (assemblage d'abord)
       if (u && low && (u.id === 'life' || u.id === 'shield' || u.category === 'defense')) s += 3;
       s += rng()*0.8;
       if (s > bs){ bs = s; best = c; }
@@ -131,22 +131,23 @@
                pct: rec ? rec.runPct : completionPct('w1-tuto', comp), comp, steps: sc.tutoStepLog, minHp: Math.round(minHp*100)/100 };
     },
 
-    // dépense les composants comme un joueur raisonnable : l'atelier d'abord (le poste de Mk le plus bas, on met de côté pour le Mk suivant
-    // plutôt que de grignoter l'arbre), puis le reste de l'arbre ; jamais de Mk III à V sans pièces de secteur (le bot n'en gagne pas)
+    // dépense les composants comme un joueur raisonnable : l'atelier d'abord (le poste de Mk le plus bas, on met de côté pour le Mk suivant),
+    // puis la R&D (prototypes, puis rangs, dans l'ordre de préférence de la politique) ; jamais de Mk III à V ni de spécialisation (pièces de secteur : le bot n'en gagne pas)
     buy(policy){
-      const meta = getMeta(), st = meta.tree;
+      const meta = getMeta();
       const ORDER = policy === 'defense' ? ['coque', 'bouclier', 'canon', 'propulseurs', 'aimant', 'ordinateur'] : ['canon', 'coque', 'bouclier', 'propulseurs', 'aimant', 'ordinateur'];
-      const PREF = policy === 'defense' ? ['defense', 'arme', 'missile'] : ['arme', 'defense', 'missile'];
+      const TECH_PREF = policy === 'defense' ? ['blindage_lourd', 'nano_reparation', 'bouclier_reactif', 'laser_continu', 'missiles_guidage', 'drone', 'laser_auto', 'missiles_demolition', 'benne', 'ricochets', 'canon_experimental', 'arc_electrique', 'overdrive', 'champ_lent', 'pulsar']
+                                        : ['laser_continu', 'missiles_guidage', 'drone', 'laser_auto', 'missiles_demolition', 'arc_electrique', 'canon_experimental', 'blindage_lourd', 'nano_reparation', 'bouclier_reactif', 'ricochets', 'overdrive', 'champ_lent', 'pulsar', 'benne'];
+      const pick = what=> TECH_PREF.find(id=> rdNextStep(meta, id) === what && rdCanBuy(meta, id, what).ok);
       let bought = 0;
       for (;;){
         const posts = ORDER.filter(id=> atelierCanBuy(meta, id).ok).sort((a, b)=> (atelierMk(meta.atelier, a) - atelierMk(meta.atelier, b)) || (ORDER.indexOf(a) - ORDER.indexOf(b)));
         if (posts.length){ atelierBuy(meta, posts[0]); bought++; continue; }
         if (ORDER.some(id=> atelierCanBuy(meta, id).reason === 'composants')) break;       // on économise pour un poste d'atelier
-        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.composants);
-        if (!avail.length) break;
-        avail.sort((a, b)=>{ const pa = PREF.indexOf(a.branch), pb = PREF.indexOf(b.branch); return ((pa < 0 ? 9 : pa) - (pb < 0 ? 9 : pb)) || (a.cost() - b.cost()); });
-        const n = avail[0]; meta.composants -= n.cost(); st[n.nid] = n.k; bought++;
+        const id = pick('proto') || pick('rang'); if (!id) break;
+        rdBuy(meta, id, rdNextStep(meta, id)); bought++;
       }
+      meta.chargement = []; TECH_PREF.forEach(id=> loadoutToggle(meta, id, slotsOpen()));      // le meilleur chargement valide (un refus est ignoré)
       setMeta(meta);
       return { bought, composants: meta.composants, points: metaPoints(meta) };
     },

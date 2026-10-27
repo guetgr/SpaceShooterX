@@ -238,7 +238,6 @@ mixin(GameScene, {
       clearTimeout(this.resetArmTimer);
       this.resetArmed = false;
       this.meta = defaultMeta();
-      this.treeState = this.meta.tree;
       setMeta(this.meta);
       // les succès et le bestiaire repartent aussi de zéro (sinon les kills du bestiaire les feraient réapparaître)
       this.achv = { killsAlert:{}, tier:{}, glob:{}, bossKills:{}, rawTotal:0, alertKills:0, bossTotal:0, maxAlert:0, maxTime:0, maxLevel:0, maxChain:0 };

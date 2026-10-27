@@ -1,7 +1,7 @@
 "use strict";
 // Animations des menus (GSAP, vendor/gsap.min.js) : retour tactile des boutons, respiration du CTA, entrée des pages, cartes en cascade, compteurs.
 // Tout est sans effet si GSAP est absent ou si le joueur demande moins d'animations (prefers-reduced-motion) : les menus restent utilisables.
-const MOTION_PRESS = '#btnLaunch, .tcard, .ttab, #homeTabs button, .home-ico, .tree-invest-btn, .map-arrow, .hangar-seg button, .skin, .mod, #gameover .btn, #pauseBtn, .sheet .btn, .tile, .sw, .bk, .lnk, .acc-head';
+const MOTION_PRESS = '#btnLaunch, .rd-buy, .ttab, #homeTabs button, .home-ico, .map-arrow, .hangar-seg button, .skin, .mod, #gameover .btn, #pauseBtn, .sheet .btn, .tile, .sw, .bk, .lnk, .acc-head';
 
 const Motion = {
   ok(){ return typeof gsap !== 'undefined' && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); },

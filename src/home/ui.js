@@ -227,7 +227,7 @@ mixin(HomeScene, {
 
   showHomeTree(){
     const gs = this.scene.get('game');
-    gs.meta = getMeta(); gs.treeState = gs.meta.tree;               // relit la sauvegarde (composants gagnés au dernier niveau)
+    gs.meta = getMeta();                                             // relit la sauvegarde (composants gagnés au dernier niveau)
     gs.renderRd();
   },
 

@@ -70,7 +70,7 @@ with sync_playwright() as pw:
       const sc = window.__game.scene.scenes.find(s=>s.startRun);
       const sfx = window.__T && window.__T.sfx; if (sfx) sfx.ensureCtx();
       return JSON.stringify({ running: sc.running, hp: sc.hp, ennemis: sc.enemies.getLength(), score: sc.score,
-        arbre: window.__T ? window.__T.ALL_TREE_NODES.length : null,
+        technologies: window.__T ? window.__T.TECHS.length : null,
         cartes: window.__T ? window.__T.UPGRADE_POOL.length : null,
         sons_enregistres: sfx ? Object.keys(sfx.files || {}).length : null });
     }"""))

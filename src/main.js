@@ -39,7 +39,7 @@ function startGame(){
     const game = new Phaser.Game(config); window.__phaserGame = game; fitUi();
     if (DEV_SEE_ALL){                       // accès console / tests automatiques (tools/smoke_test.py)
       window.__game = game;
-      window.__T = { ALL_TREE_NODES, UPGRADE_POOL, RELICS, FUSIONS, sfx };
+      window.__T = { TECHS, UPGRADE_POOL, RELICS, FUSIONS, sfx };
     }
   });
 }

@@ -50,17 +50,6 @@ const AGP_LORE = {
     'PV MAX': 'INTEGRITE COQUE', 'BOUCLIER': 'CHAMP DE SECURITE', 'DEGATS PAR TIR': 'CHARGE PAR TIR',
     'CADENCE': 'CADENCE DE TIR', 'PROJECTILES': 'BUSES ACTIVES', 'ARMURE': 'ASSURANCE DOMMAGES',
   },
-  // départements du catalogue technique (page R&D) : id de branche -> nom + sous-titre
-  depts: {
-    arme:    { name:'ARMEMENT',             sub:"Usage non officiel" },
-    missile: { name:'ORDNANCE',             sub:"Réservé aux interventions « délicates »" },
-    defense: { name:'SECURITE AU TRAVAIL',  sub:"Dernier service à avoir été consulté" },
-    util:    { name:'LOGISTIQUE',           sub:"Tout ce qui n'a pas de budget" },
-    savoir:  { name:'FORMATION CONTINUE',   sub:"Les modules sont à suivre hors temps de travail" },
-    tempete: { name:'INCIDENTS METEO',      sub:"Phénomènes non couverts" },
-    gravite: { name:'PHYSIQUE FONDAMENTALE', sub:"Département en sous-effectif (1 stagiaire)" },
-    furie:   { name:'GESTION DU STRESS',    sub:"Méthodes non homologuées" },
-  },
   // R&D : plan récupéré, recherche, baie pleine
   rd: {
     plan: "Document technique récupéré. Il ne vous appartient pas. Moi non plus.",

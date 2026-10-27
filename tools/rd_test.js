@@ -11,7 +11,8 @@ const run = s=> vm.runInContext(s, ctx);
 const order = JSON.parse(fs.readFileSync(path.join(R, 'src/scripts.json'), 'utf8'));
 ['data/events.js', 'data/bosses.js', 'data/player-stats.js', 'data/atelier.js', 'data/techs.js', 'data/meta.js'].forEach(load);
 order.filter(f=> f === 'data/worlds.js' || f.startsWith('data/worlds/') || f === 'data/world-progress.js').forEach(load);
-load('data/skill-tree.js');
+// valeurs attendues de l'ancien arbre (src/data/skill-tree.js, supprimé) : { idNœud: { rang: { champ: valeur } } }, figées dans tools/rd_equiv_snapshot.json
+const SNAP = JSON.parse(fs.readFileSync(path.join(__dirname, 'rd_equiv_snapshot.json'), 'utf8'));
 
 let fail = 0;
 const ok = (cond, msg)=>{ if (!cond){ fail++; console.log('  ÉCHEC : ' + msg); } };
@@ -28,21 +29,22 @@ ok(run("TECHS.filter(t=>t.sector<=3).every(t=> techAvailable(t))"), 'secteurs 1 
 ok(run("TECHS.every(t=> typeof t.assemble === 'function' && t.upgrades.every(u=> typeof u.inc === 'function' && u.max >= 1))"), 'assemblage et incréments définis');
 ok(run("TECHS.filter(t=> t.spe === null).map(t=>t.id).join()") === 'bouclier_reactif,ricochets,overdrive,champ_lent,pulsar,eclats', 'spécialisations à concevoir : spe nul');
 
-// ---- équivalence avec l'ancien arbre : inc appelé l fois = ancien apply(stats, l)
+// ---- équivalence avec l'ancien arbre (valeurs figées) : inc appelé l fois = ancien apply(stats, l)
 const KEYS = "Object.keys(makeDefaultStats())";
 const stats = ()=> run("makeDefaultStats()");
 const close = (a, b)=> Object.keys(a).every(k=> typeof a[k] === 'number' ? Math.abs(a[k] - b[k]) < 1e-9 : a[k] === b[k]);
 ctx.scene = {};
 const incN = (tech, upId, n)=>{ const s = stats(); ctx.s = s; run("(()=>{ const u = TECH_BY_ID['" + tech + "'].upgrades.find(u=>u.id==='" + upId + "'); for (let i=0;i<" + n + ";i++) u.inc(s, scene); })()"); return s; };
-const oldApply = (nodeId, l)=>{ const s = stats(); ctx.s = s; run("TREE_NODE_BY_ID['" + nodeId + "'].apply(s, " + l + ")"); return s; };
+const oldApply = (nodeId, l)=> Object.assign(stats(), SNAP[nodeId][l]);
+const oldMax = nodeId=> Object.keys(SNAP[nodeId]).length;
 const eqUpgrade = (tech, upId, oldId, step)=>{                       // step : un rang ancien = `step` rangs nouveaux (t_chargemissiles : 2 rangs pour +1 missile)
-  const max = run("TREE_NODE_BY_ID['" + oldId + "'].max");
+  const max = oldMax(oldId);
   for (let l = 1; l <= max; l++){ if (step && l % step) continue; ok(close(incN(tech, upId, l / (step || 1)), oldApply(oldId, l)), tech + '.' + upId + ' = ' + oldId + ' au rang ' + l); }
 };
 const eqBase = (tech, upId, oldId)=>{                               // nœud ancien à rangs : l'assemblage est le rang 1, l'amélioration les rangs suivants
   ctx.s = stats(); run("TECH_BY_ID['" + tech + "'].assemble(s, scene)"); const base = ctx.s;
   ok(close(base, oldApply(oldId, 1)), tech + ' assemblage = ' + oldId + ' rang 1');
-  const max = run("TREE_NODE_BY_ID['" + oldId + "'].max");
+  const max = oldMax(oldId);
   for (let l = 2; l <= max; l++){ const s = JSON.parse(JSON.stringify(base)); ctx.s = s; run("(()=>{ const u = TECH_BY_ID['" + tech + "'].upgrades.find(u=>u.id==='" + upId + "'); for (let i=0;i<" + (l - 1) + ";i++) u.inc(s, scene); })()"); ok(close(s, oldApply(oldId, l)), tech + '.' + upId + ' = ' + oldId + ' au rang ' + l); }
 };
 const eqSpe = (tech, oldId)=>{ ctx.s = stats(); run("TECH_BY_ID['" + tech + "'].spe.apply(s, scene)"); ok(close(ctx.s, oldApply(oldId, 1)), tech + ' spécialisation = ' + oldId); };
@@ -110,7 +112,7 @@ ok(run("rdUpgradeAt(TECH_BY_ID.laser_continu, 1).id") === 't_laser_c_portee' && 
 ok(run("rdEntry(Object.assign(defaultMeta(), { rd:{ laser_continu:{ rang:99, proto:1 } } }), 'laser_continu').rang") === 9, 'rdEntry borne le rang à la somme des maximums');
 
 // ---- sauvegarde : rd et chargement
-const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"rd":{},"chargement":[],"tree":{},"notice":null}';
+const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"rd":{},"chargement":[],"notice":null}';
 ok(JSON.stringify(run("defaultMeta()")) === DEFAULT_V3, 'defaultMeta : rd et chargement vides');
 {
   const m = run("normalizeMeta({ rd:{ laser_continu:{ rang:-3, proto:'x', plan:1 }, zzz:{ plan:true } }, chargement:['laser_continu','laser_continu','zzz', 7] })");
@@ -169,6 +171,37 @@ store.clear();
   ok(NS({ plan:true, proto:true, rang:9, spe:true }) === null, 'rdNextStep : tout acheté -> null');
   ok(run("rdNextStep(" + META({ rd:{ bouclier_reactif:{ proto:true, rang:6 } } }) + ", 'bouclier_reactif')") === 'spe', 'rdNextStep : spécialisation à concevoir -> spe (affichée en conception)');
 }
+
+// ---- migration finale : l'ancien arbre est remboursé en entier, les plans sont accordés pour les ordres déjà gagnés
+const WP = (ids)=> JSON.stringify({ v:1, levels:Object.fromEntries(ids.map(i=> [i, { clears:1, best:1 }])), seen:{}, comp:{} });
+const keys = o=> Object.keys(o).sort().join();
+ok(!('tree' in run("defaultMeta()")) && !('tree' in run("normalizeMeta({ tree:{ t_laser_c:1 } })")), 'plus de champ tree dans la méta');
+// v3 de l'étape 2 (sans rd) avec un reste d'arbre : coûts t_laser_c (30), t_laser_c_portee rangs 1-2 (10 + 18), t_multi rangs 1-3 (10 + 18 + 26)
+store.clear(); store.set('ssx_meta_v3', JSON.stringify({ v:3, composants:10, tree:{ t_laser_c:1, t_laser_c_portee:2, t_multi:3, t_inconnu:4 } }));
+{
+  const m = run("getMeta()");
+  ok(m.composants === 10 + 30 + 28 + 54 && !('tree' in m) && m.notice === 'restructuration', 'v3 avec arbre : tous les rangs remboursés, nœud inconnu ignoré, avis de restructuration');
+  ok(run("migrateMeta()") === true && !('tree' in JSON.parse(store.get('ssx_meta_v3'))) && run("getMeta().composants") === 122, 'migrateMeta écrit la méta convertie (122)');
+  ok(run("migrateMeta()") === false && run("getMeta().composants") === 122, 'migration rejouée : aucun double remboursement');
+}
+store.clear(); store.set('ssx_meta_v3', JSON.stringify({ v:3, composants:5, rd:{} }));
+ok(run("migrateMeta()") === false && run("getMeta().composants") === 5, 'v3 déjà convertie (clé rd présente) : jamais retouchée');
+// plans accordés pour chaque ordre déjà gagné, même sans arbre acheté
+store.clear(); store.set('ssx_worlds_v1', WP(['w1-tuto', 'w1-l1'])); store.set('ssx_meta_v3', JSON.stringify({ v:3, composants:0 }));
+{
+  const m = run("getMeta()");
+  ok(m.rd.laser_continu && m.rd.laser_continu.plan === true && m.rd.laser_auto && m.rd.laser_auto.plan === true && !m.rd.missiles_guidage, 'plans des ordres gagnés (tuto, l1) accordés, pas les autres');
+  ok(m.notice === null, 'aucun remboursement : pas d\'avis');
+  ok(run("migrateMeta()") === true && run("migrateMeta()") === false, 'v3 sans rd : convertie une seule fois');
+}
+// v2 directe : atelier (t_vitalite rangs 1-2 = 17) + reste, tout remboursé
+store.clear(); store.set('ssx_worlds_v1', WP(['w1-l2'])); store.set('ssx_meta_v2', JSON.stringify({ fragments:7, tree:{ t_vitalite:2 }, asc:3 }));
+{
+  const m = run("getMeta()");
+  ok(m.composants === 24 && !('tree' in m) && !('asc' in m) && m.rd.missiles_guidage.plan === true, 'v2 : 7 + 17 remboursés, plan de l2 accordé');
+}
+ok(run("metaPoints(Object.assign(defaultMeta(), { atelier:{ coque:2 }, rd:{ laser_continu:{ rang:3 } } }))") === 11, 'metaPoints : 4 par Mk d\'atelier + rangs de R&D');
+ok(run("effectiveAlert(defaultMeta())") === 1, 'alerte de départ : 1');
 
 if (fail){ console.log('ÉCHEC : rd (' + fail + ')'); process.exit(1); }
 console.log('OK : rd');
