@@ -13,7 +13,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `_levelIdx` | const | `src/data/worlds.js` |  |
 | `_lsSet` | const | `src/core/cloud-save.js` |  |
 | `_seeAll` | const | `src/data/world-progress.js` |  |
-| `_treeLayout` | const | `src/ui/tree-ui.js` |  |
 | `_uiScale` | const | `src/main.js` |  |
 | `_vnoise` | fonction | `src/gfx/planets.js` |  |
 | `AC` | const | `src/data/boss-antenne.js` |  |
@@ -68,7 +67,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ALERT_CAP` | const | `src/data/meta.js` |  |
 | `ALERT_RISE_SECONDS` | const | `src/data/balance.js` |  |
 | `ALERT_THRESHOLDS` | const | `src/data/meta.js` |  |
-| `ALL_TREE_NODES` | const | `src/data/skill-tree.js` |  |
 | `AN` | const | `src/bosses/anneau.js` |  |
 | `AN_FX_B64` | const | `src/data/image-assets.js` |  |
 | `AN_SHEET_B64` | const | `src/data/image-assets.js` |  |
@@ -159,13 +157,13 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `arW` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `arWound` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `ASHIELD_EXCL` | const | `src/core/constants.js` |  |
+| `assemblyCards` | méthode | `src/player/progression.js` | `GameScene` |
 | `ATELIER_COSTS` | const | `src/data/atelier.js` |  |
 | `ATELIER_MAX` | const | `src/data/atelier.js` |  |
 | `ATELIER_OPS` | const | `src/data/atelier.js` |  |
 | `ATELIER_PIECES` | const | `src/data/atelier.js` |  |
 | `ATELIER_POST_BY_ID` | const | `src/data/atelier.js` |  |
 | `ATELIER_POSTS` | const | `src/data/atelier.js` |  |
-| `ATELIER_REPLACED` | const | `src/data/atelier.js` |  |
 | `atelierApply` | fonction | `src/data/atelier.js` |  |
 | `atelierApplyRow` | fonction | `src/data/atelier.js` |  |
 | `atelierBuy` | fonction | `src/data/atelier.js` |  |
@@ -313,6 +311,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BULLET_P_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BULLET_P_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `cardCount` | méthode | `src/player/progression.js` | `GameScene` |
+| `cardPool` | méthode | `src/player/progression.js` | `GameScene` |
 | `chainLightning` | méthode | `src/systems/skills.js` | `GameScene` |
 | `CHARO_BULLET_B64` | const | `src/data/image-assets.js` |  |
 | `CHARO_EXPL_B64` | const | `src/data/image-assets.js` |  |
@@ -323,7 +322,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `clearWells` | méthode | `src/events/forces.js` | `GameScene` |
 | `CLOUDS_EARTH_B64` | const | `src/data/image-assets.js` |  |
 | `CloudSave` | const | `src/core/cloud-save.js` |  |
-| `codexMark` | méthode | `src/ui/tree-ui.js` | `GameScene` |
+| `codexMark` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `COLLISION_DMG_MUL` | const | `src/data/balance.js` |  |
 | `comboKill` | méthode | `src/systems/combo.js` | `GameScene` |
 | `COMP` | const | `src/data/composants.js` |  |
@@ -373,6 +372,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `DIVER_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `DIVER_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `DOUBLE_BOSS_HP_MUL` | const | `src/data/bosses.js` |  |
+| `drawCards` | méthode | `src/player/progression.js` | `GameScene` |
 | `drawGemFacets` | fonction | `src/gfx/procedural.js` |  |
 | `drawHomeOrbit` | méthode | `src/home/background.js` | `HomeScene` |
 | `DRONE2_EXPL_B64` | const | `src/data/image-assets.js` |  |
@@ -475,6 +475,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `firstOpenLevel` | fonction | `src/data/world-progress.js` |  |
 | `fitBgToView` | méthode | `src/world/background.js` | `GameScene` |
 | `fitUi` | fonction | `src/main.js` |  |
+| `flag` | const | `src/data/techs.js` |  |
 | `FLANK_TYPES` | const | `src/core/constants.js` |  |
 | `flipVortex` | méthode | `src/events/core.js` | `GameScene` |
 | `focusOrbitalLevel` | méthode | `src/home/orbital.js` | `HomeScene` |
@@ -554,7 +555,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `introLanding` | méthode | `src/game/intro.js` | `GameScene` |
 | `introPlanet` | méthode | `src/game/intro.js` | `GameScene` |
 | `introTrail` | méthode | `src/game/intro.js` | `GameScene` |
-| `investTreeNode` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `isLevelDone` | fonction | `src/data/world-progress.js` |  |
 | `isLevelUnlocked` | fonction | `src/data/world-progress.js` |  |
 | `isWorldUnlocked` | fonction | `src/data/world-progress.js` |  |
@@ -605,6 +605,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `levelZoom` | méthode | `src/game/level.js` | `GameScene` |
 | `load` | méthode | `src/audio/music.js` | `FileMusic` |
 | `loadFiles` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
+| `loadoutCheck` | fonction | `src/data/techs.js` |  |
+| `loadoutLine` | méthode | `src/home/ui.js` | `HomeScene` |
+| `loadoutSanitize` | fonction | `src/data/techs.js` |  |
+| `loadoutToggle` | fonction | `src/data/techs.js` |  |
 | `loopSet` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `LT_B64` | const | `src/data/image-assets.js` |  |
 | `makeBossPart` | méthode | `src/bosses/parts.js` | `GameScene` |
@@ -613,7 +617,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `markWorldSeen` | fonction | `src/data/world-progress.js` |  |
 | `META_KEY` | const | `src/data/meta.js` |  |
 | `META_KEY_V2` | const | `src/data/meta.js` |  |
-| `metaFromV2` | fonction | `src/data/meta.js` |  |
+| `metaFromLegacy` | fonction | `src/data/meta.js` |  |
 | `metaNum` | fonction | `src/data/meta.js` |  |
 | `metaPoints` | fonction | `src/data/meta.js` |  |
 | `metaRead` | fonction | `src/data/meta.js` |  |
@@ -626,7 +630,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `MISSILE_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `mixin` | fonction | `src/core/mixin.js` |  |
 | `mkCanvas` | fonction | `src/gfx/procedural.js` |  |
-| `mkCost` | fonction | `src/data/skill-tree.js` |  |
 | `MOB_ART` | const | `src/gfx/mob-art.js` |  |
 | `MOB_ART2` | const | `src/gfx/mob-art.js` |  |
 | `MOTHER_CHARGE_B64` | const | `src/data/image-assets.js` |  |
@@ -831,6 +834,18 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `rawGet` | fonction | `src/core/cloud-save.js` |  |
 | `rawRemove` | fonction | `src/core/cloud-save.js` |  |
 | `rawSet` | fonction | `src/core/cloud-save.js` |  |
+| `rdApplyRanks` | fonction | `src/data/techs.js` |  |
+| `rdButton` | méthode | `src/ui/rd-ui.js` | `GameScene` |
+| `rdBuy` | fonction | `src/data/techs.js` |  |
+| `rdBuyAction` | méthode | `src/ui/rd-ui.js` | `GameScene` |
+| `rdCanBuy` | fonction | `src/data/techs.js` |  |
+| `rdCardHtml` | méthode | `src/ui/rd-ui.js` | `GameScene` |
+| `rdEntry` | fonction | `src/data/techs.js` |  |
+| `rdGrantPlan` | fonction | `src/data/techs.js` |  |
+| `rdNextCost` | fonction | `src/data/techs.js` |  |
+| `rdNextStep` | fonction | `src/data/techs.js` |  |
+| `rdUpgradeAt` | fonction | `src/data/techs.js` |  |
+| `rdWorld` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `realBossAlive` | méthode | `src/events/core.js` | `GameScene` |
 | `recordCompletion` | fonction | `src/data/completion.js` |  |
 | `recordLevelClear` | fonction | `src/data/world-progress.js` |  |
@@ -839,7 +854,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `refreshGalaxy` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `refreshHome` | méthode | `src/home/ui.js` | `HomeScene` |
 | `refreshHomeStats` | méthode | `src/home/ui.js` | `HomeScene` |
-| `refreshTreeSheet` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `registerWorld` | fonction | `src/data/worlds.js` |  |
 | `RELICS` | const | `src/data/relics.js` |  |
 | `removeWell` | méthode | `src/events/forces.js` | `GameScene` |
@@ -853,8 +867,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `renderLeaderboardPage` | méthode | `src/ui/pages.js` | `GameScene` |
 | `renderPactsPage` | méthode | `src/ui/pages.js` | `GameScene` |
 | `renderPauseGear` | méthode | `src/ui/pages.js` | `GameScene` |
+| `renderRd` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `renderStatsPage` | méthode | `src/ui/pages.js` | `GameScene` |
-| `renderTree` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `rerollCards` | méthode | `src/player/progression.js` | `GameScene` |
 | `resetMapView` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `resetQuitConfirm` | méthode | `src/ui/dom.js` | `GameScene` |
@@ -863,7 +877,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `rnd` | const | `src/audio/sfx-engine.js` |  |
 | `rollDamage` | méthode | `src/player/weapons.js` | `GameScene` |
 | `rollFireCd` | méthode | `src/enemies/ai.js` | `GameScene` |
-| `ROMAN` | const | `src/data/skill-tree.js` |  |
+| `ROMAN` | const | `src/data/techs.js` |  |
 | `RU_DEATH_B64` | const | `src/data/image-assets.js` |  |
 | `RU_P1_B64` | const | `src/data/image-assets.js` |  |
 | `RU_P2_B64` | const | `src/data/image-assets.js` |  |
@@ -922,7 +936,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `SAVE_KEYS` | const | `src/core/cloud-save.js` |  |
 | `scatter` | fonction | `src/audio/sfx-engine.js` |  |
 | `selectHomeLevel` | méthode | `src/home/ui.js` | `HomeScene` |
-| `selectTreeNode` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `setAchv` | fonction | `src/data/achievements.js` |  |
 | `setBestiary` | fonction | `src/data/bestiary.js` |  |
 | `setCodex` | fonction | `src/data/pacts-style.js` |  |
@@ -948,7 +961,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `setupBossTicks` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `setupDom` | méthode | `src/ui/dom.js` | `GameScene` |
 | `setupHomeUi` | méthode | `src/home/ui.js` | `HomeScene` |
-| `setupTreeUi` | méthode | `src/ui/tree-ui.js` | `GameScene` |
+| `setupRdUi` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `setWorldProgress` | fonction | `src/data/world-progress.js` |  |
 | `Sfx` | classe | `src/audio/sfx-engine.js` |  |
 | `sfx` | const | `src/audio/sfx-lib.js` |  |
@@ -979,6 +992,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `SKIN_KEY` | const | `src/data/ship-skins.js` |  |
 | `sliceIntoFrames` | méthode | `src/scenes/BootScene.js` | `BootScene` |
 | `slotNow` | méthode | `src/audio/music.js` | `FileMusic` |
+| `slotsOpen` | fonction | `src/data/techs.js` |  |
 | `SNIPER_BULLET_B64` | const | `src/data/image-assets.js` |  |
 | `SNIPER_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `SNIPER_IDLE_B64` | const | `src/data/image-assets.js` |  |
@@ -1043,6 +1057,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `STYLE_RANKS` | const | `src/data/pacts-style.js` |  |
 | `STYLE_XP` | const | `src/data/pacts-style.js` |  |
 | `styleRank` | méthode | `src/systems/combo.js` | `GameScene` |
+| `sumRanks` | const | `src/data/meta.js` |  |
 | `supported` | méthode | `src/audio/music.js` | `FileMusic` |
 | `SWARMER2_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `SWARMER2_SHEET_B64` | const | `src/data/image-assets.js` |  |
@@ -1057,27 +1072,20 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `TANK_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `TANK_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `tapGalaxy` | méthode | `src/home/galaxy.js` | `HomeScene` |
+| `TECH_BY_ID` | const | `src/data/techs.js` |  |
+| `TECH_COST` | const | `src/data/techs.js` |  |
+| `techAssemble` | méthode | `src/player/progression.js` | `GameScene` |
+| `techAvailable` | fonction | `src/data/techs.js` |  |
+| `techCards` | méthode | `src/player/progression.js` | `GameScene` |
+| `techEffect` | méthode | `src/player/progression.js` | `GameScene` |
+| `techMaxRang` | const | `src/data/techs.js` |  |
+| `TECHS` | const | `src/data/techs.js` |  |
 | `throwEmp` | méthode | `src/events/types.js` | `GameScene` |
 | `tick` | méthode | `src/audio/music.js` | `FileMusic` |
 | `tickCorridor` | méthode | `src/events/types.js` | `GameScene` |
 | `tickIce` | méthode | `src/events/types.js` | `GameScene` |
-| `TREE_BRANCH_ICONS` | const | `src/ui/tree-ui.js` |  |
-| `TREE_BRANCHES` | const | `src/data/skill-tree.js` |  |
-| `TREE_HUB` | const | `src/data/skill-tree.js` |  |
-| `TREE_MOVED` | const | `src/data/skill-tree.js` |  |
-| `TREE_NODE_BY_ID` | const | `src/data/skill-tree.js` |  |
-| `TREE_TOTAL` | const | `src/data/skill-tree.js` |  |
-| `TREE_VIS` | const | `src/data/skill-tree.js` |  |
-| `treeBranchPoints` | méthode | `src/ui/tree-ui.js` | `GameScene` |
-| `treeBranchStemSum` | fonction | `src/data/skill-tree.js` |  |
-| `treeCardHtml` | méthode | `src/ui/tree-ui.js` | `GameScene` |
-| `treeCardInfo` | méthode | `src/ui/tree-ui.js` | `GameScene` |
-| `treeLayout` | fonction | `src/ui/tree-ui.js` |  |
-| `treeNodeUnlocked` | fonction | `src/data/skill-tree.js` |  |
-| `treeParentOk` | fonction | `src/data/skill-tree.js` |  |
-| `treeRefundFor` | fonction | `src/data/skill-tree.js` |  |
-| `treeTotalPoints` | fonction | `src/data/meta.js` |  |
-| `treeVisStatus` | fonction | `src/data/skill-tree.js` |  |
+| `TREE_LEGACY_COSTS` | const | `src/data/meta.js` |  |
+| `treeLegacyRefund` | fonction | `src/data/meta.js` |  |
 | `tryDodge` | méthode | `src/player/damage.js` | `GameScene` |
 | `tryDodgePlayerBullets` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `TUNE_LEVEL_FIELDS` | const | `src/data/tuning-apply.js` |  |
@@ -1124,6 +1132,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `UI_ICONS` | const | `src/ui/ui-icons.js` |  |
 | `uiIco` | fonction | `src/ui/ui-icons.js` |  |
 | `uiIconsInit` | fonction | `src/ui/ui-icons.js` |  |
+| `up` | const | `src/data/techs.js` |  |
 | `update` | méthode | `src/game/loop.js` | `GameScene` |
 | `update` | méthode | `src/scenes/HomeScene.js` | `HomeScene` |
 | `updateBgDecor` | méthode | `src/world/background.js` | `GameScene` |
@@ -1166,7 +1175,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `validateWorlds` | fonction | `src/data/worlds.js` |  |
 | `visibleXRange` | méthode | `src/world/background.js` | `GameScene` |
 | `visibleYRange` | méthode | `src/world/background.js` | `GameScene` |
-| `visId` | fonction | `src/data/skill-tree.js` |  |
 | `VOL` | const | `src/audio/volume.js` |  |
 | `VORTEX_ARRIVE_B64` | const | `src/data/image-assets.js` |  |
 | `VORTEX_DEATH_B64` | const | `src/data/image-assets.js` |  |
@@ -1186,4 +1194,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1179 symboles.
+1187 symboles.

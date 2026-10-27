@@ -32,13 +32,13 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `base`, `ember`, `void`, `none`, `beacon`, `rack`, `none`, `hazard`, `agp`, `none`, `guards`, `stripes`
 
-## `src/data/skill-tree.js` (111)
+## `src/data/techs.js` (30)
 
-`arme`, `t_puissance`, `t_celerite`, `t_degats`, `t_cadence`, `t_multi`, `t_perforant`, `t_percebouclier`, `t_velocite`, `t_critique`, `t_laser_c`, `t_laser_c_portee`, `t_laser_c_degats`, `t_laser_c_cap`, `t_laser_a`, `t_laser_a_verrou`, `t_laser_a_priorite`, `t_laser_a_cap`, `t_shotgun`, `t_shotgun_plombs`, `t_shotgun_recul`, `t_shotgun_cap`, `missile`, `t_lancemissiles`, `t_chargemissiles`, `t_cadmissiles`, `t_explosion`, `t_perforantmissile`, `t_napalm`, `t_stabilisateurs`, `t_rechargerapide`, `t_missile_droit`, `t_missile_droit_vitesse`, `t_missile_droit_charge`, `t_missile_droit_cap`, `t_missile_chercheur`, `t_missile_chercheur_multi`, `t_missile_chercheur_cad`, `t_missile_chercheur_cap`, `defense`, `t_vitalite`, `t_boucliergrowth`, `t_blindage`, `t_bouclier`, `t_regen`, `t_rechargebouclier`, `t_esquive`, `t_armure`, `t_voldevie`, `t_reactif`, `t_resilience`, `t_secondsouffle`, `t_forteresse`, `t_forteresse_resist`, `t_forteresse_regen`, `t_forteresse_cap`, `t_phenix`, `t_phenix_esquive`, `t_phenix_bouclier`, `t_phenix_cap`, `t_sangsue`, `t_sangsue_vol`, `t_sangsue_rayon`, `t_sangsue_cap`, `util`, `t_aimantgrowth`, `t_reacteurs`, `t_aimant`, `t_vitessevaisseau`, `t_xp`, `t_chance`, `t_collecte`, `t_cooldown`, `t_chancedevie`, `t_butindouble`, `t_cristauxvaleur`, `t_soinmajeur`, `t_coffre`, `t_coffre_xp`, `t_coffre_chance`, `t_coffre_cap`, `t_eclair`, `t_eclair_reactivite`, `t_eclair_aimant`, `t_eclair_cap`, `t_drone`, `t_drone_cadence`, `t_drone_degats`, `t_drone_cap`, `savoir`, `t_intuition`, `t_relance`, `t_genie`, `t_butin`, `tempete`, `t_foudre`, `t_rebond`, `t_eclats`, `t_tonnerre`, `gravite`, `t_champlent`, `t_pulsar`, `t_trounoir`, `t_gravite`, `furie`, `t_overdrive`, `t_frolement`, `t_surchauffe`, `t_souffle`, `hub`, `t_radar`
+`laser_continu`, `t_laser_c_cap`, `laser_auto`, `t_laser_a_cap`, `missiles_guidage`, `t_missile_chercheur_cap`, `bouclier_reactif`, `ricochets`, `drone`, `t_drone_cap`, `missiles_demolition`, `t_missile_droit_cap`, `blindage_lourd`, `t_forteresse_cap`, `nano_reparation`, `t_sangsue_cap`, `benne`, `t_coffre_cap`, `overdrive`, `canon_experimental`, `t_shotgun_cap`, `arc_electrique`, `t_tonnerre`, `champ_lent`, `pulsar`, `trou_noir`, `t_gravite`, `eclats`, `rapatriement`, `t_phenix_cap`
 
-## `src/data/upgrades.js` (13)
+## `src/data/upgrades.js` (9)
 
-`firerate`, `damage`, `spread`, `speed`, `magnet`, `life`, `shield`, `pierce`, `bulletspeed`, `laser`, `laserAuto`, `shotgun`, `missiles`
+`firerate`, `damage`, `spread`, `speed`, `magnet`, `life`, `shield`, `pierce`, `bulletspeed`
 
 ## `src/data/worlds/monde-1.js` (7)
 
@@ -52,4 +52,4 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `w3`, `w3-l1`, `w3-l2`, `w3-l3`, `w3-l4`, `w3-l5`
 
-229 ids au total.
+144 ids au total.

@@ -17,22 +17,22 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 9 | `src/data/balance.js` | Constantes d'équilibrage : dégâts, niveau d'alerte, évolution dans le temps. |
 | 10 | `src/data/composants.js` | Composants ◆ : ce que les machines détruites lâchent en mission (ramassés à l'aimant), et ce que le rapport d'intervention en retient. Victoire : tout le ramassé + la prime AGP (moitié des primes du niveau). Défaite ou abandon : l |
 | 11 | `src/data/atelier.js` | Atelier : les six postes de la camionnette, en cinq niveaux Mk I à V. Stats de base permanentes, toujours actives, hors emplacement. Achat : composants ◆ (Mk I à V) + pièces de secteur (Mk III à V). Design : docs/superpowers/specs |
-| 12 | `src/data/events.js` | Événements aléatoires (EVENT_DEFS). |
-| 13 | `src/ui/pixel-icons.js` | Icônes pixel : réduit les émojis en 16x16 avec contour. |
-| 14 | `src/ui/ui-icons.js` | Icônes d'interface en pixel art (12x12, dessinées par tools/gen_ui_icons.py) : elles remplacent les glyphes / émojis de l'interface. uiIco('lock', 12)  -> HTML <img> prêt à insérer dans un innerHTML (12 px dans le texte, 24 px pou |
-| 15 | `src/data/meta.js` | Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, arbre restant ; niveau d'alerte de la partie infinie. La v2 (`ssx_meta_v2`) n'est plus écrite : elle est lue une fois, convertie par metaFromV2  |
-| 16 | `src/data/worlds.js` | Mondes et niveaux : registre + validation. Un monde = un fichier dans data/worlds/, qui s'enregistre avec registerWorld(). Ajouter un monde = ajouter un fichier + une ligne dans scripts.json. |
-| 17 | `src/data/agp-lore.js` | Univers narratif : AGP (Agence Galactique de Propreté), an 2247. Textes de l'interface, des ordres de mission et des transmissions de N.O.R.M.A. Aucun effet sur le jeu : ce fichier ne contient que des textes d'habillage. Les nivea |
-| 18 | `src/data/worlds/monde-1.js` | Monde 1 — BROUILLON : valeurs provisoires pour tester le moteur (étape 8 du plan : contenu et équilibrage). |
-| 19 | `src/data/worlds/monde-2.js` | Monde 2 — BROUILLON : valeurs provisoires (étape 8 du plan : contenu et équilibrage). |
-| 20 | `src/data/worlds/monde-3.js` | Monde 3 — BROUILLON : valeurs provisoires (étape 8 du plan : contenu et équilibrage). |
-| 21 | `src/data/world-progress.js` | Progression dans les mondes (sauvegarde permanente, clé ssx_worlds_v1 — incluse dans SAVE_KEYS pour la sauvegarde cloud). On ne stocke que les victoires ; les déverrouillages se déduisent : |
-| 22 | `src/data/tuning-defaults.js` | Réglages par défaut du TUTO (niveau w1-tuto). Ce fichier est écrit à la main ; les modifications faites dans l'éditeur (editor.html) sont enregistrées à part dans data/tuning.js (généré) et se superposent à ces valeurs. Rien à cha |
-| 23 | `src/data/tuning.js` | GÉNÉRÉ par l'éditeur de niveaux (editor.html, bouton EXPORTER) — ne contient que les valeurs qui diffèrent des défauts. Peut aussi être modifié à la main. tuto   : surcharges de TUTO_DEFAULTS (data/tuning-defaults.js) |
-| 24 | `src/data/tuning-apply.js` | Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place. L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les v |
-| 25 | `src/data/completion.js` | FINITION d'un niveau (en %) : plusieurs objectifs pondérés (somme = 100). On garde le MEILLEUR de chaque objectif sur toutes les parties, donc chaque partie (même perdue) peut faire monter le %. Des paliers (25/50/75/100 %) rappor |
-| 26 | `src/data/ship-skins.js` | Apparences de la camionnette (teintes appliquées par le moteur : aucun fichier image). Choisie dans le HANGAR, sauvegardée sous ssx_skin_v1. Ajouter une apparence = ajouter une ligne ici. `tint` = couleur multipliée sur le sprite  |
-| 27 | `src/data/skill-tree.js` | Arbre de compétences : branches, nœuds, positions à l'écran, déblocage. |
+| 12 | `src/data/techs.js` | Technologies : le catalogue de la R&D. On récupère un plan (1re victoire d'un ordre), on prototype, on améliore (rangs), on spécialise ; on en emporte 1 à 5 selon les boss vaincus et on les ASSEMBLE en mission par des cartes. Desi |
+| 13 | `src/data/events.js` | Événements aléatoires (EVENT_DEFS). |
+| 14 | `src/ui/pixel-icons.js` | Icônes pixel : réduit les émojis en 16x16 avec contour. |
+| 15 | `src/ui/ui-icons.js` | Icônes d'interface en pixel art (12x12, dessinées par tools/gen_ui_icons.py) : elles remplacent les glyphes / émojis de l'interface. uiIco('lock', 12)  -> HTML <img> prêt à insérer dans un innerHTML (12 px dans le texte, 24 px pou |
+| 16 | `src/data/meta.js` | Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, R&D (rd), chargement ; niveau d'alerte de la partie infinie. Les sauvegardes d'avant la R&D (`ssx_meta_v2`, ou v3 sans clé `rd`) sont lues et co |
+| 17 | `src/data/worlds.js` | Mondes et niveaux : registre + validation. Un monde = un fichier dans data/worlds/, qui s'enregistre avec registerWorld(). Ajouter un monde = ajouter un fichier + une ligne dans scripts.json. |
+| 18 | `src/data/agp-lore.js` | Univers narratif : AGP (Agence Galactique de Propreté), an 2247. Textes de l'interface, des ordres de mission et des transmissions de N.O.R.M.A. Aucun effet sur le jeu : ce fichier ne contient que des textes d'habillage. Les nivea |
+| 19 | `src/data/worlds/monde-1.js` | Monde 1 — BROUILLON : valeurs provisoires pour tester le moteur (étape 8 du plan : contenu et équilibrage). |
+| 20 | `src/data/worlds/monde-2.js` | Monde 2 — BROUILLON : valeurs provisoires (étape 8 du plan : contenu et équilibrage). |
+| 21 | `src/data/worlds/monde-3.js` | Monde 3 — BROUILLON : valeurs provisoires (étape 8 du plan : contenu et équilibrage). |
+| 22 | `src/data/world-progress.js` | Progression dans les mondes (sauvegarde permanente, clé ssx_worlds_v1 — incluse dans SAVE_KEYS pour la sauvegarde cloud). On ne stocke que les victoires ; les déverrouillages se déduisent : |
+| 23 | `src/data/tuning-defaults.js` | Réglages par défaut du TUTO (niveau w1-tuto). Ce fichier est écrit à la main ; les modifications faites dans l'éditeur (editor.html) sont enregistrées à part dans data/tuning.js (généré) et se superposent à ces valeurs. Rien à cha |
+| 24 | `src/data/tuning.js` | GÉNÉRÉ par l'éditeur de niveaux (editor.html, bouton EXPORTER) — ne contient que les valeurs qui diffèrent des défauts. Peut aussi être modifié à la main. tuto   : surcharges de TUTO_DEFAULTS (data/tuning-defaults.js) |
+| 25 | `src/data/tuning-apply.js` | Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place. L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les v |
+| 26 | `src/data/completion.js` | FINITION d'un niveau (en %) : plusieurs objectifs pondérés (somme = 100). On garde le MEILLEUR de chaque objectif sur toutes les parties, donc chaque partie (même perdue) peut faire monter le %. Des paliers (25/50/75/100 %) rappor |
+| 27 | `src/data/ship-skins.js` | Apparences de la camionnette (teintes appliquées par le moteur : aucun fichier image). Choisie dans le HANGAR, sauvegardée sous ssx_skin_v1. Ajouter une apparence = ajouter une ligne ici. `tint` = couleur multipliée sur le sprite  |
 | 28 | `src/data/upgrades.js` | Cartes d'amélioration en cours de partie (UPGRADE_POOL). |
 | 29 | `src/data/relics.js` | Reliques. |
 | 30 | `src/data/pacts-style.js` | Pactes, rangs de style, collection (codex). |
@@ -71,7 +71,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 63 | `src/ui/pages.js` | Méthodes de GameScene — pages du menu : classement, stats, bestiaire, collection, pactes, succès, pause. |
 | 64 | `src/systems/achievements.js` | Méthodes de GameScene — succès en cours de partie : kills, paliers, notifications. |
 | 65 | `src/fx/effects.js` | Méthodes de GameScene — effets : explosion kamikaze, toiles, explosions de mort. |
-| 66 | `src/ui/tree-ui.js` | Méthodes de GameScene — arbre de compétences : une page par branche, une carte par compétence (les rangs sont des pastilles), fiche en bas pour le détail et l'achat. Les données (rangs sauvegardés, coûts, déblocages) viennent de d |
+| 66 | `src/ui/rd-ui.js` | Méthodes de GameScene — page R&D (page de droite de l'accueil) : un onglet par secteur, une fiche par technologie (data/techs.js), un bouton unique pour la prochaine étape (prototype -> rangs -> spécialisation). Remplace l'arbre d |
 | 67 | `src/game/run.js` | Méthodes de GameScene — cycle d'une partie : démarrage, reprise, fin, mort du joueur. |
 | 68 | `src/game/level.js` | Méthodes de GameScene — niveaux des mondes : objectif, événements du niveau, victoire. `this.lvDef` = définition du niveau en cours (data/worlds), null pour l'ancienne partie infinie (bouton DEMARRER, bac à sable). |
 | 69 | `src/game/tuto.js` | Méthodes de GameScene — TUTO (niveau 1 du monde 1, `w1-tuto`, / bouton DEV) : 3 étapes pédagogiques (bouger, tirer, boss), satellites + débris, boss satellite. Une seule boîte de consigne : N.O.R.M.A. (ui/norma.js). La FINITION (% |
@@ -170,15 +170,19 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`atelier.js`** — Atelier : les six postes de la camionnette, en cinq niveaux Mk I à V. Stats de base permanentes, toujours actives, hors emplacement. Achat : composants ◆ (Mk I à V) + pièces de secteur (Mk III à V). Design : docs/superpowers/specs
 
-- Définit : `ATELIER_MAX`, `ATELIER_COSTS`, `ATELIER_PIECES`, `ATELIER_OPS`, `atelierRows`, `ATELIER_POSTS`, `ATELIER_POST_BY_ID`, `ATELIER_REPLACED`, `atelierMk`, `atelierApplyRow`, `atelierApply`, `atelierShows`, `atelierNextCost`, `atelierCanBuy`, `atelierBuy`
+- Définit : `ATELIER_MAX`, `ATELIER_COSTS`, `ATELIER_PIECES`, `ATELIER_OPS`, `atelierRows`, `ATELIER_POSTS`, `ATELIER_POST_BY_ID`, `atelierMk`, `atelierApplyRow`, `atelierApply`, `atelierShows`, `atelierNextCost`, `atelierCanBuy`, `atelierBuy`
+
+**`techs.js`** — Technologies : le catalogue de la R&D. On récupère un plan (1re victoire d'un ordre), on prototype, on améliore (rangs), on spécialise ; on en emporte 1 à 5 selon les boss vaincus et on les ASSEMBLE en mission par des cartes. Desi
+
+- Définit : `ROMAN`, `up`, `flag`, `TECHS`, `TECH_BY_ID`, `techAvailable`, `techMaxRang`, `rdEntry`, `TECH_COST`, `rdNextCost`, `rdCanBuy`, `rdBuy`, `rdNextStep`, `rdGrantPlan`, `rdUpgradeAt`, `rdApplyRanks`, `slotsOpen`, `loadoutCheck`, `loadoutSanitize`, `loadoutToggle`
 
 **`events.js`** — Événements aléatoires (EVENT_DEFS).
 
 - Définit : `evRndX`, `EVENT_DEFS`
 
-**`meta.js`** — Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, arbre restant ; niveau d'alerte de la partie infinie. La v2 (`ssx_meta_v2`) n'est plus écrite : elle est lue une fois, convertie par metaFromV2 
+**`meta.js`** — Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, R&D (rd), chargement ; niveau d'alerte de la partie infinie. Les sauvegardes d'avant la R&D (`ssx_meta_v2`, ou v3 sans clé `rd`) sont lues et co
 
-- Définit : `META_KEY`, `META_KEY_V2`, `defaultMeta`, `metaNum`, `normalizeMeta`, `metaFromV2`, `metaRead`, `getMeta`, `setMeta`, `migrateMeta`, `ALERT_THRESHOLDS`, `ALERT_CAP`, `treeTotalPoints`, `metaPoints`, `computeAlertLevel`, `effectiveAlert`, `weaponTierFor`
+- Définit : `META_KEY`, `META_KEY_V2`, `defaultMeta`, `metaNum`, `normalizeMeta`, `TREE_LEGACY_COSTS`, `treeLegacyRefund`, `metaFromLegacy`, `metaRead`, `getMeta`, `setMeta`, `migrateMeta`, `ALERT_THRESHOLDS`, `ALERT_CAP`, `sumRanks`, `metaPoints`, `computeAlertLevel`, `effectiveAlert`, `weaponTierFor`
 
 **`worlds.js`** — Mondes et niveaux : registre + validation. Un monde = un fichier dans data/worlds/, qui s'enregistre avec registerWorld(). Ajouter un monde = ajouter un fichier + une ligne dans scripts.json.
 
@@ -211,10 +215,6 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 **`ship-skins.js`** — Apparences de la camionnette (teintes appliquées par le moteur : aucun fichier image). Choisie dans le HANGAR, sauvegardée sous ssx_skin_v1. Ajouter une apparence = ajouter une ligne ici. `tint` = couleur multipliée sur le sprite 
 
 - Définit : `SHIP_SKINS`, `SKIN_KEY`, `getShipSkin`, `setShipSkin`, `shipSkinTint`, `SHIP_PARTS`, `SHIP_PARTS_KEY`, `getShipParts`, `setShipPart`, `shipPartsTexture`
-
-**`skill-tree.js`** — Arbre de compétences : branches, nœuds, positions à l'écran, déblocage.
-
-- Définit : `mkCost`, `TREE_BRANCHES`, `TREE_HUB`, `TREE_MOVED`, `ALL_TREE_NODES`, `TREE_NODE_BY_ID`, `treeRefundFor`, `ROMAN`, `TREE_VIS`, `visId`, `treeVisStatus`, `TREE_TOTAL`, `treeBranchStemSum`, `treeParentOk`, `treeNodeUnlocked`
 
 **`upgrades.js`** — Cartes d'amélioration en cours de partie (UPGRADE_POOL).
 
@@ -279,10 +279,9 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 - Méthodes ajoutées à `GameScene` (mixin) : `getTextureFrameDataURL`, `renderLeaderboardPage`, `pauseGearItems`, `globalGearItems`, `globalGearSummary`, `renderPauseGear`, `renderStatsPage`, `renderBestiaryPage`, `renderCodexPage`, `renderPactsPage`, `renderAchievementsPage`
 
-**`tree-ui.js`** — Méthodes de GameScene — arbre de compétences : une page par branche, une carte par compétence (les rangs sont des pastilles), fiche en bas pour le détail et l'achat. Les données (rangs sauvegardés, coûts, déblocages) viennent de d
+**`rd-ui.js`** — Méthodes de GameScene — page R&D (page de droite de l'accueil) : un onglet par secteur, une fiche par technologie (data/techs.js), un bouton unique pour la prochaine étape (prototype -> rangs -> spécialisation). Remplace l'arbre d
 
-- Définit : `TREE_BRANCH_ICONS`, `_treeLayout`, `treeLayout`
-- Méthodes ajoutées à `GameScene` (mixin) : `treeCardInfo`, `treeBranchPoints`, `treeCardHtml`, `renderTree`, `setupTreeUi`, `selectTreeNode`, `refreshTreeSheet`, `codexMark`, `investTreeNode`
+- Méthodes ajoutées à `GameScene` (mixin) : `rdWorld`, `rdButton`, `rdCardHtml`, `renderRd`, `setupRdUi`, `codexMark`, `rdBuyAction`
 
 **`hud.js`** — Méthodes de GameScene — HUD : secousse, rang de style, barres.
 
@@ -403,7 +402,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 **`ui.js`** — Méthodes de HomeScene — panneaux HTML de l'accueil : pages, carte des niveaux, hangar, arbre, lancement.
 
 - Définit : `HOME_STAT_LINES`, `levelGoalText`
-- Méthodes ajoutées à `HomeScene` (mixin) : `setupHomeUi`, `enterHome`, `leaveHome`, `refreshHome`, `goHomePage`, `selectHomeLevel`, `renderHomeMap`, `finitionLine`, `renderHomeHangar`, `renderHomeTree`, `refreshHomeStats`, `showHomeTree`, `launchLevel`
+- Méthodes ajoutées à `HomeScene` (mixin) : `setupHomeUi`, `enterHome`, `leaveHome`, `refreshHome`, `goHomePage`, `selectHomeLevel`, `renderHomeMap`, `loadoutLine`, `finitionLine`, `renderHomeHangar`, `renderHomeTree`, `refreshHomeStats`, `showHomeTree`, `launchLevel`
 
 ### `src/world/`
 
@@ -520,7 +519,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`progression.js`** — Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau.
 
-- Méthodes ajoutées à `GameScene` (mixin) : `levelUp`, `showUpgradeCards`, `cardCount`, `renderCardChoices`, `rerollCards`, `updateShipTier`
+- Méthodes ajoutées à `GameScene` (mixin) : `levelUp`, `cardPool`, `drawCards`, `showUpgradeCards`, `assemblyCards`, `techEffect`, `techAssemble`, `techCards`, `cardCount`, `renderCardChoices`, `rerollCards`, `updateShipTier`
 
 ### `src/enemies/`
 

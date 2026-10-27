@@ -1,5 +1,7 @@
 # L'arbre de compétences — fonctionnement et état des lieux
 
+> **Document historique (27 octobre 2026).** L'arbre a été supprimé : l'atelier (`src/data/atelier.js`) et la R&D par technologie (`src/data/techs.js`, `src/ui/rd-ui.js`) l'ont remplacé ; `skill-tree.js` et `tree-ui.js` n'existent plus. Voir `docs/superpowers/specs/2026-10-27-progression-design.md`. Ce qui suit décrit l'ancien système.
+
 Document de travail pour un brainstorm sur l'amélioration des compétences de l'onglet **ARBRE** (page de droite de l'accueil).
 Tout ce qui est écrit ici vient du code (`src/data/skill-tree.js`, `src/ui/tree-ui.js`) ; les passages marqués **Observation** sont des constats de l'auteur, pas des règles du jeu.
 
