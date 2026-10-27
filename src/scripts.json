@@ -52,6 +52,7 @@
   "scenes/GameScene.js",
   "scenes/HomeScene.js",
   "home/background.js",
+  "home/orbital.js",
   "home/galaxy.js",
   "home/garage.js",
   "home/ui.js",

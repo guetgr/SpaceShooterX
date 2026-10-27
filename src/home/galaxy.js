@@ -151,7 +151,7 @@ mixin(HomeScene, {
     this.planetPos.x = pos.x; this.planetPos.y = pos.y + this.galY; this.planetPos.s = GAL_SCALE;
     this.planet.setVisible(true); this.planetGlow.setVisible(true); g.img.setVisible(false); g.glow.setVisible(false);
     this.warpPulse();
-    this.tweens.add({ targets:this.planetPos, x:GAME_W/2, y:250, s:1.95, duration:620, ease:'Cubic.easeInOut' });
+    this.tweens.add({ targets:this.planetPos, x:GAME_W/2, y:270, s:2.5, duration:620, ease:'Cubic.easeInOut' });
     this.tweens.add({ targets:this, galA:0, duration:450, onComplete:()=>{ this.galaxy.setVisible(false); g.img.setVisible(true); g.glow.setVisible(true); } });
     this.time.delayedCall(380, ()=>{
       this.setMapDom('world'); this.renderHomeMap(true);
@@ -172,9 +172,11 @@ mixin(HomeScene, {
 
   // remet la page CARTE en vue « monde » (retour d'un niveau, premier affichage)
   resetMapView(){
+    this.orbitRotation = 0;
+    if(this.orbitTween) this.orbitTween.stop();
     this.mapMode = 'world'; this.galVel = 0; this.galDrag = null; this.galForceLock = -1;
     this.galaxy.setVisible(false); this.galA = 0;
-    Object.assign(this.planetPos, { x:GAME_W/2, y:250, s:1.95 }); this.orbitA = 1; this.warp = 0;
+    Object.assign(this.planetPos, { x:GAME_W/2, y:270, s:2.5 }); this.orbitA = 1; this.warp = 0;
     this.planet.setVisible(true); this.planetGlow.setVisible(true);
     const pm = document.getElementById('pageMap'); pm.dataset.mode = 'world'; pm.classList.remove('swap');
   },

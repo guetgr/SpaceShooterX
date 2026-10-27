@@ -462,6 +462,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `fitUi` | fonction | `src/main.js` |  |
 | `FLANK_TYPES` | const | `src/core/constants.js` |  |
 | `flipVortex` | méthode | `src/events/core.js` | `GameScene` |
+| `focusOrbitalLevel` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `FUSIONS` | const | `src/data/fusions.js` |  |
 | `FX_ANCHOR` | const | `src/data/boss-antenne.js` |  |
 | `GAL_FONT` | const | `src/home/galaxy.js` |  |
@@ -519,7 +520,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `healerPulse` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `hexShade` | fonction | `src/gfx/procedural.js` |  |
 | `HOME_ORBIT` | const | `src/home/background.js` |  |
+| `HOME_ORBIT_VIEW` | const | `src/home/orbital.js` |  |
 | `HOME_STAT_LINES` | const | `src/home/ui.js` |  |
+| `homeOrbitPoint` | fonction | `src/home/orbital.js` |  |
 | `HomeScene` | classe | `src/scenes/HomeScene.js` |  |
 | `homeToast` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `housekeeping` | méthode | `src/audio/music.js` | `FileMusic` |
@@ -528,6 +531,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `hudFlash` | méthode | `src/ui/hud.js` | `GameScene` |
 | `inFiringPosition` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `initBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
+| `initOrbitalUi` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `INTRO_E_A` | const | `src/core/constants.js` |  |
 | `introApex` | méthode | `src/game/intro.js` | `GameScene` |
 | `introEarthInit` | méthode | `src/game/intro.js` | `GameScene` |
@@ -1120,6 +1124,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateMissiles` | méthode | `src/player/weapons.js` | `GameScene` |
 | `updateMusicMood` | méthode | `src/audio/scene-audio.js` | `GameScene` |
 | `updateNebula` | méthode | `src/events/core.js` | `GameScene` |
+| `updateOrbitalUi` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `updateOverdrive` | méthode | `src/systems/overdrive.js` | `GameScene` |
 | `updateSettingsLabels` | méthode | `src/ui/dom.js` | `GameScene` |
 | `updateShipDamage` | méthode | `src/player/damage.js` | `GameScene` |
@@ -1156,4 +1161,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1149 symboles.
+1154 symboles.

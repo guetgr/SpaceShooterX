@@ -31,6 +31,7 @@ mixin(HomeScene, {
     Motion.bindPress();
     Norma.startTicker(document.getElementById('homeTicker'), ()=> this.homeOn);
     AtelierGarage.setup();
+    this.initOrbitalUi();
     $('homeSettings').onclick = ()=>{ $('btnOptionsMain').click(); };
     if (DEV_SEE_ALL){
       $('btnDevHome').classList.remove('hidden');
@@ -50,10 +51,11 @@ mixin(HomeScene, {
     });
     const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; };
     box.addEventListener('pointercancel', pinchEnd);
-    box.addEventListener('wheel', e=>{ if (e.deltaY > 20 && canGalaxy()) this.enterGalaxy(); }, { passive:true });
+    box.addEventListener('wheel', e=>{ if (e.deltaY > 20 && !e.target.closest('#levelCard') && canGalaxy()) this.enterGalaxy(); }, { passive:true });
     box.addEventListener('pointerdown', e=>{
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
       if (pts.size === 2){ pinch0 = pinchDist(); down = false; return; }                  // 2e doigt : pincement, plus un glissement de page
+      if(e.target.closest('#levelCard,.orbit-controls')){down=false;return;}
       down = true; sx = e.clientX; sy = e.clientY; st = performance.now();
       // les onglets de l'arbre défilent à l'horizontale : on ne change de page depuis eux que depuis le bord gauche de l'écran
       if (e.target.closest && e.target.closest('#treeTabs') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
@@ -113,6 +115,7 @@ mixin(HomeScene, {
     p = Math.max(-1, Math.min(1, p));
     if (p === this.page && !instant) return;
     this.page = p;
+    document.getElementById('home').classList.toggle('orbital-home', p === 0);
     if (!instant) sfx.uiOpen();
     const tr = document.getElementById('homeTrack');
     tr.className = p === 0 ? '' : 'p' + p;
@@ -141,23 +144,18 @@ mixin(HomeScene, {
     const sm = worldSummary(w.id, p);
     $('mwProg').innerHTML = open ? ('ORDRES EXECUTES ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ' + uiIco('star') : '')) : 'ACCES REFUSE';
     const orb = $('mapOrbit'); orb.innerHTML = '';
-    const n = w.levels.length, O = HOME_ORBIT;
-    { // trace de la route entre les niveaux : pointillée, verte jusqu'au dernier niveau terminé, jaune animée vers le suivant
-      const P = w.levels.map((l, k)=>{ const th = Math.PI*(160 - k*(140/Math.max(1, n - 1)))/180; return [(O.cx + O.rx*Math.cos(th))/GAME_W*100, (O.cy + O.ry*Math.sin(th))/GAME_H*100]; });
-      let nextSeg = -1; w.levels.forEach((l, k)=>{ if (nextSeg < 0 && k < n - 1 && isLevelDone(l.id, p) && !isLevelDone(w.levels[k + 1].id, p)) nextSeg = k; });
-      orb.insertAdjacentHTML('beforeend', '<svg class="trace" viewBox="0 0 100 100" preserveAspectRatio="none">' + P.slice(1).map((q, i)=>
-        '<path class="' + (isLevelDone(w.levels[i].id, p) ? (i === nextSeg ? 'next' : 'done') : '') + '" d="M' + P[i][0].toFixed(2) + ' ' + P[i][1].toFixed(2) + 'L' + q[0].toFixed(2) + ' ' + q[1].toFixed(2) + '"/>').join('') + '</svg>');
-    }
+    const n = w.levels.length;
     w.levels.forEach((l, k)=>{
-      const done = isLevelDone(l.id, p), unl = isLevelUnlocked(l.id, p), th = Math.PI*(160 - k*(140/Math.max(1, n - 1)))/180;
+      const done = isLevelDone(l.id, p), unl = isLevelUnlocked(l.id, p), point = homeOrbitPoint(k/Math.max(1,n-1), this.orbitRotation || 0);
       const slot = document.createElement('div'); slot.className = 'node-slot';
-      slot.style.left = ((O.cx + O.rx*Math.cos(th))/GAME_W*100) + '%'; slot.style.top = ((O.cy + O.ry*Math.sin(th))/GAME_H*100) + '%';
+      slot.style.left = point.x + 'px'; slot.style.top = point.y + 'px';
       const b = document.createElement('button'), ico = LEVEL_ICONS[l.id];
       b.className = 'node ' + (done ? 'done' : (unl ? 'open' : 'locked')) + (l.type === 'boss' ? ' boss' : '') + (ico ? ' ico' : '') + (l.id === this.homeSel ? ' sel' : '');
       if (ico) b.innerHTML = '<img class="node-ico" alt="" draggable="false" src="' + ico + '" style="--b:' + (-k*0.7).toFixed(1) + 's">' +      // médaillon : l'icône du niveau (elle flotte), badge d'état, numéro en étiquette
-        (!unl ? '<i class="nd-badge nd-lock">' + uiIco('lock') + '</i>' : (done ? '<i class="nd-badge nd-done">' + uiIco('check') + '</i>' : (l.type === 'boss' ? '<i class="nd-badge nd-boss">' + uiIco('skull') + '</i>' : ''))) + '<em class="nd-num">' + (l.type === 'tuto' ? '?' : l.num) + '</em>';
+        (!unl ? '<i class="nd-badge nd-lock">' + uiIco('lock') + '</i>' : (done ? '<i class="nd-badge nd-done">' + uiIco('check') + '</i>' : (l.type === 'boss' ? '<i class="nd-badge nd-boss">' + uiIco('skull') + '</i>' : ''))) + '<em class="nd-num">' + String(k + 1).padStart(2, '0') + '</em>';
       else b.innerHTML = '<span>' + (!unl ? uiIco('lock', 16) : (done ? uiIco('check', 16) : (l.type === 'boss' ? uiIco('skull', 16) : (l.type === 'tuto' ? '?' : l.num)))) + '</span>';
-      b.setAttribute('aria-label', 'Niveau ' + l.num + ' ' + l.name);
+      b.setAttribute('aria-label', 'Ordre ' + (k+1) + ' ' + l.name + (!unl ? ' — verrouillé' : ''));
+      b.setAttribute('aria-pressed', String(l.id === this.homeSel));
       b.style.pointerEvents = 'auto';
       b.onclick = ()=> this.selectHomeLevel(l.id);
       // un niveau tout juste débloqué apparaît avec un petit éclat (une seule fois)
@@ -174,21 +172,28 @@ mixin(HomeScene, {
     $('levelCard').className = 'level-card world-only ' + (l.type === 'boss' ? 'is-boss' : (l.type === 'tuto' ? 'is-tuto' : ''));
     $('levelCard').innerHTML = '<div class="om-top"><span class="om-no">ORDRE ' + agpDossier(l) + '</span><span class="om-tag ' + ty.cls + '">' + ty.label + '</span></div><div class="lc-name"></div>' +
       '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
-      '<div class="om-row"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
+      '<div class="om-row om-risk"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
       '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
       this.finitionLine(l, p) +
-      '<div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div>';
+      '<details class="om-details"><summary>DETAILS · N.O.R.M.A.</summary><div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div></details>';
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
+    const selectedIndex = w.levels.findIndex(x=>x.id===l.id);
+    $('orbitIndex').textContent='ORDRE '+String(selectedIndex+1).padStart(2,'0')+' / '+n;
+    $('orbitPrev').disabled=selectedIndex===0; $('orbitNext').disabled=selectedIndex===n-1;
+    const tip=$('levelCard').querySelector('.completion-tip');
+    if(tip) $('levelCard').querySelector('.om-details').appendChild(tip);
+    this.focusOrbitalLevel();
+    this.updateOrbitalUi();
     this.setHomeVanTier(l.threat);
   },
 
   // ligne « FINITION n% » de la fiche d'un niveau + le prochain objectif à faire (donne envie de rejouer)
   finitionLine(l, p){
-    if (!completionDefs(l.id)) return '';
+    if (!completionDefs(l.id)) return '<div class="lc-line lc-comp">FINITION <b>—</b><span class="completion-na">Non définie pour cet ordre</span></div>';
     const comp = p.comp[l.id] || {}, pct = completionPct(l.id, comp), nx = completionNext(l.id, comp);
-    return '<div class="lc-line lc-comp">FINITION <b>' + pct + '%</b><i><u style="width:' + pct + '%"></u></i></div>' +
-      (nx ? '<div class="lc-line">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line">' + uiIco('star') + ' FINITION 100% ' + uiIco('star') + '</div>');
+    return '<div class="lc-line lc-comp">FINITION <b>' + pct + ' %</b><i role="progressbar" aria-label="Finition du niveau" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><u style="width:' + pct + '%"></u></i></div>' +
+      (nx ? '<div class="lc-line completion-tip">' + (pct > 0 ? 'Il manque ' + (100 - pct) + '% : ' : 'Objectif : ') + nx.tip + ' <b>+' + nx.missing + '%</b></div>' : '<div class="lc-line completion-tip">' + uiIco('star') + ' TOUS LES OBJECTIFS REMPLIS ' + uiIco('star') + '</div>');
   },
 
   // Conserve la livrée existante sur le sprite de navigation et de mission.
