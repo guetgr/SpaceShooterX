@@ -8,7 +8,7 @@ mixin(GameScene, {
     const tex = this.textures.exists('acLive') ? this.textures.get('acLive') : this.textures.createCanvas('acLive', 512, 512);
     const imgs = [0, 1, 2, 3].map(i=> this.textures.get('acBoss' + i).getSourceImage());
     this._ac = { state:0, ts:-1, imgs, data:[], tex, flames:[], shards:[], smokeT:600, sparkT:900, chg:null, tint:0xffffff, dy:0, n:0 };
-    this.acDrawLive(0);
+    this.acDrawLive(0); this._ac.lights = this.blInit('antenne', 5.5);
     return this.add.image(x, y, 'acLive').setDepth(5).setScale(AC.scale);
   },
   // Le sprite n'est pas déplacé en bloc : chaque bande de 4 px est décalée de ±1 px (un demi-pixel de la grille fine) à 10 images/s, les ailes se balancent à contretemps.
@@ -43,6 +43,7 @@ mixin(GameScene, {
   acBossUpdate(delta){
     const B = this.tutoBoss, ac = this._ac; if (!B || !ac || B.dead) return;
     this.acDrawLive(B.t);
+    this.blUpdate(ac.lights, delta, { toWorld:(x, y)=> this.acW(x, y), solid:(x, y)=> this.acPix(ac.state)[((y | 0)*512 + (x | 0))*4 + 3] > 128, S:AC.scale, visible:!B.dead, spin:ac.state >= 2 ? 2 : 1 });
     const st = B.hp / B.max > AC.states[0] ? 0 : B.hp / B.max > AC.states[1] ? 1 : B.hp / B.max > AC.states[2] ? 2 : 3;
     if (st > ac.state) this.acSetState(st);
     this.acFollow(delta);

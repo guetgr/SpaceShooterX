@@ -27,5 +27,8 @@ const ENEMY_ART = {
   healer:  { tex:'healerIdle',  scale:0.62,  anim:'healerFly',   body:[40,58], boomTex:'explosionSheet', boom:'explodeGrunt', boomScale:0.4 },
   sat:      { tex:'tutoSat', scale:0.5, anim:null, flipY:false, body:[110,110], boomTex:'tutoSat', boom:'explodeSat', boomScale:0.5 },                       // satellite hors service (celui du tuto), dérive en lâchant des débris
   satgun:   { tex:'satgunSheet', scale:0.5, anim:'satgunIdle', flipY:false, body:[120,150], boomTex:'satgunSheet', boom:'explodeSatgun', boomScale:0.5 },     // satellite armé : se met en position, charge (lueur bleue), tire des orbes
+  bras:     { tex:'brasSheet', scale:0.24, anim:null, flipY:false, body:[260,340], boomTex:'brFxBoom', boom:'explodeBras', boomScale:1.1 },                       // « Bras écartés » : quatre perches qui chargent et tirent en bleu (enemies/bras.js)
+  pilleur:  { tex:'plSheet', scale:0.25, anim:null, flipY:false, body:[280,440], boomTex:'rxFxBoomM', boom:'rxBoomM', boomScale:0.75 },                         // « Le Pilleur de cristaux » : aspire les cristaux, alimente son laser (enemies/pilleur.js)
+  eclaireur:{ tex:'ecSheet', scale:0.27, anim:null, flipY:false, body:[330,300], boomTex:'anFxBoomM', boom:'anBoomM', boomScale:0.8 },                          // « L'Éclaireur de patrouille » : drone-œil dont le projecteur te repère et te verrouille (enemies/eclaireur.js)
   sniper:  { tex:'sniperIdle',  scale:0.55,  anim:'sniperFly',   body:[90,110], boomTex:'sniperExpl',     boom:'explodeSniper',  boomScale:0.5, bulletTex:'sniperBullet', bulletScale:0.45 },
 };

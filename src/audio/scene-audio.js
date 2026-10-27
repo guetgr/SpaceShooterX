@@ -5,6 +5,9 @@ mixin(GameScene, {
   killSound(e){
     const pan = this.panOf(e.x), t = e.enemyType;
     if (t === 'kamikaze' || t === 'golden') return;                                   // sons gérés ailleurs (explosion kamikaze, jackpot)
+    if (t === 'bras') return sfx.brasBoom({ pan });
+    if (t === 'pilleur') return sfx.plBoom({ pan });
+    if (t === 'eclaireur') return sfx.ecBoom({ pan });
     if (t === 'mine' || t === 'mineDeployed') return sfx.mineBoom({ pan });
     if (t === 'meteor') return sfx.rock({ pan, tier:e.meteorTier });
     if (['swarmer','drone','splitter','charo','ghost'].includes(t)) return sfx.boomSmall({ pan });

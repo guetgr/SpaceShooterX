@@ -66,6 +66,12 @@ mixin(GameScene, {
     }
     this.updateDifficulty();
     this.levelUpdate(delta);
+    if (this.ar) this.arUpdate(delta);
+    if (this.mt) this.mtUpdate(delta);
+    if (this.rx) this.rxUpdate(delta);
+    if (this.an) this.anUpdate(delta);
+    if (this.pd) this.pdUpdate(delta);
+    this.ecLockUpdate(delta);
 
     // progressively dezoom from a close-in start to the full field, revealing
     // more room for enemies as the run goes on
@@ -208,7 +214,7 @@ mixin(GameScene, {
     }
 
     // spawn
-    if (!this.bossActive && !this.sandbox && !this.lvEnding && !this.tuto){
+    if (!this.bossActive && !this.sandbox && !this.lvEnding && !this.tuto && !this.ar && !this.mt && !this.rx && !this.an && !this.pd){
       this.spawnTimer -= delta;
       if (this.spawnTimer <= 0){
         this.spawnTimer = this.getSpawnInterval();
@@ -285,6 +291,7 @@ mixin(GameScene, {
       if (this._ecl){ if (e._lastFc !== undefined && e.fireCd > e._lastFc + 100) e._lit = 450; e._lastFc = e.fireCd; }
       this.updateEnemyAI(e, delta);
     });
+    this.plLoopsApply();
     this.updateSquads(delta);
     this.updateEnemyShields(delta);
     this.updateDodge(delta);

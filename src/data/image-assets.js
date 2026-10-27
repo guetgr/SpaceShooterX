@@ -272,4 +272,32 @@ const AC_BOSS_B64 = [0, 1, 2, 3].map(i=> asset('sprites/ac_boss' + i + '.webp'))
 const AC_FX_B64 = {};
 ['flame', 'smoke', 'spark', 'impact', 'orb', 'charge', 'muzzle', 'boom', 'shock'].forEach(n=>{ AC_FX_B64[n] = asset('sprites/ac_fx_' + n + '.webp'); });
 const SATGUN_SHEET_B64 = asset('sprites/satgun_sheet.webp');      // satellite armé : 26 images de 200x200 (idle 0-4 · charge 5-6 · recul 7-8 · dégâts 9-17 · explosion 18-25)
+const BRAS_SHEET_B64 = asset('sprites/bras_sheet.webp');        // mob « Bras écartés » : 4 états d'usure 512x512 côte à côte (intact · endommagé · critique · épave)
+const BR_FX_B64 = {};
+['orb', 'charge', 'muzzle', 'boom', 'impact'].forEach(n=>{ BR_FX_B64[n] = asset('sprites/br_fx_' + n + '.webp'); });      // effets bleus (plasma) et explosion feu du mob
+const AR_SHEET_B64 = asset('sprites/ar_sheet.webp');             // boss « Araignée de tri » : 4 états d'usure 512x512 côte à côte
+const AR_FX_B64 = {};
+['missile', 'boomL', 'shock'].forEach(n=>{ AR_FX_B64[n] = asset('sprites/ar_fx_' + n + '.webp'); });      // missile des bennes, grosse explosion feu, onde de choc
+const MT_SHEET_B64 = asset('sprites/mt_sheet.webp');             // boss « La Météo » : 4 états d'usure 512x512 côte à côte
+const MT_FX_B64 = {};
+['hail', 'iceb', 'fcharge', 'fmuzzle', 'bolt', 'arc', 'glow', 'charge', 'muzzle', 'impact', 'spark', 'boomM', 'boomL', 'shock'].forEach(n=>{ MT_FX_B64[n] = asset('sprites/mt_fx_' + n + '.webp'); });      // grêlon, givre, éclair, arcs, plasma, explosions bleues
+const LT_B64 = {};
+['radar', 'beacon', 'rotor_toxic', 'rotor_amber', 'rotor_fire', 'rotor_hot'].forEach(n=>{ LT_B64[n] = asset('sprites/lt_' + n + '.webp'); });      // lumières tournantes (balayage radar, gyrophare, rotor du Réacteur) : jeu de lumières des boss
+const RX_SHEET_B64 = asset('sprites/rx_sheet.webp');             // boss « Le Réacteur » : 4 états de surchauffe 512x512 côte à côte
+const RX_FX_B64 = {};
+['orb', 'arc', 'flame', 'charge', 'muzzle', 'impact', 'spark', 'glow', 'boomM', 'boomL', 'shock'].forEach(n=>{ RX_FX_B64[n] = asset('sprites/rx_fx_' + n + '.webp'); });      // effets verts (toxiques) du Réacteur
+const PL_SHEET_B64 = asset('sprites/pl_sheet.webp');             // mob « Le Pilleur de cristaux » : 4 états 512x512 côte à côte
+const PL_FX_B64 = {};
+['beam', 'suction', 'charge', 'muzzle', 'glow', 'spark', 'impact'].forEach(n=>{ PL_FX_B64[n] = asset('sprites/pl_fx_' + n + '.webp'); });      // faisceau laser, tourbillon d'aspiration, charge...
+const AN_SHEET_B64 = asset('sprites/an_sheet.webp');             // boss « L'Anneau » : 4 états 512x512 côte à côte
+const AN_FX_B64 = {};
+['beam', 'rotor', 'orb', 'orbHot', 'muzzle', 'charge', 'impact', 'spark', 'glow', 'glowHot', 'boomM', 'boomL', 'shock'].forEach(n=>{ AN_FX_B64[n] = asset('sprites/an_fx_' + n + '.webp'); });      // effets violets de L'Anneau et de l'Éclaireur
+const PD_SHEET_B64 = asset('sprites/pd_sheet.webp');             // boss final « Le PDG dans sa tour » : 4 états 512x512 côte à côte
+const PG_SHEET_B64 = asset('sprites/pg_sheet.webp');             // vaisseau de protection « Le PDG » : 4 états
+const GD_SHEET_B64 = asset('sprites/gd_sheet.webp');             // agent de sécurité : vivant, givre, gelé, fissuré
+const PD_FX_B64 = {};
+['beam', 'orb', 'muzzle', 'charge', 'impact', 'glow', 'spark', 'boomM', 'boomL', 'shock', 'flame', 'ice', 'frost'].forEach(n=>{ PD_FX_B64[n] = asset('sprites/pd_fx_' + n + '.webp'); });      // effets dorés et glace du boss final
+const EC_SHEET_B64 = asset('sprites/ec_sheet.webp');             // mob « L'Éclaireur de patrouille » : 4 états 512x512 côte à côte
+const EC_FX_B64 = {};
+['cone', 'coneHot', 'reticle'].forEach(n=>{ EC_FX_B64[n] = asset('sprites/ec_fx_' + n + '.webp'); });      // faisceau de balayage, viseur de verrouillage
 const TUTO_NDEB = 8;

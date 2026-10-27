@@ -41,7 +41,7 @@ mixin(GameScene, {
     if (this.enemies.countActive(true) >= ENEMY_HARD_CAP) return null;   // plafond absolu (fluidité)
     // certains ennemis se balancent latéralement après leur spawn — on leur laisse
     // assez de marge pour que le wobble ne les sorte pas de la zone visible (zoom)
-    const wobbleMargin = { drone:46, swarmer:70, bomber:40, sat:40, satgun:34 }[type] || 0;
+    const wobbleMargin = { drone:46, swarmer:70, bomber:40, sat:40, satgun:34, bras:36, pilleur:40, eclaireur:64 }[type] || 0;
     const vis = this.visibleXRange(30 + wobbleMargin);
     let x = (xOverride !== undefined) ? Phaser.Math.Clamp(xOverride, vis.min, vis.max) : Phaser.Math.Between(vis.min, vis.max);
     const art = ENEMY_ART[type];
@@ -154,6 +154,30 @@ mixin(GameScene, {
       e.charging = false;
       e.scoreValue = 26;
       e.contactDamage = 8;
+    } else if (type === 'bras'){
+      e.hp = BRAS.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = 40*speedScale;
+      e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
+      e.stopY = Phaser.Math.Between(120, 190);
+      this.brasInit(e);
+      e.scoreValue = 40;
+      e.contactDamage = 10;
+    } else if (type === 'pilleur'){
+      e.hp = PIL.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = 36*speedScale;
+      e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
+      e.stopY = Phaser.Math.Between(110, 170);
+      this.pilInit(e);
+      e.scoreValue = 45;
+      e.contactDamage = 9;
+    } else if (type === 'eclaireur'){
+      e.hp = EC.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = 40*speedScale;
+      e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
+      e.stopY = Phaser.Math.Between(120, 190);
+      this.ecInit(e);
+      e.scoreValue = 40;
+      e.contactDamage = 9;
     } else if (type === 'bomber'){
       e.hp = 16*hpScale; e.maxHp = e.hp;
       e.body.velocity.y = 40*speedScale;

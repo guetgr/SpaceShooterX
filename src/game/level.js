@@ -5,7 +5,7 @@
 mixin(GameScene, {
   // appelé à la fin de create() : remet à zéro l'état du niveau
   levelInit(){
-    this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null;
+    this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; this._ecRet = null;
     const d = this.lvDef;
     this.lvEvents = d ? (d.events || []).slice().sort((a, b)=> a.at - b.at) : [];
     if (d){ this.nextBossAt = 1e9; this._double1 = true; }       // ni boss périodique ni double boss : le boss du monde arrive à la fin de son niveau
@@ -22,7 +22,9 @@ mixin(GameScene, {
     }
     const g = d.goal || {};
     if (d.type === 'boss'){
-      if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; this.spawnBoss(d.boss); }
+      if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; if (d.finalBoss === 'pdg') this.pdStart(); else this.spawnBoss(d.boss); }       // le boss du monde 1 est « Le PDG » (bosses/pdg.js), pas le Dreadnought
+    } else if (d.finalBoss){                                     // niveau de survie qui finit par un boss : il arrive quand le temps est écoulé, la victoire vient de sa destruction
+      if (!this.ar && !this.mt && !this.rx && !this.an && this.levelProgress().frac >= 1 && !this.curEvent){ if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else this.arStart(); }
     } else if (this.levelProgress().frac >= 1) this.levelWin();
   },
 
@@ -42,6 +44,7 @@ mixin(GameScene, {
   levelProgress(){
     const d = this.lvDef; if (!d) return { frac:0, label:'' };
     const g = d.goal || {};
+    if (d.finalBoss && (this.ar || this.mt || this.rx || this.an || this.pd)){ const B = this.ar || this.mt || this.rx || this.an || this.pd; return { frac: Math.max(0, 1 - B.hp / B.max), label:'BOSS' }; }
     if (d.type === 'survive') return { frac: Math.min(1, this.lvT / g.seconds), label: Math.max(0, Math.ceil(g.seconds - this.lvT)) + ' s' };
     if (d.type === 'kill')    return { frac: Math.min(1, this.runKills / g.count), label: Math.min(this.runKills, g.count) + '/' + g.count };
     if (d.type === 'collect') return { frac: Math.min(1, this.lvGems / g.gems), label: Math.min(this.lvGems, g.gems) + '/' + g.gems };

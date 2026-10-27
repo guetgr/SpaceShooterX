@@ -70,10 +70,6 @@ const EVENT_DEFS = {
   nebula:   { min:3, name:'NEBULEUSE', sub:'Un nuage de gaz approche... on n\'y voit presque rien', w:()=>7, dur:()=>Phaser.Math.Between(35000,65000),
               start:(sc)=>sc.startNebula(), end:(sc)=>sc.endNebula(false) },
   bossbonus:{ min:4, small:true, name:'BOSS BONUS', sub:'Un boss surgit de nulle part !', w:()=>3, dur:()=>1500, start:(sc)=>sc.spawnBonusBoss() },
-  magnet:   { min:1, small:true, name:'TEMPETE MAGNETIQUE', sub:'Ennemis et tirs sont aspirés vers toi : esquive !', w:()=>6, dur:()=>8000,
-              start:(sc)=>{ sc._magnetUntil = sc.elapsed + 8; sc.startMagVortex(); const vx = sc.visibleXRange(20), vy = sc.visibleYRange(0);
-                            for (let i=0;i<14+3*sc.alertLevel;i++) sc.spawnGemAt(Phaser.Math.Between(vx.min, vx.max), Phaser.Math.Between(vy.min+30, vy.max-120), 3, 'gemM', 0); },
-              end:(sc)=>{ sc._magnetUntil = 0; sc.endMagVortex(); } },
   minibh:   { min:3, name:'MINI TROUS NOIRS', sub:'De petits gouffres aspirent tout, toi compris', w:()=>7, dur:()=>Phaser.Math.Between(30000,50000), tickMs:()=>3200,
               tick:(sc,vx,vy)=>{ if (sc._wells.length < 2 + Math.floor(sc.alertLevel/4)) { const near = Math.random() < 0.6; sc.addWell({ x:Phaser.Math.Clamp(near ? sc.player.x + Phaser.Math.Between(-150, 150) : Phaser.Math.Between(vx.min+60, vx.max-60), vx.min+60, vx.max-60), y:Phaser.Math.Clamp(near ? sc.player.y + Phaser.Math.Between(-260, -90) : Phaser.Math.Between(vy.min+120, vy.max-300), vy.min+100, vy.max-120), r:210, str:1000, core:20, life:12000, big:false }); } },
               end:(sc)=>{ sc.clearWells(); } },

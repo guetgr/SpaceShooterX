@@ -206,7 +206,7 @@ mixin(GameScene, {
     }));
     this.time.delayedCall(2150, ()=>{
       this.cameras.main.flash(600, 255, 255, 255, false); this.tutoSfx('tutoBossBoomFinal', x);
-      this.acDeathFinal(x, y); B.sp.destroy(); this.score += TUTO_TUNE.boss.killScore;
+      this.acDeathFinal(x, y); this.blDestroy(this._ac.lights); B.sp.destroy(); this.score += TUTO_TUNE.boss.killScore;
       this._ac.flames.forEach(f=> f.s.destroy()); this._ac.flames = [];
     });
     this.time.delayedCall(3400, ()=>{ this.tutoSfx('tutoDone', GAME_W/2); try { localStorage.setItem('ssx_tuto_v1', '1'); } catch(e){ /* ignore */ } this.tutoReward(); this.tutoShowEnd(true); });

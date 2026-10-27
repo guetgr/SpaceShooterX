@@ -30,11 +30,16 @@ mixin(GameScene, {
     btn('TOUT EFFACER', ()=>{ sc.enemies.children.iterate(e=>{ if (e && e.active && !e.bossId) e.destroy(); }); sc.enemyBullets.clear(true, true); });
     btn('TUER LES BOSS', ()=>{ const bs = []; sc.enemies.children.iterate(e=>{ if (e && e.active && e.bossId && !e.isBossPart) bs.push(e); }); bs.forEach(b=> sc.killEnemy(b)); });
     sec('MOBS');
-    ['grunt','diver','shooter','turret','drone','splitter','shieldedGrunt','mine','tank','bomber','sat','satgun','sniper','swarmer','healer','ghost','elite','mothership','vortex','charo','kamikaze','spider'].forEach(t=>{
+    ['grunt','diver','shooter','turret','drone','splitter','shieldedGrunt','mine','tank','bomber','sat','satgun','bras','pilleur','eclaireur','sniper','swarmer','healer','ghost','elite','mothership','vortex','charo','kamikaze','spider'].forEach(t=>{
       btn(t, ()=>{ const n = { swarmer:4, kamikaze:3, spider:4 }[t] || 1, vx = sc.visibleXRange(150), cx = Phaser.Math.Between(vx.min, vx.max);
                    for (let i=0;i<n;i++) sc.spawnOneEnemy(t, n > 1 ? cx + (i-(n-1)/2)*60 : undefined); });
     });
     sec('BOSS');
+    btn('ARAIGNEE DE TRI', ()=>{ if (!sc.ar && !sc.mt) sc.arStart(); });
+    btn('LA METEO', ()=>{ if (!sc.ar && !sc.mt) sc.mtStart(); });
+    btn('LE REACTEUR', ()=>{ if (!sc.ar && !sc.mt && !sc.rx) sc.rxStart(); });
+    btn('L ANNEAU', ()=>{ if (!sc.ar && !sc.mt && !sc.rx && !sc.an) sc.anStart(); });
+    btn('LE PDG', ()=>{ if (!sc.ar && !sc.mt && !sc.rx && !sc.an && !sc.pd) sc.pdStart(); });
     BOSS_ORDER.forEach(id=> btn(id, ()=>{ if (sc.bossActive) sc.spawnBoss(id, { twin:true, dx:85 }); else sc.spawnBoss(id); }));
     sec('EVENEMENTS');
     Object.keys(EVENT_DEFS).forEach(k=> btn(EVENT_DEFS[k].name, ()=>{

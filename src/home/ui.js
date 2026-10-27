@@ -11,7 +11,7 @@ function levelGoalText(l){
   if (l.type === 'kill') return 'Éliminer <b>' + g.count + '</b> ennemis';
   if (l.type === 'collect') return 'Récolter <b>' + g.gems + '</b> cristaux';
   if (l.type === 'tuto') return 'Apprendre les bases : <b>satellites, débris, boss</b>';
-  if (l.type === 'boss') return 'Vaincre le boss : <b>' + ((BOSS_DEFS[l.boss] || {}).name || l.boss) + '</b>';
+  if (l.type === 'boss') return 'Vaincre le boss : <b>' + (l.bossName || (BOSS_DEFS[l.boss] || {}).name || l.boss) + '</b>';
   return '';
 }
 
