@@ -67,6 +67,12 @@ class Sfx{
     this.voices++; src.onended = ()=>{ this.voices = Math.max(0, this.voices - 1); };
     src.start(c.currentTime + 0.001);
   }
+  loopSet(name, gain, rate){           // son continu (laser, aspiration, réservoir du Pilleur) : une boucle créée à la demande, dont on règle volume et hauteur à chaque image
+    this.ensureCtx(); const c = this.ctx; if (!c || !this.files) return; const F = SFX_FILES[name], b = this.files[name] && this.files[name][0]; if (!F || !b) return;
+    this._loops = this._loops || {}; let L = this._loops[name];
+    if (!L){ if (gain < 0.01) return; const src = c.createBufferSource(); src.buffer = b; src.loop = true; const g = c.createGain(); g.gain.value = 0; src.connect(g); g.connect(this.sfxGain); src.start(); L = this._loops[name] = { src, g }; }
+    const t = c.currentTime; L.g.gain.setTargetAtTime(gain*F.pk, t, 0.08); if (rate) L.src.playbackRate.setTargetAtTime(rate, t, 0.1);
+  }
   setNebula(on){                       // dans la nébuleuse: son étouffé + écho profond; hors nébuleuse: tout revient
     this.ensureCtx(); if (!this.ctx) return; const t = this.ctx.currentTime;
     this.mLp.frequency.cancelScheduledValues(t); this.mLp.frequency.setTargetAtTime(on ? 850 : 20000, t, on ? 0.5 : 0.35);

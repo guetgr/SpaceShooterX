@@ -177,7 +177,7 @@ mixin(GameScene, {
 
   endAllEvents(){ this.clearWells(); this.killPlasma(); this._magnetUntil = 0; ['curEvent','curSmall'].forEach(slot=>{ const ev = this[slot]; if (!ev) return; const d = EVENT_DEFS[ev.kind]; if (d && d.end) d.end(this); this[slot] = null; }); },
 
-  realBossAlive(){ return (this.bosses || []).some(b=> b && b.active && !b.isBonus); },
+  realBossAlive(){ return !!(this.ar && !this.ar.dead) || !!(this.mt && !this.mt.dead) || !!(this.rx && !this.rx.dead) || !!(this.an && !this.an.dead) || !!(this.pd && !this.pd.dead) || (this.bosses || []).some(b=> b && b.active && !b.isBonus); },
 
   // petits événements: minuteur à part (30-60 s), n'importe quand, y compris avant le 1er boss et par-dessus un gros événement; jamais pendant un combat de vrai boss (sauf un boss bonus, rare)
   updateSmallEvents(delta){

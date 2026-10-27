@@ -317,7 +317,6 @@ Table `BOSS_HP_BY_ALERT` (alerte 1 → 20) :
 | INVADERS | 4 | 6 | 3 s | Mur d'ennemis avec une brèche |
 | ESCORTE D'ELITES | 6 | 5 | 4 s | `3 + alerte/2` élites + `1 + alerte/4` healers |
 | BOULE DE PLASMA | 5 | 5 | 11 s | Invulnérable : il faut la laisser passer |
-| TEMPETE MAGNETIQUE | 1 | 6 | 8 s | Ennemis et tirs aspirés vers toi, cristaux attirés |
 
 ---
 

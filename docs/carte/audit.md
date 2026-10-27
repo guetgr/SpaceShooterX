@@ -26,8 +26,9 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `setShipPart` (fonction) — `src/data/ship-skins.js`
 - `HOME_STAT_LINES` (const) — `src/home/ui.js`
 
-## Candidats « code mort » : méthodes jamais référencées par leur nom (1)
+## Candidats « code mort » : méthodes jamais référencées par leur nom (2)
 
+- `GameScene.startMagVortex` — `src/events/types.js`
 - `HomeScene.applyHomeParts` — `src/home/background.js`
 
 ## Outils (`tools/`)

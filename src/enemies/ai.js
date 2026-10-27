@@ -168,6 +168,12 @@ mixin(GameScene, {
       e.x = e.baseX + Math.sin(e.wobble/1100 + e.ph)*24; e.rotation = Math.sin(e.wobble/1600 + e.ph)*0.2;
       const f = e.hp / e.maxHp, fr = f > 0.8 ? 0 : f > 0.62 ? 1 : f > 0.46 ? 2 : f > 0.32 ? 3 : f > 0.18 ? 4 : 5;      // l'état du satellite suit sa vie
       if (e._fr !== fr){ e._fr = fr; e.setFrame(fr); }
+    } else if (e.enemyType === 'bras'){
+      this.brasUpdate(e, delta);
+    } else if (e.enemyType === 'pilleur'){
+      this.pilUpdate(e, delta);
+    } else if (e.enemyType === 'eclaireur'){
+      this.ecUpdate(e, delta);
     } else if (e.enemyType === 'satgun'){
       if (e.y >= e.stopY && e.body.velocity.y !== 0) e.body.velocity.y = 0;
       const stopped = e.body.velocity.y === 0;
@@ -183,9 +189,13 @@ mixin(GameScene, {
         if (!e.charging && e.fireCd <= 800){
           e.charging = true; sfx.snipeCharge && sfx.snipeCharge({ pan:this.panOf(e.x) });
           if (hurt) e.setTint(0x9fd8ff); else e.play('satgunCharge');
+          e._chg = this.mtFx('mtFxCharge', 'mtCharge', e.x, e.y + 32, 0.45, { depth:6 });          // charge de plasma animée à l'embouchure (la parabole du bas)
         }
+        if (e._chg && e._chg.active) e._chg.setPosition(e.x, e.y + 32);
         if (e.fireCd <= 0){
           e.fireCd = this.rollFireCd(2300,3200,60); e.charging = false; e.clearTint();
+          if (e._chg && e._chg.active) e._chg.destroy(); e._chg = null;
+          this.mtFx('mtFxMuzzle', 'mtMuzzle', e.x, e.y + 32, 0.5, { depth:7 });
           this.enemySatShot(e);
           if (!hurt){ e._recoil = true; e.play('satgunRecoil'); e.once('animationcomplete', ()=>{ e._recoil = false; if (e.active && e.enemyType === 'satgun') e.play('satgunIdle'); }); }
         }
@@ -462,12 +472,12 @@ mixin(GameScene, {
   // satellite armé : 1 orbe bleu visé (2 puis 3 selon la menace)
   enemySatShot(e){
     if (!this.player.active || this._bLoad > BULLET_CAP) return;
-    if (!this.textures.exists('satOrb')){ const c = this.textures.createCanvas('satOrb', 26, 26), g = c.context, gr = g.createRadialGradient(13,13,1,13,13,12); gr.addColorStop(0,'#ffffff'); gr.addColorStop(0.4,'#bfe8ff'); gr.addColorStop(0.75,'rgba(70,150,255,0.8)'); gr.addColorStop(1,'rgba(30,90,255,0)'); g.fillStyle = gr; g.fillRect(0,0,26,26); c.refresh(); }
-    const base = Phaser.Math.Angle.Between(e.x, e.y + 10, this.player.x, this.player.y), n = this.alertLevel >= 3 ? 3 : (this.alertLevel >= 2 ? 2 : 1);
+    const base = Phaser.Math.Angle.Between(e.x, e.y + 32, this.player.x, this.player.y), n = this.alertLevel >= 3 ? 3 : (this.alertLevel >= 2 ? 2 : 1), H = BRAS.shotHead, sc = 0.3;
     this.spreadOffsets(n).forEach(off=>{
-      const b = this.enemyBullets.create(e.x, e.y + 12, 'satOrb');
-      b.setDepth(4); b.damage = 8; b.setScale(0.8); b.body.setCircle(7, 6, 6); b.setBlendMode(Phaser.BlendModes.ADD);
-      this.physics.velocityFromRotation(base + off, this.eSpd(235), b.body.velocity);
+      const ang = base + off, b = this.enemyBullets.create(e.x, e.y + 32, 'brFxOrb', 0);          // orbe de plasma animée (feuille de la bibliothèque d'effets), la tête vers l'avant
+      b.setDepth(4); b.damage = 8; b.setScale(sc).setOrigin(H[0]/64, H[1]/128).setRotation(ang - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
+      const r = 5.25 / sc; b.body.setCircle(r, H[0] - r, H[1] - r); b.play('brOrb');
+      this.physics.velocityFromRotation(ang, this.eSpd(235), b.body.velocity);
     });
     sfx.enemyShot({ pan:this.panOf(e.x) });
   },

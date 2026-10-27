@@ -155,34 +155,35 @@ mixin(GameScene, {
   tutoSpawnBoss(){
     this.tutoPhase = 'boss';
     const vy = this.visibleYRange(0), vx = this.visibleXRange(0);
-    const sp = this.add.image(GAME_W/2, vy.min - 200, 'tutoBoss').setDepth(5);
+    const sp = this.acBossBuild(GAME_W/2, vy.min - 200);       // Antenne-Mère : habillage dans game/tuto-boss-fx.js (les valeurs de jeu restent ci-dessous)
     this.tutoBoss = { sp, hp:TUTO_TUNE.boss.hp, max:TUTO_TUNE.boss.hp, state:'enter', t:0, ty:vy.min + 175, cx:GAME_W/2, amp:Math.max(20, Math.min(80, (vx.max - vx.min)/2 - 150)), phase:1, aimCd:1800, ringCd:TUTO_TUNE.boss.ringCd, rainCd:2600, spCd:0, spA:0, dead:false, hitT:0 };
     const wrap = document.getElementById('boss-hp-wrap'), lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
-    if (lab) lab.textContent = 'SATELLITE SPACEX'; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
+    if (lab) lab.textContent = AC.names[0]; if (fill){ fill.style.width = '100%'; fill.className = 'boss-hp-fill'; } if (wrap) wrap.classList.add('show');
   },
   tutoBossShot(x, y, ang, spd, tint, dmg){
-    const b = this.enemyBullets.create(x, y, 'tutoOrb'); b.setDepth(4); b.damage = dmg || 8; b.setTint(tint); b.setScale(0.75); b.body.setCircle(7, 6, 6); b.setBlendMode(Phaser.BlendModes.ADD);
-    this.physics.velocityFromRotation(ang, spd, b.body.velocity); return b;
+    return this.acShot(x, y, ang, spd, tint, dmg);       // boule d'énergie animée (même zone de collision que l'ancienne orbe)
   },
   tutoBossUpdate(delta, dt){
     const B = this.tutoBoss; if (B.dead) return;
     B.t += dt; const sp = B.sp, px = this.player.x, py = this.player.y;
+    this.acBossUpdate(delta);
     if (B.state === 'enter'){ sp.y += 80*dt; if (sp.y >= B.ty){ sp.y = B.ty; B.state = 'fight'; B.t = 0; } }
     else {
       sp.x = B.cx + Math.sin(B.t*0.55)*B.amp; sp.y = B.ty + Math.sin(B.t*0.9)*10;
       const BT = TUTO_TUNE.boss, f = B.hp / B.max, ph = f > BT.p2 ? 1 : f > BT.p3 ? 2 : 3;
       if (ph !== B.phase){ B.phase = ph; this.cameras.main.flash(90, 255, 140, 60, false); this.juiceShake(0.5); this.juiceStop('bossPhase'); this.tutoSfx('tutoBossPhase', sp.x);
         const fill = document.getElementById('bossHpFill'); if (fill) fill.className = 'boss-hp-fill p' + ph;
-        sp.setTint(ph === 2 ? 0xffd2b4 : 0xff9a9a); this.tutoSay(ph === 2 ? 'p2' : 'p3'); }
+        this.tutoSay(ph === 2 ? 'p2' : 'p3'); }          // l'usure se voit sur le sprite (états d'usure, game/tuto-boss-fx.js), plus par une teinte
       const bx = sp.x, by = sp.y + 40;
-      B.aimCd -= delta; if (B.aimCd <= 0){ B.aimCd = ph === 3 ? BT.aimCd3 : BT.aimCd; const a = Phaser.Math.Angle.Between(bx, by, px, py); [-0.2, 0, 0.2].forEach(o=> this.tutoBossShot(bx, by, a + o, BT.aimSpeed, 0xff5050, BT.aimDmg)); this.tutoSfx('tutoBossAim', bx);
+      B.aimCd -= delta; if (B.aimCd > 0 && B.aimCd < 470) this.acChargeStart();     // charge visible 0,47 s avant le tir (aucun délai ajouté)
+      if (B.aimCd <= 0){ this.acChargeStop(true); B.aimCd = ph === 3 ? BT.aimCd3 : BT.aimCd; const a = Phaser.Math.Angle.Between(bx, by, px, py); [-0.2, 0, 0.2].forEach(o=> this.tutoBossShot(bx, by, a + o, BT.aimSpeed, 0xff5050, BT.aimDmg)); this.tutoSfx('tutoBossAim', bx);
         if (!this._tutoH.aim){ this._tutoH.aim = 1; this.tutoSay('aim'); } }
       B.ringCd -= delta; if (B.ringCd <= 0){ B.ringCd = BT.ringCd; const n = Math.max(3, Math.round(BT.ringCount)), gap = Phaser.Math.Between(0, n-1), gw = Math.round(BT.ringGap); for (let i=0;i<n;i++){ if (((i - gap + n) % n) < gw) continue; this.tutoBossShot(bx, by, i/n*6.2832, BT.ringSpeed, 0xffa040, BT.ringDmg); } this.tutoSfx('tutoBossRing', bx);
         if (!this._tutoH.ring){ this._tutoH.ring = 1; this.tutoSay('ring'); } }
       if (ph >= 2){ B.rainCd -= delta; if (B.rainCd <= 0){ B.rainCd = BT.rainCd; [-115, 0, 115].forEach(o=> this.tutoBossShot(bx + o + Phaser.Math.Between(-20, 20), by - 10, Math.PI/2, BT.rainSpeed, 0xff8040, BT.rainDmg)); this.tutoSfx('tutoBossRain', bx); } }
       if (ph >= 3){ B.spCd -= delta; if (B.spCd <= 0){ B.spCd = BT.spiralCd; B.spA += 0.36; this.tutoBossShot(bx, by, B.spA, BT.spiralSpeed, 0xff3060, BT.spiralDmg); this.tutoBossShot(bx, by, B.spA + Math.PI, BT.spiralSpeed, 0xff3060, BT.spiralDmg); this.tutoSfx('tutoBossSpiral', bx); } }
       // dégâts reçus
-      const hit = (b, d)=>{ B.hp -= d; this.juiceImpact(b, B); this.spawnHitParticles(b.x, b.y, 3); this.tutoSfx('tutoBossHit', b.x); if (B.hitT <= 0){ B.hitT = 60; sp.setTintFill(0xffffff); this.time.delayedCall(45, ()=>{ if (sp.active) sp.setTint(B.phase === 1 ? 0xffffff : B.phase === 2 ? 0xffd2b4 : 0xff9a9a); if (B.phase === 1) sp.clearTint(); }); } };
+      const hit = (b, d)=>{ B.hp -= d; this.juiceImpact(b, B); this.spawnHitParticles(b.x, b.y, 3); this.tutoSfx('tutoBossHit', b.x); this.acBossHit(b.x, b.y); if (B.hitT <= 0){ B.hitT = 60; this.acHitFlash(B); } };
       B.hitT -= delta;
       this.tutoHitBox(this.playerBullets, { x:sp.x, y:sp.y }, 130, 118, b=> hit(b, b.damage || 10), B);
       this.tutoHitBox(this.missiles, { x:sp.x, y:sp.y }, 135, 122, b=>{ this.explodeFx(b.x, b.y, 50); hit(b, b.damage || 20); }, B);
@@ -196,22 +197,17 @@ mixin(GameScene, {
     this.tutoUiUpdate(); Norma.progress(null); this.tutoSay('win');
     this.enemyBullets.children.iterate(b=>{ if (b) b.destroy(); });
     const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.remove('show');
-    const sp = B.sp, x = sp.x, y = sp.y; sp.setVisible(false);
-    const ex = this.add.image(x, y, 'tutoBossX', 0).setDepth(6).setScale(2.2);
+    const sp = B.sp, x = sp.x, y = sp.y; this.acChargeStop(false); if (this._ac.state < 3) this.acSetState(3);
+    this._acDeathTick = this.time.addEvent({ delay:16, loop:true, callback:()=> this.acFollow(16) });          // la fumée, les flammes et les éclats continuent pendant la destruction
     this.cameras.main.shake(2100, 0.008); this.startSlowmo(1500, 0.5); this.juiceStop('bossKill');
     [0, 1, 2, 3, 4].forEach(i=> this.time.delayedCall(i*430, ()=>{
-      if (ex.active) ex.setFrame(i);
-      for (let k=0;k<3;k++){ const ox = x + Phaser.Math.Between(-120, 120), oy = y + Phaser.Math.Between(-100, 100); this.explodeFx(ox, oy, 70); }
+      for (let k=0;k<3;k++){ const ox = x + Phaser.Math.Between(-120, 120), oy = y + Phaser.Math.Between(-100, 100); this.explodeFx(ox, oy, 70); this.acDeathBoom(ox, oy, 0.35 + Math.random()*0.25); }
       this.tutoSfx(i < 3 ? 'tutoBossBoomA' : 'tutoBossBoomFinal', x + Phaser.Math.Between(-80, 80));
     }));
     this.time.delayedCall(2150, ()=>{
       this.cameras.main.flash(600, 255, 255, 255, false); this.tutoSfx('tutoBossBoomFinal', x);
-      this.tweens.add({ targets:ex, alpha:0, duration:700, onComplete:()=> ex.destroy() });
-      [0, 1].forEach(i=>{
-        const p = this.add.image(x + (i ? 60 : -60), y, 'tutoPanel', i).setDepth(7).setScale(2.4);
-        this.tweens.add({ targets:p, x:p.x + (i ? 230 : -230), y:p.y + Phaser.Math.Between(-60, 120), angle:(i ? 1 : -1)*Phaser.Math.Between(220, 420), alpha:0, duration:1600, ease:'Quad.easeOut', onComplete:()=> p.destroy() });
-      });
-      B.sp.destroy(); this.score += TUTO_TUNE.boss.killScore;
+      this.acDeathFinal(x, y); this.blDestroy(this._ac.lights); B.sp.destroy(); this.score += TUTO_TUNE.boss.killScore;
+      this._ac.flames.forEach(f=> f.s.destroy()); this._ac.flames = [];
     });
     this.time.delayedCall(3400, ()=>{ this.tutoSfx('tutoDone', GAME_W/2); try { localStorage.setItem('ssx_tuto_v1', '1'); } catch(e){ /* ignore */ } this.tutoReward(); this.tutoShowEnd(true); });
   },
@@ -253,6 +249,7 @@ mixin(GameScene, {
   },
   tutoCleanup(){
     (this.tutoSats || []).forEach(s=>{ if (s.sp && s.sp.active) s.sp.destroy(); }); this.tutoSats = [];
+    if (this._acDeathTick){ this._acDeathTick.remove(); this._acDeathTick = null; } this.acBossClear();
     Norma.reset();
     this.tutoUiClear();
     const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.remove('show');

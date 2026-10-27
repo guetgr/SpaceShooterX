@@ -50,11 +50,35 @@ class BootScene extends Phaser.Scene{
       { key:'bossSheet',    src:BOSS2_SHEET_B64,   fw:200, fh:220, n:8 },
       { key:'bossExpl',     src:BOSS2_EXPL_B64,    fw:200, fh:200, n:5 },
       { key:'tutoSat',      src:TUTO_SAT_B64,      fw:165, fh:145, n:15 },
-      { key:'tutoBoss',     src:TUTO_BOSS_B64,     fw:0,   fh:0,   n:0 },
-      { key:'tutoBossX',    src:TUTO_BOSSX_B64,    fw:200, fh:170, n:5 },
-      { key:'tutoPanel',    src:TUTO_PANEL_B64,    fw:90,  fh:60,  n:2 },
+      { key:'acBoss0', src:AC_BOSS_B64[0], fw:0, fh:0, n:0 }, { key:'acBoss1', src:AC_BOSS_B64[1], fw:0, fh:0, n:0 }, { key:'acBoss2', src:AC_BOSS_B64[2], fw:0, fh:0, n:0 }, { key:'acBoss3', src:AC_BOSS_B64[3], fw:0, fh:0, n:0 },
+      { key:'acFxFlame', src:AC_FX_B64.flame, fw:64, fh:96, n:12 }, { key:'acFxSmoke', src:AC_FX_B64.smoke, fw:96, fh:96, n:10 }, { key:'acFxSpark', src:AC_FX_B64.spark, fw:64, fh:64, n:8 },
+      { key:'acFxImpact', src:AC_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'acFxOrb', src:AC_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'acFxCharge', src:AC_FX_B64.charge, fw:128, fh:128, n:12 },
+      { key:'acFxMuzzle', src:AC_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'acFxBoom', src:AC_FX_B64.boom, fw:256, fh:256, n:14 }, { key:'acFxShock', src:AC_FX_B64.shock, fw:192, fh:192, n:10 },
       { key:'tutoDebris',   src:TUTO_DEBRIS_B64,   fw:48,  fh:48,  n:TUTO_NDEB },
       { key:'satgunSheet',  src:SATGUN_SHEET_B64,  fw:200, fh:200, n:26 },
+      { key:'brasSheet',    src:BRAS_SHEET_B64,    fw:512, fh:512, n:4 },
+      { key:'brFxOrb', src:BR_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'brFxCharge', src:BR_FX_B64.charge, fw:128, fh:128, n:12 }, { key:'brFxMuzzle', src:BR_FX_B64.muzzle, fw:128, fh:128, n:6 },
+      { key:'arSheet', src:AR_SHEET_B64, fw:512, fh:512, n:4 }, { key:'arFxMissile', src:AR_FX_B64.missile, fw:64, fh:192, n:8 }, { key:'arFxBoomL', src:AR_FX_B64.boomL, fw:256, fh:256, n:14 }, { key:'arFxShock', src:AR_FX_B64.shock, fw:192, fh:192, n:10 },
+      { key:'mtSheet', src:MT_SHEET_B64, fw:512, fh:512, n:4 }, { key:'mtFxHail', src:MT_FX_B64.hail, fw:48, fh:96, n:8 }, { key:'mtFxIceb', src:MT_FX_B64.iceb, fw:96, fh:96, n:8 }, { key:'mtFxFcharge', src:MT_FX_B64.fcharge, fw:128, fh:128, n:12 },
+      { key:'mtFxFmuzzle', src:MT_FX_B64.fmuzzle, fw:128, fh:128, n:6 }, { key:'mtFxBolt', src:MT_FX_B64.bolt, fw:64, fh:300, n:8 }, { key:'mtFxArc', src:MT_FX_B64.arc, fw:128, fh:48, n:8 }, { key:'mtFxGlow', src:MT_FX_B64.glow, fw:96, fh:96, n:8 },
+      { key:'mtFxCharge', src:MT_FX_B64.charge, fw:128, fh:128, n:12 }, { key:'mtFxMuzzle', src:MT_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'mtFxImpact', src:MT_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'mtFxSpark', src:MT_FX_B64.spark, fw:64, fh:64, n:8 },
+      { key:'mtFxBoomM', src:MT_FX_B64.boomM, fw:160, fh:160, n:14 }, { key:'mtFxBoomL', src:MT_FX_B64.boomL, fw:256, fh:256, n:14 }, { key:'mtFxShock', src:MT_FX_B64.shock, fw:192, fh:192, n:10 },
+      { key:'ltRadar', src:LT_B64.radar, fw:0, fh:0, n:0 }, { key:'ltBeacon', src:LT_B64.beacon, fw:0, fh:0, n:0 }, { key:'ltRotorToxic', src:LT_B64.rotor_toxic, fw:0, fh:0, n:0 }, { key:'ltRotorAmber', src:LT_B64.rotor_amber, fw:0, fh:0, n:0 },
+      { key:'ltRotorFire', src:LT_B64.rotor_fire, fw:0, fh:0, n:0 }, { key:'ltRotorHot', src:LT_B64.rotor_hot, fw:0, fh:0, n:0 },
+      { key:'rxSheet', src:RX_SHEET_B64, fw:512, fh:512, n:4 }, { key:'rxFxOrb', src:RX_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'rxFxArc', src:RX_FX_B64.arc, fw:128, fh:48, n:8 }, { key:'rxFxFlame', src:RX_FX_B64.flame, fw:64, fh:96, n:12 },
+      { key:'rxFxCharge', src:RX_FX_B64.charge, fw:128, fh:128, n:12 }, { key:'rxFxMuzzle', src:RX_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'rxFxImpact', src:RX_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'rxFxSpark', src:RX_FX_B64.spark, fw:64, fh:64, n:8 },
+      { key:'rxFxGlow', src:RX_FX_B64.glow, fw:96, fh:96, n:8 }, { key:'rxFxBoomM', src:RX_FX_B64.boomM, fw:160, fh:160, n:14 }, { key:'rxFxBoomL', src:RX_FX_B64.boomL, fw:256, fh:256, n:14 }, { key:'rxFxShock', src:RX_FX_B64.shock, fw:192, fh:192, n:10 },
+      { key:'plSheet', src:PL_SHEET_B64, fw:512, fh:512, n:4 }, { key:'plFxBeam', src:PL_FX_B64.beam, fw:64, fh:128, n:8 }, { key:'plFxSuction', src:PL_FX_B64.suction, fw:192, fh:192, n:8 }, { key:'plFxCharge', src:PL_FX_B64.charge, fw:128, fh:128, n:12 },
+      { key:'plFxMuzzle', src:PL_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'plFxGlow', src:PL_FX_B64.glow, fw:96, fh:96, n:8 }, { key:'plFxSpark', src:PL_FX_B64.spark, fw:64, fh:64, n:8 }, { key:'plFxImpact', src:PL_FX_B64.impact, fw:96, fh:96, n:8 },
+      { key:'anSheet', src:AN_SHEET_B64, fw:512, fh:512, n:4 }, { key:'anFxBeam', src:AN_FX_B64.beam, fw:64, fh:128, n:8 }, { key:'anFxRotor', src:AN_FX_B64.rotor, fw:0, fh:0, n:0 }, { key:'anFxOrb', src:AN_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'anFxOrbHot', src:AN_FX_B64.orbHot, fw:64, fh:128, n:8 },
+      { key:'anFxMuzzle', src:AN_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'anFxCharge', src:AN_FX_B64.charge, fw:128, fh:128, n:12 }, { key:'anFxImpact', src:AN_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'anFxSpark', src:AN_FX_B64.spark, fw:64, fh:64, n:8 },
+      { key:'anFxGlow', src:AN_FX_B64.glow, fw:96, fh:96, n:8 }, { key:'anFxGlowHot', src:AN_FX_B64.glowHot, fw:96, fh:96, n:8 }, { key:'anFxBoomM', src:AN_FX_B64.boomM, fw:160, fh:160, n:14 }, { key:'anFxBoomL', src:AN_FX_B64.boomL, fw:256, fh:256, n:14 }, { key:'anFxShock', src:AN_FX_B64.shock, fw:192, fh:192, n:10 },
+      { key:'ecSheet', src:EC_SHEET_B64, fw:512, fh:512, n:4 }, { key:'ecFxCone', src:EC_FX_B64.cone, fw:160, fh:256, n:8 }, { key:'ecFxConeHot', src:EC_FX_B64.coneHot, fw:160, fh:256, n:8 }, { key:'ecFxReticle', src:EC_FX_B64.reticle, fw:128, fh:128, n:12 },
+      { key:'pdSheet', src:PD_SHEET_B64, fw:512, fh:512, n:4 }, { key:'pgSheet', src:PG_SHEET_B64, fw:512, fh:512, n:4 }, { key:'gdSheet', src:GD_SHEET_B64, fw:512, fh:512, n:4 },
+      { key:'pdFxBeam', src:PD_FX_B64.beam, fw:64, fh:128, n:8 }, { key:'pdFxOrb', src:PD_FX_B64.orb, fw:64, fh:128, n:8 }, { key:'pdFxMuzzle', src:PD_FX_B64.muzzle, fw:128, fh:128, n:6 }, { key:'pdFxCharge', src:PD_FX_B64.charge, fw:128, fh:128, n:12 },
+      { key:'pdFxImpact', src:PD_FX_B64.impact, fw:96, fh:96, n:8 }, { key:'pdFxGlow', src:PD_FX_B64.glow, fw:96, fh:96, n:8 }, { key:'pdFxSpark', src:PD_FX_B64.spark, fw:64, fh:64, n:8 }, { key:'pdFxBoomM', src:PD_FX_B64.boomM, fw:160, fh:160, n:14 },
+      { key:'pdFxBoomL', src:PD_FX_B64.boomL, fw:256, fh:256, n:14 }, { key:'pdFxShock', src:PD_FX_B64.shock, fw:192, fh:192, n:10 }, { key:'pdFxFlame', src:PD_FX_B64.flame, fw:64, fh:96, n:12 }, { key:'pdFxIce', src:PD_FX_B64.ice, fw:96, fh:96, n:8 }, { key:'pdFxFrost', src:PD_FX_B64.frost, fw:128, fh:128, n:6 },
+      { key:'brFxBoom', src:BR_FX_B64.boom, fw:160, fh:160, n:14 }, { key:'brFxImpact', src:BR_FX_B64.impact, fw:96, fh:96, n:8 },
       { key:'bossBullet2',  src:BOSS2_BULLET_B64,  fw:0,   fh:0,   n:0 },
       { key:'shieldedGrunt2', src:SHIELDEDGRUNT2_B64, fw:0, fh:0,  n:0 },
       { key:'shieldedGruntExpl', src:SHIELDEDGRUNT2_EXPL_B64, fw:180, fh:180, n:3 },
@@ -198,7 +222,28 @@ class BootScene extends Phaser.Scene{
     this.anims.create({ key:'satgunIdle', frames:this.anims.generateFrameNumbers('satgunSheet', {start:0,end:4}), frameRate:6, repeat:-1 });
     this.anims.create({ key:'satgunCharge', frames:this.anims.generateFrameNumbers('satgunSheet', {start:5,end:6}), frameRate:9, repeat:-1 });
     this.anims.create({ key:'satgunRecoil', frames:this.anims.generateFrameNumbers('satgunSheet', {start:7,end:8}), frameRate:10, repeat:0 });
+    [['brOrb', 'brFxOrb', 7, 16, -1], ['brCharge', 'brFxCharge', 11, 26, 0], ['brMuzzle', 'brFxMuzzle', 5, 30, 0], ['explodeBras', 'brFxBoom', 13, 24, 0], ['brImpact', 'brFxImpact', 7, 28, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // mob « Bras écartés » (enemies/bras.js)
+    [['arMissile', 'arFxMissile', 7, 16, -1], ['arBoomL', 'arFxBoomL', 13, 24, 0], ['arShock', 'arFxShock', 9, 22, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // boss « Araignée de tri » (bosses/araignee.js)
+    [['mtHail', 'mtFxHail', 7, 16, -1], ['mtIceb', 'mtFxIceb', 7, 24, 0], ['mtFcharge', 'mtFxFcharge', 11, 16, 0], ['mtFmuzzle', 'mtFxFmuzzle', 5, 24, 0], ['mtBolt', 'mtFxBolt', 7, 20, -1], ['mtArc', 'mtFxArc', 7, 20, -1], ['mtArc1', 'mtFxArc', 7, 20, 0],
+     ['mtGlow', 'mtFxGlow', 7, 12, -1], ['mtCharge', 'mtFxCharge', 11, 16, 0], ['mtMuzzle', 'mtFxMuzzle', 5, 24, 0], ['mtImpact', 'mtFxImpact', 7, 24, 0], ['mtSpark', 'mtFxSpark', 7, 24, 0], ['mtBoomM', 'mtFxBoomM', 13, 24, 0], ['mtBoomL', 'mtFxBoomL', 13, 24, 0], ['mtShock', 'mtFxShock', 9, 22, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // boss « La Météo » (bosses/meteo.js)
+    [['rxOrb', 'rxFxOrb', 7, 16, -1], ['rxArc', 'rxFxArc', 7, 20, -1], ['rxArc1', 'rxFxArc', 7, 20, 0], ['rxFlame', 'rxFxFlame', 11, 16, -1], ['rxCharge', 'rxFxCharge', 11, 16, 0], ['rxMuzzle', 'rxFxMuzzle', 5, 24, 0], ['rxImpact', 'rxFxImpact', 7, 24, 0],
+     ['rxSpark', 'rxFxSpark', 7, 24, 0], ['rxGlow', 'rxFxGlow', 7, 12, -1], ['rxBoomM', 'rxFxBoomM', 13, 24, 0], ['rxBoomL', 'rxFxBoomL', 13, 24, 0], ['rxShock', 'rxFxShock', 9, 22, 0],
+     ['plBeam', 'plFxBeam', 7, 20, -1], ['plSuction', 'plFxSuction', 7, 16, -1], ['plCharge', 'plFxCharge', 11, 16, 0], ['plMuzzle', 'plFxMuzzle', 5, 24, 0], ['plGlow', 'plFxGlow', 7, 12, -1], ['plSpark', 'plFxSpark', 7, 24, 0], ['plImpact', 'plFxImpact', 7, 24, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // boss « Le Réacteur » (bosses/reacteur.js) et mob « Le Pilleur » (enemies/pilleur.js)
+    [['anBeam', 'anFxBeam', 7, 20, -1], ['anOrb', 'anFxOrb', 7, 16, -1], ['anOrbHot', 'anFxOrbHot', 7, 16, -1], ['anMuzzle', 'anFxMuzzle', 5, 24, 0], ['anCharge', 'anFxCharge', 11, 16, 0], ['anImpact', 'anFxImpact', 7, 24, 0], ['anSpark', 'anFxSpark', 7, 24, 0],
+     ['anGlow', 'anFxGlow', 7, 12, -1], ['anGlowHot', 'anFxGlowHot', 7, 12, -1], ['anBoomM', 'anFxBoomM', 13, 24, 0], ['anBoomL', 'anFxBoomL', 13, 24, 0], ['anShock', 'anFxShock', 9, 22, 0],
+     ['ecCone', 'ecFxCone', 7, 14, -1], ['ecConeHot', 'ecFxConeHot', 7, 14, -1]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // boss « L'Anneau » (bosses/anneau.js) et mob « L'Éclaireur » (enemies/eclaireur.js)
+    this.anims.create({ key:'ecRetIn', frames:this.anims.generateFrameNumbers('ecFxReticle', { start:0, end:8 }), frameRate:24, repeat:0 }); this.anims.create({ key:'ecRetLoop', frames:this.anims.generateFrameNumbers('ecFxReticle', { start:8, end:11 }), frameRate:12, repeat:-1 });
+    [['pdBeam', 'pdFxBeam', 7, 20, -1], ['pdOrb', 'pdFxOrb', 7, 16, -1], ['pdMuzzle', 'pdFxMuzzle', 5, 24, 0], ['pdCharge', 'pdFxCharge', 11, 16, 0], ['pdImpact', 'pdFxImpact', 7, 24, 0], ['pdGlow', 'pdFxGlow', 7, 12, -1], ['pdSpark', 'pdFxSpark', 7, 24, 0],
+     ['pdBoomM', 'pdFxBoomM', 13, 24, 0], ['pdBoomL', 'pdFxBoomL', 13, 24, 0], ['pdShock', 'pdFxShock', 9, 22, 0], ['pdFlame', 'pdFxFlame', 11, 16, -1], ['pdIce', 'pdFxIce', 7, 24, 0], ['pdFrost', 'pdFxFrost', 5, 20, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // boss final « Le PDG » (bosses/pdg.js)
     this.anims.create({ key:'explodeSatgun', frames:this.anims.generateFrameNumbers('satgunSheet', {start:18,end:25}), frameRate:14, repeat:0 });
+    [['acFlame', 'acFxFlame', 11, 18, -1], ['acSmoke', 'acFxSmoke', 9, 9, 0], ['acSpark', 'acFxSpark', 7, 30, 0], ['acImpact', 'acFxImpact', 7, 28, 0], ['acOrb', 'acFxOrb', 7, 16, -1], ['acCharge', 'acFxCharge', 11, 26, 0], ['acMuzzle', 'acFxMuzzle', 5, 30, 0], ['acBoom', 'acFxBoom', 13, 24, 0], ['acShock', 'acFxShock', 9, 22, 0]]
+      .forEach(a=> this.anims.create({ key:a[0], frames:this.anims.generateFrameNumbers(a[1], { start:0, end:a[2] }), frameRate:a[3], repeat:a[4] }));      // effets du boss du tuto (feuilles de la bibliothèque d'effets)
     this.anims.create({ key:'explodeSat', frames:this.anims.generateFrameNumbers('tutoSat', {start:6,end:14}), frameRate:12, repeat:0 });
     this.anims.create({ key:'explodeBomber', frames:this.anims.generateFrameNumbers('bomberExpl', {start:0,end:4}), frameRate:16, repeat:0 });
     this.anims.create({ key:'swarmerFly', frames:this.anims.generateFrameNumbers('swarmerSheet', {start:0,end:3}), frameRate:13, repeat:-1 });
