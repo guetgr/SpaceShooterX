@@ -192,8 +192,11 @@ mixin(HomeScene, {
   },
 
   // Conserve la livrée existante sur le sprite de navigation et de mission.
-  renderHomeHangar(){
+  renderHomeHangar(meta){
     this.applyHomeSkin(false);
+    AtelierGarage.refresh();
+    const m = meta || getMeta();
+    document.getElementById('tabHangar').classList.toggle('buy', ATELIER_POSTS.some(p=> atelierCanBuy(m, p.id).ok));      // point doré : un poste est achetable
   },
 
   // arbre : le panneau (méthodes de GameScene) se redessine quand on arrive sur la page ; le point doré de l'onglet signale un achat possible
