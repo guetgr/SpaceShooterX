@@ -50,6 +50,6 @@ function recordCompletion(id, vals){
   const after = completionPct(id, now);
   const milestones = COMPLETION_STEPS.filter(s=> before < s && after >= s);
   let fragments = 0; milestones.forEach(s=>{ fragments += completionReward(s); });
-  if (fragments){ const m = getMeta(); m.fragments += fragments; setMeta(m); }
+  if (fragments){ const m = getMeta(); m.composants += fragments; setMeta(m); }
   return { before, after, runPct: completionPct(id, vals), rows, milestones, fragments };
 }

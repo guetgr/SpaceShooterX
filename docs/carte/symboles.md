@@ -111,8 +111,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `anWound` | méthode | `src/bosses/anneau.js` | `GameScene` |
 | `applyAchvBuffLive` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `applyAchvBuffs` | fonction | `src/data/achievements.js` |  |
-| `applyAscension` | fonction | `src/data/meta.js` |  |
 | `applyDamageToEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
+| `applyGlobalGear` | fonction | `src/data/player-stats.js` |  |
 | `applyHomeParts` | méthode | `src/home/background.js` | `HomeScene` |
 | `applyHomeSkin` | méthode | `src/home/background.js` | `HomeScene` |
 | `applyShipSkin` | méthode | `src/player/skin.js` | `GameScene` |
@@ -158,9 +158,23 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `arUpdateShots` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `arW` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `arWound` | méthode | `src/bosses/araignee.js` | `GameScene` |
-| `ASCEND_MIN` | const | `src/data/meta.js` |  |
 | `ASHIELD_EXCL` | const | `src/core/constants.js` |  |
+| `ATELIER_COSTS` | const | `src/data/atelier.js` |  |
+| `ATELIER_MAX` | const | `src/data/atelier.js` |  |
+| `ATELIER_OPS` | const | `src/data/atelier.js` |  |
+| `ATELIER_PIECES` | const | `src/data/atelier.js` |  |
+| `ATELIER_POST_BY_ID` | const | `src/data/atelier.js` |  |
+| `ATELIER_POSTS` | const | `src/data/atelier.js` |  |
+| `ATELIER_REPLACED` | const | `src/data/atelier.js` |  |
+| `atelierApply` | fonction | `src/data/atelier.js` |  |
+| `atelierApplyRow` | fonction | `src/data/atelier.js` |  |
+| `atelierBuy` | fonction | `src/data/atelier.js` |  |
+| `atelierCanBuy` | fonction | `src/data/atelier.js` |  |
 | `AtelierGarage` | const | `src/home/garage.js` |  |
+| `atelierMk` | fonction | `src/data/atelier.js` |  |
+| `atelierNextCost` | fonction | `src/data/atelier.js` |  |
+| `atelierRows` | fonction | `src/data/atelier.js` |  |
+| `atelierShows` | fonction | `src/data/atelier.js` |  |
 | `AURA_PAD` | const | `src/gfx/procedural.js` |  |
 | `auraTexFor` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `B64_DRDEATH` | const | `src/data/image-assets.js` |  |
@@ -347,6 +361,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `damageBossPart` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `damagePlayer` | méthode | `src/player/damage.js` | `GameScene` |
 | `deathExplosion` | méthode | `src/fx/effects.js` | `GameScene` |
+| `defaultMeta` | fonction | `src/data/meta.js` |  |
 | `deferSpawn` | méthode | `src/bosses/core.js` | `GameScene` |
 | `deployMine` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `destroySandboxUI` | méthode | `src/dev/sandbox.js` | `GameScene` |
@@ -462,6 +477,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `fitUi` | fonction | `src/main.js` |  |
 | `FLANK_TYPES` | const | `src/core/constants.js` |  |
 | `flipVortex` | méthode | `src/events/core.js` | `GameScene` |
+| `focusOrbitalLevel` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `FUSIONS` | const | `src/data/fusions.js` |  |
 | `FX_ANCHOR` | const | `src/data/boss-antenne.js` |  |
 | `GAL_FONT` | const | `src/home/galaxy.js` |  |
@@ -519,7 +535,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `healerPulse` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `hexShade` | fonction | `src/gfx/procedural.js` |  |
 | `HOME_ORBIT` | const | `src/home/background.js` |  |
+| `HOME_ORBIT_VIEW` | const | `src/home/orbital.js` |  |
 | `HOME_STAT_LINES` | const | `src/home/ui.js` |  |
+| `homeOrbitPoint` | fonction | `src/home/orbital.js` |  |
 | `HomeScene` | classe | `src/scenes/HomeScene.js` |  |
 | `homeToast` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `housekeeping` | méthode | `src/audio/music.js` | `FileMusic` |
@@ -528,6 +546,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `hudFlash` | méthode | `src/ui/hud.js` | `GameScene` |
 | `inFiringPosition` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `initBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
+| `initOrbitalUi` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `INTRO_E_A` | const | `src/core/constants.js` |  |
 | `introApex` | méthode | `src/game/intro.js` | `GameScene` |
 | `introEarthInit` | méthode | `src/game/intro.js` | `GameScene` |
@@ -593,6 +612,12 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `makePlanetTexture` | fonction | `src/gfx/planets.js` |  |
 | `markWorldSeen` | fonction | `src/data/world-progress.js` |  |
 | `META_KEY` | const | `src/data/meta.js` |  |
+| `META_KEY_V2` | const | `src/data/meta.js` |  |
+| `metaFromV2` | fonction | `src/data/meta.js` |  |
+| `metaNum` | fonction | `src/data/meta.js` |  |
+| `metaPoints` | fonction | `src/data/meta.js` |  |
+| `metaRead` | fonction | `src/data/meta.js` |  |
+| `migrateMeta` | fonction | `src/data/meta.js` |  |
 | `MINE2_B64` | const | `src/data/image-assets.js` |  |
 | `MINE2_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `MINE_PAL` | const | `src/gfx/sprite-rows.js` |  |
@@ -678,6 +703,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `noise` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `Norma` | const | `src/ui/norma.js` |  |
 | `normaBoss` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normalizeMeta` | fonction | `src/data/meta.js` |  |
 | `normaLow` | méthode | `src/ui/norma.js` | `GameScene` |
 | `normaStart` | méthode | `src/ui/norma.js` | `GameScene` |
 | `note` | méthode | `src/audio/music.js` | `MusicLoop` |
@@ -803,6 +829,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `pxImg` | fonction | `src/ui/pixel-icons.js` |  |
 | `raiseAlert` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `rawGet` | fonction | `src/core/cloud-save.js` |  |
+| `rawRemove` | fonction | `src/core/cloud-save.js` |  |
 | `rawSet` | fonction | `src/core/cloud-save.js` |  |
 | `realBossAlive` | méthode | `src/events/core.js` | `GameScene` |
 | `recordCompletion` | fonction | `src/data/completion.js` |  |
@@ -1037,6 +1064,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `TREE_BRANCH_ICONS` | const | `src/ui/tree-ui.js` |  |
 | `TREE_BRANCHES` | const | `src/data/skill-tree.js` |  |
 | `TREE_HUB` | const | `src/data/skill-tree.js` |  |
+| `TREE_MOVED` | const | `src/data/skill-tree.js` |  |
 | `TREE_NODE_BY_ID` | const | `src/data/skill-tree.js` |  |
 | `TREE_TOTAL` | const | `src/data/skill-tree.js` |  |
 | `TREE_VIS` | const | `src/data/skill-tree.js` |  |
@@ -1047,6 +1075,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `treeLayout` | fonction | `src/ui/tree-ui.js` |  |
 | `treeNodeUnlocked` | fonction | `src/data/skill-tree.js` |  |
 | `treeParentOk` | fonction | `src/data/skill-tree.js` |  |
+| `treeRefundFor` | fonction | `src/data/skill-tree.js` |  |
 | `treeTotalPoints` | fonction | `src/data/meta.js` |  |
 | `treeVisStatus` | fonction | `src/data/skill-tree.js` |  |
 | `tryDodge` | méthode | `src/player/damage.js` | `GameScene` |
@@ -1120,6 +1149,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateMissiles` | méthode | `src/player/weapons.js` | `GameScene` |
 | `updateMusicMood` | méthode | `src/audio/scene-audio.js` | `GameScene` |
 | `updateNebula` | méthode | `src/events/core.js` | `GameScene` |
+| `updateOrbitalUi` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `updateOverdrive` | méthode | `src/systems/overdrive.js` | `GameScene` |
 | `updateSettingsLabels` | méthode | `src/ui/dom.js` | `GameScene` |
 | `updateShipDamage` | méthode | `src/player/damage.js` | `GameScene` |
@@ -1156,4 +1186,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1149 symboles.
+1179 symboles.

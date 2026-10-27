@@ -1,11 +1,13 @@
 "use strict";
 // Clés de sauvegarde et copie de secours dans la base privée de la plateforme (CloudSave).
 
-const SAVE_KEYS = ['ssx_tuto_v1','ssx_highscore_v1','ssx_meta_v2','ssx_bestiary_v1','ssx_muted','ssx_music_muted','ssx_leaderboard_v1','ssx_playername_v1','ssx_achv_v1','ssx_codex_v1','ssx_pacts_v1','ssx_bossbag_v1','ssx_worlds_v1','ssx_skin_v1','ssx_ship_parts_v1'];
+const SAVE_KEYS = ['ssx_tuto_v1','ssx_highscore_v1','ssx_meta_v2','ssx_meta_v3','ssx_bestiary_v1','ssx_muted','ssx_music_muted','ssx_leaderboard_v1','ssx_playername_v1','ssx_achv_v1','ssx_codex_v1','ssx_pacts_v1','ssx_bossbag_v1','ssx_worlds_v1','ssx_skin_v1','ssx_ship_parts_v1'];
 
 const _lsSet = Storage.prototype.setItem, _lsRem = Storage.prototype.removeItem;
 
 function rawSet(k, v){ try { _lsSet.call(localStorage, k, v); } catch(e){ /* ignore */ } }
+
+function rawRemove(k){ try { _lsRem.call(localStorage, k); } catch(e){ /* ignore */ } }
 
 function rawGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 
@@ -27,11 +29,12 @@ const CloudSave = {
     try {
       const snap = await this.ref.get();
       const localT = parseInt(rawGet('ssx_saved_at') || '0', 10) || 0;
-      const localHas = !!(rawGet('ssx_meta_v2') || rawGet('ssx_playername_v1'));
+      const localHas = !!(rawGet('ssx_meta_v3') || rawGet('ssx_meta_v2') || rawGet('ssx_playername_v1'));
       if (snap.exists){
         const doc = snap.data() || {}, cloudT = doc.t || 0, keys = doc.keys || {};
         if (cloudT > localT || !localHas){
           Object.keys(keys).forEach(k=>{ if (SAVE_KEYS.indexOf(k) >= 0 && typeof keys[k] === 'string') rawSet(k, keys[k]); });
+          if (typeof keys.ssx_meta_v3 !== 'string') rawRemove('ssx_meta_v3');      // copie cloud d'avant la v3 : la migration relira sa v2
           rawSet('ssx_saved_at', String(cloudT)); this.restored = true; this.status = 'restauré';
         } else if (localT > cloudT){ await this.push(); }
       } else if (localHas){ await this.push(); }
@@ -40,7 +43,7 @@ const CloudSave = {
   async push(){
     if (!this.ok || this._busy) return;
     const keys = this.gather();
-    if (!keys.ssx_meta_v2 && !keys.ssx_playername_v1) return;      // jamais d'envoi d'une sauvegarde vide: elle écraserait la copie de secours
+    if (!keys.ssx_meta_v3 && !keys.ssx_meta_v2 && !keys.ssx_playername_v1) return;      // jamais d'envoi d'une sauvegarde vide: elle écraserait la copie de secours
     this._busy = true; const t = Date.now();
     try { await this.ref.set({ t, keys }); rawSet('ssx_saved_at', String(t)); this.status = 'cloud'; this.lastOk = t; }
     catch(e){ this.status = 'erreur'; }
@@ -65,8 +68,9 @@ const CloudSave = {
     try {
       str = String(str || '').trim(); if (str.indexOf('SSX1:') !== 0) return false;
       const d = JSON.parse(decodeURIComponent(escape(atob(str.slice(5)))));
-      if (!d || typeof d !== 'object' || !d.ssx_meta_v2) return false;
+      if (!d || typeof d !== 'object' || !(d.ssx_meta_v3 || d.ssx_meta_v2)) return false;
       SAVE_KEYS.forEach(k=>{ if (typeof d[k] === 'string') rawSet(k, d[k]); });
+      if (typeof d.ssx_meta_v3 !== 'string') rawRemove('ssx_meta_v3');      // ancien code (v2 seule) : la migration relira la v2 importée
       rawSet('ssx_saved_at', String(Date.now()));
       return true;
     } catch(e){ return false; }

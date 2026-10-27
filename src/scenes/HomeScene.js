@@ -23,5 +23,6 @@ class HomeScene extends Phaser.Scene{
     this.updateHomeBackground(time, delta);
     this.updateHomeVan(time, delta);
     this.updateGalaxy(time, delta);
+    this.updateOrbitalUi();
   }
 }

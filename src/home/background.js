@@ -45,7 +45,7 @@ mixin(HomeScene, {
 
   // planète du monde affiché (texture procédurale, une par monde) + halo
   buildHomePlanet(){
-    this.planetPos = { x:GAME_W/2, y:250, s:1.95 };            // position/taille de la planète du monde affiché (animées par les transitions)
+    this.planetPos = { x:GAME_W/2, y:270, s:2.5 };            // position/taille de la planète du monde affiché (animées par les transitions)
     this.orbitA = 1;
     this.planetGlow = this.add.image(GAME_W/2, 250, 'shockRing').setDepth(-0.6).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.5);
     this.planet = this.add.image(GAME_W/2, 250, 'star0').setDepth(-0.5).setVisible(false);
@@ -61,20 +61,22 @@ mixin(HomeScene, {
 
   // orbite des niveaux : une ellipse autour de la planète, moitié arrière derrière elle, moitié avant devant
   drawHomeOrbit(){
-    const O = HOME_ORBIT;
-    [[this.orbitBack, Math.PI, Math.PI*2], [this.orbitFront, 0, Math.PI]].forEach(([g, a0, a1])=>{
-      g.clear(); g.fillStyle(0x7fe8ff, 0.55);
-      for (let a = a0; a < a1; a += 0.055) g.fillRect(Math.round(O.cx + O.rx*Math.cos(a)) - 1, Math.round(O.cy + O.ry*Math.sin(a)) - 1, 2, 2);
-    });
+    this.orbitBack.clear(); this.orbitFront.clear();
+    for(let t=0;t<=1;t+=0.008){
+      const p=homeOrbitPoint(t,this.orbitRotation||0), g=p.z<0?this.orbitBack:this.orbitFront;
+      g.fillStyle(0x070a09,.65); g.fillCircle(p.x,p.y,p.z<0?1.2:2);
+      g.fillStyle(p.z<0?0x53818d:0x88bed0,p.z<0?.5:.95);
+      g.fillCircle(p.x,p.y,p.z<0?.7:1.2);
+    }
   },
 
   setHomePlanet(world, locked){
     const th = world.theme || {};
-    const key = worldPlanetTexture(this, world, 96);
+    const key = th.photo === 'earth' ? 'homeEarth' : worldPlanetTexture(this, world, 384);
     this.setHomeBackPlanet(world, locked);
     this.planet.setTexture(key).setVisible(true).setTint(locked ? 0x2c3050 : 0xffffff);
     this.planetGlow.setVisible(true).setTint(locked ? 0x30345a : (th.glow || 0x4fa8ff));
-    this.cloudsOn = !!th.clouds && !locked; this.orbiterOn = !!th.orbiter && !locked;
+    this.cloudsOn = !!th.clouds && th.photo !== 'earth' && !locked; this.orbiterOn = false;
     if (th.clouds) this.clouds.setTexture(th.clouds).setTileScale(96/256);
     if (th.orbiter) this.orbiter.setTexture(th.orbiter);
   },
@@ -139,7 +141,7 @@ mixin(HomeScene, {
   },
 
   updateHomeVan(time){
-    const hideClassicVan = this.page === -1;
+    const hideClassicVan = this.page === -1 || (this.page === 0 && this.mapMode === 'world');
     this.van.setVisible(!hideClassicVan); this.vanParts.setVisible(!hideClassicVan); this.exhaust.setVisible(!hideClassicVan);
     const b = this.vanBase, bob = Math.sin(time/700)*5*Math.max(0.4, b.s*2);
     this.van.setPosition(b.x + Math.sin(time/1900)*3, b.y + bob).setScale(b.s).setAlpha(b.a).setAngle(Math.sin(time/1500)*2);
@@ -147,9 +149,9 @@ mixin(HomeScene, {
     this.exhaust.setPosition(this.van.x, this.van.y + 118*b.s).setAlpha(b.a);
     this.updateHomeBackPlanet(time);
     // la planète et ses éléments suivent la page (glissement horizontal)
-    const pp = this.planetPos, px = pp.x - this.pageX*GAME_W, pa = Math.max(0, 1 - Math.abs(this.pageX)*1.6), pulse = 1 + 0.012*Math.sin(time/1600);
-    this.planet.setPosition(px, pp.y).setScale(pp.s*pulse).setAlpha(pa);
-    this.planetGlow.setPosition(px, pp.y).setScale(pp.s*0.66*pulse).setAlpha(pa*(this.planetLocked ? 0.25 : 0.5));
+    const pp = this.planetPos, px = pp.x - this.pageX*GAME_W, pa = Math.max(0, 1 - Math.abs(this.pageX)*1.6), pulse = 1;
+    this.planet.setPosition(px, pp.y).setDisplaySize(pp.s*96*pulse,pp.s*96*pulse).setAlpha(pa);
+    this.planetGlow.setPosition(px, pp.y).setScale(pp.s*0.66*pulse).setAlpha(pa*(this.planetLocked ? 0.1 : 0.16));
     [this.orbitBack, this.orbitFront].forEach(g=> g.setPosition(-this.pageX*GAME_W, 0).setAlpha(pa*this.orbitA));
     // nuages : suivent la planète (position, taille, visibilité) et défilent lentement
     const cl = this.clouds, on = this.cloudsOn && this.planet.visible;

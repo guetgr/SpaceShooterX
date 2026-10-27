@@ -1,0 +1,35 @@
+{
+  "reference": "docs/concepts-accueil-2026-10-27/05-accueil-finition-100.png",
+  "logicalViewport": [
+    400,
+    700
+  ],
+  "layers": [
+    {
+      "file": "hangar-window.png",
+      "size": [
+        948,
+        1659
+      ],
+      "mode": "RGBA",
+      "role": "Foreground fixed frame; transparent aperture; CSS coordinates in home-orbital.css",
+      "alphaExtrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "file": "earth-orbital.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "role": "Earth globe; centered at (200,270), display 240x240; no UI",
+      "alphaExtrema": [
+        0,
+        253
+      ]
+    }
+  ]
+}

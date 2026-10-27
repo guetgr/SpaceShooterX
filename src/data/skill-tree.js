@@ -261,6 +261,21 @@ TREE_BRANCHES.push({ id:'furie', icon:'', name:'Furie', color:'#ff8a3c',
 
 const TREE_HUB = { id:'hub', icon:'🛸', name:'CŒUR DU VAISSEAU', desc:'Le point de départ de toute build.', max:1, requires:[], isHub:true, branch:'hub', color:'#ffd76a' };
 
+// L'atelier (data/atelier.js) reprend 27 nœuds : on les retire de l'arbre. TREE_MOVED garde leur définition (coût) pour le remboursement.
+// Les seuils de bifurcation suivent la taille de la tige restante ; une branche vide disparaît.
+const TREE_MOVED = {};
+(function stripMovedNodes(){
+  const moved = n=>{ if (!ATELIER_REPLACED.has(n.id)) return false; TREE_MOVED[n.id] = n; return true; };
+  const total = br=> br.stem.flat().reduce((a, n)=> a + n.max, 0);
+  for (let i = TREE_BRANCHES.length - 1; i >= 0; i--){
+    const br = TREE_BRANCHES[i], before = total(br);
+    br.stem = br.stem.map(pair=> pair.filter(n=> !moved(n))).filter(pair=> pair.length);
+    if (br.forks) br.forks = br.forks.filter(f=>{ const gone = moved(f.keystone); f.path.forEach(moved); if (f.cap) moved(f.cap); return !gone; });
+    if (br.forkThreshold && before) br.forkThreshold = Math.ceil(br.forkThreshold * total(br) / before);
+    if (!br.stem.length && !(br.forks && br.forks.length) && !br.cap) TREE_BRANCHES.splice(i, 1);
+  }
+})();
+
 let ALL_TREE_NODES = [TREE_HUB];
 
 TREE_BRANCHES.forEach(branch=>{
@@ -292,11 +307,19 @@ const TREE_NODE_BY_ID = {};
 
 ALL_TREE_NODES.forEach(n=> TREE_NODE_BY_ID[n.id]=n);
 
-{ const cap = ALL_TREE_NODES.find(n=>n.id==='t_drone_cap');
-  if (cap){
-    ALL_TREE_NODES.push({ id:'t_radar', icon:'📡', name:'RADAR', desc:'Dans une nébuleuse, le cône de vision porte plus loin et s\'élargit / niveau.', max:4, cost:mkCost(26,22),
-      apply:(s,l)=>{ s.nebulaVision = l; }, branch:cap.branch, color:cap.color, requires:['t_drone_cap'] });
-  } }
+// remboursement (en composants) des rangs achetés sur les nœuds repris par l'atelier (migration v2 -> v3, data/meta.js)
+function treeRefundFor(tree){
+  let sum = 0;
+  Object.keys(tree||{}).forEach(id=>{
+    const n = TREE_MOVED[id]; if (!n) return;
+    for (let i = 0; i < Math.min(tree[id], n.max); i++) sum += n.cost(i);
+  });
+  return sum;
+}
+
+TREE_MOVED.t_radar = { id:'t_radar', icon:'📡', name:'RADAR', desc:'Dans une nébuleuse, le cône de vision porte plus loin et s\'élargit / niveau.', max:4, cost:mkCost(26,22),
+  apply:(s,l)=>{ s.nebulaVision = l; } };      // repris par l'ORDINATEUR DE BORD
+
 
 /* ARBRE À L'ÉCRAN: chaque niveau d'une compétence est une compétence à part (nœud visuel).
    Les données (rangs sauvegardés, statistiques) ne changent pas: acheter le niveau k d'une compétence = passer son rang à k. */
@@ -330,7 +353,7 @@ function treeVisStatus(state, v){
 const TREE_TOTAL = ALL_TREE_NODES.reduce((a,n)=> a + (n.max||0), 0);   // points de l'arbre complet
 
 // les paliers de niveau d'alerte étaient calculés pour 381 points: on les ramène à la taille réelle de l'arbre, pour que le dernier niveau = l'arbre complet (sinon les derniers niveaux sont inatteignables et l'alerte monte trop lentement)
-{ const base = ALERT_THRESHOLDS.slice(), k = TREE_TOTAL / base[base.length-1]; base.forEach((t,i)=>{ ALERT_THRESHOLDS[i] = Math.max(i ? ALERT_THRESHOLDS[i-1] + 1 : 1, Math.round(t*k)); }); ASCEND_MIN = Math.round(ASCEND_MIN*k); }
+{ const base = ALERT_THRESHOLDS.slice(), k = TREE_TOTAL / base[base.length-1]; base.forEach((t,i)=>{ ALERT_THRESHOLDS[i] = Math.max(i ? ALERT_THRESHOLDS[i-1] + 1 : 1, Math.round(t*k)); }); }
 
 function treeBranchStemSum(state, branchId){
   return ALL_TREE_NODES.filter(n=>n.stemOf===branchId).reduce((a,n)=>a+(state[n.id]||0),0);
