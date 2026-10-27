@@ -105,7 +105,7 @@ ok(JSON.parse(store.get('ssx_meta_v3')).composants === 10 && store.get('ssx_meta
 // ---- statistiques de départ : atelier puis arbre restant
 {
   const s = run("(()=>{ const s = makeDefaultStats(); applyGlobalGear(s, { atelier:{ coque:1 }, tree:{ t_velocite:2 } }); return s; })()");
-  ok(s.maxHp === 140 && near(s.bulletSpeed, 520*1.10), 'applyGlobalGear : coque Mk I et VELOCITE II');
+  ok(s.maxHp === 140 && s.bulletSpeed === 520, 'applyGlobalGear : coque Mk I appliquée, l\'ancien arbre ne l\'est plus (les technologies s\'assemblent en mission)');
 }
 ok(run("effectiveAlert(defaultMeta())") === 1, 'alerte de départ : 1, sans ascension');
 

@@ -20,17 +20,4 @@ const UPGRADE_POOL = [
     apply:(s)=>{ s.pierce += 1; } },
   { id:'bulletspeed', icon:'✨', name:'VELOCITE', desc:'Projectiles plus rapides', max:Infinity, category:'weapon',
     apply:(s)=>{ s.bulletSpeed *= 1.18; } },
-  // évolutions d'armes — débloquées via l'arbre de compétences permanent, proposées dès le niveau 5
-  { id:'laser', icon:'🔫', name:'ARME LASER', desc:'Remplace tes balles par un laser perforant', max:1, legendary:true, category:'weapon',
-    minLevel:5, requiresTree:'t_laser_c',
-    apply:(s)=>{ s.weaponMode = 'laser'; } },
-  { id:'laserAuto', icon:'🎯', name:'LASER AUTO-CIBLEUR', desc:'Remplace tes balles par un laser qui verrouille automatiquement', max:1, legendary:true, category:'weapon',
-    minLevel:5, requiresTree:'t_laser_a',
-    apply:(s)=>{ s.weaponMode = 'laserAuto'; } },
-  { id:'shotgun', icon:'💠', name:'SHOTGUN', desc:'Remplace tes balles par une salve en cône, plus lourde par plomb', max:1, legendary:true, category:'weapon',
-    minLevel:5, requiresTree:'t_shotgun',
-    apply:(s)=>{ s.weaponMode = 'shotgun'; } },
-  { id:'missiles', icon:'🚀', name:'LANCE-MISSILES', desc:'Ajoute un missile (selon le type débloqué dans l\'arbre)', max:Infinity, category:'weapon',
-    minLevel:5, requiresTree:'t_lancemissiles',
-    apply:(s)=>{ s.missileCount += 1; } },
 ];

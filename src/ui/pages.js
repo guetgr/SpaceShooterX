@@ -56,14 +56,14 @@ mixin(GameScene, {
 
   // atouts GLOBAUX : les postes de l'atelier et les modules du catalogue R&D achetés (permanents, appliqués à chaque mission, jamais perdus)
   globalGearItems(){
-    const st = this.treeState || {}, out = [];
+    const out = [];
     ATELIER_POSTS.forEach(p=>{
       const mk = atelierMk(this.meta && this.meta.atelier, p.id); if (mk <= 0) return;
       out.push({ icon:'🔧', name:p.name + ' MK ' + ROMAN[mk], desc:p.text, count:mk, max:ATELIER_MAX, kind:'GLOBAL' });
     });
-    ALL_TREE_NODES.forEach(n=>{
-      const r = st[n.id] || 0; if (n.isHub || r <= 0) return;
-      out.push({ icon:n.icon, name:n.name, desc:n.desc.replace(/\s*\/\s*niveau/i, ' par rang'), count:r, max:n.max, kind:'GLOBAL' });
+    Object.keys(this.techState || {}).forEach(id=>{
+      const t = TECH_BY_ID[id], ts = this.techState[id];
+      out.push({ icon:t.icon, name:t.name + ' · ' + (ts.assembled ? 'ASSEMBLEE' : 'NON ASSEMBLEE'), desc:t.desc, count:ts.rang, max:techMaxRang(t), kind:'GLOBAL' });
     });
     return out;
   },

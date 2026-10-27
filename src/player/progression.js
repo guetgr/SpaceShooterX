@@ -12,23 +12,46 @@ mixin(GameScene, {
     this.showUpgradeCards();
   },
 
+  // cartes proposées à la montée de niveau : réglages du canon + cartes d'assemblage des technologies emportées pas encore assemblées
+  cardPool(){
+    const n = this.cardCount(), eligible = u => !(u.minLevel && this.level < u.minLevel), extra = this.assemblyCards();
+    const available = UPGRADE_POOL.filter(u => eligible(u) && (this.upgradeCounts[u.id]||0) < u.max).concat(extra);
+    return available.length >= n ? available : UPGRADE_POOL.filter(eligible).concat(extra);
+  },
+
+  // tire n cartes ; tant qu'une technologie emportée n'est pas assemblée, une carte d'assemblage en fait partie (jamais de tirage vide)
+  drawCards(pool, n){
+    const picks = Phaser.Utils.Array.Shuffle(pool.slice()).slice(0, n), asm = pool.filter(u=> u.asm);
+    if (picks.length && asm.length && !picks.some(u=> u.asm)) picks[picks.length - 1] = Phaser.Utils.Array.GetRandom(asm);
+    return picks;
+  },
+
   showUpgradeCards(){
     sfx.cardsOpen();
-    const eligible = u => {
-      if (u.minLevel && this.level < u.minLevel) return false;
-      if (u.legendary) return false;                                  // armes légendaires: uniquement dans la récompense d'un boss
-      if (u.requiresTree && !(this.treeState[u.requiresTree] > 0)) return false;
-      return true;
-    };
-    const n = this.cardCount();
-    const available = UPGRADE_POOL.filter(u => eligible(u) && (this.upgradeCounts[u.id]||0) < u.max);
-    const fallback = UPGRADE_POOL.filter(eligible);
-    const pool = available.length >= n ? available : fallback;
-    this.currentCardPool = pool;
-    const picks = Phaser.Utils.Array.Shuffle(pool.slice()).slice(0,n);
-    this.renderCardChoices(picks);
+    this.renderCardChoices(this.drawCards(this.cardPool(), this.cardCount()));
     document.getElementById('luNorma').textContent = Norma.pick('cards');
     document.getElementById('levelup').classList.remove('hidden');
+  },
+
+  // une carte « ASSEMBLAGE : <technologie> » par technologie emportée non assemblée
+  assemblyCards(){
+    return Object.keys(this.techState || {}).filter(id=> !this.techState[id].assembled).map(id=>{
+      const t = TECH_BY_ID[id];
+      return { id:'asm_' + id, asm:true, icon:t.icon, name:'ASSEMBLAGE : ' + t.name, desc:t.desc, max:1, category:'weapon', apply:()=> this.techAssemble(id) };
+    });
+  },
+
+  // assemble une technologie du chargement : effet de base, puis ses rangs de R&D ; soigne de ce que la coque et le bouclier gagnent
+  techAssemble(id){
+    const st = this.techState[id], t = TECH_BY_ID[id]; if (!st || st.assembled) return;
+    const hp0 = this.stats.maxHp, sh0 = this.stats.shieldMax, dg0 = this.stats.dodgeCharges;
+    st.assembled = true;
+    t.assemble(this.stats, this);
+    rdApplyRanks(id, this.stats, st.rang, this);
+    if (this.stats.maxHp > hp0) this.hp = Math.min(this.stats.maxHp, this.hp + this.stats.maxHp - hp0);
+    if (this.stats.shieldMax > sh0) this.shield = Math.min(this.stats.shieldMax, this.shield + this.stats.shieldMax - sh0);
+    this.dodgeCharges += this.stats.dodgeCharges - dg0;
+    this.codexMark('skills', id);
   },
 
   // nombre de cartes proposées (2 de base, +1 par rang d'INTUITION, 5 au maximum)
@@ -84,9 +107,7 @@ mixin(GameScene, {
     this.rerollsLeft -= 1;
     sfx.reroll();
     const n = this.cardCount();
-    const pool = (this.currentCardPool && this.currentCardPool.length >= n) ? this.currentCardPool : UPGRADE_POOL;
-    const picks = Phaser.Utils.Array.Shuffle(pool.slice()).slice(0,n);
-    this.renderCardChoices(picks);
+    this.renderCardChoices(this.drawCards(this.cardPool(), n));
   },
 
   updateShipTier(){

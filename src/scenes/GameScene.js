@@ -60,25 +60,14 @@ class GameScene extends Phaser.Scene{
     if (this.pacts.indexOf('p_fragile') >= 0) this.stats.maxHp *= 0.6;
     if (this.pacts.indexOf('p_sansshield') >= 0) this.stats.shieldMax = 0;
     this.achv.maxAlert = Math.max(this.achv.maxAlert || 0, this.alertLevel);
-    // weapon evolutions unlocked via the tree — only offered as level-up cards once owned
-    this.laserContinuOwned = (this.treeState['t_laser_c']||0) > 0;
-    this.laserAutoOwned = (this.treeState['t_laser_a']||0) > 0;
-    this.shotgunOwned = (this.treeState['t_shotgun']||0) > 0;
-    this.missileDroitOwned = (this.treeState['t_missile_droit']||0) > 0;
-    this.missileChercheurOwned = (this.treeState['t_missile_chercheur']||0) > 0;
-    this.laserDestructeurOwned = (this.treeState['t_laser_c_cap']||0) > 0;
-    this.reticuleOmniscientOwned = (this.treeState['t_laser_a_cap']||0) > 0;
-    this.fragmentationOwned = (this.treeState['t_shotgun_cap']||0) > 0;
-    this.nukeOwned = (this.treeState['t_missile_droit_cap']||0) > 0;
-    this.swarmMissilesOwned = (this.treeState['t_missile_chercheur_cap']||0) > 0;
-    this.phoenixOwned = (this.treeState['t_phenix']||0) > 0;
-    this.droneOwned = (this.treeState['t_drone']||0) > 0;
-    this.doublePhoenixOwned = (this.treeState['t_phenix_cap']||0) > 0;
-    this.sangsueOwned = (this.treeState['t_sangsue']||0) > 0;
-    this.droneSwarmOwned = (this.treeState['t_drone_cap']||0) > 0;
-    if (this.missileDroitOwned && !this.missileChercheurOwned) this.stats.missileType = 'droit';
+    // technologies (data/techs.js) : le chargement est lu ici, mais RIEN n'est actif au départ — chaque technologie s'assemble par une carte (techAssemble)
+    // qui pose l'arme, les missiles, le drone… et les indicateurs ci-dessous. Le tutoriel se joue sans chargement.
+    this.laserDestructeurOwned = this.reticuleOmniscientOwned = this.fragmentationOwned = this.nukeOwned = this.swarmMissilesOwned = false;
+    this.phoenixOwned = this.doublePhoenixOwned = this.droneOwned = this.droneSwarmOwned = this.sangsueOwned = false;
+    this.techState = {};
+    if (!this.tuto) loadoutSanitize(this.meta, slotsOpen()).forEach(id=>{ const e = rdEntry(this.meta, id); this.techState[id] = { rang:e.rang, assembled:false, spe:e.spe, picks:0 }; });
     this.laserBeamTimer = 0;
-    this.phoenixCharges = this.phoenixOwned ? (this.doublePhoenixOwned ? 2 : 1) : 0;
+    this.phoenixCharges = 0;
     this.dodgeCharges = this.stats.dodgeCharges;
     this.autoCollectTimer = 8000;
     this.nukeTimer = 6000;

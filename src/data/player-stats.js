@@ -73,13 +73,10 @@ function makeDefaultStats(){
   };
 }
 
-// atouts GLOBAUX permanents : atelier (postes Mk I à V) puis reste de l'arbre ; appliqués à chaque mission et au tutoriel
+// atouts GLOBAUX permanents : l'atelier (postes Mk I à V), appliqué à chaque mission et au tutoriel.
+// Les technologies emportées (R&D) n'y sont PAS : elles s'assemblent en mission par des cartes (GameScene.techAssemble).
 function applyGlobalGear(stats, meta){
   atelierApply(stats, meta.atelier);
-  ALL_TREE_NODES.forEach(node=>{
-    const lvl = (meta.tree && meta.tree[node.id]) || 0;
-    if (lvl > 0 && node.apply) node.apply(stats, lvl);
-  });
 }
 
 function computeStartingStatsPreview(){

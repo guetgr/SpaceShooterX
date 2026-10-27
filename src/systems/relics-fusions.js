@@ -8,7 +8,6 @@ mixin(GameScene, {
     const owned = new Set((this.relics || []).map(x=> x.id));
     const list = (RELICS[bossId] || []).filter(r=> !owned.has(r.id));                  // une compétence de boss est unique: jamais deux fois la même
     this.pickFusions(2).forEach(f=> list.push(f));
-    { const lw = Phaser.Utils.Array.Shuffle(UPGRADE_POOL.filter(u=> u.legendary && this.treeState[u.requiresTree] > 0 && !(this.upgradeCounts[u.id] > 0))).slice(0, 1); lw.forEach(u=> list.push(u)); }   // une arme légendaire (si débloquée dans l'arbre)                                      // les fusions (légendaires) ne se débloquent que dans la récompense d'un boss
     if (!list.length || !this.running){ if (this._relicNext && this._relicNext.length){ const nx = this._relicNext.shift(); this.time.delayedCall(350, ()=> this.showRelicChoice(nx)); } return; }
     this.running = false;
     this.physics.world.pause();
@@ -21,13 +20,10 @@ mixin(GameScene, {
     list.forEach(r=>{
       const div = document.createElement('div');
       div.className = 'card fusion';
-      div.innerHTML = '<div class="card-icon">' + pxImg(r.icon, 32) + '</div><div class="card-name">' + (r.legendary ? uiIco('star') + ' ' : '') + r.name + '</div><div class="card-desc">' + (r.legendary ? 'LEGENDAIRE — ' : '') + r.desc + '</div>';
+      div.innerHTML = '<div class="card-icon">' + pxImg(r.icon, 32) + '</div><div class="card-name">' + r.name + '</div><div class="card-desc">' + r.desc + '</div>';
       div.onclick = ()=>{
         sfx.cardPick();
-        if (r.legendary){                                       // arme légendaire: remplace l'arme actuelle
-          r.apply(this.stats); this.upgradeCounts[r.id] = 1; this.codexMark('cards', r.id);
-          this.weaponUpgradeCount += 1; this.updateShipTier();
-        } else if (r.id.indexOf('fus_') === 0){                       // fusion légendaire: appliquée une seule fois
+        if (r.id.indexOf('fus_') === 0){
           r.apply(this.stats); this.upgradeCounts[r.id] = 1; this.codexMark('fusions', r.id);
           if (r.heal) this.hp = Math.min(this.stats.maxHp, this.hp + r.heal);
         } else {
