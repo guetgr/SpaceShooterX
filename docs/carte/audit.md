@@ -33,6 +33,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 
 ## Outils (`tools/`)
 
+- `tools/atelier_test.js` — Vérifie les règles de l'atelier (postes, Mk I à V, coûts, achat), sans navigateur : node tools/atelier_test.js
 - `tools/build.py` — Fabrique les versions « un seul fichier HTML » du jeu (tout est embarqué : code, CSS, images, sons, polices).
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
@@ -92,5 +93,6 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/space-shooter-x-analyse.md` — SPACE SHOOTER X — Analyse équilibrage, cohérence et pouvoir addictif
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée
 - `docs/suno-prompts.md` — Space Shooter X — les prompts Suno (version finale : 22 prompts = 44 morceaux pour 42 pistes)
+- `docs/superpowers/plans/2026-10-27-atelier-v3.md` — Étape 2 — sauvegarde v3 et atelier à six postes : plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées

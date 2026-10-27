@@ -2,7 +2,7 @@
 // (chargé APRÈS le jeu ; pas du code du jeu). Expose window.__sim.
 //   __sim.prepare()                               figer le hasard / l'horloge, couper l'affichage et le son
 //   __sim.runLevel(levelId, seed, opts)           joue un niveau entier, renvoie le résultat
-//   __sim.buy(policy)                             dépense les fragments dans l'arbre (comme un joueur raisonnable)
+//   __sim.buy(policy)                             dépense les composants à l'atelier puis dans l'arbre (comme un joueur raisonnable)
 (function(){
   "use strict";
   const DT = 1000/60;
@@ -131,19 +131,24 @@
                pct: rec ? rec.runPct : completionPct('w1-tuto', comp), comp, steps: sc.tutoStepLog, minHp: Math.round(minHp*100)/100 };
     },
 
-    // dépense les fragments : un joueur raisonnable prend d'abord ce qui rend plus solide / plus puissant, puis le moins cher
+    // dépense les composants comme un joueur raisonnable : l'atelier d'abord (le poste de Mk le plus bas, on met de côté pour le Mk suivant
+    // plutôt que de grignoter l'arbre), puis le reste de l'arbre ; jamais de Mk III à V sans pièces de secteur (le bot n'en gagne pas)
     buy(policy){
       const meta = getMeta(), st = meta.tree;
+      const ORDER = policy === 'defense' ? ['coque', 'bouclier', 'canon', 'propulseurs', 'aimant', 'ordinateur'] : ['canon', 'coque', 'bouclier', 'propulseurs', 'aimant', 'ordinateur'];
       const PREF = policy === 'defense' ? ['defense', 'arme', 'missile'] : ['arme', 'defense', 'missile'];
       let bought = 0;
       for (;;){
+        const posts = ORDER.filter(id=> atelierCanBuy(meta, id).ok).sort((a, b)=> (atelierMk(meta.atelier, a) - atelierMk(meta.atelier, b)) || (ORDER.indexOf(a) - ORDER.indexOf(b)));
+        if (posts.length){ atelierBuy(meta, posts[0]); bought++; continue; }
+        if (ORDER.some(id=> atelierCanBuy(meta, id).reason === 'composants')) break;       // on économise pour un poste d'atelier
         const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.composants);
         if (!avail.length) break;
         avail.sort((a, b)=>{ const pa = PREF.indexOf(a.branch), pb = PREF.indexOf(b.branch); return ((pa < 0 ? 9 : pa) - (pb < 0 ? 9 : pb)) || (a.cost() - b.cost()); });
         const n = avail[0]; meta.composants -= n.cost(); st[n.nid] = n.k; bought++;
       }
       setMeta(meta);
-      return { bought, composants: meta.composants, points: treeTotalPoints(st) };
+      return { bought, composants: meta.composants, points: metaPoints(meta) };
     },
   };
 })();

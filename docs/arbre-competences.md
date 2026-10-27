@@ -246,3 +246,19 @@ Ce sont des constats tirés des données, à discuter.
 8. D'autres **sources de fragments** ou d'autres **monnaies** (par monde, par boss) pour les branches avancées ?
 9. Un **objectif de build** visible (suggestions, builds types, « chemin » conseillé) pour guider le joueur dans 335 rangs ?
 10. Comment lier l'arbre à la **progression des mondes** (branches ou paliers verrouillés par un boss vaincu) ?
+
+
+## 9. Nœuds repris par l'atelier (27 octobre 2026)
+
+L'atelier (`src/data/atelier.js`, six postes en cinq niveaux Mk I à V) a repris l'effet de **27 nœuds** de cet arbre, retirés de `ALL_TREE_NODES` (leur définition reste dans `TREE_MOVED` pour le remboursement à la migration `ssx_meta_v2` → `ssx_meta_v3`). La branche « Savoir » a disparu avec eux ; l’arbre compte 76 nœuds au lieu de 103. Le reste de l'arbre est conservé jusqu'à l'étape 3 (R&D par technologie).
+
+| Poste | Nœuds repris |
+|---|---|
+| COQUE | VITALITE, BLINDAGE+, ARMURE, RESILIENCE |
+| CANON DE SERIE | PUISSANCE, DEGATS+, CELERITE, CADENCE+, CRITIQUE |
+| GENERATEUR DE BOUCLIER | BOUCLIER+, BOUCLIER, RECHARGE BOUCLIER |
+| PROPULSEURS | REACTEURS, VITESSE, ECLAIR, REACTIVITE+, VITESSE LUMIERE, ESQUIVE, SECOND SOUFFLE (défense) |
+| AIMANT | AIMANT+, AIMANT, SILLAGE MAGNETIQUE |
+| ORDINATEUR DE BORD | INTUITION, RELANCE, ECLAIR DE GENIE, BUTIN DE BOSS, RADAR |
+
+Les seuils de bifurcation des branches restantes ont été réduits au prorata de la tige conservée.

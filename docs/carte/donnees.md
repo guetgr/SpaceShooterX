@@ -8,6 +8,10 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `g_k100`, `g_k500`, `g_k1500`, `g_k5000`, `g_k15000`, `g_a6`, `g_boss1`, `g_boss10`, `g_bossall`, `g_types`, `g_chain15`, `g_chain50`, `g_chain120`, `g_time5`, `g_time10`, `g_time20`, `g_lvl20`, `g_lvl40`, `g_al8`, `g_al10`, `g_al12`, `g_al15`, `g_cb100`, `g_cb500`, `g_cb2000`, `g_bt_dread`, `g_bt_faucheuse`, `g_bt_ruche`, `g_bt_prisme`, `g_bt_kraken`, `g_bt_eclipse`, `g_bt_hydre`
 
+## `src/data/atelier.js` (6)
+
+`coque`, `canon`, `bouclier`, `propulseurs`, `aimant`, `ordinateur`
+
 ## `src/data/completion.js` (4)
 
 `sats`, `boss`, `win`, `clean`
@@ -48,4 +52,4 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `w3`, `w3-l1`, `w3-l2`, `w3-l3`, `w3-l4`, `w3-l5`
 
-223 ids au total.
+229 ids au total.
