@@ -108,5 +108,21 @@ ok(JSON.parse(store.get('ssx_meta_v3')).composants === 10 && store.get('ssx_meta
 }
 ok(run("effectiveAlert(defaultMeta())") === 1, 'alerte de départ : 1, sans ascension');
 
+// ---- l'arbre sans les nœuds repris par l'atelier
+ok(run("ALL_TREE_NODES.every(n=> !ATELIER_REPLACED.has(n.id))"), 'aucun nœud repris ne reste dans ALL_TREE_NODES');
+ok(run("TREE_VIS.every(v=> !ATELIER_REPLACED.has(v.nid))"), 'ni dans les nœuds visuels (TREE_VIS)');
+ok(run("TREE_BRANCHES.every(b=> b.id !== 'savoir')"), 'la branche Savoir (4 nœuds repris) a disparu');
+ok(run("TREE_BRANCHES.every(b=> b.stem.length > 0)"), 'aucune branche vide');
+ok(run("ATELIER_REPLACED.size === Object.keys(TREE_MOVED).length && [...ATELIER_REPLACED].every(id=> TREE_MOVED[id] && typeof TREE_MOVED[id].cost === 'function')"), 'TREE_MOVED garde les 27 définitions (coût) pour le remboursement');
+ok(run("treeRefundFor({t_radar:2}) === 26 + 48"), 'remboursement de RADAR (nœud ajouté hors des branches)');
+ok(run("ALL_TREE_NODES.every(n=> n.isHub || n.requires.every(r=> r === 'hub' || TREE_NODE_BY_ID[r]))"), 'aucun requires ne pointe vers un nœud retiré');
+{
+  // chaque nœud restant doit pouvoir se débloquer quand tout le reste est acheté
+  const bad = run("ALL_TREE_NODES.filter(n=> !n.isHub).filter(n=>{ const st = {}; ALL_TREE_NODES.forEach(m=>{ if (m !== n && !m.isHub) st[m.id] = m.max; }); return !treeNodeUnlocked(st, n); }).map(n=>n.id)");
+  ok(bad.length === 0, 'tout nœud restant est atteignable (bloqués : ' + bad.join(',') + ')');
+  const th = run("TREE_BRANCHES.filter(b=> b.forkThreshold).filter(b=> b.forkThreshold > b.stem.flat().reduce((a,n)=> a + n.max, 0)).map(b=>b.id)");
+  ok(th.length === 0, 'seuil de bifurcation <= rangs de la tige restante (branches : ' + th.join(',') + ')');
+}
+
 if (fail){ console.log('ÉCHEC : atelier (' + fail + ')'); process.exit(1); }
 console.log('OK : atelier');
