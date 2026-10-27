@@ -66,6 +66,7 @@
   "systems/achievements.js",
   "fx/effects.js",
   "ui/tree-ui.js",
+  "ui/rd-ui.js",
   "game/run.js",
   "game/level.js",
   "game/tuto.js",

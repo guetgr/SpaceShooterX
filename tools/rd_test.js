@@ -160,5 +160,15 @@ store.clear();
   ok(run("recordLevelClear('w1-tuto', 5).plan") === 'laser_continu', 'recordLevelClear : le tuto accorde le laser continu');
 }
 
+// ---- prochaine étape d'une fiche R&D (le bouton unique de la page)
+{
+  const NS = (e)=> run("rdNextStep(" + META({ rd:{ laser_continu:e } }) + ", 'laser_continu')");
+  ok(NS({}) === 'proto', 'rdNextStep : sans prototype -> proto');
+  ok(NS({ plan:true, proto:true, rang:3 }) === 'rang', 'rdNextStep : rangs restants -> rang');
+  ok(NS({ plan:true, proto:true, rang:9 }) === 'spe', 'rdNextStep : rangs au maximum -> spe');
+  ok(NS({ plan:true, proto:true, rang:9, spe:true }) === null, 'rdNextStep : tout acheté -> null');
+  ok(run("rdNextStep(" + META({ rd:{ bouclier_reactif:{ proto:true, rang:6 } } }) + ", 'bouclier_reactif')") === 'spe', 'rdNextStep : spécialisation à concevoir -> spe (affichée en conception)');
+}
+
 if (fail){ console.log('ÉCHEC : rd (' + fail + ')'); process.exit(1); }
 console.log('OK : rd');

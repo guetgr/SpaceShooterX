@@ -1,0 +1,24 @@
+/* Page R&D (page de droite de l'accueil) : fiches de technologies, dans le repère logique 400 × 700. */
+#pageTree .tree-info{ display:none; }
+.ttab .tt-s{ font-size:9px; letter-spacing:1px; }
+.ttab.locked{ opacity:.45; }
+.rdcard{ position:relative; display:flex; flex-direction:column; gap:6px; margin:0 0 8px; padding:9px; background:rgba(12,18,15,.94); border:1px solid #243029; }
+.rdcard.aff{ border-color:var(--agp-yellow,#ffce27); }
+.rdcard.noplan{ opacity:.78; }
+.rd-head{ display:flex; align-items:center; gap:7px; }
+.rd-ic{ flex:0 0 auto; display:inline-flex; }
+.rd-nm{ flex:1; font-size:8px; letter-spacing:1px; color:#eef1e7; }
+.rd-tag{ font-size:6px; padding:3px 5px; background:#3b3220; color:var(--agp-yellow,#ffce27); }
+.rd-desc{ font-family:var(--vt); font-size:15px; line-height:1.05; color:#a9bdb0; }
+.rd-st{ display:flex; flex-wrap:wrap; align-items:center; gap:3px 10px; font-family:var(--vt); font-size:14px; line-height:1; color:#82978b; }
+.rd-st b{ font-weight:400; color:#cddbd1; }
+.rd-pips{ display:inline-flex; gap:2px; }
+.rd-pips i{ width:7px; height:7px; border:1px solid #46584b; background:#142019; }
+.rd-pips i.f{ background:#ffce27; border-color:#ffce27; }
+.rd-buy{ width:100%; min-height:44px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2px 6px; padding:6px 8px; border:0; background:#ffce27; color:#152019; font-size:7px; text-align:center; }
+.rd-buy small{ flex-basis:100%; font-family:var(--vt); font-size:13px; line-height:1; }
+.rd-buy:disabled{ background:#26352d; color:#7f9387; }
+.rd-buy .uii{ vertical-align:middle; }
+.rd-locked{ padding:26px 10px; text-align:center; font-size:9px; letter-spacing:2px; color:#c08a5a; }
+.rd-locked small{ display:block; margin-top:8px; font-family:var(--vt); font-size:15px; letter-spacing:0; color:#82978b; }
+@media (prefers-reduced-motion: reduce){ .rdcard{ transition:none; } }

@@ -290,7 +290,7 @@ mixin(GameScene, {
       this.hasActiveRun = false;
       this.showStartScreen();
     };
-    this.setupTreeUi();
+    this.setupRdUi();
   },
 
   // pause : feuille animée, sous-titre (niveau · temps), équipement replié, confirmation de sortie réinitialisée

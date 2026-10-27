@@ -206,7 +206,7 @@ mixin(HomeScene, {
 
   // arbre : le panneau (méthodes de GameScene) se redessine quand on arrive sur la page ; le point doré de l'onglet signale un achat possible
   renderHomeTree(meta){
-    const buy = TREE_VIS.some(n=> !n.isHub && treeVisStatus(meta.tree, n) === 'avail' && meta.composants >= n.cost());
+    const buy = TECHS.some(t=> techAvailable(t) && rdNextStep(meta, t.id) && rdCanBuy(meta, t.id, rdNextStep(meta, t.id)).ok);
     document.getElementById('tabTree').classList.toggle('buy', buy);
   },
 
@@ -219,8 +219,8 @@ mixin(HomeScene, {
 
   showHomeTree(){
     const gs = this.scene.get('game');
-    gs.meta = getMeta(); gs.treeState = gs.meta.tree;               // relit la sauvegarde (fragments gagnés au dernier niveau)
-    gs.renderTree();
+    gs.meta = getMeta(); gs.treeState = gs.meta.tree;               // relit la sauvegarde (composants gagnés au dernier niveau)
+    gs.renderRd();
   },
 
   launchLevel(){

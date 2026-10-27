@@ -173,6 +173,14 @@ function rdBuy(meta, techId, what){
   return true;
 }
 
+// étape que propose le bouton unique de la fiche R&D : 'proto' -> 'rang' (tant qu'il en reste) -> 'spe' ; null quand tout est acheté
+function rdNextStep(meta, techId){
+  const t = TECH_BY_ID[techId], e = rdEntry(meta, techId); if (!t) return null;
+  if (!e.proto) return 'proto';
+  if (e.rang < techMaxRang(t)) return 'rang';
+  return e.spe ? null : 'spe';
+}
+
 // accorde le plan (1re victoire de l'ordre) ; false s'il était déjà acquis ou si la technologie est inconnue
 function rdGrantPlan(meta, techId){
   if (!TECH_BY_ID[techId]) return false;
