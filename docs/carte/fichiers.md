@@ -128,7 +128,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`cloud-save.js`** — Clés de sauvegarde et copie de secours dans la base privée de la plateforme (CloudSave).
 
-- Définit : `SAVE_KEYS`, `_lsSet`, `rawSet`, `rawGet`, `CloudSave`
+- Définit : `SAVE_KEYS`, `_lsSet`, `rawSet`, `rawRemove`, `rawGet`, `CloudSave`
 
 **`constants.js`** — Constantes du jeu : taille du terrain, zoom, plafonds, zones HUD.
 

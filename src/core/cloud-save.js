@@ -7,6 +7,8 @@ const _lsSet = Storage.prototype.setItem, _lsRem = Storage.prototype.removeItem;
 
 function rawSet(k, v){ try { _lsSet.call(localStorage, k, v); } catch(e){ /* ignore */ } }
 
+function rawRemove(k){ try { _lsRem.call(localStorage, k); } catch(e){ /* ignore */ } }
+
 function rawGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
 
 const CloudSave = {
@@ -32,7 +34,7 @@ const CloudSave = {
         const doc = snap.data() || {}, cloudT = doc.t || 0, keys = doc.keys || {};
         if (cloudT > localT || !localHas){
           Object.keys(keys).forEach(k=>{ if (SAVE_KEYS.indexOf(k) >= 0 && typeof keys[k] === 'string') rawSet(k, keys[k]); });
-          if (typeof keys.ssx_meta_v3 !== 'string'){ try { _lsRem.call(localStorage, 'ssx_meta_v3'); } catch(e){ /* ignore */ } }      // copie cloud d'avant la v3 : la migration relira sa v2
+          if (typeof keys.ssx_meta_v3 !== 'string') rawRemove('ssx_meta_v3');      // copie cloud d'avant la v3 : la migration relira sa v2
           rawSet('ssx_saved_at', String(cloudT)); this.restored = true; this.status = 'restauré';
         } else if (localT > cloudT){ await this.push(); }
       } else if (localHas){ await this.push(); }
@@ -68,6 +70,7 @@ const CloudSave = {
       const d = JSON.parse(decodeURIComponent(escape(atob(str.slice(5)))));
       if (!d || typeof d !== 'object' || !(d.ssx_meta_v3 || d.ssx_meta_v2)) return false;
       SAVE_KEYS.forEach(k=>{ if (typeof d[k] === 'string') rawSet(k, d[k]); });
+      if (typeof d.ssx_meta_v3 !== 'string') rawRemove('ssx_meta_v3');      // ancien code (v2 seule) : la migration relira la v2 importée
       rawSet('ssx_saved_at', String(Date.now()));
       return true;
     } catch(e){ return false; }

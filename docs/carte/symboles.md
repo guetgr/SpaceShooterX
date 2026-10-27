@@ -825,6 +825,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `pxImg` | fonction | `src/ui/pixel-icons.js` |  |
 | `raiseAlert` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `rawGet` | fonction | `src/core/cloud-save.js` |  |
+| `rawRemove` | fonction | `src/core/cloud-save.js` |  |
 | `rawSet` | fonction | `src/core/cloud-save.js` |  |
 | `realBossAlive` | méthode | `src/events/core.js` | `GameScene` |
 | `recordCompletion` | fonction | `src/data/completion.js` |  |
@@ -1180,4 +1181,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1173 symboles.
+1174 symboles.

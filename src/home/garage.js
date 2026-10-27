@@ -30,6 +30,9 @@ const AtelierGarage = (()=>{
     return row;
   }
 
+  // l'avis de migration reste affiché jusqu'à la première interaction du joueur avec le garage (onglet ou achat)
+  function consumeNotice(){ const m = getMeta(); if (m.notice){ m.notice = null; setMeta(m); } }
+
   function buy(postId){
     const meta = getMeta();
     if (!atelierBuy(meta, postId)) return;
@@ -63,7 +66,6 @@ const AtelierGarage = (()=>{
       }
       if (!keepText){
         describe(meta.notice === 'restructuration' ? AGP_LORE.atelier.migration : 'Cinq niveaux par poste. Les composants viennent des machines détruites.');
-        if (meta.notice){ meta.notice = null; setMeta(meta); }
       }
     } else {
       cards.className = 'an-catalog'; const image = document.createElement('img');
@@ -81,7 +83,7 @@ const AtelierGarage = (()=>{
       `</div></div></div><div class="an-panel"><h2>CAMIONNETTE AGP-77</h2><p>Atelier de la camionnette</p><div class="an-tabs"><button data-section="paint">PEINTURE</button><button data-section="body">CARROSSERIE</button><button data-section="modules">POSTES</button></div><div id="anCards"></div><p id="anDescription" aria-live="polite"></p><small>Les postes sont permanents et toujours actifs · les technologies emportées se règlent en R&D.</small><button id="anMotion" aria-pressed="true">MOUVEMENTS : OUI</button></div>`;
     page.appendChild(root);
     let motion = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-    root.querySelectorAll('[data-section]').forEach(b=> b.onclick = ()=>{ sfx.uiSelect(); render(b.dataset.section); });
+    root.querySelectorAll('[data-section]').forEach(b=> b.onclick = ()=>{ sfx.uiSelect(); render(b.dataset.section); consumeNotice(); });
     const scene = root.querySelector('.an-scene');
     scene.onpointermove = e=>{ if (!motion || e.pointerType === 'touch') return; const r = scene.getBoundingClientRect(); scene.style.setProperty('--mx', (e.clientX - r.left)/r.width*2 - 1); scene.style.setProperty('--my', (e.clientY - r.top)/r.height*2 - 1); };
     scene.onpointerleave = ()=>{ scene.style.setProperty('--mx', 0); scene.style.setProperty('--my', 0); };

@@ -124,5 +124,21 @@ ok(run("ALL_TREE_NODES.every(n=> n.isHub || n.requires.every(r=> r === 'hub' || 
   ok(th.length === 0, 'seuil de bifurcation <= rangs de la tige restante (branches : ' + th.join(',') + ')');
 }
 
+// ---- import d'un code de sauvegarde (CloudSave.importCode) : un ancien code (v2 seule) doit être relu par la migration
+{
+  class Storage { constructor(){ this.m = new Map(); } getItem(k){ return this.m.has(k) ? this.m.get(k) : null; } setItem(k, v){ this.m.set(k, String(v)); } removeItem(k){ this.m.delete(k); } }
+  const c2 = vm.createContext({ console, Storage, btoa, atob, unescape, escape, encodeURIComponent, decodeURIComponent, window:{} });
+  c2.localStorage = new Storage();
+  vm.runInContext(fs.readFileSync(path.join(R, 'src', 'core', 'cloud-save.js'), 'utf8'), c2, { filename:'core/cloud-save.js' });
+  const code = keys=> 'SSX1:' + Buffer.from(unescape(encodeURIComponent(JSON.stringify(keys))), 'binary').toString('base64');
+  c2.localStorage.setItem('ssx_meta_v3', JSON.stringify({ v:3, composants:500 }));
+  c2.code = code({ ssx_meta_v2: JSON.stringify({ fragments:7, tree:{} }) });
+  ok(vm.runInContext("CloudSave.importCode(code)", c2) === true, 'importCode accepte un code v2 seule');
+  ok(c2.localStorage.getItem('ssx_meta_v3') === null && c2.localStorage.getItem('ssx_meta_v2') !== null, 'code v2 seule : la v3 locale est retirée, la migration relira la v2 importée');
+  c2.localStorage.setItem('ssx_meta_v3', JSON.stringify({ v:3, composants:500 }));
+  c2.code = code({ ssx_meta_v3: JSON.stringify({ v:3, composants:42 }) });
+  ok(vm.runInContext("CloudSave.importCode(code)", c2) === true && JSON.parse(c2.localStorage.getItem('ssx_meta_v3')).composants === 42, 'code v3 : la v3 importée remplace la locale');
+}
+
 if (fail){ console.log('ÉCHEC : atelier (' + fail + ')'); process.exit(1); }
 console.log('OK : atelier');
