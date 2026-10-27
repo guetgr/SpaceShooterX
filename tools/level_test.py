@@ -176,6 +176,7 @@ with sync_playwright() as pw:
     check(p.evaluate("%s.runComposants + %s.composantsOnScreenValue()" % (SC, SC)) - k0 >= 60, 'boss de secteur (PDG) : grosse pluie de composants (12 gros)')
     p.wait_for_timeout(9000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du PDG')
+    check('847 infractions' in p.evaluate("document.getElementById('rpNorma').textContent"), 'fin du secteur 1 : transmission N.O.R.M.A. de la bible')
     check(p.evaluate("worldSummary('w1').bossDown"), 'boss du monde enregistré')
     check(vis('#btnNext') and p.evaluate("%s.lvResult.next" % SC) == 'w2-l1', 'boss du monde 1 : SUIVANT mène au monde 2')
     check('NOUVEAU SECTEUR' in p.evaluate("document.getElementById('goRewards').textContent"), 'annonce du monde débloqué')

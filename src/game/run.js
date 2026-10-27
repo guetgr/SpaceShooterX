@@ -127,7 +127,8 @@ mixin(GameScene, {
       document.getElementById('goLevel').textContent = L ? ('SECTEUR ' + worldById(L.world).name + ' · ORDRE ' + String(L.num).padStart(2, '0') + ' — ' + L.name) : '';
       document.getElementById('rpNo').textContent = 'N° ' + (L ? agpDossier(L) : 'AGP-' + String(Math.floor(this.score) % 100000).padStart(5, '0'));
       { const g = STYLE_RANKS[this.runBestRank].l, gr = document.getElementById('rpGrade'); gr.textContent = g; gr.style.setProperty('--gc', STYLE_RANKS[this.runBestRank].col); document.getElementById('rpMention').textContent = AGP_LORE.grades[g] || '';
-        document.getElementById('rpNorma').textContent = Norma.report(victory ? 'win' : (abandon ? 'abort' : 'lose'), g); }
+        const sec = victory && this.lvDef && this.lvDef.type === 'boss' && AGP_LINES.sectors[this.lvDef.world];      // fin de secteur : la transmission de la bible
+        document.getElementById('rpNorma').textContent = sec ? sec.end : Norma.report(victory ? 'win' : (abandon ? 'abort' : 'lose'), g); }
       const pr = document.getElementById('goProg'); pr.classList.toggle('hidden', !L);
       if (L){ document.getElementById('goProgFill').style.width = Math.round(res.progress*100) + '%'; document.getElementById('goProgTxt').textContent = Math.round(res.progress*100) + '%'; }
       const rw = document.getElementById('goRewards'); rw.innerHTML = '';

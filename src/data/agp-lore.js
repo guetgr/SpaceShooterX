@@ -143,6 +143,12 @@ const AGP_LINES = {
   ],
   // note de service affichée sur la fiche d'un niveau terminé / verrouillé
   locked: "Habilitation insuffisante. Terminez l'ordre précédent.",
+  // fin de secteur (incident majeur vaincu) : transmission de la bible (docs/bible-univers.md §4), à la place de la réplique tirée au hasard
+  sectors: {
+    w1: { end: "Votre première mission est terminée. Nous avons enregistré 847 infractions à la sécurité. Toutes vous sont attribuées." },
+    w2: { end: "Vous venez de détruire notre principal centre de recyclage. Le service environnement vous remercie." },
+    w3: { end: "Une anomalie a été détectée dans les documents comptables. Je suis légalement tenue de ne pas vous en informer." },
+  },
 };
 
 // numéro de dossier affichable : AGP-0003-B (lettre = menace)
