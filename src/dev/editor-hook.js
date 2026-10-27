@@ -47,7 +47,7 @@
       for (let i = 0; i < msg.seeds; i++){
         // sauvegarde vierge à chaque essai (en mémoire : voir ?sandbox) + arbre acheté avec le budget demandé
         ['ssx_achv_v1','ssx_bestiary_v1','ssx_codex_v1','ssx_bossbag_v1','ssx_worlds_v1','ssx_pacts_v1','ssx_leaderboard_v1','ssx_highscore_v1'].forEach(k=> localStorage.removeItem(k));
-        localStorage.setItem('ssx_meta_v2', JSON.stringify({ fragments:msg.budget || 0, tree:{}, asc:0 }));
+        localStorage.setItem('ssx_meta_v3', JSON.stringify({ v:3, composants:msg.budget || 0 }));
         if (msg.budget) __sim.buy('attaque');
         res.push(l.tuto ? __sim.runTuto(1000 + i * 37, cfg) : __sim.runLevel(l.id, 1000 + i * 37, cfg));
         send({ type:'bot-progress', done:i + 1, total:msg.seeds });

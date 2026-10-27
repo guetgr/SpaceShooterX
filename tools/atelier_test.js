@@ -8,6 +8,11 @@ const load = f=> vm.runInContext(fs.readFileSync(path.join(R, 'src', f), 'utf8')
 const run = s=> vm.runInContext(s, ctx);
 load('data/player-stats.js');
 load('data/atelier.js');
+// sauvegarde simulée : localStorage adossé à une Map, partagé avec le contexte
+const store = new Map();
+ctx.localStorage = { getItem:k=> store.has(k) ? store.get(k) : null, setItem:(k, v)=>{ store.set(k, String(v)); }, removeItem:k=>{ store.delete(k); } };
+load('data/meta.js');
+load('data/skill-tree.js');
 
 let fail = 0;
 const ok = (cond, msg)=>{ if (!cond){ fail++; console.log('  ÉCHEC : ' + msg); } };
@@ -65,6 +70,43 @@ ok(run("atelierMk({coque:-3}, 'coque')") === 0, 'Mk négatif -> 0');
 ok(run("atelierMk({coque:99}, 'coque')") === 5, 'Mk trop grand -> 5');
 ok(run("atelierMk({coque:NaN}, 'coque')") === 0, 'Mk NaN -> 0');
 ok(run("atelierMk(undefined, 'coque')") === 0, 'atelier absent -> 0');
+
+// ---- sauvegarde v3
+const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"tree":{},"notice":null}';
+ok(JSON.stringify(run("defaultMeta()")) === DEFAULT_V3, 'defaultMeta : forme de la v3');
+ok(JSON.stringify(run("normalizeMeta({})")) === DEFAULT_V3, 'normalizeMeta({}) = defaultMeta()');
+{
+  const m = run("normalizeMeta({composants:'12', atelier:{coque:-2, canon:9, aimant:NaN, inconnu:3}, pieces:{s1:-1, zz:4}, tree:{t_laser_c:1, t_x:'a'}})");
+  ok(m.composants === 12 && m.atelier.coque === 0 && m.atelier.canon === 5 && m.atelier.aimant === 0 && !('inconnu' in m.atelier), 'sauvegarde abîmée : Mk bornés, clés inconnues ignorées');
+  ok(m.pieces.s1 === 0 && !('zz' in m.pieces) && JSON.stringify(m.tree) === '{"t_laser_c":1}', 'sauvegarde abîmée : pièces et arbre nettoyés');
+}
+store.clear(); store.set('ssx_meta_v3', '{not json');
+ok(JSON.stringify(run("getMeta()")) === DEFAULT_V3, 'v3 illisible : défauts, sans exception');
+store.clear();
+ok(JSON.stringify(run("getMeta()")) === DEFAULT_V3, 'aucune sauvegarde : défauts');
+
+// migration v2 -> v3 : seuls les nœuds repris par l'atelier sont remboursés (6 + 11 = 17)
+store.clear(); store.set('ssx_meta_v2', JSON.stringify({ fragments:10, tree:{ t_vitalite:2, t_laser_c:1 }, asc:3 }));
+{
+  const m = run("getMeta()");
+  ok(m.composants === 27 && JSON.stringify(m.tree) === '{"t_laser_c":1}' && m.notice === 'restructuration' && !('asc' in m), 'migration : nœuds repris remboursés, le reste de l\'arbre conservé, plus d\'ascension');
+  ok(run("treeRefundFor({t_vitalite:2})") === 17 && run("treeRefundFor({t_laser_c:1})") === 0, 'treeRefundFor : seuls les ids repris');
+}
+ok(run("migrateMeta()") === true && store.has('ssx_meta_v3') && run("getMeta().composants") === 27, 'migrateMeta écrit la v3');
+ok(run("migrateMeta()") === false && run("getMeta().composants") === 27, 'migration rejouée : aucun double remboursement');
+store.clear(); store.set('ssx_meta_v2', JSON.stringify({ fragments:999, tree:{ t_vitalite:6 } })); store.set('ssx_meta_v3', JSON.stringify({ v:3, composants:5 }));
+ok(run("migrateMeta()") === false && run("getMeta().composants") === 5, 'une v3 existante n\'est jamais écrasée par la v2');
+store.clear(); store.set('ssx_meta_v2', JSON.stringify({ fragments:7, tree:{} }));
+ok(run("getMeta().notice") === null && run("getMeta().composants") === 7, 'migration sans nœud repris : pas d\'avis');
+run("(()=>{ const m = getMeta(); m.composants += 3; setMeta(m); })()");
+ok(JSON.parse(store.get('ssx_meta_v3')).composants === 10 && store.get('ssx_meta_v2') === JSON.stringify({ fragments:7, tree:{} }), 'setMeta n\'écrit que la v3');
+
+// ---- statistiques de départ : atelier puis arbre restant
+{
+  const s = run("(()=>{ const s = makeDefaultStats(); applyGlobalGear(s, { atelier:{ coque:1 }, tree:{ t_velocite:2 } }); return s; })()");
+  ok(s.maxHp === 140 && near(s.bulletSpeed, 520*1.10), 'applyGlobalGear : coque Mk I et VELOCITE II');
+}
+ok(run("effectiveAlert(defaultMeta())") === 1, 'alerte de départ : 1, sans ascension');
 
 if (fail){ console.log('ÉCHEC : atelier (' + fail + ')'); process.exit(1); }
 console.log('OK : atelier');

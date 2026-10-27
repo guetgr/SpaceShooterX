@@ -54,9 +54,13 @@ mixin(GameScene, {
     return items;
   },
 
-  // atouts GLOBAUX : les modules du catalogue R&D achetés (permanents, appliqués à chaque mission, jamais perdus)
+  // atouts GLOBAUX : les postes de l'atelier et les modules du catalogue R&D achetés (permanents, appliqués à chaque mission, jamais perdus)
   globalGearItems(){
     const st = this.treeState || {}, out = [];
+    ATELIER_POSTS.forEach(p=>{
+      const mk = atelierMk(this.meta && this.meta.atelier, p.id); if (mk <= 0) return;
+      out.push({ icon:'🔧', name:p.name + ' MK ' + ROMAN[mk], desc:p.text, count:mk, max:ATELIER_MAX, kind:'GLOBAL' });
+    });
     ALL_TREE_NODES.forEach(n=>{
       const r = st[n.id] || 0; if (n.isHub || r <= 0) return;
       out.push({ icon:n.icon, name:n.name, desc:n.desc.replace(/\s*\/\s*niveau/i, ' par rang'), count:r, max:n.max, kind:'GLOBAL' });
@@ -71,7 +75,7 @@ mixin(GameScene, {
     if (b.dmg > 0.005) parts.push('+' + Math.round(b.dmg*100) + ' % de charge');
     if (b.hp >= 1) parts.push('+' + Math.round(b.hp) + ' de coque');
     if (b.shield >= 1) parts.push('+' + Math.round(b.shield) + ' de champ de sécurité');
-    return 'Catalogue R&D chargé : ' + g.length + (g.length > 1 ? ' atouts globaux actifs' : ' atout global actif') + (parts.length ? ' (' + parts.join(', ') + ')' : '') + '.';
+    return 'Camionnette équipée : ' + g.length + (g.length > 1 ? ' atouts globaux actifs' : ' atout global actif') + (parts.length ? ' (' + parts.join(', ') + ')' : '') + '.';
   },
 
   renderPauseGear(keepPage){

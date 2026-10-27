@@ -35,7 +35,7 @@ with sync_playwright() as pw:
     swipe(6,320); ck(page()==0,'glisser vers la droite depuis le bord (arbre) -> CARTE')
     swipe(80,320); ck(page()==-1,'glisser vers la droite -> HANGAR')
     # arbre : page de droite, achat, fragments mis à jour
-    p.evaluate("localStorage.setItem('ssx_meta_v2', JSON.stringify({fragments:500,tree:{},asc:0}))")
+    p.evaluate("localStorage.setItem('ssx_meta_v3', JSON.stringify({v:3,composants:500}))")
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(600)
     p.evaluate("document.getElementById('tabTree').click()"); p.wait_for_timeout(900)
     ck(page()==1 and p.evaluate("document.querySelectorAll('#treeScroll .tcard').length")>1,"l'arbre s'affiche dans la page de droite")

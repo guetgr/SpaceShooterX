@@ -292,6 +292,16 @@ const TREE_NODE_BY_ID = {};
 
 ALL_TREE_NODES.forEach(n=> TREE_NODE_BY_ID[n.id]=n);
 
+// remboursement (en composants) des rangs achetés sur les nœuds repris par l'atelier (migration v2 -> v3, data/meta.js)
+function treeRefundFor(tree){
+  let sum = 0;
+  Object.keys(tree||{}).forEach(id=>{
+    const n = TREE_NODE_BY_ID[id]; if (!n || !ATELIER_REPLACED.has(id)) return;
+    for (let i = 0; i < Math.min(tree[id], n.max); i++) sum += n.cost(i);
+  });
+  return sum;
+}
+
 { const cap = ALL_TREE_NODES.find(n=>n.id==='t_drone_cap');
   if (cap){
     ALL_TREE_NODES.push({ id:'t_radar', icon:'📡', name:'RADAR', desc:'Dans une nébuleuse, le cône de vision porte plus loin et s\'élargit / niveau.', max:4, cost:mkCost(26,22),
@@ -330,7 +340,7 @@ function treeVisStatus(state, v){
 const TREE_TOTAL = ALL_TREE_NODES.reduce((a,n)=> a + (n.max||0), 0);   // points de l'arbre complet
 
 // les paliers de niveau d'alerte étaient calculés pour 381 points: on les ramène à la taille réelle de l'arbre, pour que le dernier niveau = l'arbre complet (sinon les derniers niveaux sont inatteignables et l'alerte monte trop lentement)
-{ const base = ALERT_THRESHOLDS.slice(), k = TREE_TOTAL / base[base.length-1]; base.forEach((t,i)=>{ ALERT_THRESHOLDS[i] = Math.max(i ? ALERT_THRESHOLDS[i-1] + 1 : 1, Math.round(t*k)); }); ASCEND_MIN = Math.round(ASCEND_MIN*k); }
+{ const base = ALERT_THRESHOLDS.slice(), k = TREE_TOTAL / base[base.length-1]; base.forEach((t,i)=>{ ALERT_THRESHOLDS[i] = Math.max(i ? ALERT_THRESHOLDS[i-1] + 1 : 1, Math.round(t*k)); }); }
 
 function treeBranchStemSum(state, branchId){
   return ALL_TREE_NODES.filter(n=>n.stemOf===branchId).reduce((a,n)=>a+(state[n.id]||0),0);
