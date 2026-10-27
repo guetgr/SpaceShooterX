@@ -88,7 +88,7 @@
       seedState = seed >>> 0 || 1;
       const sc0 = SC(), g = sc0.game, L = levelById(levelId);
       const cap = opts.cap || (L.type === 'survive' ? L.goal.seconds*3 + 60 : 300);
-      const f0 = getMeta().fragments;
+      const f0 = getMeta().composants;
       sc0.scene.restart({ autoStart:true, levelId });
       let sc = null, tick = 0, t0 = clock, minHp = 1, cards = 0, introDone = false;
       const step = ()=>{ clock += DT; g.step(clock, DT); tick++; };
@@ -106,7 +106,7 @@
       return {
         win: !!(res && res.victory), timeout: !res, time: Math.round(simT*10)/10, kills: sc.runKills, level: sc.level, cards,
         score: Math.floor(sc.score), minHp: Math.round(minHp*100)/100, progress: res ? res.progress : sc.levelProgress().frac,
-        frags: getMeta().fragments - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
+        frags: getMeta().composants - f0, clearBonus: res ? res.clearBonus : 0, maxHp: Math.round(sc.stats.maxHp), dmg: Math.round(sc.stats.damage*10)/10,
       };
     },
 
@@ -137,13 +137,13 @@
       const PREF = policy === 'defense' ? ['defense', 'arme', 'missile'] : ['arme', 'defense', 'missile'];
       let bought = 0;
       for (;;){
-        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.fragments);
+        const avail = TREE_VIS.filter(n=> !n.isHub && treeVisStatus(st, n) === 'avail' && n.cost() <= meta.composants);
         if (!avail.length) break;
         avail.sort((a, b)=>{ const pa = PREF.indexOf(a.branch), pb = PREF.indexOf(b.branch); return ((pa < 0 ? 9 : pa) - (pb < 0 ? 9 : pb)) || (a.cost() - b.cost()); });
-        const n = avail[0]; meta.fragments -= n.cost(); st[n.nid] = n.k; bought++;
+        const n = avail[0]; meta.composants -= n.cost(); st[n.nid] = n.k; bought++;
       }
       setMeta(meta);
-      return { bought, fragments: meta.fragments, points: treeTotalPoints(st) };
+      return { bought, composants: meta.composants, points: treeTotalPoints(st) };
     },
   };
 })();

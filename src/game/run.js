@@ -79,7 +79,7 @@ mixin(GameScene, {
     const bank = composantsBank({ picked: this.runComposants + (victory ? this.composantsOnScreenValue() : 0), victory: !!victory, fragmentBonus: this.stats.fragmentBonus, pactMul: this.pactBonusMul || 1, prime });
     const nxt = (this.lvDef && victory) ? nextLevelOf(this.lvDef.id) : null;
     this.lvResult = { victory: !!victory, rec, bank, clearBonus: bank.prime, progress: this.lvDef ? (victory ? 1 : this.levelProgress().frac) : 0, next: nxt && isLevelUnlocked(nxt.id) ? nxt.id : null };
-    this.meta.fragments += bank.total;
+    this.meta.composants += bank.total;
     setMeta(this.meta);
 
     // classement local : la partie est enregistrée avec le dernier pseudo utilisé (modifiable juste après)

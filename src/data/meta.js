@@ -6,13 +6,13 @@ const META_KEY = 'ssx_meta_v2';
 function getMeta(){
   try {
     const raw = JSON.parse(localStorage.getItem(META_KEY) || 'null');
-    if (raw && typeof raw === 'object') return { fragments: raw.fragments||0, tree: raw.tree||{}, asc: raw.asc||0 };
+    if (raw && typeof raw === 'object') return { composants: raw.fragments||0, tree: raw.tree||{}, asc: raw.asc||0 };
   } catch(e){ /* ignore */ }
-  return { fragments:0, tree:{}, asc:0 };
+  return { composants:0, tree:{}, asc:0 };
 }
 
 function setMeta(meta){
-  try { localStorage.setItem(META_KEY, JSON.stringify(meta)); } catch(e){ /* ignore */ }
+  try { localStorage.setItem(META_KEY, JSON.stringify({ fragments: meta.composants, tree: meta.tree, asc: meta.asc })); } catch(e){ /* ignore */ }
 }
 
 // "Niveau d'alerte" — the more the permanent skill tree is invested, the nastier mobs get

@@ -102,7 +102,7 @@ mixin(HomeScene, {
   refreshHome(){
     if (!this.homeOn) return;
     const meta = getMeta();
-    document.getElementById('homeFrag').innerHTML = uiIco('frag') + ' ' + meta.fragments;
+    document.getElementById('homeFrag').innerHTML = uiIco('frag') + ' ' + meta.composants;
     this.renderHomeMap();
     if (this.mapMode === 'galaxy') this.refreshGalaxy();
     this.renderHomeHangar(meta);
@@ -198,14 +198,14 @@ mixin(HomeScene, {
 
   // arbre : le panneau (méthodes de GameScene) se redessine quand on arrive sur la page ; le point doré de l'onglet signale un achat possible
   renderHomeTree(meta){
-    const buy = TREE_VIS.some(n=> !n.isHub && treeVisStatus(meta.tree, n) === 'avail' && meta.fragments >= n.cost());
+    const buy = TREE_VIS.some(n=> !n.isHub && treeVisStatus(meta.tree, n) === 'avail' && meta.composants >= n.cost());
     document.getElementById('tabTree').classList.toggle('buy', buy);
   },
 
   // fragments, stats du hangar, point doré : après un achat dans l'arbre
   refreshHomeStats(){
     const meta = getMeta();
-    Motion.count(document.getElementById('homeFrag'), meta.fragments, v=> uiIco('frag') + ' ' + v);
+    Motion.count(document.getElementById('homeFrag'), meta.composants, v=> uiIco('frag') + ' ' + v);
     this.renderHomeHangar(meta); this.renderHomeTree(meta);
   },
 

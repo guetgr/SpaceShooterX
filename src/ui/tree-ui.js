@@ -26,7 +26,7 @@ mixin(GameScene, {
     const r = this.treeState[n.id] || 0;
     if (r >= n.max) return { r, st:'max' };
     const v = TREE_VIS_BY_ID[visId(n.id, r + 1)], avail = treeVisStatus(this.treeState, v) === 'avail';
-    return { r, v, avail, can: avail && this.meta.fragments >= v.cost(), st: r > 0 ? 'owned' : (avail ? 'avail' : 'locked') };
+    return { r, v, avail, can: avail && this.meta.composants >= v.cost(), st: r > 0 ? 'owned' : (avail ? 'avail' : 'locked') };
   },
 
   treeBranchPoints(L){ return L.tiers.flat().concat(L.lanes.flat()).reduce((a, n)=> a + (this.treeState[n.id] || 0), 0); },
@@ -110,7 +110,7 @@ mixin(GameScene, {
     document.getElementById('treeInfoDesc').textContent = node.desc.replace(/\s*\/\s*niveau/i, ' par rang');
     let meta;
     if (i.st === 'max') meta = node.max > 1 ? 'Rang maximum atteint. Budget épuisé.' : 'Installé.';
-    else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ' + uiIco('frag') + ' ' + i.v.cost() + (i.can ? '' : ' (il manque ' + uiIco('frag') + ' ' + (i.v.cost() - this.meta.fragments) + ')');
+    else if (i.avail) meta = (node.max > 1 ? 'Rang ' + i.r + ' → ' + (i.r + 1) + ' · ' : '') + 'Coût : ' + uiIco('frag') + ' ' + i.v.cost() + (i.can ? '' : ' (il manque ' + uiIco('frag') + ' ' + (i.v.cost() - this.meta.composants) + ')');
     else if (node.isKey && node.forkThreshold && node.requires.some(p => (state[p] || 0) > 0))
       meta = 'Non habilité · ' + node.forkThreshold + ' pts d\'habilitation requis dans ce département (' + treeBranchStemSum(state, node.branch) + '/' + node.forkThreshold + ').';
     else if (node.isKey) meta = "Non habilité · terminez d'abord la dernière habilitation du département.";
@@ -131,7 +131,7 @@ mixin(GameScene, {
     const i = this.treeCardInfo(node);
     if (!i.can) return;
     sfx.skillBuy();
-    this.meta.fragments -= i.v.cost();
+    this.meta.composants -= i.v.cost();
     this.treeState[node.id] = i.v.k;                // acheter le rang k = passer le rang de la compétence à k
     this.codexMark('skills', node.id);
     setMeta(this.meta);

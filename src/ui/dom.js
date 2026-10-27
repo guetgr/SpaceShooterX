@@ -32,7 +32,7 @@ mixin(GameScene, {
     };
     document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: this.lvDef ? this.lvDef.id : undefined }); };
     document.getElementById('hiScoreStart').textContent = getHighScore();
-    document.getElementById('fragStart').textContent = this.meta.fragments;
+    document.getElementById('fragStart').textContent = this.meta.composants;
 
     const pauseBtn = document.getElementById('pauseBtn');
     pauseBtn.onclick = ()=>{
@@ -237,7 +237,7 @@ mixin(GameScene, {
       }
       clearTimeout(this.resetArmTimer);
       this.resetArmed = false;
-      this.meta = { fragments:0, tree:{}, asc:0 };
+      this.meta = { composants:0, tree:{}, asc:0 };
       this.treeState = this.meta.tree;
       setMeta(this.meta);
       // les succès et le bestiaire repartent aussi de zéro (sinon les kills du bestiaire les feraient réapparaître)
@@ -249,7 +249,7 @@ mixin(GameScene, {
       try { localStorage.removeItem('ssx_bossbag_v1'); localStorage.removeItem(WORLDS_KEY); localStorage.removeItem('ssx_tuto_v1'); } catch(e){ /* ignore */ }      // après une réinitialisation, la 1re partie redevient le tuto
       sfx.uiClick();
       btn.textContent = 'RÉINITIALISER LA PROGRESSION';
-      document.getElementById('fragStart').textContent = this.meta.fragments;
+      document.getElementById('fragStart').textContent = this.meta.composants;
     };
     document.getElementById('btnQuit').onclick = ()=>{            // demande confirmation dans la feuille (plus de bouton « re-tape »)
       sfx.uiOpen();
