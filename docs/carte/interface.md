@@ -10,16 +10,15 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 |---|---|---|
 | `stage` | `main.js` | `css/style.css`, `css/agp.css` |
 | `game-container` | `home/ui.js`, `main.js`, `ui/motion.js`, `ui/norma.js` | `css/style.css`, `css/agp.css` |
-| `hud` | `ui/hud.js` | `css/style.css` |
+| `hud` | — | `css/style.css` |
 | `hud-top` | `ui/motion.js` | `css/style.css` |
-| `hudAvaImg` | `ui/hud.js` | — |
-| `lvlBadge` | `ui/hud.js` | — |
 | `hpTrack` | `player/damage.js`, `ui/motion.js` | — |
+| `hpTxt` | `ui/hud.js` | — |
 | `hpGhost` | `ui/motion.js` | — |
 | `hpFill` | `ui/hud.js` | — |
-| `hpTxt` | `ui/hud.js` | — |
 | `shieldTrack` | `player/damage.js`, `ui/hud.js` | — |
 | `shieldFill` | `ui/hud.js` | — |
+| `lvlBadge` | `ui/hud.js` | — |
 | `xpTrack` | `ui/hud.js` | — |
 | `xpFill` | `ui/hud.js` | — |
 | `scoreVal` | `ui/hud.js` | — |
@@ -262,11 +261,11 @@ Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase l
 
 `#boss-banner`, `#btnBackWorld`, `#btnLaunch`, `#game-container`, `#gameNotice .gn-desc`, `#gameNotice .gn-name`, `#gameover`, `#gameover .go-title`, `#gameover.win .go-title`, `#homeTabs`, `#homeToast`, `#homeTop`, `#levelup .lu-title`, `#odBtn`, `#pageTree`, `#pauseGear .pg-head`, `#pauseMenu, #settingsMenu`, `#pgGrid .pg-it.sel`, `#relicRow`, `#stage`, `#styleHud`, `#treeBName`, `#treeBProg`, `#tutoEnd .go-title`, `#tutoEnd .te-big`, `#tutoEnd .te-new`, `#tutoEnd.win .go-title`, `#tutoPct .tp-fill`, `.boss-hp-label`, `.boss-hp-track`, `.btn.secondary`, `.btn.secondary:hover`, `.btn:not(.secondary):not(.small)`, `.card`, `.card-desc`, `.card-name`, `.card.fusion`, `.card:hover`, `.go-extra`, `.go-extra .go-boss`, `.go-extra .go-near`, `.go-prog`, `.go-prog-bar`, `.go-prog-bar > i`, `.go-rewards`, `.go-rw`, `.go-rw b`, `.go-rw.total`, `.go-rw.total b`, `.go-stats`, `.go-unlock`, `.gx-hint`, `.gx-title`, `.hangar-body`, `.hangar-body .stat-row`, `.hangar-gap`, `.hangar-seg button`, `.hangar-seg button.on`, `.hangar-tier`, `.home-frag`, `.home-ico`, `.home-page`, `.home-tab`, `.home-tab.buy::after`, `.home-tab.on`, `.home-tab.on::before`, `.home-tab::before`, `.hp-bar-fill`, `.hp-bar-ghost`, `.hp-bar-track`, `.hp-label, .score-label`, `.hp-title`, `.lc-comp i`, `.lc-comp i u`, `.lc-line`, `.lc-name`, `.level-card`, `.lu-title`, `.lvl-badge`, `.map-arrow`, `.mod`, `.mod-detail em`, `.mod.sel`, `.mute-btn`, `.mw-n`, `.mw-name`, `.mw-prog`, `.new-best`, `.node`, `.node-pct`, `.node-pct.full`, `.node.boss`, `.node.done`, `.node.open`, `.node.sel`, `.overlay`, `.overlay::after`, `.scanlines`, `.score-label`, `.score-val`, `.sheet`, `.sheet-overlay`, `.sheet::before`, `.shield-bar-fill`, `.shield-bar-track`, `.skin`, `.skin i`, `.skin.sel`, `.skin.sel i`, `.tc-cost`, `.tc-cost b`, `.tc-nm`, `.tcard`, `.tcard.aff::before`, `.tree-bhead`, `.tree-info`, `.tree-info-meta`, `.tree-info-name`, `.tree-invest-btn`, `.tree-invest-btn:disabled`, `.tree-tabs`, `.tt-dot`, `.ttab`, `.ttier`, `.wave-note`, `.xp-fill`, `.xp-track`, `:root`
 
-### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (22 candidats)
+### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (26 candidats)
 
 Peut aussi être une classe construite par concaténation de texte : vérifier avant de supprimer.
 
-`hangar-body` (style.css), `hangar-custom-note` (agp.css), `hangar-gap` (style.css), `hangar-label` (agp.css), `hangar-part` (agp.css), `hangar-part-option` (agp.css), `hangar-part-options` (agp.css), `hangar-part-title` (agp.css), `hangar-stage` (agp.css), `hangar-tier` (style.css), `hp-label` (style.css), `hp-title` (style.css), `mod-detail` (style.css), `mod-empty` (style.css), `mod-grid` (style.css), `mod-head` (agp.css), `n1` (style.css), `n2` (style.css), `n3` (style.css), `p-1` (style.css), `p1` (style.css), `skin-row` (style.css)
+`hangar-body` (style.css), `hangar-custom-note` (agp.css), `hangar-gap` (style.css), `hangar-label` (agp.css), `hangar-part` (agp.css), `hangar-part-option` (agp.css), `hangar-part-options` (agp.css), `hangar-part-title` (agp.css), `hangar-stage` (agp.css), `hangar-tier` (style.css), `hp-label` (style.css), `hp-title` (style.css), `lvl-badge` (style.css), `mod-detail` (style.css), `mod-empty` (style.css), `mod-grid` (style.css), `mod-head` (agp.css), `n1` (style.css), `n2` (style.css), `n3` (style.css), `nm-av` (agp.css), `nm-eye` (agp.css), `nm-mouth` (agp.css), `p-1` (style.css), `p1` (style.css), `skin-row` (style.css)
 
 ### @keyframes jamais utilisés (0)
 
@@ -274,14 +273,14 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`audio/music/` : 23, `audio/sfx/` : 66, `fonts/` : 3, `sprites/` : 165
+`audio/music/` : 23, `audio/sfx/` : 66, `fonts/` : 3, `hud/` : 1, `sprites/` : 165
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 
 —
 
-### Assets dont le nom n'apparaît nulle part dans le code (17 candidats)
+### Assets dont le nom n'apparaît nulle part dans le code (18 candidats)
 
 Les sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.
 
-`sprites/ui_arrow_l.png`, `sprites/ui_arrow_r.png`, `sprites/ui_check.png`, `sprites/ui_clock.png`, `sprites/ui_frag.png`, `sprites/ui_galaxy.png`, `sprites/ui_gear.png`, `sprites/ui_hand.png`, `sprites/ui_lock.png`, `sprites/ui_next.png`, `sprites/ui_pause.png`, `sprites/ui_pip_off.png`, `sprites/ui_pip_on.png`, `sprites/ui_skull.png`, `sprites/ui_star.png`, `sprites/ui_target.png`, `sprites/ui_trophy.png`
+`hud/segments.svg`, `sprites/ui_arrow_l.png`, `sprites/ui_arrow_r.png`, `sprites/ui_check.png`, `sprites/ui_clock.png`, `sprites/ui_frag.png`, `sprites/ui_galaxy.png`, `sprites/ui_gear.png`, `sprites/ui_hand.png`, `sprites/ui_lock.png`, `sprites/ui_next.png`, `sprites/ui_pause.png`, `sprites/ui_pip_off.png`, `sprites/ui_pip_on.png`, `sprites/ui_skull.png`, `sprites/ui_star.png`, `sprites/ui_target.png`, `sprites/ui_trophy.png`

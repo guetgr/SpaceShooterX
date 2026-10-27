@@ -83,7 +83,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 75 | `src/bosses/parts.js` | Méthodes de GameScene — pièces de boss : tentacules, têtes, dégâts par pièce, repousse. |
 | 76 | `src/bosses/ai.js` | Méthodes de GameScene — IA spécifique de chaque boss (dread, faucheuse, ruche, prisme, kraken, éclipse, hydre). |
 | 77 | `src/combat/damage.js` | Méthodes de GameScene — collisions et dégâts sur les ennemis, mort des ennemis. |
-| 78 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. portraits du HUD (même image que la camionnette en jeu, selon son palier) |
+| 78 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. |
 | 79 | `src/systems/combo.js` | Méthodes de GameScene — combo et rang de style (multiplicateur d'XP). |
 | 80 | `src/systems/overdrive.js` | Méthodes de GameScene — Overdrive. |
 | 81 | `src/systems/relics-fusions.js` | Méthodes de GameScene — choix de reliques et fusions. |
@@ -252,10 +252,9 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 - Définit : `TREE_BRANCH_ICONS`, `_treeLayout`, `treeLayout`
 - Méthodes ajoutées à `GameScene` (mixin) : `treeCardInfo`, `treeBranchPoints`, `treeCardHtml`, `renderTree`, `setupTreeUi`, `selectTreeNode`, `refreshTreeSheet`, `codexMark`, `investTreeNode`
 
-**`hud.js`** — Méthodes de GameScene — HUD : secousse, rang de style, barres. portraits du HUD (même image que la camionnette en jeu, selon son palier)
+**`hud.js`** — Méthodes de GameScene — HUD : secousse, rang de style, barres.
 
-- Définit : `HUD_AVATARS`, `HUD_STILL`
-- Méthodes ajoutées à `GameScene` (mixin) : `shakeHud`, `updateStyleHud`, `hudFlash`, `updateHudSway`, `updateHud`
+- Méthodes ajoutées à `GameScene` (mixin) : `shakeHud`, `updateStyleHud`, `hudFlash`, `updateHud`
 
 ### `src/data/worlds/`
 

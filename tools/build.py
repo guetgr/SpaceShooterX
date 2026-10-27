@@ -12,7 +12,7 @@ import base64, json, mimetypes, os, re, subprocess, sys
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INLINE_PHASER = '--inline-phaser' in sys.argv
-MIME = {'png': 'image/png', 'webp': 'image/webp', 'jpg': 'image/jpeg', 'mp3': 'audio/mpeg', 'woff2': 'font/woff2'}
+MIME = {'svg': 'image/svg+xml', 'png': 'image/png', 'webp': 'image/webp', 'jpg': 'image/jpeg', 'mp3': 'audio/mpeg', 'woff2': 'font/woff2'}
 
 
 def read(rel, mode='r'):
