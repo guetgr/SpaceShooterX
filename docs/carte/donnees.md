@@ -12,9 +12,9 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `coque`, `canon`, `bouclier`, `propulseurs`, `aimant`, `ordinateur`
 
-## `src/data/completion.js` (4)
+## `src/data/completion.js` (12)
 
-`sats`, `boss`, `win`, `clean`
+`sats`, `boss`, `win`, `clean`, `boss`, `win`, `clean`, `goal`, `boss`, `win`, `win`, `clean`
 
 ## `src/data/fusions.js` (6)
 
@@ -52,4 +52,4 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `w3`, `w3-l1`, `w3-l2`, `w3-l3`, `w3-l4`, `w3-l5`
 
-144 ids au total.
+152 ids au total.

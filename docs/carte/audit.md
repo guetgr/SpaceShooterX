@@ -27,10 +27,11 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `HOME_ORBIT` (const) — `src/home/background.js`
 - `HOME_STAT_LINES` (const) — `src/home/ui.js`
 
-## Candidats « code mort » : méthodes jamais référencées par leur nom (2)
+## Candidats « code mort » : méthodes jamais référencées par leur nom (3)
 
 - `GameScene.startMagVortex` — `src/events/types.js`
 - `HomeScene.applyHomeParts` — `src/home/background.js`
+- `GameScene.showCombo` — `src/systems/combo.js`
 
 ## Outils (`tools/`)
 

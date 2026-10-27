@@ -34,7 +34,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `bossHpFill2` | — | — |
 | `bossShTrack2` | — | — |
 | `bossShFill2` | — | — |
-| `boss-hp-wrap3` | `game/level.js`, `scenes/GameScene.js` | `css/style.css` |
+| `boss-hp-wrap3` | `game/level.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
 | `bossLabel3` | — | — |
 | `bossHpFill3` | — | — |
 | `bossShTrack3` | — | — |
@@ -60,17 +60,14 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `levelCard` | `home/ui.js` | — |
 | `btnLaunch` | `home/ui.js`, `ui/motion.js` | `css/style.css`, `css/agp.css` |
 | `mapOrbit` | `home/orbital.js`, `home/ui.js` | `css/style.css` |
-| `orbitPrev` | `home/orbital.js`, `home/ui.js` | — |
-| `orbitIndex` | `home/ui.js` | — |
-| `orbitNext` | `home/orbital.js`, `home/ui.js` | — |
 | `btnBackWorld` | `home/ui.js` | `css/style.css`, `css/agp.css` |
 | `pageTree` | `ui/rd-ui.js` | `css/style.css`, `css/agp.css` |
 | `treeTabs` | `home/ui.js`, `ui/rd-ui.js` | — |
-| `treeBName` | `ui/rd-ui.js` | `css/style.css`, `css/agp.css` |
+| `treeScroll` | `ui/rd-ui.js` | — |
 | `treeBSub` | `ui/rd-ui.js` | — |
+| `treeBName` | `ui/rd-ui.js` | `css/style.css`, `css/agp.css` |
 | `treeBProg` | `ui/rd-ui.js` | `css/style.css`, `css/agp.css` |
 | `treeBBar` | `ui/rd-ui.js` | — |
-| `treeScroll` | `ui/rd-ui.js` | — |
 | `homeTabs` | `ui/motion.js` | `css/style.css`, `css/agp.css` |
 | `tabHangar` | `home/ui.js` | — |
 | `tabMap` | `home/ui.js` | — |
@@ -208,7 +205,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 
 Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase les règles du haut), mais source de confusion.
 
-### `css/style.css` : 431 sélecteurs, 36 définis plusieurs fois
+### `css/style.css` : 416 sélecteurs, 36 définis plusieurs fois
 
 - `:root` : 2 fois
 - `#hud` : 2 fois
@@ -247,22 +244,22 @@ Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase l
 - `#pageTree` : 2 fois
 - `.acc-head` : 2 fois
 
-### `css/agp.css` : 264 sélecteurs, 2 définis plusieurs fois
+### `css/agp.css` : 274 sélecteurs, 2 définis plusieurs fois
 
 - `#stage` : 2 fois
 - `.lu-sub` : 2 fois
 
-### Sélecteurs de `style.css` redéfinis par `agp.css` (117)
+### Sélecteurs de `style.css` redéfinis par `agp.css` (125)
 
 `agp.css` est chargé après : sa version gagne. Pour comprendre un style, lire les deux.
 
-`#boss-banner`, `#btnBackWorld`, `#btnLaunch`, `#game-container`, `#gameNotice .gn-desc`, `#gameNotice .gn-name`, `#gameover`, `#gameover .go-title`, `#gameover.win .go-title`, `#homeTabs`, `#homeToast`, `#homeTop`, `#levelup .lu-title`, `#odBtn`, `#pageTree`, `#pauseGear .pg-head`, `#pauseMenu, #settingsMenu`, `#pgGrid .pg-it.sel`, `#relicRow`, `#stage`, `#styleHud`, `#treeBName`, `#treeBProg`, `#tutoEnd .go-title`, `#tutoEnd .te-big`, `#tutoEnd .te-new`, `#tutoEnd.win .go-title`, `#tutoPct .tp-fill`, `.boss-hp-label`, `.boss-hp-track`, `.btn.secondary`, `.btn.secondary:hover`, `.btn:not(.secondary):not(.small)`, `.card`, `.card-desc`, `.card-name`, `.card.fusion`, `.card:hover`, `.go-extra`, `.go-extra .go-boss`, `.go-extra .go-near`, `.go-prog`, `.go-prog-bar`, `.go-prog-bar > i`, `.go-rewards`, `.go-rw`, `.go-rw b`, `.go-rw.total`, `.go-rw.total b`, `.go-stats`, `.go-unlock`, `.gx-hint`, `.gx-title`, `.hangar-body`, `.hangar-body .stat-row`, `.hangar-gap`, `.hangar-seg button`, `.hangar-seg button.on`, `.hangar-tier`, `.home-frag`, `.home-ico`, `.home-page`, `.home-tab`, `.home-tab.buy::after`, `.home-tab.on`, `.home-tab.on::before`, `.home-tab::before`, `.hp-bar-fill`, `.hp-bar-ghost`, `.hp-bar-track`, `.hp-label, .score-label`, `.hp-title`, `.lc-comp i`, `.lc-comp i u`, `.lc-line`, `.lc-name`, `.level-card`, `.lu-title`, `.lvl-badge`, `.map-arrow`, `.mod`, `.mod-detail em`, `.mod.sel`, `.mute-btn`, `.mw-n`, `.mw-name`, `.mw-prog`, `.new-best`, `.node`, `.node-pct`, `.node-pct.full`, `.node.boss`, `.node.done`, `.node.open`, `.node.sel`, `.overlay`, `.overlay::after`, `.scanlines`, `.score-label`, `.score-val`, `.sheet`, `.sheet-overlay`, `.sheet::before`, `.shield-bar-fill`, `.shield-bar-track`, `.skin`, `.skin i`, `.skin.sel`, `.skin.sel i`, `.tree-bhead`, `.tree-tabs`, `.tt-dot`, `.ttab`, `.wave-note`, `.xp-fill`, `.xp-track`, `:root`
+`#boss-banner`, `#btnBackWorld`, `#btnLaunch`, `#game-container`, `#gameNotice .gn-desc`, `#gameNotice .gn-name`, `#gameover`, `#homeTabs`, `#homeToast`, `#homeTop`, `#levelup .lu-title`, `#odBtn`, `#pageTree`, `#pauseGear .pg-head`, `#pauseMenu, #settingsMenu`, `#pgGrid .pg-it.sel`, `#relicRow`, `#stage`, `#styleHud`, `#treeBName`, `#treeBProg`, `#tutoEnd .te-b`, `#tutoEnd .te-b i`, `#tutoEnd .te-bar`, `#tutoEnd .te-bar s`, `#tutoEnd .te-big`, `#tutoEnd .te-new`, `#tutoEnd .te-next`, `#tutoEnd .te-next b, #tutoEnd .te-next em`, `#tutoEnd .te-old`, `#tutoEnd .te-row`, `#tutoEnd .te-row.ok`, `#tutoEnd .te-row.ok .te-b i`, `#tutoEnd .te-sub`, `#tutoEnd .te-sub em, #tutoEnd .te-row em`, `#tutoEnd .te-v`, `.boss-hp-label`, `.boss-hp-track`, `.btn.secondary`, `.btn.secondary:hover`, `.btn:not(.secondary):not(.small)`, `.card`, `.card-desc`, `.card-name`, `.card.fusion`, `.card:hover`, `.go-extra`, `.go-extra .go-boss`, `.go-extra .go-near`, `.go-prog`, `.go-prog-bar`, `.go-prog-bar > i`, `.go-rewards`, `.go-rw`, `.go-rw b`, `.go-rw.total`, `.go-rw.total b`, `.go-stats`, `.go-unlock`, `.gx-hint`, `.gx-title`, `.hangar-body`, `.hangar-body .stat-row`, `.hangar-gap`, `.hangar-seg button`, `.hangar-seg button.on`, `.hangar-tier`, `.home-frag`, `.home-ico`, `.home-page`, `.home-tab`, `.home-tab.buy::after`, `.home-tab.on`, `.home-tab.on::before`, `.home-tab::before`, `.hp-bar-fill`, `.hp-bar-ghost`, `.hp-bar-track`, `.hp-label, .score-label`, `.hp-title`, `.lc-comp i`, `.lc-comp i u`, `.lc-line`, `.lc-name`, `.level-card`, `.lu-title`, `.lvl-badge`, `.map-arrow`, `.mod`, `.mod-detail em`, `.mod.sel`, `.mute-btn`, `.mw-n`, `.mw-name`, `.mw-prog`, `.new-best`, `.node`, `.node-pct`, `.node-pct.full`, `.node.boss`, `.node.done`, `.node.open`, `.node.sel`, `.overlay`, `.overlay::after`, `.scanlines`, `.score-label`, `.score-val`, `.sheet`, `.sheet-overlay`, `.sheet::before`, `.shield-bar-fill`, `.shield-bar-track`, `.skin`, `.skin i`, `.skin.sel`, `.skin.sel i`, `.tree-bhead`, `.tree-tabs`, `.tt-dot`, `.ttab`, `.wave-note`, `.xp-fill`, `.xp-track`, `:root`
 
-### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (24 candidats)
+### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (22 candidats)
 
 Peut aussi être une classe construite par concaténation de texte : vérifier avant de supprimer.
 
-`hangar-body` (style.css), `hangar-custom-note` (agp.css), `hangar-gap` (style.css), `hangar-label` (agp.css), `hangar-part` (agp.css), `hangar-part-option` (agp.css), `hangar-part-options` (agp.css), `hangar-part-title` (agp.css), `hangar-stage` (agp.css), `hangar-tier` (style.css), `hp-label` (style.css), `hp-title` (style.css), `lvl-badge` (style.css), `mod-detail` (style.css), `mod-empty` (style.css), `mod-grid` (style.css), `mod-head` (agp.css), `nm-av` (agp.css), `nm-eye` (agp.css), `nm-mouth` (agp.css), `p-1` (style.css), `p1` (style.css), `skin-row` (style.css), `trace` (agp.css)
+`hangar-body` (style.css), `hangar-custom-note` (agp.css), `hangar-gap` (style.css), `hangar-label` (agp.css), `hangar-part` (agp.css), `hangar-part-option` (agp.css), `hangar-part-options` (agp.css), `hangar-part-title` (agp.css), `hangar-stage` (agp.css), `hangar-tier` (style.css), `hp-label` (style.css), `hp-title` (style.css), `lvl-badge` (style.css), `mod-detail` (style.css), `mod-empty` (style.css), `mod-grid` (style.css), `mod-head` (agp.css), `p-1` (style.css), `p1` (style.css), `skin-row` (style.css), `tb-l` (agp.css), `trace` (agp.css)
 
 ### @keyframes jamais utilisés (0)
 

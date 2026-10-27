@@ -31,11 +31,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `acFollow` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `acFx` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `acHitFlash` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
-| `ACHV_EXPLO` | const | `src/data/achievements.js` |  |
 | `ACHV_GLOBALS` | const | `src/data/achievements.js` |  |
 | `ACHV_KEY` | const | `src/data/achievements.js` |  |
-| `ACHV_RARE` | const | `src/data/achievements.js` |  |
-| `ACHV_TIERS` | const | `src/data/achievements.js` |  |
 | `ACHV_TYPES` | const | `src/data/achievements.js` |  |
 | `ACHV_W` | const | `src/data/achievements.js` |  |
 | `achvCheck` | méthode | `src/systems/achievements.js` | `GameScene` |
@@ -43,10 +40,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `achvOnKill` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `achvPump` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `achvRaw` | fonction | `src/data/achievements.js` |  |
-| `achvThreshold` | fonction | `src/data/achievements.js` |  |
-| `achvTierFor` | fonction | `src/data/achievements.js` |  |
 | `achvToast` | méthode | `src/systems/achievements.js` | `GameScene` |
-| `achvWeighted` | fonction | `src/data/achievements.js` |  |
 | `acPix` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `acRandomHull` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
 | `acRebuildFlames` | méthode | `src/game/tuto-boss-fx.js` | `GameScene` |
@@ -361,7 +355,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `damageBossAll` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `damageBossPart` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `damagePlayer` | méthode | `src/player/damage.js` | `GameScene` |
-| `deathExplosion` | méthode | `src/fx/effects.js` | `GameScene` |
 | `defaultMeta` | fonction | `src/data/meta.js` |  |
 | `deferSpawn` | méthode | `src/bosses/core.js` | `GameScene` |
 | `deployMine` | méthode | `src/enemies/ai.js` | `GameScene` |
@@ -450,8 +443,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `eSpd` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `EVENT_DEFS` | const | `src/data/events.js` |  |
 | `evRndX` | const | `src/data/events.js` |  |
-| `EXPLO_BOSS_FACTOR` | const | `src/data/balance.js` |  |
-| `EXPLO_HURTS_PLAYER_ALERT` | const | `src/data/balance.js` |  |
 | `explodeFx` | méthode | `src/fx/effects.js` | `GameScene` |
 | `EXPLOSION_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `FAU_CR_B64` | const | `src/data/image-assets.js` |  |
@@ -540,6 +531,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `HOME_ORBIT` | const | `src/home/background.js` |  |
 | `HOME_ORBIT_VIEW` | const | `src/home/orbital.js` |  |
 | `HOME_STAT_LINES` | const | `src/home/ui.js` |  |
+| `homeMusic` | méthode | `src/home/ui.js` | `HomeScene` |
 | `homeOrbitPoint` | fonction | `src/home/orbital.js` |  |
 | `HomeScene` | classe | `src/scenes/HomeScene.js` |  |
 | `homeToast` | méthode | `src/home/galaxy.js` | `HomeScene` |
@@ -598,6 +590,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
+| `levelComp` | méthode | `src/game/level.js` | `GameScene` |
+| `levelCompletionDefs` | fonction | `src/data/completion.js` |  |
 | `levelGoalText` | fonction | `src/home/ui.js` |  |
 | `levelInit` | méthode | `src/game/level.js` | `GameScene` |
 | `levelProgress` | méthode | `src/game/level.js` | `GameScene` |
@@ -695,6 +689,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `MUSIC_BOSS` | const | `src/audio/music.js` |  |
 | `MUSIC_BOSS_KEYS` | const | `src/audio/music.js` |  |
 | `MUSIC_FILES` | const | `src/audio/music-data.js` |  |
+| `MUSIC_LEN` | const | `src/audio/music-data.js` |  |
+| `MUSIC_LEVEL` | const | `src/audio/music.js` |  |
+| `MUSIC_MENU_WORLD` | const | `src/audio/music.js` |  |
 | `MUSIC_SLOTS` | const | `src/audio/music.js` |  |
 | `musicLen` | const | `src/audio/music.js` |  |
 | `MusicLoop` | classe | `src/audio/music.js` |  |
@@ -711,6 +708,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `normalizeMeta` | fonction | `src/data/meta.js` |  |
 | `normaLow` | méthode | `src/ui/norma.js` | `GameScene` |
 | `normaStart` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaTick` | méthode | `src/ui/norma.js` | `GameScene` |
 | `note` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `notice` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `odPower` | méthode | `src/systems/overdrive.js` | `GameScene` |
@@ -1049,6 +1047,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `startRun` | méthode | `src/game/run.js` | `GameScene` |
 | `startSlowmo` | méthode | `src/systems/skills.js` | `GameScene` |
 | `staticStrike` | méthode | `src/events/types.js` | `GameScene` |
+| `stepOrbitLevel` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `stepSec` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `stop` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `stop` | méthode | `src/audio/music.js` | `FileMusic` |
@@ -1129,7 +1128,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `tutoStepEnter` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoStepProgress` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUiClear` | méthode | `src/game/tuto.js` | `GameScene` |
-| `tutoUiInit` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUiUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
 | `UI_ICONS` | const | `src/ui/ui-icons.js` |  |
@@ -1214,4 +1212,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1207 symboles.
+1205 symboles.
