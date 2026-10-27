@@ -14,7 +14,7 @@ mixin(GameScene, {
 
   // cartes proposées à la montée de niveau : réglages du canon + cartes d'assemblage des technologies emportées pas encore assemblées
   cardPool(){
-    const n = this.cardCount(), eligible = u => !(u.minLevel && this.level < u.minLevel), extra = this.assemblyCards();
+    const n = this.cardCount(), eligible = u => !(u.minLevel && this.level < u.minLevel), extra = this.assemblyCards().concat(this.techCards());
     const available = UPGRADE_POOL.filter(u => eligible(u) && (this.upgradeCounts[u.id]||0) < u.max).concat(extra);
     return available.length >= n ? available : UPGRADE_POOL.filter(eligible).concat(extra);
   },
@@ -41,17 +41,39 @@ mixin(GameScene, {
     });
   },
 
-  // assemble une technologie du chargement : effet de base, puis ses rangs de R&D ; soigne de ce que la coque et le bouclier gagnent
-  techAssemble(id){
-    const st = this.techState[id], t = TECH_BY_ID[id]; if (!st || st.assembled) return;
+  // exécute un effet de technologie ; soigne de ce que la coque et le bouclier gagnent, ajuste les esquives
+  techEffect(fn){
     const hp0 = this.stats.maxHp, sh0 = this.stats.shieldMax, dg0 = this.stats.dodgeCharges;
-    st.assembled = true;
-    t.assemble(this.stats, this);
-    rdApplyRanks(id, this.stats, st.rang, this);
+    fn();
     if (this.stats.maxHp > hp0) this.hp = Math.min(this.stats.maxHp, this.hp + this.stats.maxHp - hp0);
     if (this.stats.shieldMax > sh0) this.shield = Math.min(this.stats.shieldMax, this.shield + this.stats.shieldMax - sh0);
     this.dodgeCharges += this.stats.dodgeCharges - dg0;
-    this.codexMark('skills', id);
+  },
+
+  // assemble une technologie du chargement : effet de base, puis ses rangs de R&D
+  techAssemble(id){
+    const st = this.techState[id], t = TECH_BY_ID[id]; if (!st || st.assembled) return;
+    st.assembled = true;
+    this.techEffect(()=>{ t.assemble(this.stats, this); rdApplyRanks(id, this.stats, st.rang, this); });
+    this.codexMark('skills', id); this.codexMark('usedSkills', id);      // collection : la technologie est « utilisée » dès son assemblage
+  },
+
+  // cartes des technologies assemblées : leurs améliorations (3 par mission au plus) et, si elle est recherchée en R&D, leur spécialisation
+  // (après 2 cartes de la technologie dans la mission)
+  techCards(){
+    const out = [];
+    Object.keys(this.techState || {}).forEach(id=>{
+      const st = this.techState[id], t = TECH_BY_ID[id]; if (!st.assembled) return;
+      const kind = t.tag ? 'weapon' : 'utility';
+      t.upgrades.forEach(u=>{
+        const cid = 'up_' + id + '_' + u.id; if ((this.upgradeCounts[cid]||0) >= 3) return;
+        out.push({ id:cid, tech:id, icon:t.icon, name:u.name, desc:u.desc, max:3, category:kind, apply:()=> this.techEffect(()=> u.inc(this.stats, this)) });
+      });
+      const sid = 'spe_' + id;
+      if (t.spe && st.spe && st.picks >= 2 && !this.upgradeCounts[sid])
+        out.push({ id:sid, tech:id, icon:t.icon, name:'SPECIALISATION : ' + t.spe.name, desc:t.spe.desc, max:1, category:kind, apply:()=> this.techEffect(()=> t.spe.apply(this.stats, this)) });
+    });
+    return out;
   },
 
   // nombre de cartes proposées (2 de base, +1 par rang d'INTUITION, 5 au maximum)
@@ -69,6 +91,7 @@ mixin(GameScene, {
         sfx.cardPick();
         u.apply(this.stats);
         this.upgradeCounts[u.id] = (this.upgradeCounts[u.id]||0)+1;
+        if (u.tech && this.techState[u.tech] && u.id.indexOf('up_') === 0) this.techState[u.tech].picks += 1;
         this.codexMark(u.id.indexOf('fus_') === 0 ? 'fusions' : 'cards', u.id);
         // ECLAIR DE GENIE: la carte peut compter double (sans dépasser son maximum)
         if (this.stats.doubleCardChance > 0 && this.upgradeCounts[u.id] < u.max && Math.random() < this.stats.doubleCardChance){

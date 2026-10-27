@@ -76,5 +76,43 @@ with mission({'v':3,'composants':0,'rd':RD('laser_continu','missiles_guidage','d
     ck(ev(p,"return [s.stats.weaponMode, s.stats.missileCount, !!s.droneOwned]")==['laser',1,True],'effets des trois assemblages : laser, 1 missile, drone')
     ck(not errs,'(f) pas d\'erreur JS')
 
+# ---- cartes d'amélioration, spécialisation et fusions
+take=lambda p,cid: p.evaluate("(()=>{const s=window.__ssxScene; const c=s.techCards().find(c=>c.id==='%s'); s.renderCardChoices([c]); document.querySelector('#cardsWrap .card').click(); return 0;})()"%cid)
+ids=lambda p: ev(p,"return s.techCards().map(c=>c.id)")
+LC='up_laser_continu_t_laser_c_portee'
+# (g) technologie assemblée : ses améliorations sont proposées, pas la spécialisation tant que < 2 cartes
+with mission({'v':3,'composants':0,'rd':RD('laser_continu',laser_continu={'spe':True}),'chargement':['laser_continu']}) as (p,errs):
+    ck(ids(p)==[],'technologie non assemblée : aucune carte d\'amélioration')
+    ev(p,"s.techAssemble('laser_continu'); return 0")
+    c=ids(p)
+    ck('up_laser_continu_t_laser_c_portee' in c and 'up_laser_continu_t_laser_c_degats' in c and 'spe_laser_continu' not in c,'assemblée : améliorations proposées, pas la spécialisation (%s)'%c)
+    v0=ev(p,"return s.stats.laserSpeedBonus")
+    take(p,LC); v1=ev(p,"return s.stats.laserSpeedBonus")
+    ck(abs((v1-v0)-0.10)<1e-9,'une carte d\'amélioration applique l\'incrément exactement une fois (+%s)'%(v1-v0))
+    ck('spe_laser_continu' not in ids(p),'1 carte prise : toujours pas de spécialisation')
+    take(p,LC)
+    ck('spe_laser_continu' in ids(p),'2 cartes de la technologie prises : la spécialisation est proposée')
+    take(p,'spe_laser_continu')
+    ck(ev(p,"return s.laserDestructeurOwned")==True and 'spe_laser_continu' not in ids(p),'carte SPECIALISATION : LASER DESTRUCTEUR posé, carte non reproposée')
+    ck(not errs,'(g) pas d\'erreur JS')
+
+# (h) une spécialisation non recherchée ne sort jamais
+with mission({'v':3,'composants':0,'rd':RD('laser_continu'),'chargement':['laser_continu']}) as (p,errs):
+    ev(p,"s.techAssemble('laser_continu'); return 0")
+    take(p,LC); take(p,LC); take(p,LC)
+    ck('spe_laser_continu' not in ids(p) and ev(p,"return s.laserDestructeurOwned")==False,'spécialisation non recherchée : jamais proposée')
+    ck(LC not in ids(p),'une amélioration de mission est plafonnée (3 cartes)')
+
+# (i) fusions : ORAGE exige ARC ELECTRIQUE et TIRS RICOCHETS emportées ET assemblées ; VORTEX attend le trou noir (secteur 4)
+FU=lambda p: ev(p,"return s.eligibleFusions().map(f=>f.id)")
+with mission({'v':3,'composants':0,'rd':RD('arc_electrique','ricochets','pulsar'),'chargement':['arc_electrique','ricochets','pulsar']}, dev=True) as (p,errs):
+    ck('fus_orage' not in FU(p),'ORAGE : technologies emportées mais non assemblées -> pas de fusion')
+    ev(p,"s.techAssemble('arc_electrique'); return 0")
+    ck('fus_orage' not in FU(p),'ORAGE : une seule des deux assemblée -> pas de fusion')
+    ev(p,"s.techAssemble('ricochets'); s.techAssemble('pulsar'); return 0")
+    f=FU(p)
+    ck('fus_orage' in f and 'fus_vortex' not in f,'ORAGE disponible quand les deux sont assemblées, VORTEX jamais (trou noir indisponible) : %s'%f)
+    ck(not errs,'(i) pas d\'erreur JS')
+
 if fails: print('ÉCHEC : techs (%d)'%len(fails)); sys.exit(1)
 print('OK : techs')

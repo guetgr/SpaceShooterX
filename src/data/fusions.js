@@ -10,8 +10,8 @@ const FUSIONS = [
     apply:(s)=>{ s.maxHp += 40; s.shieldMax += 40; }, heal:40 },
   { id:'fus_nitro', icon:'🚀', name:'FUSION: NITRO', desc:'REACTEURS + VELOCITE : vaisseau et tirs bien plus rapides', cards:[['speed',3],['bulletspeed',2]],
     apply:(s)=>{ s.moveResponsiveness = Math.min(24, s.moveResponsiveness + 4); s.bulletSpeed *= 1.25; } },
-  { id:'fus_orage', icon:'🌩️', name:'FUSION: ORAGE', desc:'FOUDRE + REBOND (arbre) : +2 arcs de foudre et +1 rebond', tree:['t_foudre','t_rebond'],
+  { id:'fus_orage', icon:'🌩️', name:'FUSION: ORAGE', desc:'ARC ELECTRIQUE + TIRS RICOCHETS : +2 arcs de foudre et +1 rebond', techs:['arc_electrique','ricochets'],
     apply:(s)=>{ s.chainLightning += 2; s.bounce += 1; } },
-  { id:'fus_vortex', icon:'🌌', name:'FUSION: VORTEX', desc:'PULSAR + TROU NOIR (arbre) : le pulsar est plus fréquent et le trou noir plus long', tree:['t_pulsar','t_trounoir'],
+  { id:'fus_vortex', icon:'🌌', name:'FUSION: VORTEX', desc:'PULSAR + TROU NOIR : le pulsar est plus fréquent et le trou noir plus long', techs:['pulsar','trou_noir'],
     apply:(s)=>{ s.pulsar += 1; s.blackHoleBoost = 1; } },
 ];

@@ -29,8 +29,6 @@ mixin(GameScene, {
     this.cameras.main.setZoom(ZOOM_START);
     this.cameras.main.centerOn(GAME_W/2, GAME_H/2);
     this.fitBgToView();
-    // collection: les compétences de l'arbre possédées passent en "utilisées" dès qu'on lance une partie avec
-    { let ch = false; Object.keys(this.treeState||{}).forEach(k=>{ if (this.treeState[k] > 0 && !this.codex.usedSkills[k]){ this.codex.usedSkills[k] = 1; ch = true; } }); if (ch) setCodex(this.codex); }
     const vy0 = this.visibleYRange(0);
     this.player.y = vy0.max - 90/ZOOM_START;
     this.playerTarget.y = this.player.y;
