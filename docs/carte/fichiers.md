@@ -334,7 +334,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`music-data.js`** — Liste des fichiers de musique (MUSIC_FILES).
 
-- Définit : `MUSIC_FILES`
+- Définit : `MUSIC_FILES`, `MUSIC_LEN`
 
 **`volume.js`** — Volumes (VOL).
 
@@ -355,7 +355,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`music.js`** — Lecture de la musique : MusicLoop, FileMusic, instance globale music.
 
-- Définit : `MusicLoop`, `MUSIC_SLOTS`, `MUSIC_BOSS`, `MUSIC_BOSS_KEYS`, `musicLen`, `MUSIC_BAR_S`, `FileMusic`, `music`
+- Définit : `MusicLoop`, `MUSIC_SLOTS`, `MUSIC_MENU_WORLD`, `MUSIC_LEVEL`, `MUSIC_BOSS`, `MUSIC_BOSS_KEYS`, `musicLen`, `MUSIC_BAR_S`, `FileMusic`, `music`
 - Méthodes de la classe `MusicLoop` : `constructor`, `setIntensity`, `ensure`, `setMuted`, `applyVol`, `setScene`, `start`, `startProc`, `pump`, `stepSec`, `setMood`, `note`, `drum`, `playStep`, `stop`
 - Méthodes de la classe `FileMusic` : `constructor`, `supported`, `ensure`, `slotNow`, `keysOf`, `pickKey`, `load`, `keepSet`, `housekeeping`, `start`, `stop`, `tick`, `switchTo`
 
@@ -404,7 +404,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 **`ui.js`** — Méthodes de HomeScene — panneaux HTML de l'accueil : pages, carte des niveaux, hangar, arbre, lancement.
 
 - Définit : `HOME_STAT_LINES`, `levelGoalText`
-- Méthodes ajoutées à `HomeScene` (mixin) : `setupHomeUi`, `enterHome`, `leaveHome`, `refreshHome`, `goHomePage`, `selectHomeLevel`, `renderHomeMap`, `finitionLine`, `renderHomeHangar`, `renderHomeTree`, `refreshHomeStats`, `showHomeTree`, `launchLevel`
+- Méthodes ajoutées à `HomeScene` (mixin) : `setupHomeUi`, `homeMusic`, `enterHome`, `leaveHome`, `refreshHome`, `goHomePage`, `selectHomeLevel`, `renderHomeMap`, `finitionLine`, `renderHomeHangar`, `renderHomeTree`, `refreshHomeStats`, `showHomeTree`, `launchLevel`
 
 ### `src/world/`
 

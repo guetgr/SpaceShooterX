@@ -12,4 +12,4 @@ document.addEventListener('dblclick', e=> e.preventDefault());                  
 
 document.addEventListener('contextmenu', e=>{ if (!(e.target && e.target.closest && e.target.closest('input, textarea'))) e.preventDefault(); });   // appui long (sauf dans les champs: il faut pouvoir coller le code de sauvegarde)
 
-document.addEventListener('pointerdown', ()=>{ sfx.resume(); try{ music.setScene({ mode:'menu' }); music.start(); }catch(e){ /* ignore */ } }, { once:true });   // la musique du menu démarre au premier toucher
+document.addEventListener('pointerdown', ()=>{ sfx.resume(); try{ if (!(music.scene && music.scene.mode === 'menu' && music.scene.menuWorld)) music.setScene({ mode:'menu' }); music.start(); }catch(e){ /* ignore */ } }, { once:true });   // la musique du menu démarre au premier toucher

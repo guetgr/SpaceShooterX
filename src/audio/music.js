@@ -107,14 +107,22 @@ class MusicLoop{
    Les morceaux sont des boucles de 48 s qui commencent toutes sur un premier temps: à n'importe quel moment, la position
    dans la boucle est (horloge musicale) modulo 48 s, donc un nouveau morceau entre toujours "en phase".
 ========================================================= */
-const MUSIC_SLOTS = { menu:['menu_a','menu_b','menu_c','menu_d'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'], tutoniv:['tuto_niv_a','tuto_niv_b'] };
+const MUSIC_SLOTS = { menu:['menu_a','menu_b','menu_c','menu_d'], tier1:['niv_1','niv_1b'], tier2:['niv_2','niv_2b'], boss:['boss_p1'], tutoniv:['w1_tuto_a','w1_tuto_b'] };
+
+// monde 1 : un couple de morceaux par ordre de mission (alternés d'un passage à l'autre)
+// menu principal : 4 morceaux par monde affiché (clé = rang du monde ; le menu Atelier / R&D joue la même chose) ; carte des secteurs (dézoom) : 8 morceaux. Liste vide = menu générique
+const MUSIC_MENU_WORLD = { 1:['menu_terre_a', 'menu_terre_b', 'menu_terre_c', 'menu_terre_d'], 2:['menu_mars_a', 'menu_mars_b', 'menu_mars_c', 'menu_mars_d'] };
+MUSIC_SLOTS.dezoom = ['dezoom_a', 'dezoom_b', 'dezoom_c', 'dezoom_d', 'dezoom_e', 'dezoom_f', 'dezoom_g'];
+
+const MUSIC_LEVEL = { 'w1-l1':['w1_l1_a','w1_l1_b'], 'w1-l2':['w1_l2_a','w1_l2_b'], 'w1-l3':['w1_l3_a','w1_l3_b'], 'w1-l4':['w1_l4_a','w1_l4_b'] };
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
-const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['tuto_boss_a'], tuto2:['tuto_boss_b','tuto_boss_c','tuto_boss_d'] };      // tuto: a = phase 1, puis b/c/d en alternance
+const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['w1b_antenne_a'], tuto2:['w1b_antenne_b'],
+                     fb_meteo:['w1b_meteo_a','w1b_meteo_b'], fb_araignee:['w1b_araignee_a','w1b_araignee_b'], fb_reacteur:['w1b_reacteur_a','w1b_reacteur_b'], fb_anneau:['w1b_anneau_a','w1b_anneau_b'], fb_pdg:['w1b_pdg_a','w1b_pdg_b'] };      // fb_* : boss de fin d'ordre du monde 1      // tuto: a = phase 1, puis b/c/d en alternance
 
 const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 
-const musicLen = key => MUSIC_BOSS_KEYS.includes(key) ? 56 : 48;
+const musicLen = key => (typeof MUSIC_LEN === 'object' && MUSIC_LEN[key]) || (MUSIC_BOSS_KEYS.includes(key) ? 56 : 48);
 
 const MUSIC_BAR_S = 2, MUSIC_GAIN = 1.0;
 
@@ -134,12 +142,18 @@ class FileMusic{
   }
   slotNow(){
     const s = this.o.scene || { mode:'menu' };
-    if (s.mode === 'menu') return 'menu';
+    if (s.mode === 'menu'){
+      if (s.galaxy && MUSIC_SLOTS.dezoom.length) return 'dezoom';                              // carte des secteurs : musique du dézoom
+      if (s.menuWorld && (MUSIC_MENU_WORLD[s.menuWorld] || []).length) return 'mw:' + s.menuWorld;       // menu du monde affiché
+      return 'menu';
+    }
     if (s.tutoLevel) return 'tutoniv';
+    if (s.fboss && MUSIC_BOSS['fb_' + s.fboss]) return 'boss:fb_' + s.fboss;                   // boss de fin d'ordre (monde 1) : sa propre musique dès qu'il entre
     if (s.boss) return (s.bossId && MUSIC_BOSS[s.bossId]) ? 'boss:' + s.bossId : 'boss';
+    if (s.lvl && MUSIC_LEVEL[s.lvl]) return 'lvl:' + s.lvl;                                    // ordre du monde 1 : sa musique
     return (s.alert || 1) <= 4 ? 'tier1' : 'tier2';
   }
-  keysOf(slot){ return slot.indexOf('boss:') === 0 ? MUSIC_BOSS[slot.slice(5)] : MUSIC_SLOTS[slot]; }
+  keysOf(slot){ return slot.indexOf('boss:') === 0 ? MUSIC_BOSS[slot.slice(5)] : slot.indexOf('lvl:') === 0 ? MUSIC_LEVEL[slot.slice(4)] : slot.indexOf('mw:') === 0 ? MUSIC_MENU_WORLD[slot.slice(3)] : MUSIC_SLOTS[slot]; }
   pickKey(slot){ const ks = this.keysOf(slot); const i = this.vi[slot] || 0; this.vi[slot] = i + 1; return ks[i % ks.length]; }
   load(key){
     if (this.buf[key]) return Promise.resolve(this.buf[key]);
@@ -160,7 +174,16 @@ class FileMusic{
   }
   // morceaux à garder en mémoire selon la situation (4 au plus)
   keepSet(){
-    const sc = this.o.scene || { mode:'menu' }; if (sc.mode === 'menu') return MUSIC_SLOTS.menu.slice();
+    const sc = this.o.scene || { mode:'menu' };
+    if (sc.mode === 'menu'){
+      const slot = this.slotNow(), ks = this.keysOf(slot), n = ks.length, i = this.vi[slot] || 0;
+      const k = n > 4 ? [ks[i % n], ks[(i + 1) % n]] : ks.slice();                              // 8 morceaux de dézoom : on ne garde en mémoire que le suivant et celui d'après
+      if (this.cur && !k.includes(this.cur.key)) k.push(this.cur.key); return k;
+    }
+    if (sc.lvl && (MUSIC_LEVEL[sc.lvl] || sc.fbId)){                                          // ordre du monde 1 : ses 2 morceaux + ceux de son boss (il peut arriver à tout moment)
+      const k = (MUSIC_LEVEL[sc.lvl] || []).slice(); if (sc.fbId && MUSIC_BOSS['fb_' + sc.fbId]) k.push(...MUSIC_BOSS['fb_' + sc.fbId]);
+      if (this.cur && !k.includes(this.cur.key)) k.push(this.cur.key); return k;
+    }
     const slot = this.slotNow(), isB = slot.indexOf('boss') === 0, base = isB ? (sc.bossId && sc.bossId.indexOf('tuto') === 0 ? 'tutoniv' : (sc.alert || 1) <= 4 ? 'tier1' : 'tier2') : slot;   // pendant un boss on garde aussi la musique du niveau
     const k = MUSIC_SLOTS[base].slice(); if (isB) k.push(...this.keysOf(slot)); else k.push(...(base === 'tutoniv' ? MUSIC_BOSS.tuto1 : MUSIC_SLOTS.boss));   // le boss peut arriver à tout moment
     if (base === 'tier1' && (sc.alert || 1) >= 3) k.push(MUSIC_SLOTS.tier2[0]);        // le palier suivant approche
@@ -214,9 +237,10 @@ class FileMusic{
     if (!this.on || !b){ this.busy = false; return; }
     const c = this.o.sfx.ctx, now = c.currentTime;
     let at, fade;
-    if (!this.cur){ at = now + 0.06; fade = 1.4; }
-    else if (this.fastSw){ at = now + 0.05; fade = 1.0; }
-    else { const nb = Math.ceil((this.t + 0.03) / MUSIC_BAR_S) * MUSIC_BAR_S; at = now + Math.max(0.03, (nb - this.t) / this.rate); fade = 2.0; }    // à la prochaine mesure
+    if (!this.cur){ at = now + 0.06; fade = 1.0; }
+    else if (this.fastSw){ at = now + 0.05; fade = 0.5; }
+    else { const grid = MUSIC_BOSS_KEYS.includes(key) ? MUSIC_BAR_S : MUSIC_BAR_S/2;                    // un morceau de boss démarre à son début : sur un début de mesure ; les autres sont calés sur l'horloge : tous les 2 temps suffisent
+      const nb = Math.ceil((this.t + 0.03) / grid) * grid; at = now + Math.max(0.03, (nb - this.t) / this.rate); fade = 0.9; }    // changement de morceau rapide : attente <= 1 s, fondu enchaîné de 0,9 s
     const tAt = this.t + (at - now) * this.rate, LEN = musicLen(key), off = MUSIC_BOSS_KEYS.includes(key) ? 0 : ((tAt % LEN) + LEN) % LEN;
     const src = c.createBufferSource(), g = c.createGain();
     src.buffer = b.buf; src.loop = true; src.loopStart = b.pad; src.loopEnd = b.pad + LEN; src.playbackRate.value = this.rate;

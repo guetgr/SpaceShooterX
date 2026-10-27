@@ -73,6 +73,12 @@ mixin(HomeScene, {
     this.input.keyboard.on('keydown-ENTER', ()=>{ if (this.homeOn && this.page === 0 && !document.querySelector('.overlay:not(.hidden)')) this.launchLevel(); });
   },
 
+  // musique du menu : celle du monde affiché (rang du monde), ou celle de la carte des secteurs ; identique sur les pages Atelier, Missions et R&D
+  homeMusic(galaxy){
+    const w = WORLDS[this.homeWorld];
+    music.setScene({ mode:'menu', menuWorld: w ? w.order : 0, galaxy: !!galaxy });
+  },
+
   enterHome(){
     this.homeOn = true; this._launching = false;
     Motion.breath(document.getElementById('btnLaunch'));
@@ -85,7 +91,7 @@ mixin(HomeScene, {
     this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
     const front = firstOpenLevel(p);                                                       // monde où l'on en est : la camionnette y stationne sur la carte stellaire
     this.homeCurrent = Math.max(0, WORLDS.findIndex(w=> front ? w.id === front.world : w === WORLDS[WORLDS.length - 1]));
-    this.resetMapView();
+    this.resetMapView(); this.homeMusic(false);
     this.page = 99; this.goHomePage(0, true);                                              // toujours sur la carte à l'arrivée
     this.refreshHome();
     // nouveau monde débloqué depuis la dernière visite : voyage animé sur la carte stellaire (jamais en mode DEV, où tout est ouvert)
