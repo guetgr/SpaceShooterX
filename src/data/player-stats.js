@@ -73,14 +73,18 @@ function makeDefaultStats(){
   };
 }
 
-function computeStartingStatsPreview(){
-  const stats = makeDefaultStats();
-  const meta = getMeta();
+// atouts GLOBAUX permanents : atelier (postes Mk I à V) puis reste de l'arbre ; appliqués à chaque mission et au tutoriel
+function applyGlobalGear(stats, meta){
+  atelierApply(stats, meta.atelier);
   ALL_TREE_NODES.forEach(node=>{
-    const lvl = meta.tree[node.id] || 0;
+    const lvl = (meta.tree && meta.tree[node.id]) || 0;
     if (lvl > 0 && node.apply) node.apply(stats, lvl);
   });
+}
+
+function computeStartingStatsPreview(){
+  const stats = makeDefaultStats();
+  applyGlobalGear(stats, getMeta());
   applyAchvBuffs(stats, getAchv());
-  applyAscension(stats, meta.asc);
   return stats;
 }
