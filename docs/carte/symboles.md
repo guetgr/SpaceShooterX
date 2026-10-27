@@ -226,6 +226,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BESTIARY_KEY` | const | `src/data/bestiary.js` |  |
 | `BESTIARY_LIST` | const | `src/data/bestiary.js` |  |
 | `bestiaryKeyFor` | fonction | `src/data/achievements.js` |  |
+| `BG_TERRE_B64` | const | `src/data/image-assets.js` |  |
 | `BG_ZONES` | const | `src/gfx/procedural.js` |  |
 | `blDestroy` | méthode | `src/fx/boss-lights.js` | `GameScene` |
 | `blInit` | méthode | `src/fx/boss-lights.js` | `GameScene` |
@@ -303,6 +304,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `buildShieldAuraCanvas` | fonction | `src/gfx/procedural.js` |  |
 | `buildShockRingCanvas` | fonction | `src/gfx/procedural.js` |  |
 | `buildStarfield` | méthode | `src/world/background.js` | `GameScene` |
+| `buildWorldBg` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `BULLET_CAP` | const | `src/core/constants.js` |  |
 | `BULLET_E_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BULLET_E_ROWS` | const | `src/gfx/sprite-rows.js` |  |
@@ -1170,6 +1172,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateSquads` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `updateStyleHud` | méthode | `src/ui/hud.js` | `GameScene` |
 | `updateWebs` | méthode | `src/fx/effects.js` | `GameScene` |
+| `updateWorldBg` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `UPGRADE_POOL` | const | `src/data/upgrades.js` |  |
 | `v` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `V` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
@@ -1184,7 +1187,23 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `VORTEX_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `warpPulse` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `wasWorldSeen` | fonction | `src/data/world-progress.js` |  |
+| `wbgAtmosphere` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_cristaux` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_debris` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_direction` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_horizon` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_patrouille` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_station` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgEarthTexture` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgGlowAt` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgGradient` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgPaintCrystal` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgPaintDebris` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgPaintPaper` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgRng` | fonction | `src/world/bg-monde.js` |  |
+| `wbgTextures` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `weaponTierFor` | fonction | `src/data/meta.js` |  |
+| `worldBgKind` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `worldById` | fonction | `src/data/worlds.js` |  |
 | `worldPlanetTexture` | fonction | `src/gfx/planets.js` |  |
 | `WORLDS` | const | `src/data/worlds.js` |  |
@@ -1195,4 +1214,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1188 symboles.
+1207 symboles.

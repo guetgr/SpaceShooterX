@@ -58,6 +58,7 @@
   "home/garage.js",
   "home/ui.js",
   "world/background.js",
+  "world/bg-monde.js",
   "ui/dom.js",
   "ui/motion.js",
   "ui/norma.js",

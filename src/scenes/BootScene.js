@@ -36,6 +36,7 @@ class BootScene extends Phaser.Scene{
       { key:'swarmerExpl',  src:SWARMER2_EXPL_B64, fw:180, fh:180, n:4 },
       { key:'homeEarth',    src:asset('home/earth-orbital.png'), fw:0, fh:0, n:0 },
       { key:'earth',        src:EARTH_B64,         fw:0,   fh:0,   n:0 },
+      { key:'bgTerre',      src:BG_TERRE_B64,      fw:0,   fh:0,   n:0 },
       { key:'planetSrcW2',  src:PLANET_W2_B64,     fw:0,   fh:0,   n:0 },
       { key:'planetSrcW3',  src:PLANET_W3_B64,     fw:0,   fh:0,   n:0 },
       { key:'cloudsEarth',  src:CLOUDS_EARTH_B64,  fw:0,   fh:0,   n:0 },
