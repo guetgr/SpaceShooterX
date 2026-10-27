@@ -5,7 +5,7 @@
 const AGP_LORE = {
   os: 'AGP-OS 9.4',
   company: 'AGENCE GALACTIQUE DE PROPRETE',
-  employee: 'EMPLOYE N° 4 471 902',
+  employee: 'EMPLOYE N° 0042',
   // libellé du type d'ordre (fiche de mission) et couleur d'étiquette
   types: {
     tuto:    { label:'FORMATION OBLIGATOIRE', cls:'t-tuto' },

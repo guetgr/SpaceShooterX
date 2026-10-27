@@ -87,7 +87,8 @@ mixin(GameScene, {
 
     sfx.bossAlert(); this.normaBoss();
     document.getElementById('boss-banner').classList.add('show');
-    this.bossEls(boss).label.textContent = def.name + ' NIV.' + (this.difficultyTier+1);
+    const shownName = this.lvDef && this.lvDef.bossName && this.lvDef.boss === id ? this.lvDef.bossName : def.name;      // en niveau, le boss porte le nom de la bible (`bossName` du niveau)
+    this.bossEls(boss).label.textContent = shownName + ' NIV.' + (this.difficultyTier+1);
     this.setupBossTicks(boss);
     this.time.delayedCall(1400, ()=> document.getElementById('boss-banner').classList.remove('show'));
 
