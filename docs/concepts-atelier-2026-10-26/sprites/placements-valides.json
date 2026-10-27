@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "coordinateSystem": {
+    "width": 768,
+    "height": 820,
+    "origin": "top-left of full PNG including transparent padding",
+    "units": "logical pixels"
+  },
+  "vehicle": {
+    "file": "vehicule-nu.png",
+    "x": 0,
+    "y": 330,
+    "width": 768,
+    "sourceWidth": 1536,
+    "sourceHeight": 1024
+  },
+  "modules": {
+    "magnet": {
+      "file": "module-aimant-v2.png",
+      "x": 349,
+      "y": 273,
+      "width": 310,
+      "height": 206.66666666666666,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024
+    },
+    "cannon": {
+      "file": "module-canon.png",
+      "x": 413,
+      "y": 342,
+      "width": 215,
+      "height": 143.33333333333334,
+      "sourceWidth": 1536,
+      "sourceHeight": 1024
+    }
+  }
+}

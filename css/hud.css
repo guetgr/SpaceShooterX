@@ -1,0 +1,56 @@
+/* HUD AGP minimal — 400 × 700 pixels logiques. Texte et jauges restent dynamiques. */
+#hud{ padding:10px 12px 0; gap:8px; }
+#hud::before{ content:''; position:absolute; inset:0 0 auto; height:110px; z-index:-1; pointer-events:none;
+  background:linear-gradient(#050907b8, #05090700); }
+#hud-top{ gap:12px; min-height:38px; }
+#hud .hp-wrap{ padding:0; border:0; border-radius:0; background:none; box-shadow:none; flex:1; min-width:0; }
+.hud-bars{ display:flex; flex-direction:column; gap:4px; width:100%; }
+#hud .hp-bar-track{ display:flex; align-items:center; width:100%; height:18px; margin:0; padding:2px; gap:3px; background:#101a17; border:1px solid #34433b; border-radius:0; overflow:hidden; }
+#hud .hp-txt{ position:static; flex:0 0 27px; text-align:center; transform:none; color:#e8efdf; font:normal 10px/1 'SSX Label',monospace; font-variant-numeric:tabular-nums; letter-spacing:0; text-shadow:none; z-index:3; }
+.hp-meter{ position:relative; height:100%; flex:1; overflow:hidden; background:#18251e; }
+#hud .hp-bar-fill{ height:100%; background:#43a86b; transition:width .18s ease-out; animation:none; }
+#hud .hp-bar-ghost{ background:#b8bda3; opacity:.7; }
+.hp-meter::after{ content:''; position:absolute; inset:0; pointer-events:none; background:url('../assets/hud/segments.svg') left top/100% 100%; }
+#hud .hp-low .hp-bar-fill{ background:#c35f50; }
+#hud .hp-low .hp-txt{ color:#f4b5a3; }
+#hud .xp-wrap{ display:flex; align-items:center; gap:6px; height:12px; }
+.xp-level{ flex:none; color:#c7b477; font:normal 6px/1 'SSX Label',monospace; letter-spacing:.5px; }
+.xp-level b{ display:inline-block; font-weight:normal; }
+#hud .xp-track{ flex:1; width:auto; height:4px; border:0; border-radius:0; background:#17282f; box-shadow:none; overflow:hidden; }
+#hud .xp-fill{ height:100%; background:#548ba4; box-shadow:none; transition:width .25s ease-out; }
+#hud .shield-bar-track{ width:100%; height:4px; margin:0; border:0; background:#182b36; border-radius:0; }
+#hud .shield-bar-fill{ background:#88bed0; box-shadow:none; }
+.hud-right{ display:flex; align-items:flex-start; gap:9px; margin-left:auto; }
+#hud .score-wrap{ min-width:67px; text-align:right; padding:0; }
+#hud .score-label{ display:block; font:normal 6px/1 'SSX Label',monospace; letter-spacing:1px; color:#a9b4a9; margin:0 0 4px; }
+#hud .score-val{ font:normal 19px/1 'SSX Display',monospace; font-variant-numeric:tabular-nums; letter-spacing:1px; color:#e7e5d5; text-shadow:0 1px #000; }
+#hud .mute-btn{ display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid #34433b; border-radius:2px; background:#101a17cc; box-shadow:none; }
+#hud .mute-btn:active{ background:#34433b; transform:translateY(1px); }
+#hud .wave-note{ position:relative; align-self:center; min-width:0; height:16px; margin:0; padding:2px 7px; border:0; border-left:2px solid #c7b477; border-radius:0; background:#0c1410aa; box-shadow:none; clip-path:none; font:normal 7px/1.2 'SSX Label',monospace; letter-spacing:.6px; }
+#hud .wn-ico{ display:none; }
+.wn-txt{ position:relative; white-space:nowrap; }
+.wn-fill{ position:absolute; bottom:0; left:0; height:1px; background:#c7b477; transition:width .3s; }
+#hud #relicRow{ top:51px; right:12px; margin:0; font-size:11px; }
+/* Zone de transmission stable, y compris pendant un incident ou le tutoriel. */
+#game-container #norma{ top:78px; left:12px; right:12px; max-width:none; transform:none; transition:opacity .2s; }
+#norma .nm-body{ width:100%; box-sizing:border-box; min-height:42px; padding:5px 7px; border:0; border-left:2px solid #7c8b74; background:#0c1410c9; }
+#norma .nm-head{ font:normal 6px/1 'SSX Label',monospace; color:#bbaa78; letter-spacing:1px; margin-bottom:4px; }
+#norma .nm-txt{ font:normal 13px/1.25 'SSX Text',monospace; color:#cbd4c9; text-shadow:none; }
+#norma .nm-prog{ margin-top:3px; }
+#norma .nm-prog i{ background:#bbaa78; }
+body.at-home #norma{ display:none; }
+/* Les incidents démarrent après la zone réservée à NORMA. */
+#boss-hp-wrap{ top:151px; }
+#boss-hp-wrap2{ top:187px; }
+#boss-hp-wrap3{ top:223px; }
+.boss-hp-label{ border:0; background:#171211cc; font-size:7px; letter-spacing:1px; padding:2px 5px; }
+.boss-hp-track{ height:6px; border:1px solid #53342e; border-radius:0; background:#211713; }
+.boss-hp-fill{ background:#b86250; }
+#styleHud{ top:264px; border:0; border-left:2px solid #7c8b74; border-radius:0; background:#0c1410aa; box-shadow:none; }
+#hud .hp-bar-track.heal{ animation:hudHeal .6s ease-out; }
+#hud .xp-track.lvup{ animation:hudLevel .75s ease-out; }
+@keyframes hudHeal{ from{ border-color:#a7dcb2; } to{ border-color:#34433b; } }
+@keyframes hudLevel{ from{ background:#d8e8db; } to{ background:#17282f; } }
+@media(prefers-reduced-motion:reduce){ #hud *, #norma{ animation:none!important; transition:none!important; } }
+
+#hud .hp-bar-track::after{ display:none; }

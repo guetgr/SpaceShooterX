@@ -16,6 +16,8 @@
 <script src="vendor/gsap.min.js"></script>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/agp.css">
+<link rel="stylesheet" href="css/hud.css">
+<link rel="stylesheet" href="css/atelier.css">
 </head>
 <body>
 <div id="stage">
@@ -26,21 +28,21 @@
     <div id="hud">
       <div id="hud-top">
         <div class="hp-wrap">
-          <div class="hp-label">COQUE</div>
-          <div class="hp-bar-track" id="hpTrack"><div class="hp-bar-ghost" id="hpGhost"></div><div class="hp-bar-fill" id="hpFill"></div></div>
-          <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
+          <div class="hud-bars">
+            <div class="hp-bar-track" id="hpTrack" aria-label="Points de vie"><span class="hp-txt" id="hpTxt"></span><div class="hp-meter"><div class="hp-bar-ghost" id="hpGhost"></div><div class="hp-bar-fill" id="hpFill"></div></div></div>
+            <div class="shield-bar-track" id="shieldTrack"><div class="shield-bar-fill" id="shieldFill"></div></div>
+            <div class="xp-wrap"><span class="xp-level">NIV. <b id="lvlBadge">1</b></span><div class="xp-track" id="xpTrack"><div class="xp-fill" id="xpFill"></div></div></div>
+          </div>
         </div>
-        <button class="mute-btn" id="pauseBtn">⏸</button>
-        <div class="score-wrap">
-          <div class="score-label">RENDEMENT</div>
-          <div class="score-val" id="scoreVal">0</div>
+        <div class="hud-right">
+          <div class="score-wrap">
+            <div class="score-label">RENDEMENT</div>
+            <div class="score-val" id="scoreVal">0</div>
+          </div>
+          <button class="mute-btn" id="pauseBtn" aria-label="Pause"><i data-ico="pause" data-s="24"></i></button>
         </div>
       </div>
-      <div class="xp-wrap">
-        <div class="lvl-badge" id="lvlBadge">GR.1</div>
-        <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
-      </div>
-      <div class="wave-note" id="waveNote">T+00:00</div>
+      <div class="wave-note" id="waveNote"><i class="wn-fill" id="waveFill"></i><i class="wn-ico" id="waveIco"></i><span class="wn-txt" id="waveTxt">T+00:00</span></div>
       <div id="relicRow"></div>
     </div>
 
@@ -64,21 +66,15 @@
     <div id="home" class="hidden">
       <div id="homeTop">
         <div class="agp-id"><i class="agp-logo">AGP</i><span class="agp-who"><b>EMPLOYE N° 4 471 902</b><u>AGP-OS 9.4 · ATELIER 7</u></span></div>
-        <div class="home-right"><div class="home-frag" id="homeFrag">◆ 0</div><button class="home-ico" id="homeSettings" aria-label="Paramètres">⚙</button></div>
+        <div class="home-right"><div class="home-frag" id="homeFrag"><i data-ico="frag"></i> 0</div><button class="home-ico" id="homeSettings" aria-label="Paramètres"><i data-ico="gear" data-s="24"></i></button></div>
       </div>
       <div id="homeTicker"><div class="tk-line"><span class="tk-tag"></span><span class="tk-win"><span class="tk-txt"></span></span></div></div>
       <div id="homeTrack">
         <section class="home-page" id="pageHangar">
-          <div class="hp-title">ATELIER</div>
-          <div class="hangar-gap"></div>
-          <div class="hangar-tier" id="hangarTier"></div>
-          <div class="skin-row" id="skinRow"></div>
-          <div class="hangar-seg"><button id="segStats" class="on">FICHE TECHNIQUE</button><button id="segMods">MODULES</button></div>
-          <div class="hangar-body" id="hangarBody"></div>
         </section>
         <section class="home-page" id="pageMap" data-mode="world">
           <div class="map-world world-only">
-            <button class="map-arrow" id="btnGalaxy" aria-label="Répartition des secteurs">✦</button>
+            <button class="map-arrow" id="btnGalaxy" aria-label="Répartition des secteurs"><i data-ico="galaxy" data-s="24"></i></button>
             <div class="mw-mid"><div class="mw-n" id="mwNum"></div><div class="mw-name" id="mwName"></div><div class="mw-prog" id="mwProg"></div></div>
             <span class="map-arrow ghost"></span>
           </div>
@@ -119,7 +115,7 @@
       <div class="title-logo">SPACE<br>SHOOTER <span>X</span></div>
       <div class="subtitle">-- survie spatiale --</div>
       <div class="hi-row">MEILLEUR SCORE : <span id="hiScoreStart">0</span></div>
-      <div class="frag-row">◆ FRAGMENTS : <span id="fragStart">0</span></div>
+      <div class="frag-row"><i data-ico="frag"></i> FRAGMENTS : <span id="fragStart">0</span></div>
       <div class="frag-row hidden" id="ascRow" style="color:#ffd76a;"></div>
       <button class="btn hidden" id="btnContinue">CONTINUER</button>
       <button class="btn" id="btnStart" style="margin-top:10px;min-width:230px;padding:16px 22px;">DEMARRER</button>
@@ -215,7 +211,7 @@
             <div class="pg-head"><span id="pgTitle"></span><span id="pgPage"></span></div>
             <div id="pgGrid"></div>
             <div id="pgDetail">Touchez une icône pour voir ce qu'elle fait (x2, x3… = son niveau).</div>
-            <div class="pg-nav"><button class="btn secondary" id="pgPrev">◀</button><button class="btn secondary" id="pgNext">▶</button></div>
+            <div class="pg-nav"><button class="btn secondary" id="pgPrev" aria-label="Précédent"><i data-ico="arrow_l" data-s="24"></i></button><button class="btn secondary" id="pgNext" aria-label="Suivant"><i data-ico="arrow_r" data-s="24"></i></button></div>
           </div></div>
         </div>
         <div class="quit" data-in>
@@ -259,7 +255,7 @@
     </div>
 
     <div id="levelup" class="overlay hidden">
-      <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;">⏸</button>
+      <button class="mute-btn" id="luPause" style="position:absolute;top:10px;left:0;right:0;margin:0 auto;width:fit-content;z-index:5;" aria-label="Pause"><i data-ico="pause" data-s="24"></i></button>
       <div class="lu-title">REQUISITION DE MODULE</div>
       <div class="lu-sub">Atout de MISSION : valable pour cette intervention uniquement.</div>
       <div class="cards" id="cardsWrap"></div>
@@ -288,7 +284,7 @@
         <div class="rp-eval"><span class="rp-lab">EVALUATION</span><b class="rp-grade" id="rpGrade">D</b><span class="rp-mention" id="rpMention"></span></div>
         <div class="go-extra" id="goExtra"></div>
         <div class="rp-norma"><span class="rp-lab">N.O.R.M.A</span><p id="rpNorma"></p></div>
-        <div class="new-best hidden" id="newBest">★ RENDEMENT RECORD ★</div>
+        <div class="new-best hidden" id="newBest"><i data-ico="star"></i> RENDEMENT RECORD <i data-ico="star"></i></div>
       </div>
       <button class="btn hidden" id="btnNext">ORDRE SUIVANT</button>
       <button class="btn" id="btnRetry">REFAIRE L'INTERVENTION</button>

@@ -113,6 +113,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `applyAchvBuffs` | fonction | `src/data/achievements.js` |  |
 | `applyAscension` | fonction | `src/data/meta.js` |  |
 | `applyDamageToEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
+| `applyHomeParts` | méthode | `src/home/background.js` | `HomeScene` |
 | `applyHomeSkin` | méthode | `src/home/background.js` | `HomeScene` |
 | `applyShipSkin` | méthode | `src/player/skin.js` | `GameScene` |
 | `applyTuning` | fonction | `src/data/tuning-apply.js` |  |
@@ -159,6 +160,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `arWound` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `ASCEND_MIN` | const | `src/data/meta.js` |  |
 | `ASHIELD_EXCL` | const | `src/core/constants.js` |  |
+| `AtelierGarage` | const | `src/home/garage.js` |  |
 | `AURA_PAD` | const | `src/gfx/procedural.js` |  |
 | `auraTexFor` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `B64_DRDEATH` | const | `src/data/image-assets.js` |  |
@@ -305,6 +307,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `cleanupBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `cleanupGroup` | méthode | `src/game/loop.js` | `GameScene` |
 | `clearWells` | méthode | `src/events/forces.js` | `GameScene` |
+| `CLOUDS_EARTH_B64` | const | `src/data/image-assets.js` |  |
 | `CloudSave` | const | `src/core/cloud-save.js` |  |
 | `codexMark` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `COLLISION_DMG_MUL` | const | `src/data/balance.js` |  |
@@ -480,6 +483,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `getMeta` | fonction | `src/data/meta.js` |  |
 | `getPacts` | fonction | `src/data/pacts-style.js` |  |
 | `getPlayerName` | fonction | `src/data/leaderboard.js` |  |
+| `getShipParts` | fonction | `src/data/ship-skins.js` |  |
 | `getShipSkin` | fonction | `src/data/ship-skins.js` |  |
 | `getSpawnInterval` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `getTextureFrameDataURL` | méthode | `src/ui/pages.js` | `GameScene` |
@@ -515,6 +519,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `housekeeping` | méthode | `src/audio/music.js` | `FileMusic` |
 | `hpScaleNow` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `HUD_SAFE_Y` | const | `src/core/constants.js` |  |
+| `hudFlash` | méthode | `src/ui/hud.js` | `GameScene` |
 | `inFiringPosition` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `initBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `INTRO_E_A` | const | `src/core/constants.js` |  |
@@ -564,6 +569,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LEVEL_BASE` | const | `src/data/tuning-apply.js` |  |
 | `LEVEL_COMPLETION` | const | `src/data/completion.js` |  |
 | `LEVEL_FRAG_MUL` | const | `src/data/balance.js` |  |
+| `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
 | `levelGoalText` | fonction | `src/home/ui.js` |  |
@@ -682,6 +688,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `onEnemyHitsPlayer` | méthode | `src/combat/damage.js` | `GameScene` |
 | `onMissileHitsEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
 | `openPauseMenu` | méthode | `src/ui/dom.js` | `GameScene` |
+| `ORBIT_W1_B64` | const | `src/data/image-assets.js` |  |
 | `pactBonus` | fonction | `src/data/pacts-style.js` |  |
 | `PACTS` | const | `src/data/pacts-style.js` |  |
 | `panOf` | méthode | `src/game/intro.js` | `GameScene` |
@@ -762,6 +769,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `PL_FX_B64` | const | `src/data/image-assets.js` |  |
 | `PL_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `PLANET_BIG` | const | `src/home/background.js` |  |
+| `PLANET_W2_B64` | const | `src/data/image-assets.js` |  |
+| `PLANET_W3_B64` | const | `src/data/image-assets.js` |  |
 | `planEvents` | méthode | `src/events/core.js` | `GameScene` |
 | `play` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `PLAYER_BASE_B64` | const | `src/data/image-assets.js` |  |
@@ -900,6 +909,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `setPacts` | fonction | `src/data/pacts-style.js` |  |
 | `setPlayerName` | fonction | `src/data/leaderboard.js` |  |
 | `setScene` | méthode | `src/audio/music.js` | `MusicLoop` |
+| `setShipPart` | fonction | `src/data/ship-skins.js` |  |
 | `setShipSkin` | fonction | `src/data/ship-skins.js` |  |
 | `setTarget` | méthode | `src/world/background.js` | `GameScene` |
 | `setupBossTicks` | méthode | `src/bosses/parts.js` | `GameScene` |
@@ -917,7 +927,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `SHIELDEDGRUNT2_B64` | const | `src/data/image-assets.js` |  |
 | `SHIELDEDGRUNT2_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `shieldShatter` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
+| `SHIP_PARTS` | const | `src/data/ship-skins.js` |  |
+| `SHIP_PARTS_KEY` | const | `src/data/ship-skins.js` |  |
 | `SHIP_SKINS` | const | `src/data/ship-skins.js` |  |
+| `shipPartsTexture` | fonction | `src/data/ship-skins.js` |  |
 | `shipSkinTint` | fonction | `src/data/ship-skins.js` |  |
 | `SHOOTER_BULLET_B64` | const | `src/data/image-assets.js` |  |
 | `SHOOTER_EXPL_B64` | const | `src/data/image-assets.js` |  |
@@ -1072,6 +1085,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `tutoUiInit` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUiUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
 | `tutoUpdate` | méthode | `src/game/tuto.js` | `GameScene` |
+| `UI_ICONS` | const | `src/ui/ui-icons.js` |  |
+| `uiIco` | fonction | `src/ui/ui-icons.js` |  |
+| `uiIconsInit` | fonction | `src/ui/ui-icons.js` |  |
 | `update` | méthode | `src/game/loop.js` | `GameScene` |
 | `update` | méthode | `src/scenes/HomeScene.js` | `HomeScene` |
 | `updateBgDecor` | méthode | `src/world/background.js` | `GameScene` |
@@ -1132,4 +1148,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1125 symboles.
+1141 symboles.

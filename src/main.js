@@ -28,6 +28,7 @@ function fitUi(){
 window.addEventListener('resize', fitUi); window.addEventListener('orientationchange', ()=> setTimeout(fitUi, 150));
 if (window.visualViewport) window.visualViewport.addEventListener('resize', fitUi);
 fitUi();
+uiIconsInit();                                                       // icônes pixel des boutons et libellés de index.html (<i data-ico="…">)
 
 // boot.js charge ce fichier en dernier, souvent après l'événement "load" : on démarre tout de suite dans ce cas
 function startGame(){

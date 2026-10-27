@@ -105,7 +105,7 @@ const Motion = {
     const rows = all('.go-rw');
     if (rows.length) tl.from(rows, { x:-24, opacity:0, duration:.35, stagger:.12, ease:'power3.out', clearProps:'transform,opacity' }, 1);
     const tot = q('.go-rw.total b');
-    if (tot) tl.call(()=>{ const to = parseInt(tot.textContent.replace(/\D/g, ''), 10) || 0; tot.textContent = '+0 ◆'; this.count(tot, to, v=> '+' + v + ' ◆'); this.pop(tot, 1.25); }, null, 1 + .12*rows.length);
+    if (tot) tl.call(()=>{ const to = parseInt(tot.textContent.replace(/\D/g, ''), 10) || 0; tot.innerHTML = '+0 ' + uiIco('frag'); this.count(tot, to, v=> '+' + v + ' ' + uiIco('frag')); this.pop(tot, 1.25); }, null, 1 + .12*rows.length);
     const t1 = 1.25 + .12*rows.length;
     const unl = all('.go-unlock');
     if (unl.length) tl.from(unl, { scale:.5, opacity:0, duration:.7, stagger:.2, ease:'elastic.out(1, 0.5)', clearProps:'transform,opacity' }, t1);
@@ -140,6 +140,7 @@ const Motion = {
     const last = this._hpPct; if (last !== undefined && Math.abs(pct - last) < 0.01) return;
     this._hpPct = pct;
     if (this._ghostTw){ this._ghostTw.kill(); this._ghostTw = null; }
+    if (last !== undefined && pct > last + 0.5){ const t = document.getElementById('hpTrack'); if (t){ t.classList.remove('heal'); void t.offsetWidth; t.classList.add('heal'); } }      // soin : éclat vert
     if (!this.ok() || last === undefined || pct > last){ g.style.width = pct + '%'; return; }
     this._ghostTw = gsap.to(g, { width:pct + '%', duration:.45, delay:.35, ease:'power2.in' });
   },
@@ -176,9 +177,9 @@ const Motion = {
   count(el, to, fmt){
     if (el._cnt){ el._cnt.kill(); el._cnt = null; }
     const from = parseInt(String(el.textContent).replace(/\D/g, ''), 10) || 0;
-    if (!this.ok() || from === to){ el.textContent = fmt(to); return; }
+    if (!this.ok() || from === to){ el.innerHTML = fmt(to); return; }
     const o = { v:from };
-    el._cnt = gsap.to(o, { v:to, duration:Math.min(.9, .25 + Math.abs(to - from)/400), ease:'power2.out', onUpdate:()=>{ el.textContent = fmt(Math.round(o.v)); }, onComplete:()=>{ el.textContent = fmt(to); } });
+    el._cnt = gsap.to(o, { v:to, duration:Math.min(.9, .25 + Math.abs(to - from)/400), ease:'power2.out', onUpdate:()=>{ el.innerHTML = fmt(Math.round(o.v)); }, onComplete:()=>{ el.innerHTML = fmt(to); } });
     if (to < from) this.pop(el, 1.12);
   },
 };

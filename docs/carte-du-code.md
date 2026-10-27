@@ -46,7 +46,7 @@ Affichage : pause (onglets ATOUTS GLOBAUX / DE MISSION, `ui/pages.js`), transmis
 `SAVE_KEYS` (`core/cloud-save.js`) : liste des clés `localStorage` `ssx_*` (méta, succès, bestiaire, réglages…). `CloudSave` en fait un miroir cloud (`gather/sync/push`) ; elle n'envoie jamais une sauvegarde vide. `GameScene` enregistre à `pagehide`/`visibilitychange`. Accesseurs `getMeta/setMeta`… : voir `symboles.md`. **`?sandbox`** (`boot.js`) remplace `localStorage` par une mémoire jetable (utilisé par l'éditeur). Ne pas toucher aux formats de sauvegarde pour de l'habillage.
 
 ### HUD
-HTML dans `index.html` (`#hud`), logique dans `ui/hud.js` (secousse, barres, rang de style) ; animation de la vie : `Motion.hudHp` (appelé depuis `hud.js`).
+HTML dans `index.html` (`#hud` : portrait + grade, barres coque / bouclier / expérience, rendement, pause, ordre de mission en jauge), style dans `css/hud.css`, logique dans `ui/hud.js` (`updateHud`, secousse, rang de style, `hudFlash`, parallaxe `updateHudSway` appelée par la boucle) ; traînée de vie et éclat de soin : `Motion.hudHp`.
 
 ### N.O.R.M.A.
 Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` + déclencheurs `normaStart/normaBoss/normaLow` (mixin GameScene dans le même fichier). Règles : **une transmission à la fois** (file `_q`, `_showing`), **14 s d'écart** par défaut (`o.gap`), `prio` passe devant, jamais pendant l'intro, les cartes, la pause ou l'écran de fin, jamais bloquante. Accueil : bandeau d'information `startTicker`.
@@ -84,6 +84,8 @@ Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` +
 | Style de l'interface | `css/style.css` puis `css/agp.css`, `docs/direction-artistique-agp.md` |
 | Sons / musiques | `audio/`, `assets/audio/` |
 | Assets (images, polices) | `assets/` + `assets/manifest.json` (régénérer : `tools/gen_manifest.py`) |
+| Icônes de niveaux, planètes, nuages, objet en orbite (carte du monde) | `LEVEL_ICONS` et `*_B64` dans `data/image-assets.js`, `theme` des mondes (`photo`, `clouds`, `orbiter`), rendu dans `home/ui.js` (médaillons, trace) et `home/background.js` (nuages, orbite) ; import des PNG : `tools/import_sprites_niveaux.py` (icônes) et `tools/import_decors_carte.py` (planètes, nuages, satellite) |
+| Icônes d'interface (cadenas, coche, composants, étoile, pause…) | `ui/ui-icons.js` (`uiIco('nom', 12 ou 24)`, `<i data-ico>` dans `index.html`), dessinées par `tools/gen_ui_icons.py` (grilles 12x12, aperçu `docs/img/ui-icons.png`) |
 | Écran de chargement | `src/boot.js`, `loading/bg.webp` |
 | Icône PWA | `manifest.webmanifest`, `icons/` |
 | Build fichier unique | `tools/build.py` |
@@ -95,10 +97,11 @@ Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` +
 - **`mixin(GameScene, {…})`** (idem `HomeScene`) **plante au démarrage si une méthode est définie deux fois** (voulu) : Grep avant d'ajouter.
 - **Vocabulaire AGP** : mondes = secteurs, niveaux = ordres de mission, boss = incidents majeurs, fragments = composants, écran de fin = rapport d'intervention. Ton subtil, jamais caricatural (`docs/brief-univers-agp.md`).
 - **Zone de jeu 400x700 logiques**, mise à l'échelle d'un bloc par `fitUi()` : pas d'unités `vw/vh` ni de mesure de fenêtre dans l'interface, tout en px logiques.
-- **CSS en deux couches** : `css/style.css` puis `css/agp.css` (chargée après, **agp gagne**).
+- **CSS en trois couches** : `css/style.css`, puis `css/agp.css` (habillage AGP), puis `css/hud.css` (HUD en niveau) ; la dernière gagne. `tools/build.py` les embarque toutes les trois.
 - **Titres en majuscules sans accents** dans l'interface AGP (« INTERVENTION VALIDEE »). Les tests vérifient ces libellés.
 - **Animations de menus** via `Motion` (GSAP), jamais en CSS concurrent sur `transform`. Sans effet si GSAP absent ou `prefers-reduced-motion`.
 - **Image de chargement** `loading/bg.webp` **hors manifeste** : elle doit s'afficher avant le chargement des assets.
+- **Pas d'émojis ni de glyphes (◆ ★ ✔ 🔒…) pour les symboles de l'interface** : sprites pixel `uiIco(...)`. Restent en émojis (réduits en pixel par `pxImg`) : les icônes de compétences, cartes, reliques et pactes.
 - Pas de plafond artificiel en gameplay ; ne jamais modifier mécaniques, équilibrage, sauvegardes ou compétences pour de l'habillage.
 
 ## 5. Pièges connus

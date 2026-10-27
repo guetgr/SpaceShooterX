@@ -17,7 +17,7 @@ const Norma = {
     if (!e){
       const host = document.getElementById('game-container'); if (!host) return null;
       e = document.createElement('div'); e.id = 'norma';
-      e.innerHTML = '<div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A <u>// TRANSMISSION</u></div><div class="nm-txt"></div><div class="nm-prog"><i></i></div></div>';
+      e.innerHTML = '<div class="nm-body"><div class="nm-head">N.O.R.M.A.</div><div class="nm-txt"></div><div class="nm-prog"><i></i></div></div>';
       host.appendChild(e);
     }
     return e;

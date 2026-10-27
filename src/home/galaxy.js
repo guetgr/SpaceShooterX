@@ -25,8 +25,9 @@ mixin(HomeScene, {
       const ring = this.add.graphics();
       const num = this.add.text(0, GAL_R + 9, '', { fontFamily:GAL_FONT, fontSize:'8px', color:'#cfd6ff' }).setOrigin(0.5, 0).setResolution(2);
       const sub = this.add.text(0, GAL_R + 22, '', { fontFamily:GAL_FONT2, fontSize:'17px', color:'#ffce4a' }).setOrigin(0.5, 0).setResolution(2);
-      c.add([glow, img, ring, num, sub]); this.galaxy.add(c);
-      return { w, i, c, glow, img, ring, num, sub, pos };
+      const star = this.add.image(0, GAL_R + 31, 'uiStar').setScale(1.25).setVisible(false);      // boss vaincu : sprite à droite du texte (Phaser ne mélange pas texte et image)
+      c.add([glow, img, ring, num, sub, star]); this.galaxy.add(c);
+      return { w, i, c, glow, img, ring, num, sub, star, pos };
     });
     // défilement vertical au doigt, avec inertie ; un toucher bref sur un monde l'ouvre
     this.input.on('pointerdown', p=>{
@@ -59,7 +60,8 @@ mixin(HomeScene, {
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
       const sm = worldSummary(w.id, p);
       g.num.setText(open ? w.name : '? ? ?').setColor(open ? '#cfd6ff' : '#5a6290');
-      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total + (sm.bossDown ? ' ★' : '')) : 'ACCES REFUSE').setColor(open ? '#ffc21a' : '#7a5a4a');
+      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total) : 'ACCES REFUSE').setColor(open ? '#ffc21a' : '#7a5a4a');
+      g.star.setVisible(open && sm.bossDown).setPosition(g.sub.width/2 + 10, GAL_R + 31);
       // anneau : un segment par niveau (vert = terminé, rouge = boss), on laisse les dernières lueurs pour les niveaux restants
       const L = w.levels.length, gap = 0.12, seg = Math.PI*2/L;
       g.ring.clear();

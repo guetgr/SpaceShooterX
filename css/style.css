@@ -407,6 +407,8 @@
   #styleRank{ font-size:18px; min-width:26px; }
   #styleCount{ font-size:14px; }
   .lu-title{ font-size:12px; }
+  .uii{ image-rendering:pixelated; image-rendering:crisp-edges; display:inline-block; vertical-align:-2px; flex:none; pointer-events:none; }      /* icônes d'interface en pixel art (ui/ui-icons.js) */
+  .mute-btn .uii, .home-ico .uii, .map-arrow .uii, .btn .uii, .nd-badge .uii{ vertical-align:middle; }
   .pxi{ image-rendering:pixelated; image-rendering:crisp-edges; display:inline-block; vertical-align:middle; }
   .card-icon{ height:34px; display:flex; align-items:center; }
 

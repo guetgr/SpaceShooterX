@@ -132,16 +132,16 @@ mixin(GameScene, {
       const pr = document.getElementById('goProg'); pr.classList.toggle('hidden', !L);
       if (L){ document.getElementById('goProgFill').style.width = Math.round(res.progress*100) + '%'; document.getElementById('goProgTxt').textContent = Math.round(res.progress*100) + '%'; }
       const rw = document.getElementById('goRewards'); rw.innerHTML = '';
-      const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.textContent = val; rw.appendChild(d); };
+      const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.innerHTML = val; rw.appendChild(d); };
       if (clearBonus){
-        addRw('Collecte en combat', '+' + (fragmentsEarned - clearBonus) + ' ◆');
-        addRw('Prime d\'intervention', '+' + this.lvDef.reward.clear + ' ◆');
-        if (rec.first && this.lvDef.reward.first) addRw('Prime de 1re validation', '+' + this.lvDef.reward.first + ' ◆');
-        addRw('TOTAL', '+' + fragmentsEarned + ' ◆', 'total');
-      } else addRw('Collecte en combat', '+' + fragmentsEarned + ' ◆', 'total');
-      const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.textContent = txt; rw.appendChild(d); };
-      if (rec && rec.unlockedLevel) unl('▶ ORDRE SUIVANT ATTRIBUE');
-      if (rec && rec.unlockedWorld) unl('★ NOUVEAU SECTEUR : ' + worldById(rec.unlockedWorld).name);
+        addRw('Collecte en combat', '+' + (fragmentsEarned - clearBonus) + ' ' + uiIco('frag'));
+        addRw('Prime d\'intervention', '+' + this.lvDef.reward.clear + ' ' + uiIco('frag'));
+        if (rec.first && this.lvDef.reward.first) addRw('Prime de 1re validation', '+' + this.lvDef.reward.first + ' ' + uiIco('frag'));
+        addRw('TOTAL', '+' + fragmentsEarned + ' ' + uiIco('frag'), 'total');
+      } else addRw('Collecte en combat', '+' + fragmentsEarned + ' ' + uiIco('frag'), 'total');
+      const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.innerHTML = txt; rw.appendChild(d); };
+      if (rec && rec.unlockedLevel) unl(uiIco('next') + ' ORDRE SUIVANT ATTRIBUE');
+      if (rec && rec.unlockedWorld) unl(uiIco('star') + ' NOUVEAU SECTEUR : ' + worldById(rec.unlockedWorld).name);
       if (victory && L && !nxt) unl('FIN DES ORDRES (pour l\'instant)');
       const bn = document.getElementById('btnNext'), br = document.getElementById('btnRetry');
       bn.classList.toggle('hidden', !res.next);
@@ -162,6 +162,7 @@ mixin(GameScene, {
     const px = this.player.x, py = this.player.y;
     const kz = Phaser.Math.Clamp(1/this.cameras.main.zoom, 1, 2.2);       // les effets grossissent quand on dézoome
     this.player.setVisible(false);
+    if (this.playerParts) this.playerParts.setVisible(false);
     if (this.shieldAura) this.shieldAura.setVisible(false);
     if (this.shipDmgGfx) this.shipDmgGfx.clear();
     this.startSlowmo(1200, 0.35);

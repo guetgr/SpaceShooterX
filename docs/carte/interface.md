@@ -12,16 +12,21 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `game-container` | `home/ui.js`, `main.js`, `ui/motion.js`, `ui/norma.js` | `css/style.css`, `css/agp.css` |
 | `hud` | — | `css/style.css` |
 | `hud-top` | `ui/motion.js` | `css/style.css` |
-| `hpTrack` | `player/damage.js` | — |
+| `hpTrack` | `player/damage.js`, `ui/motion.js` | — |
+| `hpTxt` | `ui/hud.js` | — |
 | `hpGhost` | `ui/motion.js` | — |
 | `hpFill` | `ui/hud.js` | — |
 | `shieldTrack` | `player/damage.js`, `ui/hud.js` | — |
 | `shieldFill` | `ui/hud.js` | — |
-| `pauseBtn` | `ui/dom.js`, `ui/motion.js` | — |
-| `scoreVal` | `ui/hud.js` | — |
 | `lvlBadge` | `ui/hud.js` | — |
+| `xpTrack` | `ui/hud.js` | — |
 | `xpFill` | `ui/hud.js` | — |
+| `scoreVal` | `ui/hud.js` | — |
+| `pauseBtn` | `ui/dom.js`, `ui/motion.js` | — |
 | `waveNote` | `ui/hud.js`, `ui/motion.js` | — |
+| `waveFill` | `ui/hud.js` | — |
+| `waveIco` | — | — |
+| `waveTxt` | `ui/hud.js` | — |
 | `relicRow` | `systems/relics-fusions.js` | `css/style.css`, `css/agp.css` |
 | `boss-hp-wrap2` | `game/level.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
 | `bossLabel2` | — | — |
@@ -45,12 +50,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `homeSettings` | `home/ui.js` | — |
 | `homeTicker` | `home/ui.js` | `css/agp.css` |
 | `homeTrack` | `home/ui.js` | `css/style.css` |
-| `pageHangar` | — | — |
-| `hangarTier` | `home/ui.js` | — |
-| `skinRow` | `home/ui.js` | — |
-| `segStats` | `home/ui.js` | — |
-| `segMods` | `home/ui.js` | — |
-| `hangarBody` | `home/ui.js` | — |
+| `pageHangar` | `home/garage.js` | — |
 | `pageMap` | `home/galaxy.js` | `css/style.css` |
 | `btnGalaxy` | `home/ui.js` | — |
 | `mwNum` | `home/ui.js` | — |
@@ -211,7 +211,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 
 Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase les règles du haut), mais source de confusion.
 
-### `css/style.css` : 471 sélecteurs, 36 définis plusieurs fois
+### `css/style.css` : 473 sélecteurs, 36 définis plusieurs fois
 
 - `:root` : 2 fois
 - `#hud` : 2 fois
@@ -250,7 +250,7 @@ Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase l
 - `#pageTree` : 2 fois
 - `.acc-head` : 2 fois
 
-### `css/agp.css` : 241 sélecteurs, 2 définis plusieurs fois
+### `css/agp.css` : 276 sélecteurs, 2 définis plusieurs fois
 
 - `#stage` : 2 fois
 - `.lu-sub` : 2 fois
@@ -261,11 +261,11 @@ Souvent des couches successives volontaires (« INTERFACE ALLÉGÉE » écrase l
 
 `#boss-banner`, `#btnBackWorld`, `#btnLaunch`, `#game-container`, `#gameNotice .gn-desc`, `#gameNotice .gn-name`, `#gameover`, `#gameover .go-title`, `#gameover.win .go-title`, `#homeTabs`, `#homeToast`, `#homeTop`, `#levelup .lu-title`, `#odBtn`, `#pageTree`, `#pauseGear .pg-head`, `#pauseMenu, #settingsMenu`, `#pgGrid .pg-it.sel`, `#relicRow`, `#stage`, `#styleHud`, `#treeBName`, `#treeBProg`, `#tutoEnd .go-title`, `#tutoEnd .te-big`, `#tutoEnd .te-new`, `#tutoEnd.win .go-title`, `#tutoPct .tp-fill`, `.boss-hp-label`, `.boss-hp-track`, `.btn.secondary`, `.btn.secondary:hover`, `.btn:not(.secondary):not(.small)`, `.card`, `.card-desc`, `.card-name`, `.card.fusion`, `.card:hover`, `.go-extra`, `.go-extra .go-boss`, `.go-extra .go-near`, `.go-prog`, `.go-prog-bar`, `.go-prog-bar > i`, `.go-rewards`, `.go-rw`, `.go-rw b`, `.go-rw.total`, `.go-rw.total b`, `.go-stats`, `.go-unlock`, `.gx-hint`, `.gx-title`, `.hangar-body`, `.hangar-body .stat-row`, `.hangar-gap`, `.hangar-seg button`, `.hangar-seg button.on`, `.hangar-tier`, `.home-frag`, `.home-ico`, `.home-page`, `.home-tab`, `.home-tab.buy::after`, `.home-tab.on`, `.home-tab.on::before`, `.home-tab::before`, `.hp-bar-fill`, `.hp-bar-ghost`, `.hp-bar-track`, `.hp-label, .score-label`, `.hp-title`, `.lc-comp i`, `.lc-comp i u`, `.lc-line`, `.lc-name`, `.level-card`, `.lu-title`, `.lvl-badge`, `.map-arrow`, `.mod`, `.mod-detail em`, `.mod.sel`, `.mute-btn`, `.mw-n`, `.mw-name`, `.mw-prog`, `.new-best`, `.node`, `.node-pct`, `.node-pct.full`, `.node.boss`, `.node.done`, `.node.open`, `.node.sel`, `.overlay`, `.overlay::after`, `.scanlines`, `.score-label`, `.score-val`, `.sheet`, `.sheet-overlay`, `.sheet::before`, `.shield-bar-fill`, `.shield-bar-track`, `.skin`, `.skin i`, `.skin.sel`, `.skin.sel i`, `.tc-cost`, `.tc-cost b`, `.tc-nm`, `.tcard`, `.tcard.aff::before`, `.tree-bhead`, `.tree-info`, `.tree-info-meta`, `.tree-info-name`, `.tree-invest-btn`, `.tree-invest-btn:disabled`, `.tree-tabs`, `.tt-dot`, `.ttab`, `.ttier`, `.wave-note`, `.xp-fill`, `.xp-track`, `:root`
 
-### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (5 candidats)
+### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (26 candidats)
 
 Peut aussi être une classe construite par concaténation de texte : vérifier avant de supprimer.
 
-`n1` (style.css), `n2` (style.css), `n3` (style.css), `p-1` (style.css), `p1` (style.css)
+`hangar-body` (style.css), `hangar-custom-note` (agp.css), `hangar-gap` (style.css), `hangar-label` (agp.css), `hangar-part` (agp.css), `hangar-part-option` (agp.css), `hangar-part-options` (agp.css), `hangar-part-title` (agp.css), `hangar-stage` (agp.css), `hangar-tier` (style.css), `hp-label` (style.css), `hp-title` (style.css), `lvl-badge` (style.css), `mod-detail` (style.css), `mod-empty` (style.css), `mod-grid` (style.css), `mod-head` (agp.css), `n1` (style.css), `n2` (style.css), `n3` (style.css), `nm-av` (agp.css), `nm-eye` (agp.css), `nm-mouth` (agp.css), `p-1` (style.css), `p1` (style.css), `skin-row` (style.css)
 
 ### @keyframes jamais utilisés (0)
 
@@ -273,14 +273,14 @@ Peut aussi être une classe construite par concaténation de texte : vérifier a
 
 ## Assets (`assets/manifest.json`)
 
-`audio/music/` : 23, `audio/sfx/` : 233, `fonts/` : 3, `sprites/` : 233
+`atelier/` : 7, `audio/music/` : 23, `audio/sfx/` : 233, `fonts/` : 3, `hud/` : 1, `sprites/` : 260
 
 ### ⚠ `asset(...)` qui visent un fichier absent du manifeste (0)
 
 —
 
-### Assets dont le nom n'apparaît nulle part dans le code (88 candidats)
+### Assets dont le nom n'apparaît nulle part dans le code (106 candidats)
 
 Les sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.
 
-`sprites/ac_boss0.webp`, `sprites/ac_boss1.webp`, `sprites/ac_boss2.webp`, `sprites/ac_boss3.webp`, `sprites/ac_fx_boom.webp`, `sprites/ac_fx_charge.webp`, `sprites/ac_fx_flame.webp`, `sprites/ac_fx_impact.webp`, `sprites/ac_fx_muzzle.webp`, `sprites/ac_fx_orb.webp`, `sprites/ac_fx_shock.webp`, `sprites/ac_fx_smoke.webp`, `sprites/ac_fx_spark.webp`, `sprites/an_fx_beam.webp`, `sprites/an_fx_boomL.webp`, `sprites/an_fx_boomM.webp`, `sprites/an_fx_charge.webp`, `sprites/an_fx_glow.webp`, `sprites/an_fx_glowHot.webp`, `sprites/an_fx_impact.webp`, `sprites/an_fx_muzzle.webp`, `sprites/an_fx_orb.webp`, `sprites/an_fx_orbHot.webp`, `sprites/an_fx_rotor.webp`, `sprites/an_fx_shock.webp`, `sprites/an_fx_spark.webp`, `sprites/ar_fx_boomL.webp`, `sprites/ar_fx_missile.webp`, `sprites/ar_fx_shock.webp`, `sprites/br_fx_boom.webp`, `sprites/br_fx_charge.webp`, `sprites/br_fx_impact.webp`, `sprites/br_fx_muzzle.webp`, `sprites/br_fx_orb.webp`, `sprites/ec_fx_cone.webp`, `sprites/ec_fx_coneHot.webp`, `sprites/ec_fx_reticle.webp`, `sprites/lt_beacon.webp`, `sprites/lt_radar.webp`, `sprites/lt_rotor_amber.webp`, `sprites/lt_rotor_fire.webp`, `sprites/lt_rotor_hot.webp`, `sprites/lt_rotor_toxic.webp`, `sprites/mt_fx_arc.webp`, `sprites/mt_fx_bolt.webp`, `sprites/mt_fx_boomL.webp`, `sprites/mt_fx_boomM.webp`, `sprites/mt_fx_charge.webp`, `sprites/mt_fx_fcharge.webp`, `sprites/mt_fx_fmuzzle.webp`, `sprites/mt_fx_glow.webp`, `sprites/mt_fx_hail.webp`, `sprites/mt_fx_iceb.webp`, `sprites/mt_fx_impact.webp`, `sprites/mt_fx_muzzle.webp`, `sprites/mt_fx_shock.webp`, `sprites/mt_fx_spark.webp`, `sprites/pd_fx_beam.webp`, `sprites/pd_fx_boomL.webp`, `sprites/pd_fx_boomM.webp`, `sprites/pd_fx_charge.webp`, `sprites/pd_fx_flame.webp`, `sprites/pd_fx_frost.webp`, `sprites/pd_fx_glow.webp`, `sprites/pd_fx_ice.webp`, `sprites/pd_fx_impact.webp`, `sprites/pd_fx_muzzle.webp`, `sprites/pd_fx_orb.webp`, `sprites/pd_fx_shock.webp`, `sprites/pd_fx_spark.webp`, `sprites/pl_fx_beam.webp`, `sprites/pl_fx_charge.webp`, `sprites/pl_fx_glow.webp`, `sprites/pl_fx_impact.webp`, `sprites/pl_fx_muzzle.webp`, `sprites/pl_fx_spark.webp`, `sprites/pl_fx_suction.webp`, `sprites/rx_fx_arc.webp`, `sprites/rx_fx_boomL.webp`, `sprites/rx_fx_boomM.webp`, `sprites/rx_fx_charge.webp`, `sprites/rx_fx_flame.webp`, `sprites/rx_fx_glow.webp`, `sprites/rx_fx_impact.webp`, `sprites/rx_fx_muzzle.webp`, `sprites/rx_fx_orb.webp`, `sprites/rx_fx_shock.webp`, `sprites/rx_fx_spark.webp`
+`hud/segments.svg`, `sprites/ac_boss0.webp`, `sprites/ac_boss1.webp`, `sprites/ac_boss2.webp`, `sprites/ac_boss3.webp`, `sprites/ac_fx_boom.webp`, `sprites/ac_fx_charge.webp`, `sprites/ac_fx_flame.webp`, `sprites/ac_fx_impact.webp`, `sprites/ac_fx_muzzle.webp`, `sprites/ac_fx_orb.webp`, `sprites/ac_fx_shock.webp`, `sprites/ac_fx_smoke.webp`, `sprites/ac_fx_spark.webp`, `sprites/an_fx_beam.webp`, `sprites/an_fx_boomL.webp`, `sprites/an_fx_boomM.webp`, `sprites/an_fx_charge.webp`, `sprites/an_fx_glow.webp`, `sprites/an_fx_glowHot.webp`, `sprites/an_fx_impact.webp`, `sprites/an_fx_muzzle.webp`, `sprites/an_fx_orb.webp`, `sprites/an_fx_orbHot.webp`, `sprites/an_fx_rotor.webp`, `sprites/an_fx_shock.webp`, `sprites/an_fx_spark.webp`, `sprites/ar_fx_boomL.webp`, `sprites/ar_fx_missile.webp`, `sprites/ar_fx_shock.webp`, `sprites/br_fx_boom.webp`, `sprites/br_fx_charge.webp`, `sprites/br_fx_impact.webp`, `sprites/br_fx_muzzle.webp`, `sprites/br_fx_orb.webp`, `sprites/ec_fx_cone.webp`, `sprites/ec_fx_coneHot.webp`, `sprites/ec_fx_reticle.webp`, `sprites/lt_beacon.webp`, `sprites/lt_radar.webp`, `sprites/lt_rotor_amber.webp`, `sprites/lt_rotor_fire.webp`, `sprites/lt_rotor_hot.webp`, `sprites/lt_rotor_toxic.webp`, `sprites/mt_fx_arc.webp`, `sprites/mt_fx_bolt.webp`, `sprites/mt_fx_boomL.webp`, `sprites/mt_fx_boomM.webp`, `sprites/mt_fx_charge.webp`, `sprites/mt_fx_fcharge.webp`, `sprites/mt_fx_fmuzzle.webp`, `sprites/mt_fx_glow.webp`, `sprites/mt_fx_hail.webp`, `sprites/mt_fx_iceb.webp`, `sprites/mt_fx_impact.webp`, `sprites/mt_fx_muzzle.webp`, `sprites/mt_fx_shock.webp`, `sprites/mt_fx_spark.webp`, `sprites/pd_fx_beam.webp`, `sprites/pd_fx_boomL.webp`, `sprites/pd_fx_boomM.webp`, `sprites/pd_fx_charge.webp`, `sprites/pd_fx_flame.webp`, `sprites/pd_fx_frost.webp`, `sprites/pd_fx_glow.webp`, `sprites/pd_fx_ice.webp`, `sprites/pd_fx_impact.webp`, `sprites/pd_fx_muzzle.webp`, `sprites/pd_fx_orb.webp`, `sprites/pd_fx_shock.webp`, `sprites/pd_fx_spark.webp`, `sprites/pl_fx_beam.webp`, `sprites/pl_fx_charge.webp`, `sprites/pl_fx_glow.webp`, `sprites/pl_fx_impact.webp`, `sprites/pl_fx_muzzle.webp`, `sprites/pl_fx_spark.webp`, `sprites/pl_fx_suction.webp`, `sprites/rx_fx_arc.webp`, `sprites/rx_fx_boomL.webp`, `sprites/rx_fx_boomM.webp`, `sprites/rx_fx_charge.webp`, `sprites/rx_fx_flame.webp`, `sprites/rx_fx_glow.webp`, `sprites/rx_fx_impact.webp`, `sprites/rx_fx_muzzle.webp`, `sprites/rx_fx_orb.webp`, `sprites/rx_fx_shock.webp`, `sprites/rx_fx_spark.webp`, `sprites/ui_arrow_l.png`, `sprites/ui_arrow_r.png`, `sprites/ui_check.png`, `sprites/ui_clock.png`, `sprites/ui_frag.png`, `sprites/ui_galaxy.png`, `sprites/ui_gear.png`, `sprites/ui_hand.png`, `sprites/ui_lock.png`, `sprites/ui_next.png`, `sprites/ui_pause.png`, `sprites/ui_pip_off.png`, `sprites/ui_pip_on.png`, `sprites/ui_skull.png`, `sprites/ui_star.png`, `sprites/ui_target.png`, `sprites/ui_trophy.png`

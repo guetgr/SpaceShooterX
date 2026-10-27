@@ -44,20 +44,22 @@ with sync_playwright() as pw:
     p.evaluate("document.querySelector('#treeScroll .tcard.aff').dispatchEvent(new MouseEvent('click',{bubbles:true}))"); p.wait_for_timeout(300)
     ck(p.evaluate("!document.getElementById('treeInvestBtn').disabled"),'nœud abordable sélectionné : bouton + actif')
     p.evaluate("document.getElementById('treeInvestBtn').click()"); p.wait_for_timeout(500)
-    ck(p.evaluate("getMeta().fragments")<500 and p.evaluate("document.getElementById('homeFrag').textContent")=='◆ '+str(p.evaluate("getMeta().fragments")),'achat : fragments débités et affichage mis à jour')
-    # hangar : apparence + modules
+    ck(p.evaluate("getMeta().fragments")<500 and p.evaluate("document.getElementById('homeFrag').textContent").strip()==str(p.evaluate("getMeta().fragments")),'achat : fragments débités et affichage mis à jour')
+    # Garage illustré : un seul atelier et modules purement visuels.
     p.evaluate("document.getElementById('tabHangar').click()"); p.wait_for_timeout(700)
-    ck(p.evaluate("document.querySelectorAll('#skinRow .skin').length")==3,'3 apparences proposées')
-    p.evaluate("document.querySelectorAll('#skinRow .skin')[1].click()"); p.wait_for_timeout(400)
-    ck(p.evaluate("getShipSkin()")=='ember' and p.evaluate("window.__ssxScene.scene.get('home').van.isTinted"),"choisir BRAISE : sauvegardé et camionnette teintée")
-    p.evaluate("document.querySelectorAll('#skinRow .skin')[0].click()"); p.wait_for_timeout(400)
-    ck(p.evaluate("getShipSkin()")=='base' and not p.evaluate("window.__ssxScene.scene.get('home').van.isTinted"),'ORIGINE : couleurs d\'origine')
-    p.evaluate("document.querySelectorAll('#skinRow .skin')[2].click()"); p.wait_for_timeout(300)
-    p.evaluate("document.getElementById('segMods').click()"); p.wait_for_timeout(300)
-    ck(p.evaluate("document.querySelectorAll('#hangarBody .mod').length")>=1,'MODULES : la compétence achetée est listée')
-    p.evaluate("document.querySelector('#hangarBody .mod').click()"); p.wait_for_timeout(200)
-    ck(len(p.evaluate("document.getElementById('modDetail').textContent"))>10,'toucher un module affiche son détail')
-    p.evaluate("document.getElementById('segStats').click()")
+    assert p.locator('#atelierNext').is_visible()
+    assert p.locator('#atelierVersion').count()==0
+    assert not p.evaluate("window.__ssxScene.scene.get('home').van.visible")
+    p.locator('.an-cards button').nth(1).click()
+    assert 'aimant' in p.locator('#anModule').get_attribute('src')
+    p.locator('.an-cards button').nth(2).click()
+    assert 'canon' in p.locator('#anModule').get_attribute('src')
+    assert p.evaluate("localStorage.getItem('ssx_atelier_preview_module')")=='cannon'
+    p.locator('.an-cards button').nth(0).click()
+    assert p.locator('#anModule').is_hidden()
+    for category in ['paint','body','modules']:
+        p.locator('[data-section='+category+']').click()
+    ck(True,'garage unique : ajout/retrait des modules et catégories')
     p.evaluate("document.getElementById('tabTree').click()"); p.wait_for_timeout(700)
     # arbre : glisser sur les onglets de branche = les faire défiler (pas de changement de page) ; ailleurs = changer de page
     ty=p.evaluate("(()=>{const r=document.getElementById('treeTabs').getBoundingClientRect(); return Math.round(r.top+r.height/2)})()")

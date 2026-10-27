@@ -63,6 +63,18 @@ const PLAYER_T4_B64 = asset('sprites/player_t4.webp');
 
 const EARTH_B64 = asset('sprites/earth.webp');
 
+// décors de la carte du monde (accueil) : planètes des mondes 2 et 3, nuages de la Terre (tuile qui boucle), satellite en orbite
+const PLANET_W2_B64 = asset('sprites/planet_w2.webp');
+const PLANET_W3_B64 = asset('sprites/planet_w3.webp');
+const CLOUDS_EARTH_B64 = asset('sprites/clouds_earth.webp');
+const ORBIT_W1_B64 = asset('sprites/orbit_w1.webp');
+
+// icônes des niveaux (médaillons de la carte) : id du niveau -> image. Un niveau sans icône garde le rond avec son numéro.
+const LEVEL_ICONS = {
+  'w1-tuto': asset('sprites/lvl_w1_tuto.webp'), 'w1-l1': asset('sprites/lvl_w1_l1.webp'), 'w1-l2': asset('sprites/lvl_w1_l2.webp'),
+  'w1-l3': asset('sprites/lvl_w1_l3.webp'), 'w1-l4': asset('sprites/lvl_w1_l4.webp'), 'w1-l5': asset('sprites/lvl_w1_l5.webp'),
+};
+
 const PLAYER_BULLET_B64 = asset('sprites/player_bullet.png');
 
 const PLAYER_MISSILE_B64 = asset('sprites/player_missile.png');

@@ -228,14 +228,14 @@ mixin(GameScene, {
     const nx = completionNext(TUTO_ID);
     const rows = rec.rows.map((r, i)=>{
       const pc = Math.round(r.best * r.w), gain = Math.round((r.best - r.prev) * r.w), ok = r.best >= 0.999;
-      return '<div class="te-row' + (ok ? ' ok' : '') + '" style="animation-delay:' + (0.5 + i*0.18) + 's"><span class="te-l">' + (ok ? '✔ ' : '') + r.label + '</span><span class="te-v">' + pc + '/' + r.w + (gain > 0 ? ' <em>+' + gain + '</em>' : '') + '</span><div class="te-b"><i style="width:' + Math.round(r.best*100) + '%"></i></div></div>';
+      return '<div class="te-row' + (ok ? ' ok' : '') + '" style="animation-delay:' + (0.5 + i*0.18) + 's"><span class="te-l">' + (ok ? uiIco('check') + ' ' : '') + r.label + '</span><span class="te-v">' + pc + '/' + r.w + (gain > 0 ? ' <em>+' + gain + '</em>' : '') + '</span><div class="te-b"><i style="width:' + Math.round(r.best*100) + '%"></i></div></div>';
     }).join('');
     el.innerHTML = '<div class="go-title">' + (victory ? 'FORMATION VALIDEE' : 'ACCIDENT DU TRAVAIL') + '</div>' +
       '<div class="te-big"><b id="teN">' + rec.before + '</b>%</div><div class="te-sub">TAUX DE FINITION DE LA FORMATION' + (d > 0 ? ' <em>+' + d + '%</em>' : '') + '</div>' +
       '<div class="te-bar"><i class="te-old" style="width:' + rec.before + '%"></i><i class="te-new" id="teFill" style="width:' + rec.before + '%"></i><s style="left:25%"></s><s style="left:50%"></s><s style="left:75%"></s></div>' +
       '<div class="te-rows">' + rows + '</div>' +
-      (rec.milestones.length ? '<div class="go-unlock">★ PALIER ' + rec.milestones.join(' + ') + '% · +' + rec.fragments + ' ◆</div>' : '') +
-      (full ? '<div class="go-unlock">★ FINITION 100% — PARFAIT ★</div>' : (nx ? '<div class="te-next">IL TE MANQUE <b>' + (100 - rec.after) + '%</b> · ' + nx.tip.toUpperCase() + ' <em>+' + nx.missing + '%</em></div>' : '')) +
+      (rec.milestones.length ? '<div class="go-unlock">' + uiIco('star') + ' PALIER ' + rec.milestones.join(' + ') + '% · +' + rec.fragments + ' ' + uiIco('frag') + '</div>' : '') +
+      (full ? '<div class="go-unlock">' + uiIco('star') + ' FINITION 100% — PARFAIT ' + uiIco('star') + '</div>' : (nx ? '<div class="te-next">IL TE MANQUE <b>' + (100 - rec.after) + '%</b> · ' + nx.tip.toUpperCase() + ' <em>+' + nx.missing + '%</em></div>' : '')) +
       (d <= 0 ? '<div class="te-next">Cette partie : ' + rec.runPct + '% · record ' + rec.after + '%</div>' : '') +
       '<button class="btn" id="teRetry">' + (full ? 'REFAIRE LA FORMATION' : 'REFAIRE · VISER ' + (COMPLETION_STEPS.find(s=> s > rec.after) || 100) + '%') + '</button><button class="btn secondary" id="teHome">RETOUR AU BUREAU</button>';
     host.appendChild(el);

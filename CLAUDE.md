@@ -1,53 +1,45 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guide pour Claude Code (claude.ai/code) dans ce dépôt. État du projet et tâches en cours : `PASSATION.md`. Où se trouve chaque élément du code : `docs/carte-du-code.md`.
 
 # Space Shooter X
 
-> **CONTEXTE NARRATIF À LIRE EN PREMIER (tout agent, toute tâche touchant à l'interface, aux textes ou au ton)** : `docs/brief-univers-agp.md` (brief d'origine). En résumé : an 2247, le joueur est un employé de l'**AGP (Agence Galactique de Propreté)** qui nettoie la galaxie avec une camionnette pourrie ; il découvre que l'agence a intérêt à garder la galaxie polluée. Ton : SF rétro-industrielle, humour noir et absurdité administrative, satire du travail, **subtil et lisible** (jamais une caricature). L'interface = logiciel de bord de l'AGP (AGP-OS) ; assistante embarquée **N.O.R.M.A.** (froide, polie, sarcastique, jamais bloquante en combat). Vocabulaire : mondes = secteurs, niveaux = ordres de mission, boss = incidents majeurs, fragments = composants, écran de fin = rapport d'intervention. **Lisibilité du combat prioritaire** (HUD léger, rien d'opaque). **Ne jamais modifier mécaniques, équilibrage, sauvegardes ni logique des compétences** pour de l'habillage ; toute idée de gameplay se présente à part. Réalisation : `docs/direction-artistique-agp.md`.
+> **CONTEXTE NARRATIF À LIRE EN PREMIER (tout agent, toute tâche touchant à l'interface, aux textes ou au ton)** : `docs/brief-univers-agp.md`. En résumé : an 2247, le joueur est un employé de l'**AGP (Agence Galactique de Propreté)** qui nettoie la galaxie avec une camionnette pourrie ; il découvre que l'agence a intérêt à garder la galaxie polluée. Ton : SF rétro-industrielle, humour noir et absurdité administrative, satire du travail, **subtil et lisible** (jamais une caricature). L'interface = logiciel de bord de l'AGP (AGP-OS) ; assistante embarquée **N.O.R.M.A.** (froide, polie, sarcastique, jamais bloquante en combat). Vocabulaire : mondes = secteurs, niveaux = ordres de mission, boss = incidents majeurs, fragments = composants, arbre = catalogue R&D, écran de fin = rapport d'intervention. **Lisibilité du combat prioritaire.** **Ne jamais modifier mécaniques, équilibrage, sauvegardes ni logique des compétences** pour de l'habillage ; toute idée de gameplay se présente à part. Réalisation visuelle : `docs/direction-artistique-agp.md`.
 
+Jeu de tir spatial mobile (portrait) type Raiden / Archero / Vampire Survivors, Phaser 3, scripts classiques sans bundler, destiné à Android / Google Play (wrapper Capacitor ou TWA à faire). Dépôt GitHub `guetgr/SpaceShooterX`, partagé à deux.
 
-Jeu de tir spatial type Raiden / Archero / Vampire Survivors (endless + boss), Phaser 3, destiné à Android / Google Play (wrapper Android à faire).
-**Le code est découpé en modules** (`src/`, scripts classiques, pas de bundler) — voir `README.md` pour l'organisation, le lancement, l'ajout de fichiers/assets et le travail Git à deux. Lire aussi `PASSATION.md` (état complet) et `docs/space-shooter-x-gameplay.md` (boucle de gameplay détaillée).
-L'ancien monolithe (un seul `index.html` de 16 Mo) est conservé dans `backups/index_monolithe_avant_split.html` (non versionné).
+## Équipe et préférences
+- **Guet** (Gaëtan, Mac) et **Bio** (Bioleboss, Windows) : aucun des deux ne code, Claude fait tout. Français.
+- Guet : vouvoiement, l'appeler « Guet », réponses courtes et sans remplissage, collaboration d'égal à égal, poser les questions qui manquent avant de se lancer.
+- Bio : ton casual et direct, réponses courtes ; juge les sons à l'oreille (« trop fort / pas assez fort »).
+- Les deux : fichiers complets et fonctionnels ; **pas de rustines** (aucun plafond artificiel d'ennemis, balles, régén, crits ; ne pas « accélérer le jeu » pour équilibrer : le joueur peut casser le jeu, mais par le temps et la réflexion ; l'optimisation vient à la fin) ; ressources gratuites uniquement ; dire ce qu'on va faire avant de coder quand c'est demandé.
+- Assets : images générées par eux (ChatGPT, ComfyUI) à partir de briefs que Claude écrit ; musique Suno ; sons enregistrés/générés par Bio.
 
-## Structure du jeu (depuis l'accueil à mondes)
-Plus de partie infinie comme mode principal : **accueil (HomeScene) → carte des mondes → niveau (GameScene avec `lvDef`) → écran de résultat**. Détails, fichiers et tests : `docs/menu-accueil.md`.
-En niveau, `alertLevel` = menace fixée par le niveau (`threat`), plus par l'arbre ; la partie infinie reste accessible en `?dev` (bouton DEV). Mondes/niveaux : `src/data/worlds/*.js` (brouillons). Le tuto est le niveau 1 du monde 1 (`w1-tuto`, type `tuto`, `src/game/tuto.js`) : sans `lvDef`, lancé par `tuto:true`. Le revenu de combat en niveau est réduit par `LEVEL_FRAG_MUL` (`data/balance.js`).
-Sur Mac : `python3` à la place de `py` pour les commandes ci-dessous. Pas de npm/bundler/lint : Python 3 (+ `pip install playwright numpy`), Node (vérif syntaxe du build) et Chrome suffisent. `file://` ne marche pas : toujours passer par le serveur.
+## Au début de chaque session
+**Démarrer le serveur de dev tout de suite**, en arrière-plan, s'il ne tourne pas déjà :
+- Mac (Guet) : `python3 tools/serve.py 8080`
+- Windows (Bio) : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store).
 
-**Habillage AGP (branche `direction-agp`)** : l'interface est le logiciel de bord de l'Agence Galactique de Propreté (AGP-OS). Palette, composants et écrans : `docs/direction-artistique-agp.md` ; couche CSS : `css/agp.css` (chargée après `style.css`) ; textes et voix de N.O.R.M.A. : `src/data/agp-lore.js` + `src/ui/norma.js`. Les libellés de l'interface suivent ce vocabulaire (secteurs, ordres de mission, composants, rapport d'intervention).
-
-## Interface : où est quoi (accueil, arbre, animations, chargement, icône)
-- **Animations de menus** : GSAP (`vendor/gsap.min.js`, gratuit) via `src/ui/motion.js` (objet `Motion` : retour tactile des boutons, CTA qui respire, pages/cartes en cascade, compteurs, rapport de fin, HUD). Sans effet si GSAP absent ou `prefers-reduced-motion`. Le build l'embarque (`--inline-phaser`) ou le charge depuis cdnjs.
-- **Arbre de compétences** (page R&D) : une page par branche, une carte par compétence, rangs en pastilles, fiche + achat en bas (`src/ui/tree-ui.js`). Données/coûts/déblocages inchangés (`data/skill-tree.js`). Fonctionnement et pistes d'amélioration : `docs/arbre-competences.md`.
-- **Écran de chargement** : `src/boot.js` (image `loading/bg.webp`, hors `assets/` volontairement : elle doit s'afficher avant le manifeste ; barre lissée ; lignes de boot AGP).
-- **Icône d'écran d'accueil** (PWA) : `manifest.webmanifest` + `icons/` (iPhone 180 px, Android 192/512 + maskable). Pas de service worker : le jeu s'installe mais exige le réseau. HTTPS requis.
-- **Typographie** : définie dans `css/style.css` (`SSX Display` = Jersey 15, `SSX Label`/`SSX Text` = Chakra Petch), tailles calées sur l'ancien jeu (`size-adjust`).
-- **Deux familles d'atouts, toujours distinctes** : **atouts GLOBAUX** = modules du catalogue R&D (arbre), permanents, appliqués à chaque mission (`GameScene.create`, `treeState`/`treeBonus`) ; **atouts de MISSION** = cartes, fusions et reliques choisies pendant la partie, perdus en fin de mission. Affichage : pause (onglets ATOUTS GLOBAUX / ATOUTS DE MISSION, `ui/pages.js`), transmission de début de mission, rapport de fin, atelier. Ne jamais les mélanger dans une même liste. Test : `python3 tools/perks_test.py`. **Le tutoriel utilise aussi les atouts globaux** (vaisseau de base + modules R&D ; ni succès ni ascension). Les armes débloquées par l'arbre (lasers, shotgun, lance-missiles) sont seulement **proposées** dans les cartes de montée de niveau (flags `…Owned`).
-- **Responsive (téléphone, tablette, PC)** : la zone de jeu fait toujours **400x700 logiques** (`#game-container`, Phaser en mode `NONE`) et est mise à l'échelle d'un bloc par `fitUi()` (`src/main.js`, variable CSS `--ui-s`) : canevas et HTML partagent le même repère, donc même mise en page et même lisibilité partout (bandes sombres autour). Ne pas utiliser d'unités `vw/vh` ni de mesures de fenêtre dans l'interface : tout se règle en px logiques sur 400x700. Détails : `docs/responsive.md`.
-- **Tests de l'interface** : `home_test.py` et `level_test.py` vérifient des libellés AGP (« INTERVENTION VALIDEE », « ACCIDENT DU TRAVAIL », « ORDRE ANNULE », « NOUVEAU SECTEUR ») : les mettre à jour si on change ces textes.
+Puis donner http://localhost:8080/?dev. `file://` ne marche pas. Faire `git pull` (ou `git fetch` + `git merge origin/main`) avant de commencer : l'autre pousse souvent.
 
 ## Carte du code (où est quoi)
-Point d'entrée : `docs/carte-du-code.md` (flux, table « où trouver quoi », conventions, pièges, tests). Index générés dans `docs/carte/` (`symboles.md` : nom → fichier, à consulter en premier ; `fichiers.md`, `donnees.md`, `interface.md`, `audit.md`). Générés par `python3 tools/gen_codemap.py` ; `--check` échoue si la carte est périmée. **Règle : après tout ajout/suppression de fichier ou de fonction, et avant de pousser, relancer le script** (en cas de conflit sur `docs/carte/`, le relancer).
+Point d'entrée : **`docs/carte-du-code.md`** (flux vérifiés, table « où trouver quoi », conventions, pièges, tests). Index générés dans `docs/carte/` : **`symboles.md`** (nom → fichier, à consulter en premier), `fichiers.md`, `donnees.md`, `interface.md`, `audit.md`. Générés par `python3 tools/gen_codemap.py` ; `--check` échoue si la carte est périmée. **Règle : après tout ajout/suppression de fichier ou de fonction, et avant de pousser, relancer le script** (en cas de conflit sur `docs/carte/`, le relancer).
 
-## Au début de chaque session / message
-**Démarrer le serveur de dev tout de suite** (sans attendre qu'on le demande), en arrière-plan : `py tools/serve.py 8080` (ou `C:\Users\louel\AppData\Local\Programs\Python\Python311\python.exe tools\serve.py 8080` si `py` échoue — le `python` du PATH est le faux raccourci Microsoft Store). Ne pas relancer s'il tourne déjà. Donner ensuite http://localhost:8080/?dev.
+## Règles du code
+- **Structure** : `index.html` (coque + HTML des menus/HUD) → `src/boot.js` (écran de chargement, charge `assets/manifest.json` en data-URI accessibles par `asset('sprites/x.png')`) → scripts de `src/scripts.json` **dans l'ordre** (portée globale partagée : un fichier n'utilise au démarrage que ce qui est défini plus haut ; tout nouveau fichier va dans `scripts.json`) → `src/main.js`.
+- **Scènes** : `BootScene` (textures) → `GameScene` (le jeu, ~40 fichiers de méthodes en `mixin(GameScene, {…})`) ↔ `HomeScene` (accueil, méthodes dans `src/home/`). `mixin` plante au démarrage si une méthode est définie deux fois : Grep avant d'ajouter.
+- **Boucle de jeu** : accueil → carte des secteurs → ordre de mission (`GameScene` avec `lvDef`, mondes dans `src/data/worlds/*.js`) → rapport d'intervention. Le tuto est le niveau `w1-tuto`. La partie infinie n'existe plus qu'en `?dev`. Détails : `docs/menu-accueil.md`.
+- **Deux familles d'atouts, toujours distinctes** : GLOBAUX (modules R&D, permanents, appliqués à chaque mission et au tuto) et DE MISSION (cartes, fusions, reliques de la partie). Ne jamais les mélanger dans une liste. Test : `tools/perks_test.py`.
+- **Zone de jeu 400x700 logiques** mise à l'échelle d'un bloc par `fitUi()` : jamais de `vw/vh` ni de mesures de fenêtre dans l'interface (`docs/responsive.md`).
+- **CSS en trois couches** : `css/style.css` → `css/agp.css` (habillage AGP) → `css/hud.css` (HUD en niveau) ; la dernière gagne. Le build les embarque toutes.
+- **Interface** : titres en majuscules sans accents ; animations JS via `Motion` (`src/ui/motion.js`, GSAP ; la classe `.mo` coupe la transition CSS sur `transform`) ; **pas d'émojis ni de glyphes pour les symboles de l'interface** : sprites pixel `uiIco('nom', 12|24)` (`src/ui/ui-icons.js`, dessinés par `tools/gen_ui_icons.py`, aussi en CSS : `var(--ico-nom)`). Les icônes de compétences, cartes, reliques et pactes sont encore des émojis réduits en pixel (`pxImg`).
+- **Textes N.O.R.M.A.** : `src/data/agp-lore.js` ; moteur `src/ui/norma.js` (une transmission à la fois, 14 s d'écart, jamais pendant intro, cartes, pause ou écran de fin).
+- **Sauvegardes** : `SAVE_KEYS` (`src/core/cloud-save.js`, clés `ssx_*`) ; ne pas en changer le format.
+- **Modes d'URL** : `?dev` (tout débloqué, `window.__game`, `window.__T`, boutons DEV) · `?sandbox` (sauvegarde en mémoire) · `?edit=play|bot` (pont de l'éditeur `editor.html`).
+- **Tests de l'interface** : `home_test.py` et `level_test.py` vérifient des libellés AGP (« INTERVENTION VALIDEE », « ACCIDENT DU TRAVAIL », « ORDRE ANNULE », « NOUVEAU SECTEUR ») : les mettre à jour si on change ces textes.
 
-## Préférences de Bio (utilisateur)
-- Français, ton casual, direct, peu de patience. Réponses courtes. Bio ne code pas : Claude fait tout.
-- Toujours livrer des fichiers complets et fonctionnels, pas des bouts d'édition.
-- Pas de rustines paresseuses : aucun plafond/limite artificiel (ennemis, balles, régén, crits), ne pas « accélérer le jeu » pour équilibrer. Le joueur peut casser le jeu, mais par le temps et la réflexion. L'optimisation vient à la fin.
-- Dire ce qu'on va faire avant de coder s'il le demande. Ressources gratuites uniquement.
-- Sons : il les enregistre/génère lui-même et les envoie par lots ; il juge « trop fort / pas assez fort » à l'oreille.
-
-## Structure du code (tout est en portée globale partagée, ordre = `src/scripts.json`)
-- `index.html` (coque + HTML du menu/HUD) → `src/boot.js` charge `assets/manifest.json` (tous les assets en mémoire, accessibles par `asset('sprites/x.png')` = data-URI) puis les scripts dans l'ordre de `src/scripts.json`.
-- **Ordre de chargement** : un fichier ne peut utiliser au démarrage (hors fonctions appelées plus tard) que ce qui est défini plus haut dans `scripts.json`. Toujours ajouter un nouveau fichier à `scripts.json`.
-- `GameScene` : `src/scenes/GameScene.js` (constructor + create) + ~35 fichiers de méthodes en `mixin(GameScene, { … })` rangés par sujet (`game/`, `player/`, `enemies/`, `bosses/`, `combat/`, `events/`, `systems/`, `world/`, `fx/`, `ui/`, `dev/`, `audio/scene-audio.js`). Pour trouver une méthode : Grep sur son nom.
-- Sons : classe `Sfx` (`audio/sfx-engine.js`), `SFX_LIB` (`audio/sfx-lib.js`, 110 sons synthétiques, `play(name,p)`). **`SFX_FILES`** (`audio/sfx-files.js`) : sons enregistrés (mp3 dans `assets/audio/sfx/`) qui remplacent la version synthétique du même nom ; décodés par `loadFiles()`, joués par `playFile()` (pk = niveau de crête, rv = envoi réverb, tier = pitch selon niveau d'arme, `d` = prises tirées au hasard). L'anti-spam `lim` de SFX_LIB s'applique toujours. 47 sons enregistrés à ce jour.
-- Musique : `audio/music-data.js` (`MUSIC_FILES`) + `audio/music.js` (`MusicLoop`, `FileMusic`, `MUSIC_SLOTS`, `MUSIC_BOSS`).
-- Événements : `data/events.js` (`EVENT_DEFS`), `events/` (`startEvent(kind,dur)`). Alertes / équilibrage : `data/balance.js`, `data/meta.js` (`ALERT_THRESHOLDS`, `ASCEND_MIN`), `data/bosses.js` (`BOSS_HP_BY_ALERT`), `game/difficulty.js` (`hpScaleNow`, `enemyDmgMul`).
+## Boss et mobs du monde 1 (où est quoi)
+Chaque boss/mob a son module, ses assets (`sprite-factory/tools/make_*_assets.py`) et ses sons `SFX_FILES`. Méthode : 3 variantes → Bio choisit → états d'usure + page de combat validée → intégration.
 - Satellites : `sat` (satellite hors service, dérive et se disloque en débris) et `satgun` (satellite armé : se met en position, charge, tire des orbes bleus) — art `satgun_sheet.webp` (26 images 200×200, découpées de `sources`/la planche d'origine), enregistrés dans `ENEMY_ART`, `spawning.js`, `enemies/ai.js` (`enemySatShot`, `satDebris`). Utilisés par le niveau `w1-l1` via `spawns`.
 - Mob « Bras écartés » (`bras`) : `enemies/bras.js` (comportement, tirs par tier, 4 états d'usure, pièces découpées dans le sprite, constantes `BRAS`), art `bras_sheet.webp` (4 images 512x512) + `br_fx_*.webp` (effets bleus), sons `bras*` dans `SFX_FILES`. Le tier d'intelligence (1 à 4) vient de l'entrée `{ type:'bras', tier }` de `spawns` du niveau (utilisé par `w1-l2`, affiché « Ordre 03 »). Assets produits par `sprite-factory/tools/make_bras_assets.py`.
 - Boss « Araignée de tri » (fin de `w1-l2`, affiché « Ordre 03 ») : `bosses/araignee.js` (état dans `this.ar`, constantes `AR`), art `ar_sheet.webp` + `ar_fx_*.webp`, sons `ar*`. Un niveau de survie avec `finalBoss:'araignee'` (ou `'meteo'`) lance le boss à la fin du temps ; la victoire vient de sa mort (`levelWin`). Autonome comme le boss du tuto (pas dans le système `BOSS_DEFS`). Assets : `sprite-factory/tools/make_araignee_assets.py`. Bouton ARAIGNEE DE TRI dans le bac à sable DEV.
@@ -59,36 +51,20 @@ Point d'entrée : `docs/carte-du-code.md` (flux, table « où trouver quoi », c
 - Boss « L'Anneau » (fin de `w1-l4`, affiché « Ordre 05 », type `kill` 40 puis boss) : `bosses/anneau.js` (état dans `this.an`, constantes `AN`), art `an_sheet.webp` + `an_fx_*.webp` (effets violets), sons `an*`. `finalBoss:'anneau'`. L'anneau central TOURNE vraiment : à chaque état d'usure, deux textures canvas (`anRing<st>` = couronne sans le nez, `anBase<st>` = le reste) ; il ralentit puis se grippe. Trois attaques en boucle : RAYONS (4 faisceaux violets tournants après une charge au moyeu), TOURELLES (4 d'angle + 2 pointes, salves visées, chacune meurt avec sa pièce de coque), BAIES (volets blindés qui coulissent, deux Éclaireurs sortent). Jeu de lumières : rotor au moyeu, chenille sur l'anneau, comète sur la roue, tourelles qui clignotent. Assets : `sprite-factory/tools/make_anneau_assets.py` (sources de la page de combat : `tools/anneau/`). Impact = « verre lourd étouffé » (choisi par Bio). Bouton L ANNEAU dans le bac à sable DEV.
 - Mob « L'Éclaireur de patrouille » (`eclaireur`, `w1-l4` et baies de L'Anneau) : `enemies/eclaireur.js` (constantes `EC`), art `ec_sheet.webp` + `ec_fx_*.webp` (cône de balayage dont le bout s'estompe, viseur), sons `ec*`. Patrouille en balayant un projecteur ; si tu restes dans le faisceau, le viseur se referme et il te VERROUILLE : TANT QUE LE VERROUILLAGE DURE, les tirs de tous les autres ennemis visent le joueur (`ecLockUpdate`, appelé à chaque image par `game/loop.js` : un tir ennemi qui apparaît près d'un ennemi non-boss est réorienté vers le joueur, marqué `_lk` et teinté en rouge ; les tirs de l'éclaireur et du boss portent `_ec` / `_aim` et ne sont pas touchés). Tier 1 à 4 dans `spawns` (renfort au tier 2, faisceau large au tier 3, tandem au tier 4). Assets : même script que le boss.
 - Boss final « Le PDG dans sa tour » (fin de `w1-l5`, affiché « Ordre 06 », type `boss` avec `finalBoss:'pdg'` ; `boss:'dread'` reste dans les données pour la validation du monde, le Dreadnought n'est plus lancé) : `bosses/pdg.js` (état dans `this.pd`, constantes `PD`), art `pd_sheet.webp` (tour, 4 états), `pg_sheet.webp` (vaisseau de protection « Le PDG », 4 états), `gd_sheet.webp` (agent de sécurité : vivant, givre, gelé, fissuré), effets dorés/glace `pd_fx_*.webp`, sons `pd*` / `pg*` / `gd*`. Quatre attaques en boucle : LICENCIEMENTS (canons, salves de pièces d'or visées), RESTRUCTURATION (anneau de pièces avec un passage), RAYONS SOLAIRES (les ailes balaient en croix), VIGILES (jusqu'à 3 vaisseaux « Le PDG » se placent devant la tour ; détruits, ils explosent en débris (pièces, contrats, coque) et lâchent chacun un agent de sécurité qui s'interpose bras écartés et GÈLE ; vaisseaux et agents arrêtent les tirs du joueur, testés par masque de pixels avant la tour). Nombre de vaisseaux = 1 + état d'usure du boss. Assets : `sprite-factory/tools/make_pdg_assets.py` (sources `tools/pdg/`, sons `tools/pdg/pdg_final_snd.py`). Sons : enregistrements réels (Kenney sci-fi/impact/RPG audio + pack CC0 « 100 CC0 SFX ») adoucis, choisis par Bio à l'écoute. Bouton LE PDG dans le bac à sable DEV.
-- Zoom de niveau : `levelZoom()` (`game/level.js`) = dézoom progressif lié à l'avancement du niveau, plus large quand on avance dans le monde (`zoom:{start,end,seconds}` par niveau pour régler).
-- Planètes des mondes : `worldPlanetTexture(scene, world, taille)` (`gfx/planets.js`) — la Terre (`theme.photo`) pour le monde 1, planètes générées pour les autres ; même planète sur la carte, la galaxie, le fond des pages Atelier/R&D (`setHomeBackPlanet`) et au décollage (`introPlanet`, `intro:'earth'` sur le 1er niveau de chaque monde).
-- Boucliers ennemis / IA : `enemies/squads-shields.js` (`updateEnemyShields`, `auraTexFor`, `shieldShatter`, `updateDodge`, `updateSquads`).
-- Overdrive : `systems/overdrive.js` (`odPower()`), `player/damage.js` (`damagePlayer` sort tôt si `odActive>0`).
-- Arbre : `data/skill-tree.js` (`ALL_TREE_NODES`). Cartes : `data/upgrades.js` (`UPGRADE_POOL`). Reliques : `data/relics.js`. Fusions : `data/fusions.js`.
-- Joueur : camionnette (van) 270×300 WebP, 4 paliers T1–T4 (`PLAYER_BASE/T2/T3/T4_B64` dans `data/image-assets.js`), pods/lueurs dessinés en code. Dérapage : bloc « drift » dans `update` (`game/loop.js`), réduit avec `stats.moveResponsiveness`.
-- Intro : décollage depuis la Terre (`game/intro.js`, constantes `INTRO_E_A/B/C` dans `core/constants.js`, texture `earth`) ; le bac à sable (`dev/sandbox.js`) garde l'ancienne intro courte.
-- Sauvegarde : `SAVE_KEYS` (`core/cloud-save.js`, localStorage `ssx_*`).
-- Mode DEV : `?dev` dans l'URL (ou build `-dev`) → `DEV_SEE_ALL = true`, expose `window.__game` et `window.__T` (`ALL_TREE_NODES, UPGRADE_POOL, RELICS, FUSIONS, sfx`). Les `const` de haut niveau sont aussi utilisables directement dans `page.evaluate`.
 
-- Mixins : `mixin(GameScene, {…})` plante au démarrage si une méthode est définie deux fois (voulu) — ne pas redéfinir, chercher d'abord avec Grep. L'accueil suit le même principe : `HomeScene` + méthodes dans `src/home/` (voir `docs/menu-accueil.md`).
-- Hooks de test (`?dev`) : scène de jeu = `window.__game.scene.scenes.find(s=>s.startRun)` ; lancer une run = clic `#btnStart` ; bac à sable = `#btnSandbox` ; finir l'intro = `sc.introT=99999`. Tests headless : dt clampé, FPS bas faussent la vitesse.
+## Outils et tests (dossier `tools/`, pas de lanceur unique)
+- Prérequis : Python 3 + `pip install playwright numpy scipy pillow`, Chrome, Node (vérif syntaxe du build). Sur Mac `python3`, sur Windows `py`.
+- **Avant chaque push** : `python3 tools/smoke_test.py` (une partie se lance sans erreur JS), `home_test.py`, `level_test.py`, `perks_test.py`, `node tools/check_worlds.js`, `python3 tools/gen_codemap.py --check`.
+- `build.py` : fichier unique `dist/space-shooter-x.html` (+ `-dev`), vérif `node --check` ; `--inline-phaser` pour embarquer Phaser. `smoke_test.py --dist` le teste.
+- `sim_balance.py grid|campaign|tune` : joueur automatique en avance rapide (équilibrage des niveaux).
+- Assets : `gen_manifest.py` (après tout ajout/suppression dans `assets/`), `gen_ui_icons.py` (icônes d'interface), `import_sprites_niveaux.py <dossier>` (icônes de niveaux PNG), `import_decors_carte.py --w2 --w3 --nuages --orbite` (planètes, nuages, satellite de la carte), `cut_satgun.py` (planche du satellite armé).
+- `editor.html` (racine) : éditeur de niveaux, export dans `src/data/tuning.js` (`docs/editeur-niveaux.md`).
+- Machine de test lente (WebGL logiciel) : FPS non représentatifs ; en headless, `dt` clampé fausse les vitesses. Dans un `page.evaluate`, ne jamais renvoyer un objet Phaser (sérialisation infinie) : terminer par `return 0`.
 
-## Outils (dossier tools/)
-- `serve.py` / `serve.bat` : serveur local sans cache (`http://localhost:8080/?dev`).
-- `editor.html` (racine) : éditeur de niveaux (réglages en direct, TESTER, bot, EXPORTER → `src/data/tuning.js`) : `http://localhost:8080/editor.html`, voir `docs/editeur-niveaux.md`. Les réglages du tuto vivent dans `TUTO_TUNE` (`data/tuning-*.js`), pas en dur dans `tuto.js`.
-- `build.py` : génère `dist/space-shooter-x.html` (prod) et `dist/space-shooter-x-dev.html` (DEV) en un seul fichier + vérif de syntaxe (Node). Option `--inline-phaser`.
-- `smoke_test.py` : test headless (playwright + Chrome) — lance une partie, échoue si erreur JS. À lancer avant tout push. `--dist` pour tester le fichier unique.
-- Autres tests : `node tools/check_worlds.js` (format/déblocages des mondes), `python3 tools/level_test.py` (victoire/défaite par objectif), `python3 tools/home_test.py` (accueil, carte, arbre, hangar), `python3 tools/sim_balance.py grid|campaign|tune` (joueur auto en avance rapide, équilibrage). Pas de lanceur de test unique : lancer le script voulu directement.
-- `gen_manifest.py` : régénère `assets/manifest.json` après ajout/suppression d'un asset.
-- Anciens scripts ponctuels (découpe des sons `cut*.py`, `skills3.py`, `drift2.py`, `intro2.py`, `prof.py`, `sfxtest.py`, `gen_doc.py`) supprimés ; récupérables dans l'historique Git. Les sources mp3 des sons restent dans `sources/sons-sources/`.
-- Machine de test à 1 cœur / WebGL logiciel : les FPS ne sont pas représentatifs d'un téléphone.
+## Git
+- Une branche par sujet, commits petits, PR vers `main`. Avant de pousser : `git fetch` + `git merge origin/main`, résoudre les conflits en gardant les deux côtés (fréquents sur `CLAUDE.md`, `PASSATION.md`, `css/agp.css`), retester, relancer `gen_codemap.py`.
+- Commiter et pousser seulement quand Guet ou Bio le demande.
+- macOS : `sed -i` exige `-i ''` ; préférer un petit script Python pour éditer.
 
 ## Contrainte de taille
-Le build « un seul fichier » fait ~16 Mo (limite des artifacts claude.ai : 16 Mo, donc pas d'artifact avec l'inline Phaser). En local la limite n'existe plus, mais le jeu final doit rester raisonnable pour le Play Store. Sons recompressés mp3 mono 24–32 kbps.
-
-## Flux de travail
-1. Modifier les fichiers de `src/` (petits Edit ciblés), `F5` sur `http://localhost:8080/?dev`.
-2. `python tools/smoke_test.py` (et `python tools/build.py` + `smoke_test.py --dist` avant une livraison).
-3. Git : commits petits, `git pull` avant de commencer (le projet est partagé avec un collègue).
-
-## Points ouverts
-Voir PASSATION.md §À faire.
+Build « fichier unique » ~22 Mo (la limite de 16 Mo des artifacts claude.ai ne permet plus de le publier là). Le jeu final doit rester raisonnable pour le Play Store : sons en mp3 mono 24–32 kbps, images en WebP.
