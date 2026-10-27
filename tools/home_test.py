@@ -1,5 +1,5 @@
 """Test headless de l'accueil : pages (glisser, onglets), paramètres, arbre, retour.   python tools/home_test.py"""
-import functools, http.server, threading, sys, os
+import functools, http.server, re, threading, sys, os
 from playwright.sync_api import sync_playwright
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 class Q(http.server.SimpleHTTPRequestHandler):
@@ -78,6 +78,10 @@ with sync_playwright() as pw:
     ck(mode()=='galaxy' and p.evaluate("document.getElementById('homeToast').classList.contains('show')"),'monde verrouillé : message, on reste sur la carte')
     p.mouse.click(pos[0][0],pos[0][1]); p.wait_for_timeout(2200)
     ck(mode()=='world' and p.evaluate("document.getElementById('mwName').textContent")=='ORBITE TERRESTRE','toucher un monde ouvert -> vue du monde')
+    sel=p.evaluate("window.__ssxScene.scene.get('home').homeSel")
+    prow=p.evaluate("(()=>{ const r=[...document.querySelectorAll('.om-row')].find(x=>x.textContent.indexOf('PRIME')>=0); return r ? r.textContent : ''; })()")
+    pv=p.evaluate("composantsPrime(levelById('%s').reward, false)" % sel)
+    ck(re.search(r'\+%d(?!\d)' % pv, prow) is not None,'fiche d\'ordre : prime AGP affichée (+%s dans « %s »)' % (pv, prow))
     ck(p.evaluate("document.querySelectorAll('#mapOrbit .node').length")==6,'6 niveaux en orbite (tuto + 5)')
     # déblocage animé : monde 1 terminé -> le monde 2 se débloque au retour sur l'accueil
     p.evaluate("localStorage.setItem('ssx_worlds_v1', JSON.stringify({v:1,levels:{'w1-l1':{clears:1,best:5},'w1-l2':{clears:1,best:5},'w1-l3':{clears:1,best:5},'w1-l4':{clears:1,best:5},'w1-l5':{clears:1,best:5}},seen:{},last:'w1-l5'}))")

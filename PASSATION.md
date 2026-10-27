@@ -1,6 +1,8 @@
 ﻿# PASSATION — Space Shooter X (état au 26 oct. 2026)
 
-> Lire d'abord `CLAUDE.md` (règles), `docs/brief-univers-agp.md` (univers et ton), puis `docs/carte-du-code.md` (où est quoi).
+> Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers.md` (bible de l'univers, référence du lore), `docs/brief-univers-agp.md` (ton de l'interface), puis `docs/carte-du-code.md` (où est quoi).
+
+> **Refonte de la progression en cours (branche `progression-agp`, 27 oct. 2026)** : design `docs/superpowers/specs/2026-10-27-progression-design.md`, plan `docs/superpowers/plans/2026-10-27-progression-agp.md`. Étape 1 (composants visibles) et 6a (textes des secteurs 2 et 3) faites ; étapes 2 à 5 (atelier, R&D par technologie, emplacements, plans, livrées) à planifier une par une.
 
 > **Garage en pause (27 octobre 2026)** : lire [docs/REPRISE-GARAGE.md](docs/REPRISE-GARAGE.md) pour l’état de la branche `codex/atelier-personnalisation`, les assets validés et la suite prévue.
 
@@ -13,6 +15,7 @@ Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers
 - Les autres branches distantes (`menu-accueil`, `direction-agp`, `responsive`, `carte-du-code`, `carte-monde-vivante`…) sont fusionnées ; elles peuvent être supprimées sur GitHub.
 
 ## 2. Ce qui a été fait (du plus récent au plus ancien)
+- **Composants visibles** (branche `progression-agp`) : les machines détruites lâchent des composants ◆ (icône : écrou AGP), ramassés à l'aimant, comptés dans le HUD sous le RENDEMENT ; pluies de composants à la mort des boss et du Trésorin, aspirées à la victoire. Rapport : composants récupérés + prime AGP (moitié des primes du niveau) en victoire, franchise d'accident de 30 % en défaite ou abandon ; le score ne rapporte plus de composants. Règles : `src/data/composants.js` (test `node tools/composants_test.js`), jeu : `src/world/composants.js`. Secteurs 2 et 3 renommés d'après la bible (LA CASSE LUNAIRE / LE BROYEUR, MARS, PLANETE POUBELLE / LE DIRECTEUR DE TRAITEMENT), employé n° 0042, transmissions N.O.R.M.A. de fin de secteur.
 - **Secteur 1 : tous les boss et mobs sont dans le jeu** (branche `boss-antenne-mere`, fusionnée avec `main` le 27 oct.) : boss du tuto Antenne-Mère, La Météo (`w1-l1`), Araignée de tri (`w1-l2`), Le Réacteur (`w1-l3`), L'Anneau (`w1-l4`, 40 kills puis boss), Le PDG dans sa tour (`w1-l5`, avec jusqu'à 3 vaisseaux de protection « Le PDG » qui lâchent chacun un agent de sécurité gelé) ; mobs Bras écartés, Pilleur de cristaux (aspiration + laser alimenté), Éclaireur de patrouille (verrouillage : tant qu'il te tient, les tirs des autres ennemis visent le joueur). Chaque boss est autonome (`src/bosses/*.js`, état `this.ar/mt/rx/an/pd`), avec jeu de lumières, états d'usure, pièces découpées dans le sprite et sons réels adoucis. Détails et fichiers : section « Boss et mobs du monde 1 » de `CLAUDE.md`. Assets produits par `sprite-factory/tools/make_*_assets.py` (hors dépôt). **Valeurs d'équilibrage PROVISOIRES** (PV, dégâts, cadences) : à régler en jouant.
 - **HUD en niveau** (`css/hud.css`, `src/ui/hud.js`) : portrait de la camionnette + grade, barres de coque / bouclier / expérience épaisses et brillantes (coque chiffrée), rendement en gros chiffres, pause en relief, ordre de mission en jauge avec icône du type d'objectif, jauge de boss assortie, voile sombre en haut. Effets : flash + secousse à l'impact, éclat vert au soin, alerte coque, reflet, montée de grade, parallaxe légère (`updateHudSway`). `smoke_test.py` attend que le jeu soit vraiment démarré.
 - **Icônes d'interface en sprites** : cadenas, coche, composants (◆), étoile, crâne, pause, engrenage, flèches, pastilles, trophée, main, chrono, réticule → `assets/sprites/ui_*.png` (12x12, `tools/gen_ui_icons.py`), utilisées par `uiIco()`.
@@ -23,6 +26,8 @@ Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers
 
 ## 3. À faire / questions ouvertes
 **Prochaines étapes proposées**
+- **Refonte de la progression** : étapes 2 à 5 du design (sauvegarde v3 + atelier à 6 postes Mk I-V, R&D par technologie + emplacements 1→5, plans et pièces de secteur, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : vagues des secteurs 2 et 3 selon la bible, boss Broyeur et Directeur (images à générer), planètes à échanger (la Casse lunaire affiche aujourd'hui une géante rouge, Mars une planète violette).
+- **Simulateur** : `sim_balance.py campaign` saute désormais le tutoriel (le bot ne sait pas le jouer depuis le boss Antenne-Mère).
 - Tester le HUD et la carte sur de **vrais téléphones** (lisibilité, rythme des animations, parallaxe).
 - **Icônes manquantes** à faire générer (brief ComfyUI à écrire) : niveaux des secteurs 2 et 3 (à ajouter dans `LEVEL_ICONS`), objets en orbite des secteurs 2 et 3 (`theme.orbiter`), puis les ~100 icônes de compétences, cartes, reliques et pactes (aujourd'hui des émojis réduits en pixel). Import : `tools/import_sprites_niveaux.py`, `tools/import_decors_carte.py`.
 - **Équilibrage des niveaux** (courbe de difficulté, économie, `hpMul`/`dmgMul`) avec `tools/sim_balance.py` ; voir `docs/menu-accueil.md` § État.

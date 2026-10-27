@@ -215,7 +215,7 @@ mixin(GameScene, {
   /* ---------- BILAN / FINITION ---------- */
   tutoReward(){        // le tuto est un niveau du monde 1 : victoire enregistrée (ouvre le niveau suivant) + récompense de la 1re victoire
     const d = levelById(TUTO_ID), rec = recordLevelClear(TUTO_ID, this.score);
-    if (rec && rec.first){ const m = getMeta(); m.fragments += d.reward.clear + (d.reward.first || 0); setMeta(m); }
+    if (rec && rec.first){ const m = getMeta(); m.fragments += composantsPrime(d.reward, true); setMeta(m); }      // prime AGP (data/composants.js), comme les autres ordres
   },
   tutoBank(){          // enregistre la finition de CETTE partie (victoire, défaite ou abandon) — une seule fois
     if (!this._tutoRec) this._tutoRec = recordCompletion(TUTO_ID, this.tutoComp());
