@@ -4,7 +4,7 @@
   python tools/level_test.py          (sert le dossier du projet SANS ?dev, pour tester les vrais déblocages ; prérequis : pip install playwright)
 Les objectifs sont raccourcis par le test (goal.seconds = 3, etc.) ; le moteur de jeu tourne pour de vrai.
 """
-import functools, http.server, os, sys, threading
+import functools, http.server, json, os, sys, threading
 from playwright.sync_api import sync_playwright
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -55,6 +55,7 @@ with sync_playwright() as pw:
         d = os.environ.get('SHOT_DIR')
         if d: p.screenshot(path=os.path.join(d, name + '.png'))
     def prog(): return p.evaluate("JSON.stringify(getWorldProgress().levels)")
+    def bank(): return json.loads(p.evaluate("JSON.stringify(%s.lvResult && %s.lvResult.bank || null)" % (SC, SC))) or {}
 
     print('apparence en jeu')
     p.evaluate("setShipSkin('ember')")
@@ -67,11 +68,24 @@ with sync_playwright() as pw:
     p.evaluate("setShipSkin('base')")
 
     print('survie (w1-l1)')
+    f0 = p.evaluate("getMeta().fragments")
+    check(p.evaluate("typeof LEVEL_FRAG_MUL") == 'undefined', 'ancien calcul (score -> fragments) retiré')
     start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
     check(p.evaluate("%s.lvDef.id" % SC) == 'w1-l1', 'le niveau est chargé')
     check(p.evaluate("%s.alertLevel" % SC) == 1, 'menace = celle du niveau')
+    print('composants en mission')
+    check(p.evaluate("%s.runComposants" % SC) == 0 and p.evaluate("%s.comps.getLength()" % SC) == 0, 'composants : compteur à 0 au départ')
+    n = p.evaluate("(()=>{ const sc = %s; const e = sc.spawnOneEnemy('tank', 200); sc.killEnemy(e); return sc.comps.getLength(); })()" % SC)
+    check(n >= 3, 'un ennemi lourd lâche 3 composants (%s)' % n)
+    check(p.evaluate("%s.comps.getChildren().every(c=> c.depth === 3)" % SC), 'composants sous les tirs ennemis (profondeur 3)')
+    p.evaluate("(()=>{ const sc = %s; sc.spawnComposantAt(sc.player.x, sc.player.y, 'compL', 0); return 0; })()" % SC); p.wait_for_timeout(400)
+    check(p.evaluate("%s.runComposants" % SC) >= 5, 'ramassage : +5 pour un gros composant')
+    check(p.evaluate("document.getElementById('compVal').textContent") == str(p.evaluate("%s.runComposants" % SC)), 'compteur du HUD = composants ramassés')
+    check(p.evaluate("(()=>{ const sc = %s; const k = sc.comps.getLength(); sc.tuto = 1; sc.composantDrop({ enemyType:'tank', x:200, y:200 }); sc.tuto = 0; return sc.comps.getLength() - k; })()" % SC) == 0, 'tutoriel : aucun composant')
+    c0 = p.evaluate("(()=>{ const sc = %s; sc.stats.magnetRadius = 60; for (let i=0;i<10;i++) sc.spawnComposantAt(20, sc.player.y - 300, 'compS', 0); return sc.runComposants; })()" % SC)
     p.wait_for_timeout(5500)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par survie -> écran de fin')
+    check(p.evaluate("%s.runComposants" % SC) - c0 >= 10, "victoire : les composants restés à l'écran sont aspirés vers la camionnette")
     check(vis('#btnNext') and vis('#btnRetry') and vis('#btnGoMenu'), 'victoire : boutons SUIVANT, REJOUER, ACCUEIL')
     check(not vis('#home'), "l'arbre de compétences (page de l'accueil) ne s'ouvre pas tout seul : l'accueil reste fermé")
     check('ORBITE TERRESTRE' in p.evaluate("document.getElementById('goLevel').textContent"), 'le niveau est affiché')
@@ -79,12 +93,15 @@ with sync_playwright() as pw:
     shot('victoire')
     check('w1-l1' in prog() and 'w1-l2' not in prog(), 'victoire enregistrée')
     check(p.evaluate("isLevelUnlocked('w1-l2')"), 'niveau 2 débloqué')
-    f1 = p.evaluate("getMeta().fragments"); check(f1 >= 60, 'fragments + bonus de première victoire (%s)' % f1)
+    f1 = p.evaluate("getMeta().fragments"); bk = bank()
+    check(bk.get('prime') == 30 and f1 - f0 == bk.get('total'), '1re victoire : composants + prime AGP de 30 (%s, +%s)' % (bk, f1 - f0))
 
     print('rejeu : pas de nouveau bonus de 1re victoire')
     start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
+    check(p.evaluate("%s.runComposants" % SC) == 0, 'rejeu : le compteur repart de 0')
     p.wait_for_timeout(5500)
-    f2 = p.evaluate("getMeta().fragments"); check(0 < f2 - f1 < 60, 'rejeu : bonus réduit (+%s)' % (f2 - f1))
+    f2 = p.evaluate("getMeta().fragments"); bk = bank()
+    check(bk.get('prime') == 10 and f2 - f1 == bk.get('total'), 'rejeu : prime réduite à 10 (%s, +%s)' % (bk, f2 - f1))
 
     print('kills (w1-l4)')
     start('w1-l4', "levelById('w1-l4').goal.count = 5; levelById('w1-l4').finalBoss = null")       # le boss de fin est testé à part plus bas
@@ -103,7 +120,10 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ const sc = %s; sc.anStartAtk('spokes'); })()" % SC); p.wait_for_timeout(4500)
     p.evaluate("(()=>{ %s.anDamage(200, 200, 600, true); })()" % SC); p.wait_for_timeout(1500)
     check(p.evaluate("%s.an.st >= 2" % SC), "L'Anneau s'abîme (états d'usure)")
-    p.evaluate("(()=>{ %s.anDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_timeout(9000)
+    k0 = p.evaluate("(()=>{ const sc = %s; sc.comps.clear(true, true); return sc.runComposants; })()" % SC)       # on ne mesure que la pluie du boss
+    p.evaluate("(()=>{ %s.anDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.an && window.__ssxScene.an.dead", timeout=10000); p.wait_for_timeout(200)
+    check(p.evaluate("%s.runComposants + %s.composantsOnScreenValue()" % (SC, SC)) - k0 >= 20, 'mini-boss (Anneau) : pluie de composants (4 gros)')
+    p.wait_for_timeout(7000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', "victoire à la mort de L'Anneau")
     p.evaluate("(()=>{ %s.dodgeInvuln = 0; })()" % SC)
     print("mob Éclaireur (w1-l4) : verrouillage et tirs qui visent le joueur")
@@ -125,13 +145,15 @@ with sync_playwright() as pw:
     print('défaite (w1-l2) : fragments conservés, pas de victoire enregistrée')
     start('w1-l2')
     fa = p.evaluate("getMeta().fragments")
-    p.evaluate("(()=>{ const sc = %s; sc.score = 300; sc.hp = 1; sc.hitCooldown = 0; sc.dodgeInvuln = 0; sc.shield = 0; sc.phoenixCharges = 0; sc.damagePlayer(9999); })()" % SC)
+    p.evaluate("(()=>{ const sc = %s; sc.runComposants = 100; sc.stats.fragmentBonus = 0; sc.pactBonusMul = 1; sc.hp = 1; sc.hitCooldown = 0; sc.dodgeInvuln = 0; sc.shield = 0; sc.phoenixCharges = 0; sc.damagePlayer(9999); })()" % SC)
     p.wait_for_timeout(2800)
     check(go_visible() and title() == 'ACCIDENT DU TRAVAIL', 'défaite -> écran de fin')
     check(not vis('#btnNext') and vis('#btnRetry') and not vis('#home'), 'défaite : REJOUER seul (pas de SUIVANT), pas d\'arbre')
     shot('defaite')
     check('w1-l2' not in prog(), 'défaite non enregistrée comme victoire')
-    check(p.evaluate("getMeta().fragments") > fa, 'fragments gagnés conservés')
+    bk = bank(); fb = p.evaluate("getMeta().fragments")
+    check(bk.get('gross', 0) >= 100 and bk.get('franchise') == int(bk['gross']*0.3 + 0.5) and bk.get('prime') == 0 and fb - fa == bk.get('total'), 'défaite : composants conservés moins la franchise de 30 %% (%s, +%s)' % (bk, fb - fa))
+    check('Franchise' in p.evaluate("document.getElementById('goRewards').textContent"), 'défaite : ligne de franchise dans le rapport')
 
     print('boss final (w1-l5, Le PDG)')
     start('w1-l5')
@@ -149,8 +171,12 @@ with sync_playwright() as pw:
     check(p.evaluate("%s.pd.st >= 2" % SC), "Le PDG s'abîme (états d'usure)")
     p.evaluate("(()=>{ const sc = %s; sc.pdStartAtk('guard'); })()" % SC); p.wait_for_timeout(2500)
     check(p.evaluate("%s.pd.ships.length >= 1" % SC), 'jusqu\'à trois vaisseaux de protection')
-    p.evaluate("(()=>{ %s.pdDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_timeout(15000)
+    k0 = p.evaluate("(()=>{ const sc = %s; sc.comps.clear(true, true); return sc.runComposants; })()" % SC)       # on ne mesure que la pluie du boss
+    p.evaluate("(()=>{ %s.pdDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.pd && window.__ssxScene.pd.dead", timeout=12000); p.wait_for_timeout(200)
+    check(p.evaluate("%s.runComposants + %s.composantsOnScreenValue()" % (SC, SC)) - k0 >= 60, 'boss de secteur (PDG) : grosse pluie de composants (12 gros)')
+    p.wait_for_timeout(9000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du PDG')
+    check('847 infractions' in p.evaluate("document.getElementById('rpNorma').textContent"), 'fin du secteur 1 : transmission N.O.R.M.A. de la bible')
     check(p.evaluate("worldSummary('w1').bossDown"), 'boss du monde enregistré')
     check(vis('#btnNext') and p.evaluate("%s.lvResult.next" % SC) == 'w2-l1', 'boss du monde 1 : SUIVANT mène au monde 2')
     check('NOUVEAU SECTEUR' in p.evaluate("document.getElementById('goRewards').textContent"), 'annonce du monde débloqué')
@@ -162,8 +188,10 @@ with sync_playwright() as pw:
     check(p.evaluate("%s.lvDef && %s.lvDef.id" % (SC, SC)) is not None and not p.evaluate("document.body.classList.contains('at-home')"), 'DECOLLER lance le niveau choisi')
     check(p.evaluate("!document.getElementById('home') || document.getElementById('home').classList.contains('hidden')"), "l'accueil disparaît pendant le niveau")
     p.evaluate("document.getElementById('pauseBtn').click()"); p.wait_for_timeout(300)
+    p.evaluate("(()=>{ const sc = %s; sc.runComposants = 10; sc.stats.fragmentBonus = 0; sc.pactBonusMul = 1; return 0; })()" % SC)
     p.evaluate("document.getElementById('btnQuit').click(); document.getElementById('btnQuitYes').click()"); p.wait_for_timeout(900)
     check(go_visible() and title() == 'ORDRE ANNULE', 'QUITTER = niveau abandonné (écran de résultat)')
+    bk = bank(); check(bk.get('gross', 0) >= 10 and bk.get('franchise') == int(bk['gross']*0.3 + 0.5) and bk.get('prime') == 0, 'abandon : franchise, pas de prime (%s)' % bk)
 
     print('boss de fin (w1-l2)')
     start('w1-l2', "levelById('w1-l2').goal.seconds = 3")
@@ -193,6 +221,12 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ const sc = %s; sc.enemies.clear(true, true); const e = sc.spawnOneEnemy('pilleur', 200); window.__pl = e; e.y = sc.visibleYRange(0).min + 40; e.stopY = e.y + 60; e.hp = e.maxHp = 1e7; for (let i = 0; i < 8; i++) sc.spawnGemAt(e.x + (i - 4)*14, e.y + 10 + i*8, 3, 'gemM', 0); })()" % SC); p.wait_for_timeout(5500)
     check(p.evaluate("!!(window.__pl && window.__pl.eaten > 0)"), "le Pilleur avale des cristaux et remplit son réservoir")
     check(p.evaluate("!!(window.__pl && window.__pl.bm)"), 'le Pilleur a son faisceau laser')
+
+    print('secteur 2 : nom du boss (bible)')
+    check(p.evaluate("AGP_LORE.employee") == 'EMPLOYE N° 0042', 'employé n° 0042 (bible)')
+    start('w2-l5')
+    p.wait_for_function("window.__ssxScene.bossActive", timeout=10000); p.wait_for_timeout(300)
+    check('LE BROYEUR' in p.evaluate("document.getElementById('bossLabel').textContent"), 'jauge du boss : LE BROYEUR (%s)' % p.evaluate("document.getElementById('bossLabel').textContent"))
 
     print('partie infinie historique')
     p.evaluate("(()=>{ %s.scene.restart({ autoStart:true }); })()" % SC)

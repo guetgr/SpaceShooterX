@@ -54,7 +54,7 @@ Chaque boss/mob a son module, ses assets (`sprite-factory/tools/make_*_assets.py
 
 ## Outils et tests (dossier `tools/`, pas de lanceur unique)
 - Prérequis : Python 3 + `pip install playwright numpy scipy pillow`, Chrome, Node (vérif syntaxe du build). Sur Mac `python3`, sur Windows `py`.
-- **Avant chaque push** : `python3 tools/smoke_test.py` (une partie se lance sans erreur JS), `home_test.py`, `level_test.py`, `perks_test.py`, `node tools/check_worlds.js`, `python3 tools/gen_codemap.py --check`.
+- **Avant chaque push** : `python3 tools/smoke_test.py` (une partie se lance sans erreur JS), `home_test.py`, `level_test.py`, `perks_test.py`, `node tools/check_worlds.js`, `node tools/composants_test.js`, `python3 tools/gen_codemap.py --check`.
 - `build.py` : fichier unique `dist/space-shooter-x.html` (+ `-dev`), vérif `node --check` ; `--inline-phaser` pour embarquer Phaser. `smoke_test.py --dist` le teste.
 - `sim_balance.py grid|campaign|tune` : joueur automatique en avance rapide (équilibrage des niveaux).
 - Assets : `gen_manifest.py` (après tout ajout/suppression dans `assets/`), `gen_ui_icons.py` (icônes d'interface), `import_sprites_niveaux.py <dossier>` (icônes de niveaux PNG), `import_decors_carte.py --w2 --w3 --nuages --orbite` (planètes, nuages, satellite de la carte), `cut_satgun.py` (planche du satellite armé).

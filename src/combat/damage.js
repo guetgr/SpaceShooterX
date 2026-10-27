@@ -192,6 +192,7 @@ mixin(GameScene, {
       }
     }
 
+    if (!isBoss) this.composantDrop(enemy);          // composants ◆ (en plus des cristaux)
     // chance to drop a heal pickup instead of the usual gem(s)
     if (!isBoss && Math.random() < this.stats.healDropChance){
       const h = this.heals.create(enemy.x, enemy.y, 'cell');

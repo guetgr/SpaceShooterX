@@ -312,11 +312,17 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `codexMark` | méthode | `src/ui/tree-ui.js` | `GameScene` |
 | `COLLISION_DMG_MUL` | const | `src/data/balance.js` |  |
 | `comboKill` | méthode | `src/systems/combo.js` | `GameScene` |
+| `COMP` | const | `src/data/composants.js` |  |
 | `COMPLETION_STEPS` | const | `src/data/completion.js` |  |
 | `completionDefs` | fonction | `src/data/completion.js` |  |
 | `completionNext` | fonction | `src/data/completion.js` |  |
 | `completionPct` | fonction | `src/data/completion.js` |  |
 | `completionReward` | const | `src/data/completion.js` |  |
+| `composantDrop` | méthode | `src/world/composants.js` | `GameScene` |
+| `composantsBank` | fonction | `src/data/composants.js` |  |
+| `composantShower` | méthode | `src/world/composants.js` | `GameScene` |
+| `composantsOnScreenValue` | méthode | `src/world/composants.js` | `GameScene` |
+| `composantsPrime` | fonction | `src/data/composants.js` |  |
 | `computeAlertLevel` | fonction | `src/data/meta.js` |  |
 | `computeStartingStatsPreview` | fonction | `src/data/player-stats.js` |  |
 | `computeZoom` | méthode | `src/world/background.js` | `GameScene` |
@@ -568,7 +574,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `leaveHome` | méthode | `src/home/ui.js` | `HomeScene` |
 | `LEVEL_BASE` | const | `src/data/tuning-apply.js` |  |
 | `LEVEL_COMPLETION` | const | `src/data/completion.js` |  |
-| `LEVEL_FRAG_MUL` | const | `src/data/balance.js` |  |
 | `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
@@ -682,6 +687,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `onBossDefeated` | méthode | `src/bosses/core.js` | `GameScene` |
 | `onBossPartKilled` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `onBulletHitsEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
+| `onCollectComposant` | méthode | `src/world/composants.js` | `GameScene` |
 | `onCollectGem` | méthode | `src/world/pickups.js` | `GameScene` |
 | `onCollectHeal` | méthode | `src/world/pickups.js` | `GameScene` |
 | `onEnemyBulletHitsPlayer` | méthode | `src/combat/damage.js` | `GameScene` |
@@ -960,6 +966,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `spawnBgMeteor` | méthode | `src/world/meteors.js` | `GameScene` |
 | `spawnBonusBoss` | méthode | `src/bosses/core.js` | `GameScene` |
 | `spawnBoss` | méthode | `src/bosses/core.js` | `GameScene` |
+| `spawnComposantAt` | méthode | `src/world/composants.js` | `GameScene` |
 | `spawnDodgeGhost` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `spawnDoubleBoss` | méthode | `src/bosses/core.js` | `GameScene` |
 | `spawnEnemy` | méthode | `src/enemies/spawning.js` | `GameScene` |
@@ -1092,6 +1099,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `update` | méthode | `src/scenes/HomeScene.js` | `HomeScene` |
 | `updateBgDecor` | méthode | `src/world/background.js` | `GameScene` |
 | `updateBossAI` | méthode | `src/bosses/core.js` | `GameScene` |
+| `updateComposants` | méthode | `src/world/composants.js` | `GameScene` |
 | `updateDevEventHud` | méthode | `src/dev/sandbox.js` | `GameScene` |
 | `updateDifficulty` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `updateDodge` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
@@ -1148,4 +1156,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1141 symboles.
+1149 symboles.

@@ -13,18 +13,20 @@ N = 12
 BASE = {'K': '#0a0d0b', 'W': '#f4f8f5'}      # K = contour, W = reflet blanc
 
 ICONS = {
- # ◆ composants : gemme jaune AGP
- 'frag': ({'Y': '#ffc21a', 'L': '#ffe58a', 'D': '#c98a0a'}, [
-  "..KKKKKKKK..",
-  ".KWWLYYYYYK.",
-  "KWLLYYYYYDDK",
-  "KKKKKKKKKKKK",
-  ".KYYYYYYYDK.",
-  "..KYYYYYDDK.",
-  "...KYYYYDK..",
-  "....KYYDK...",
-  ".....KDK....",
-  "......K.....",
+ # ◆ composants : écrou AGP (métal usé, arête jaune) — à ne pas confondre avec l'engrenage (paramètres) ni le gros cristal doré
+ 'frag': ({'Y': '#ffc21a', 'L': '#e2ebe6', 'S': '#a9b8b0', 'D': '#5e6b66'}, [
+  "...KKKKKK...",
+  "..KYYYYYYK..",
+  ".KLLLLSSSDK.",
+  "KLLSSKKSSSDK",
+  "KLSSK..KSSDK",
+  "KLSK....KSDK",
+  "KLSK....KSDK",
+  "KSSSK..KSSDK",
+  "KSSSSKKSSDDK",
+  ".KSSSSSSDDK.",
+  "..KDDDDDDK..",
+  "...KKKKKK...",
  ]),
  # niveau verrouillé : cadenas jaune
  'lock': ({'Y': '#ffc21a', 'D': '#b97d08', 'S': '#a9b8b0', 'L': '#e2ebe6'}, [

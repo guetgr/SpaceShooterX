@@ -347,6 +347,7 @@ mixin(GameScene, {
     this.pdFx('pdFxMuzzle', 'pdMuzzle', hx, hy, 1.6); this.pdLitter(hx, hy, 60, 'coin', 2); this.pdLitter(hx, hy, 30, 'paper', 1.4); this.time.delayedCall(250, ()=> this.pdSfx('pdCoins', cx));
     for (let k = 0; k < 24; k++) this.pdSpark(cx + Phaser.Math.Between(-60, 60), cy + Phaser.Math.Between(-60, 60), Phaser.Math.FloatBetween(0.7, 1.4));
     [pd.sp, pd.logoG, pd.hubG].concat(pd.wingL[0], pd.wingL[1], pd.towerG, pd.gunG, pd.wingG, pd.thr, pd.beams).forEach(o=>{ if (o) o.setVisible(false); }); pd.flames.forEach(f=> f.s.destroy()); pd.flames = [];
+    this.composantShower(cx, cy, COMP.bossBig);
     this.score += PD.killScore;
     this.time.delayedCall(2400, ()=>{ if (this.running) this.levelWin(); });
   },

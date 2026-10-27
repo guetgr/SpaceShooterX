@@ -26,8 +26,8 @@ mixin(GameScene, {
   },
 
   goldJackpot(enemy){
-    const bonus = 3 + this.alertLevel;
-    this.runFragBonus += bonus; this.runGold += 1;
+    const bonus = COMP.goldenBig*COMP.bigValue;
+    this.composantShower(enemy.x, enemy.y, COMP.goldenBig); this.runGold += 1;
     this.xp += this.xpToNext * 0.25 * this.xpMul();
     for (let i=0;i<10;i++) this.spawnGemAt(enemy.x + Phaser.Math.Between(-30,30), enemy.y + Phaser.Math.Between(-20,20), 4, 'gemM', 50);
     const t = this.add.text(enemy.x - 8, enemy.y, '+' + bonus, { fontFamily:'SSX Label, monospace', fontSize:'16px', color:'#ffd76a', stroke:'#3a2a00', strokeThickness:4 }).setOrigin(0.5).setDepth(20);
@@ -35,7 +35,7 @@ mixin(GameScene, {
     this.tweens.add({ targets:[t, ic], y:'-=60', alpha:0, duration:1100, onComplete:()=>{ t.destroy(); ic.destroy(); } });
     this.cameras.main.flash(120, 255, 215, 100, false);
     sfx.jackpot();
-    this.notice('JACKPOT !', '+' + bonus + ' fragments · gros bonus d\'XP');
+    this.notice('JACKPOT !', '+' + bonus + ' composants · gros bonus d\'XP');
   },
 
   onCollectGem(player, gem){

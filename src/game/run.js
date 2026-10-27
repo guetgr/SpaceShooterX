@@ -43,7 +43,7 @@ mixin(GameScene, {
       this.player.y = this.introEndY; this.introEarthInit();
       this.hitCooldown = Math.max(this.hitCooldown, INTRO_E_TOTAL + 400); this.spawnTimer = Math.max(this.spawnTimer, INTRO_E_A + INTRO_E_B);
     }
-    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this.pgTab = null; this.normaStart();
+    sfx.launch(); Motion.hudIn(); this._lvShown = undefined; this._scShown = undefined; this._cpShown = undefined; this.pgTab = null; this.normaStart();
     Motion.uncover();                      // le rideau de transition (accueil → niveau) se rouvre
     music.setIntensity(this.alertLevel); music.setMood(1, 0); music.rate = 1; music.dimNow = 0;
     music.setScene({ mode:'game', alert:this.alertLevel, boss:false, tutoLevel:!!this.tuto, fast:true });
@@ -69,18 +69,17 @@ mixin(GameScene, {
     const isNew = this.score > hs;
     if (isNew) setHighScore(Math.floor(this.score));
 
-    let fragmentsEarned = Math.round((Math.max(1, Math.round(Math.floor(this.score/15) * (1+this.stats.fragmentBonus))) + Math.floor(this.runFragBonus)) * (this.pactBonusMul || 1));
-    if (this.lvDef) fragmentsEarned = Math.max(1, Math.round(fragmentsEarned * LEVEL_FRAG_MUL));      // niveaux courts et rejouables : revenu de combat réduit
-    // niveau d'un monde : une victoire est enregistrée (déblocages) et ajoute sa récompense ; une défaite garde tous les fragments gagnés
-    let clearBonus = 0, rec = null;
+    // composants ◆ (data/composants.js) : tout le ramassé — en victoire, aussi ce qui reste à l'écran — avec les bonus et les clauses ;
+    // une victoire en niveau est enregistrée (déblocages) et touche la prime AGP ; une défaite ou un abandon paie la franchise d'accident
+    let rec = null, prime = 0;
     if (this.lvDef && victory){
       rec = recordLevelClear(this.lvDef.id, this.score);
-      clearBonus = this.lvDef.reward.clear + (rec && rec.first ? (this.lvDef.reward.first || 0) : 0);
-      fragmentsEarned += clearBonus;
+      prime = composantsPrime(this.lvDef.reward, !!(rec && rec.first));
     }
+    const bank = composantsBank({ picked: this.runComposants + (victory ? this.composantsOnScreenValue() : 0), victory: !!victory, fragmentBonus: this.stats.fragmentBonus, pactMul: this.pactBonusMul || 1, prime });
     const nxt = (this.lvDef && victory) ? nextLevelOf(this.lvDef.id) : null;
-    this.lvResult = { victory: !!victory, rec, clearBonus, progress: this.lvDef ? (victory ? 1 : this.levelProgress().frac) : 0, next: nxt && isLevelUnlocked(nxt.id) ? nxt.id : null };
-    this.meta.fragments += fragmentsEarned;
+    this.lvResult = { victory: !!victory, rec, bank, clearBonus: bank.prime, progress: this.lvDef ? (victory ? 1 : this.levelProgress().frac) : 0, next: nxt && isLevelUnlocked(nxt.id) ? nxt.id : null };
+    this.meta.fragments += bank.total;
     setMeta(this.meta);
 
     // classement local : la partie est enregistrée avec le dernier pseudo utilisé (modifiable juste après)
@@ -128,17 +127,20 @@ mixin(GameScene, {
       document.getElementById('goLevel').textContent = L ? ('SECTEUR ' + worldById(L.world).name + ' · ORDRE ' + String(L.num).padStart(2, '0') + ' — ' + L.name) : '';
       document.getElementById('rpNo').textContent = 'N° ' + (L ? agpDossier(L) : 'AGP-' + String(Math.floor(this.score) % 100000).padStart(5, '0'));
       { const g = STYLE_RANKS[this.runBestRank].l, gr = document.getElementById('rpGrade'); gr.textContent = g; gr.style.setProperty('--gc', STYLE_RANKS[this.runBestRank].col); document.getElementById('rpMention').textContent = AGP_LORE.grades[g] || '';
-        document.getElementById('rpNorma').textContent = Norma.report(victory ? 'win' : (abandon ? 'abort' : 'lose'), g); }
+        const sec = victory && this.lvDef && this.lvDef.type === 'boss' && AGP_LINES.sectors[this.lvDef.world];      // fin de secteur : la transmission de la bible
+        document.getElementById('rpNorma').textContent = sec ? sec.end : Norma.report(victory ? 'win' : (abandon ? 'abort' : 'lose'), g); }
       const pr = document.getElementById('goProg'); pr.classList.toggle('hidden', !L);
       if (L){ document.getElementById('goProgFill').style.width = Math.round(res.progress*100) + '%'; document.getElementById('goProgTxt').textContent = Math.round(res.progress*100) + '%'; }
       const rw = document.getElementById('goRewards'); rw.innerHTML = '';
       const addRw = (label, val, cls)=>{ const d = document.createElement('div'); d.className = 'go-rw' + (cls ? ' ' + cls : ''); d.innerHTML = '<span></span><b></b>'; d.firstChild.textContent = label; d.lastChild.innerHTML = val; rw.appendChild(d); };
-      if (clearBonus){
-        addRw('Collecte en combat', '+' + (fragmentsEarned - clearBonus) + ' ' + uiIco('frag'));
-        addRw('Prime d\'intervention', '+' + this.lvDef.reward.clear + ' ' + uiIco('frag'));
-        if (rec.first && this.lvDef.reward.first) addRw('Prime de 1re validation', '+' + this.lvDef.reward.first + ' ' + uiIco('frag'));
-        addRw('TOTAL', '+' + fragmentsEarned + ' ' + uiIco('frag'), 'total');
-      } else addRw('Collecte en combat', '+' + fragmentsEarned + ' ' + uiIco('frag'), 'total');
+      const bank = res.bank, ic = ' ' + uiIco('frag');
+      addRw('Composants récupérés', '+' + bank.gross + ic);
+      if (!victory) addRw('Franchise accident du travail (' + Math.round(COMP.franchise*100) + ' %)', '-' + bank.franchise + ic);
+      if (bank.prime){
+        addRw('Prime d\'intervention', '+' + composantsPrime(L.reward, false) + ic);
+        if (rec.first && L.reward.first) addRw('Prime de 1re validation', '+' + (bank.prime - composantsPrime(L.reward, false)) + ic);
+      }
+      addRw('TOTAL', '+' + bank.total + ic, 'total');
       const unl = (txt)=>{ const d = document.createElement('div'); d.className = 'go-unlock'; d.innerHTML = txt; rw.appendChild(d); };
       if (rec && rec.unlockedLevel) unl(uiIco('next') + ' ORDRE SUIVANT ATTRIBUE');
       if (rec && rec.unlockedWorld) unl(uiIco('star') + ' NOUVEAU SECTEUR : ' + worldById(rec.unlockedWorld).name);

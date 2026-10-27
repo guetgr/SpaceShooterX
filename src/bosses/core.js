@@ -87,7 +87,8 @@ mixin(GameScene, {
 
     sfx.bossAlert(); this.normaBoss();
     document.getElementById('boss-banner').classList.add('show');
-    this.bossEls(boss).label.textContent = def.name + ' NIV.' + (this.difficultyTier+1);
+    const shownName = this.lvDef && this.lvDef.bossName && this.lvDef.boss === id ? this.lvDef.bossName : def.name;      // en niveau, le boss porte le nom de la bible (`bossName` du niveau)
+    this.bossEls(boss).label.textContent = shownName + ' NIV.' + (this.difficultyTier+1);
     this.setupBossTicks(boss);
     this.time.delayedCall(1400, ()=> document.getElementById('boss-banner').classList.remove('show'));
 
@@ -257,12 +258,14 @@ mixin(GameScene, {
     if (ref && ref.isBonus){                                                                 // boss bonus: pas de palier, pas de relique, pas de nouveau décor — juste une pluie de cristaux
       this.cameras.main.flash(220, 255, 206, 74, false); this.startSlowmo(450, 0.45); this.galaxyBlast(bx, by);
       for (let i=0;i<10;i++) this.spawnGemAt(bx + Phaser.Math.Between(-70, 70), by + Phaser.Math.Between(-30, 40), 6, 'gemL', Phaser.Math.Between(60, 120));
+      this.composantShower(bx, by, COMP.bonusBossBig);
       if (this.bosses.length > 0) this.currentBoss = this.bosses.find(b=> !b.isBonus) || this.bosses[0];
       else { this.bossActive = false; this.currentBoss = null; this.spawnTimer = 500; }
       return;
     }
     if (boss && boss.id) (this._relicQueue = this._relicQueue || []).push(boss.id);          // les reliques s'enchaînent quand tous les boss sont tombés
     this.difficultyTier += 1; this.bossesDefeated += 1;
+    this.composantShower(bx, by, COMP.bossBig);
     if (this.bosses.some(b=> !b.isBonus)){                                                   // il reste un vrai boss: la partie continue
       this.currentBoss = this.bosses.find(b=> !b.isBonus);
       this.cameras.main.flash(220, 255, 206, 74, false); this.startSlowmo(450, 0.45);

@@ -320,6 +320,7 @@ mixin(GameScene, {
     for (let k = 0; k < 24; k++) this.rxSpark(cx + Phaser.Math.Between(-60, 60), cy + Phaser.Math.Between(-60, 60), Phaser.Math.FloatBetween(0.7, 1.4));
     this.blDestroy(rx.lights); rx.rotor.destroy(); rx.core.destroy(); rx.sp.setVisible(false); rx.flames.forEach(f=> f.s.destroy()); rx.flames = [];
     this.time.delayedCall(300, ()=> this.rxSfx('rxLimb', cx));
+    this.composantShower(cx, cy, COMP.miniBossBig);
     this.score += RX.killScore;
     this.time.delayedCall(2200, ()=>{ if (this.running) this.levelWin(); });
   },

@@ -22,6 +22,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `xpTrack` | `ui/hud.js` | — |
 | `xpFill` | `ui/hud.js` | — |
 | `scoreVal` | `ui/hud.js` | — |
+| `compVal` | `ui/hud.js` | — |
 | `pauseBtn` | `ui/dom.js`, `ui/motion.js` | — |
 | `waveNote` | `ui/hud.js`, `ui/motion.js` | — |
 | `waveFill` | `ui/hud.js` | — |

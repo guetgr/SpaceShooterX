@@ -35,6 +35,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 
 - `tools/build.py` — Fabrique les versions « un seul fichier HTML » du jeu (tout est embarqué : code, CSS, images, sons, polices).
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
+- `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
 - `tools/gen_codemap.py` — Génère la carte du code dans docs/carte/ (rien à installer : Python 3 seul).
 - `tools/gen_manifest.py` — Régénère assets/manifest.json à partir du contenu de assets/ (à lancer après avoir ajouté/supprimé un fichier).
@@ -57,6 +58,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/HUD-MINIMAL.md` — HUD de mission — version minimale
 - `docs/REPRISE-GARAGE.md` — Garage AGP — point de reprise
 - `docs/arbre-competences.md` — L'arbre de compétences — fonctionnement et état des lieux
+- `docs/bible-univers.md` — SPACE SHOOTER X
 - `docs/brief-univers-agp.md` — Brief de référence — univers AGP, ton, interface (à lire avant de toucher à l'interface ou aux textes)
 - `docs/captures-prompt-2026-10-26/README.md` — Space Shooter X — captures de référence
 - `docs/carte-du-code.md` — Carte du code — point d'entrée
@@ -90,3 +92,5 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/space-shooter-x-analyse.md` — SPACE SHOOTER X — Analyse équilibrage, cohérence et pouvoir addictif
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée
 - `docs/suno-prompts.md` — Space Shooter X — les prompts Suno (version finale : 22 prompts = 44 morceaux pour 42 pistes)
+- `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
+- `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées

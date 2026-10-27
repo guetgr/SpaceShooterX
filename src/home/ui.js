@@ -175,7 +175,7 @@ mixin(HomeScene, {
     $('levelCard').innerHTML = '<div class="om-top"><span class="om-no">ORDRE ' + agpDossier(l) + '</span><span class="om-tag ' + ty.cls + '">' + ty.label + '</span></div><div class="lc-name"></div>' +
       '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
       '<div class="om-row"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
-      '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + l.reward.clear + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (l.reward.first || 0) + '</b>') + '</em></div>' +
+      '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
       this.finitionLine(l, p) +
       '<div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div>';
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');

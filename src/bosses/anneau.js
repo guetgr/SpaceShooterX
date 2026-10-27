@@ -301,6 +301,7 @@ mixin(GameScene, {
     for (let k = 0; k < 24; k++) this.anSpark(cx + Phaser.Math.Between(-60, 60), cy + Phaser.Math.Between(-60, 60), Phaser.Math.FloatBetween(0.7, 1.4));
     [an.base, an.ring, an.rotor, an.doors, an.hubG].concat(an.chase, an.comet, an.tg, an.bayG, an.strobe, an.beams).forEach(o=>{ if (o) o.setVisible(false); }); an.flames.forEach(f=> f.s.destroy()); an.flames = [];
     this.time.delayedCall(300, ()=> this.anSfx('anLimb', cx));
+    this.composantShower(cx, cy, COMP.miniBossBig);
     this.score += AN.killScore;
     this.time.delayedCall(2200, ()=>{ if (this.running) this.levelWin(); });
   },

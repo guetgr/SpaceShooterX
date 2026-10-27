@@ -72,7 +72,7 @@ def _campaign_task(a):
     rep, skill, policy, max_attempts = a
     p = _W['p']
     p.evaluate("(()=>{ %s.forEach(k=> localStorage.removeItem(k)); localStorage.setItem('ssx_meta_v2', JSON.stringify({fragments:0, tree:{}, asc:0})); })()" % json.dumps(RESET_KEYS))
-    levels = p.evaluate("WORLDS.flatMap(w=> w.levels.map(l=> l.id))")
+    levels = p.evaluate("WORLDS.flatMap(w=> w.levels.filter(l=> !l.tuto).map(l=> l.id))")      # le tuto est scripté (le bot ne sait pas le jouer) : on part du niveau 1
     out, total_frags, t_play = [], 0, 0.0
     for lv in levels:
         attempts, win, first = 0, None, None

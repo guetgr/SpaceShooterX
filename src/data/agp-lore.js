@@ -5,7 +5,7 @@
 const AGP_LORE = {
   os: 'AGP-OS 9.4',
   company: 'AGENCE GALACTIQUE DE PROPRETE',
-  employee: 'EMPLOYE N° 4 471 902',
+  employee: 'EMPLOYE N° 0042',
   // libellé du type d'ordre (fiche de mission) et couleur d'étiquette
   types: {
     tuto:    { label:'FORMATION OBLIGATOIRE', cls:'t-tuto' },
@@ -123,16 +123,19 @@ const AGP_LINES = {
     "Résultat conforme. Aucune félicitation ne sera émise.",
     "Bon travail. Un collègue moins performant a été libéré de ses obligations.",
     "Mission accomplie. Une nouvelle mission vous attend. Elle vous attendait déjà.",
+    "Prime de rendement versée. Elle ne sera pas renouvelée.",
   ],
   lose: [
     "Accident du travail constaté. Il sera requalifié en « imprudence personnelle ».",
     "Votre camionnette est détruite. Le montant sera retenu sur votre salaire.",
     "Vous êtes déclaré indisponible. Un remplaçant a été commandé (livraison : jamais).",
     "Le formulaire de réclamation est disponible. Il est fermé.",
+    "Franchise accident retenue : 30 %. Merci de votre compréhension.",
   ],
   abort: [
     "Ordre annulé. Merci de justifier votre absence par écrit.",
     "Abandon de poste enregistré. Il sera conservé dans votre dossier. Longtemps.",
+    "Franchise accident retenue : 30 %. Merci de votre compréhension.",
   ],
   hiGrade: [
     "Performance anormalement élevée. Un audit a été ouvert à titre préventif.",
@@ -140,6 +143,12 @@ const AGP_LINES = {
   ],
   // note de service affichée sur la fiche d'un niveau terminé / verrouillé
   locked: "Habilitation insuffisante. Terminez l'ordre précédent.",
+  // fin de secteur (incident majeur vaincu) : transmission de la bible (docs/bible-univers.md §4), à la place de la réplique tirée au hasard
+  sectors: {
+    w1: { end: "Votre première mission est terminée. Nous avons enregistré 847 infractions à la sécurité. Toutes vous sont attribuées." },
+    w2: { end: "Vous venez de détruire notre principal centre de recyclage. Le service environnement vous remercie." },
+    w3: { end: "Une anomalie a été détectée dans les documents comptables. Je suis légalement tenue de ne pas vous en informer." },
+  },
 };
 
 // numéro de dossier affichable : AGP-0003-B (lettre = menace)
