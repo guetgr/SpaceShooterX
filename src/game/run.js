@@ -74,6 +74,7 @@ mixin(GameScene, {
     let rec = null, prime = 0;
     if (this.lvDef && victory){
       rec = recordLevelClear(this.lvDef.id, this.score);
+      if (rec && rec.plan) rdGrantPlan(this.meta, rec.plan);      // plan de technologie de l'ordre (data/techs.js), inscrit dans la meta de la partie avant son enregistrement
       prime = composantsPrime(this.lvDef.reward, !!(rec && rec.first));
     }
     const bank = composantsBank({ picked: this.runComposants + (victory ? this.composantsOnScreenValue() : 0), victory: !!victory, fragmentBonus: this.stats.fragmentBonus, pactMul: this.pactBonusMul || 1, prime });

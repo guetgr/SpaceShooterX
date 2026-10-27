@@ -8,6 +8,7 @@ const load = f=> vm.runInContext(fs.readFileSync(path.join(R, 'src', f), 'utf8')
 const run = s=> vm.runInContext(s, ctx);
 load('data/player-stats.js');
 load('data/atelier.js');
+load('data/techs.js');
 // sauvegarde simulée : localStorage adossé à une Map, partagé avec le contexte
 const store = new Map();
 ctx.localStorage = { getItem:k=> store.has(k) ? store.get(k) : null, setItem:(k, v)=>{ store.set(k, String(v)); }, removeItem:k=>{ store.delete(k); } };
@@ -72,7 +73,7 @@ ok(run("atelierMk({coque:NaN}, 'coque')") === 0, 'Mk NaN -> 0');
 ok(run("atelierMk(undefined, 'coque')") === 0, 'atelier absent -> 0');
 
 // ---- sauvegarde v3
-const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"tree":{},"notice":null}';
+const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"rd":{},"chargement":[],"tree":{},"notice":null}';
 ok(JSON.stringify(run("defaultMeta()")) === DEFAULT_V3, 'defaultMeta : forme de la v3');
 ok(JSON.stringify(run("normalizeMeta({})")) === DEFAULT_V3, 'normalizeMeta({}) = defaultMeta()');
 {

@@ -109,5 +109,56 @@ ok(run("rdNextCost('bouclier_reactif', 'spe')") === null, 'pas de prix pour une 
 ok(run("rdUpgradeAt(TECH_BY_ID.laser_continu, 1).id") === 't_laser_c_portee' && run("rdUpgradeAt(TECH_BY_ID.laser_continu, 5).id") === 't_laser_c_degats' && run("rdUpgradeAt(TECH_BY_ID.laser_continu, 10)") === null, 'rdUpgradeAt : les rangs se consomment dans l\'ordre');
 ok(run("rdEntry(Object.assign(defaultMeta(), { rd:{ laser_continu:{ rang:99, proto:1 } } }), 'laser_continu').rang") === 9, 'rdEntry borne le rang à la somme des maximums');
 
+// ---- sauvegarde : rd et chargement
+const DEFAULT_V3 = '{"v":3,"composants":0,"pieces":{"s1":0,"s2":0,"s3":0,"s4":0,"s5":0},"atelier":{"coque":0,"canon":0,"bouclier":0,"propulseurs":0,"aimant":0,"ordinateur":0},"rd":{},"chargement":[],"tree":{},"notice":null}';
+ok(JSON.stringify(run("defaultMeta()")) === DEFAULT_V3, 'defaultMeta : rd et chargement vides');
+{
+  const m = run("normalizeMeta({ rd:{ laser_continu:{ rang:-3, proto:'x', plan:1 }, zzz:{ plan:true } }, chargement:['laser_continu','laser_continu','zzz', 7] })");
+  ok(JSON.stringify(Object.keys(m.rd)) === '["laser_continu"]' && JSON.stringify(m.rd.laser_continu) === '{"plan":true,"proto":true,"rang":0,"spe":false}', 'normalizeMeta : rd = technologies connues, valeurs bornées');
+  ok(JSON.stringify(m.chargement) === '["laser_continu"]', 'normalizeMeta : chargement sans doublon ni inconnue');
+  ok(JSON.stringify(run("normalizeMeta({ rd:'abc', chargement:'abc' })")) === DEFAULT_V3, 'normalizeMeta : rd et chargement abîmés -> vides');
+}
+
+// ---- emplacements : 1 + un par boss de secteur vaincu, 5 au maximum
+const P = (lv)=> JSON.stringify({ levels:Object.fromEntries(lv.map(id=> [id, { clears:1, best:1 }])), seen:{}, comp:{} });
+ok(run("slotsOpen(" + P([]) + ")") === 1, 'emplacements : 1 au départ');
+ok(run("slotsOpen(" + P(['w1-tuto', 'w1-l1']) + ")") === 1, 'emplacements : un ordre gagné ne suffit pas');
+ok(run("slotsOpen(" + P(['w1-l5']) + ")") === 2, 'emplacements : boss du secteur 1 vaincu = 2');
+ok(run("slotsOpen(" + P(['w1-l5', 'w2-l5', 'w3-l5']) + ")") === 4, 'emplacements : trois secteurs = 4 (les mondes existants)');
+
+// ---- chargement : règles et assainissement
+const LM = (ids, rd)=> "Object.assign(defaultMeta(), { chargement:" + JSON.stringify(ids) + ", rd:" + JSON.stringify(rd) + " })";
+const PROTO = (...ids)=> Object.fromEntries(ids.map(i=> [i, { plan:true, proto:true }]));
+{
+  const rd = PROTO('laser_continu', 'laser_auto', 'missiles_guidage', 'missiles_demolition', 'drone', 'trou_noir');
+  const san = (ids, n)=> JSON.stringify(run("loadoutSanitize(" + LM(ids, rd) + ", " + n + ")"));
+  ok(san(['laser_continu', 'laser_auto'], 4) === '["laser_continu"]', 'assainissement : deux ARME -> garde la première');
+  ok(san(['missiles_guidage', 'missiles_demolition', 'drone'], 4) === '["missiles_guidage","drone"]', 'assainissement : deux RAMPE -> garde la première');
+  ok(san(['laser_continu', 'drone', 'missiles_guidage'], 1) === '["laser_continu"]', 'assainissement : plus de technologies que de baies -> garde les premières');
+  ok(san(['trou_noir', 'drone'], 4) === '["drone"]', 'assainissement : technologie d\'un secteur indisponible retirée');
+  ok(JSON.stringify(run("loadoutSanitize(" + LM(['laser_continu', 'zzz', 'drone', 'drone'], PROTO('drone')) + ", 4)")) === '["drone"]', 'assainissement : sans prototype, inconnue et doublon retirés');
+  const chk = (ids, n)=> JSON.stringify(run("loadoutCheck(" + LM([], rd) + ", " + JSON.stringify(ids) + ", " + n + ")"));
+  ok(chk(['laser_continu'], 1) === '{"ok":true,"reason":null}', 'loadoutCheck : une technologie, une baie');
+  ok(chk(['laser_continu', 'drone'], 1) === '{"ok":false,"reason":"baies"}', 'loadoutCheck : baies pleines');
+  ok(chk(['laser_continu', 'laser_auto'], 2) === '{"ok":false,"reason":"arme"}', 'loadoutCheck : une seule ARME');
+  ok(chk(['missiles_guidage', 'missiles_demolition'], 2) === '{"ok":false,"reason":"rampe"}', 'loadoutCheck : une seule RAMPE');
+  ok(chk(['trou_noir'], 2) === '{"ok":false,"reason":"secteur"}', 'loadoutCheck : secteur indisponible');
+  ok(chk(['canon_experimental'], 2) === '{"ok":false,"reason":"proto"}', 'loadoutCheck : sans prototype');
+  ok(chk(['zzz'], 2) === '{"ok":false,"reason":"inconnu"}', 'loadoutCheck : inconnue');
+  ctx.m = run(LM(['laser_continu'], rd)); const avant = JSON.stringify(ctx.m);
+  ok(run("loadoutToggle(m, 'laser_auto', 2)") === false && JSON.stringify(ctx.m) === avant, 'loadoutToggle : 2e ARME refusée, meta intacte');
+  ok(run("loadoutToggle(m, 'drone', 2)") === true && JSON.stringify(ctx.m.chargement) === '["laser_continu","drone"]', 'loadoutToggle : équipe');
+  ok(run("loadoutToggle(m, 'laser_continu', 2)") === true && JSON.stringify(ctx.m.chargement) === '["drone"]', 'loadoutToggle : retire');
+}
+
+// ---- plan à la 1re victoire (accordé par l'appelant sur sa meta : recordLevelClear ne touche pas à la sauvegarde de la méta)
+store.clear();
+{
+  const r1 = run("recordLevelClear('w1-l1', 5)"), r2 = run("recordLevelClear('w1-l1', 6)");
+  ok(r1.plan === 'laser_auto' && r2.plan === null, 'recordLevelClear : plan du niveau à la 1re victoire seulement');
+  ok(run("recordLevelClear('w1-l5', 5).plan") === null, 'recordLevelClear : le dernier ordre du secteur 1 n\'accorde pas de plan');
+  ok(run("recordLevelClear('w1-tuto', 5).plan") === 'laser_continu', 'recordLevelClear : le tuto accorde le laser continu');
+}
+
 if (fail){ console.log('ÉCHEC : rd (' + fail + ')'); process.exit(1); }
 console.log('OK : rd');

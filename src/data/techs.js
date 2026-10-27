@@ -194,3 +194,46 @@ function rdApplyRanks(techId, stats, rang, scene){
   const t = TECH_BY_ID[techId]; if (!t) return;
   for (let i = 1; i <= rang; i++){ const u = rdUpgradeAt(t, i); if (u) u.inc(stats, scene); }
 }
+
+// ---- emplacements et chargement (spec §3.5 et §6)
+
+// baies d'équipement ouvertes : 1 + un par boss de secteur vaincu, 5 au maximum (tout ouvert en ?dev)
+function slotsOpen(progress){
+  if (typeof DEV_SEE_ALL !== 'undefined' && DEV_SEE_ALL) return 5;
+  const p = progress || getWorldProgress();
+  return Math.min(5, 1 + WORLDS.filter(w=> worldSummary(w.id, p).bossDown).length);
+}
+
+// { ok, reason } : reason = null | 'inconnu' | 'secteur' | 'proto' | 'baies' | 'arme' | 'rampe'
+function loadoutCheck(meta, ids, slots){
+  const techs = [];
+  for (const id of ids){
+    const t = TECH_BY_ID[id]; if (!t) return { ok:false, reason:'inconnu' };
+    if (!techAvailable(t)) return { ok:false, reason:'secteur' };
+    if (!rdEntry(meta, id).proto) return { ok:false, reason:'proto' };
+    techs.push(t);
+  }
+  if (ids.length > slots) return { ok:false, reason:'baies' };
+  if (techs.filter(t=> t.tag === 'ARME').length > 1) return { ok:false, reason:'arme' };
+  if (techs.filter(t=> t.tag === 'RAMPE').length > 1) return { ok:false, reason:'rampe' };
+  return { ok:true, reason:null };
+}
+
+// chargement de la sauvegarde ramené à un chargement valide, dans l'ordre : une sauvegarde modifiée ou un boss « dévalidé » ne casse rien
+function loadoutSanitize(meta, slots){
+  const out = [];
+  (meta.chargement || []).forEach(id=>{
+    if (out.length >= slots || out.indexOf(id) >= 0) return;
+    if (loadoutCheck(meta, out.concat(id), slots).ok) out.push(id);
+  });
+  return out;
+}
+
+// équipe ou retire une technologie ; false (meta intacte) si le chargement obtenu serait refusé
+function loadoutToggle(meta, techId, slots){
+  const cur = meta.chargement || [];
+  if (cur.indexOf(techId) >= 0){ meta.chargement = cur.filter(id=> id !== techId); return true; }
+  if (!loadoutCheck(meta, cur.concat(techId), slots).ok) return false;
+  meta.chargement = cur.concat(techId);
+  return true;
+}

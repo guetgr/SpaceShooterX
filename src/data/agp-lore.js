@@ -61,6 +61,12 @@ const AGP_LORE = {
     gravite: { name:'PHYSIQUE FONDAMENTALE', sub:"Département en sous-effectif (1 stagiaire)" },
     furie:   { name:'GESTION DU STRESS',    sub:"Méthodes non homologuées" },
   },
+  // R&D : plan récupéré, recherche, baie pleine
+  rd: {
+    plan: "Document technique récupéré. Il ne vous appartient pas. Moi non plus.",
+    research: "Cette modification annule immédiatement la garantie constructeur.",
+    loadoutFull: "Capacité de la baie atteinte. Veuillez renoncer à quelque chose.",
+  },
   // garage : achats d'atelier, verrous, restructuration du catalogue
   atelier: {
     buy: "Modification non homologuée enregistrée. Votre véhicule n'est plus couvert.",

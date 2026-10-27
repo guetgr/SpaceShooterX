@@ -7,7 +7,7 @@ const META_KEY_V2 = 'ssx_meta_v2';
 
 function defaultMeta(){
   const atelier = {}; ATELIER_POSTS.forEach(p=>{ atelier[p.id] = 0; });
-  return { v:3, composants:0, pieces:{ s1:0, s2:0, s3:0, s4:0, s5:0 }, atelier, tree:{}, notice:null };
+  return { v:3, composants:0, pieces:{ s1:0, s2:0, s3:0, s4:0, s5:0 }, atelier, rd:{}, chargement:[], tree:{}, notice:null };
 }
 
 // entier >= 0 tiré d'une valeur de sauvegarde (nombre ou texte numérique), 0 sinon
@@ -20,6 +20,8 @@ function normalizeMeta(raw){
   m.composants = metaNum(raw.composants);
   Object.keys(m.pieces).forEach(k=>{ m.pieces[k] = metaNum(raw.pieces && raw.pieces[k]); });
   Object.keys(m.atelier).forEach(k=>{ m.atelier[k] = atelierMk(raw.atelier, k); });
+  if (raw.rd && typeof raw.rd === 'object') Object.keys(raw.rd).forEach(k=>{ if (TECH_BY_ID[k]) m.rd[k] = rdEntry(raw, k); });
+  if (Array.isArray(raw.chargement)) raw.chargement.forEach(id=>{ if (typeof id === 'string' && TECH_BY_ID[id] && m.chargement.indexOf(id) < 0) m.chargement.push(id); });
   if (raw.tree && typeof raw.tree === 'object') Object.keys(raw.tree).forEach(k=>{ const r = metaNum(raw.tree[k]); if (r > 0) m.tree[k] = r; });
   m.notice = raw.notice === 'restructuration' ? raw.notice : null;
   return m;

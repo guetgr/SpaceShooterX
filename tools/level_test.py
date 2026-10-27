@@ -96,6 +96,8 @@ with sync_playwright() as pw:
     f1 = p.evaluate("getMeta().composants"); bk = bank()
     check(bk.get('prime') == 30 and f1 - f0 == bk.get('total'), '1re victoire : composants + prime AGP de 30 (%s, +%s)' % (bk, f1 - f0))
 
+    check(p.evaluate("!!(getMeta().rd.laser_auto && getMeta().rd.laser_auto.plan)"), '1re victoire de w1-l1 : le plan du LASER AUTO-CIBLEUR est acquis (R&D)')
+
     print('rejeu : pas de nouveau bonus de 1re victoire')
     start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
     check(p.evaluate("%s.runComposants" % SC) == 0, 'rejeu : le compteur repart de 0')
