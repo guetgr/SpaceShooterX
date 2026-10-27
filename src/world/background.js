@@ -22,6 +22,7 @@ mixin(GameScene, {
   // instant=true au début de run ; sinon l'ancien décor "explose" en s'agrandissant /
   // s'éteignant pendant que le nouveau apparaît en fondu — plus de fond qui disparaît d'un coup
   pickBgZone(instant){
+    if (this.worldBgKind()) return;                 // niveau avec son propre fond (world/bg-monde.js) : pas de planètes au hasard
     const old = this.bgDecor || [];
     this.bgDecor = [];
     old.forEach(d=>{

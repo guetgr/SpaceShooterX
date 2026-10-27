@@ -62,6 +62,7 @@ const PLAYER_T3_B64 = asset('sprites/player_t3.webp');
 const PLAYER_T4_B64 = asset('sprites/player_t4.webp');
 
 const EARTH_B64 = asset('sprites/earth.webp');
+const BG_TERRE_B64 = asset('sprites/bg_terre.webp');           // la Terre des fonds de niveau (world/bg-monde.js)
 
 // décors de la carte du monde (accueil) : planètes des mondes 2 et 3, nuages de la Terre (tuile qui boucle), satellite en orbite
 const PLANET_W2_B64 = asset('sprites/planet_w2.webp');

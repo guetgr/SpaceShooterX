@@ -9,6 +9,7 @@
 //   reward  : { clear } fragments ◆ ajoutés à une victoire · { first } bonus supplémentaire à la première victoire
 //   hpMul, dmgMul : réglage fin de la difficulté (× PV des ennemis et du boss, × dégâts des ennemis et du boss) en plus de `threat` ; 1 par défaut
 //   zoom    : { start, end, seconds } dézoom de la caméra pendant le niveau (défauts : voir levelZoom dans game/level.js, selon la place du niveau dans le monde)
+//   bg      : fond du niveau (world/bg-monde.js) : 'horizon' · 'debris' · 'station' · 'cristaux' · 'patrouille' · 'direction' (monde 1) ; sans `bg`, décor de planètes tiré au hasard
 //   intro   : 'earth' = grand décollage depuis la planète du monde (la Terre pour le monde 1, sinon la planète générée du monde ; sinon décollage court)
 //   spawns  : [{ type, from }] surcharge de la liste d'ennemis (sinon formule historique selon la menace)
 //   events  : [{ kind, at }] événements (clés de EVENT_DEFS) déclenchés à `at` secondes
