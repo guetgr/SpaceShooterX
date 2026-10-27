@@ -11,7 +11,7 @@ if (/[?&]sandbox\b/.test(location.search)) {
   try { Object.defineProperty(window, 'localStorage', { value: fake, configurable: true }); } catch (e) { /* ignore */ }
 }
 (function () {
-  const MIME = { png: 'image/png', webp: 'image/webp', jpg: 'image/jpeg', mp3: 'audio/mpeg', woff2: 'font/woff2' };
+  const MIME = { svg: 'image/svg+xml', png: 'image/png', webp: 'image/webp', jpg: 'image/jpeg', mp3: 'audio/mpeg', woff2: 'font/woff2' };
   const store = {};
 
   window.asset = function (path) {

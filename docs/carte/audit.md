@@ -53,6 +53,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `CLAUDE.md` — CLAUDE.md
 - `PASSATION.md` — PASSATION — Space Shooter X (état au 26 oct. 2026)
 - `README.md` — Space Shooter X
+- `docs/HUD-MINIMAL.md` — HUD de mission — version minimale
 - `docs/REPRISE-GARAGE.md` — Garage AGP — point de reprise
 - `docs/arbre-competences.md` — L'arbre de compétences — fonctionnement et état des lieux
 - `docs/brief-univers-agp.md` — Brief de référence — univers AGP, ton, interface (à lire avant de toucher à l'interface ou aux textes)
@@ -70,6 +71,11 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/concepts-atelier-2026-10-26/sprites/prompts-isolation-v2.md` — Modules isolés V2
 - `docs/concepts-atelier-2026-10-26/sprites/prompts-menu-complements.md` — Visuels complémentaires du menu atelier
 - `docs/concepts-atelier-2026-10-26/sprites/prompts.md` — Sprites atelier
+- `docs/concepts-hud-2026-10-27/prompt-cartoon.md` — HUD — variante cartoon
+- `docs/concepts-hud-2026-10-27/prompt-hud-atelier.md` — HUD — direction artistique de l’atelier
+- `docs/concepts-hud-2026-10-27/prompt-hud-bureaucratique.md` — HUD — fiche de service AGP
+- `docs/concepts-hud-2026-10-27/prompt-hud-minimal.md` — HUD minimal
+- `docs/concepts-hud-2026-10-27/prompt-hud-simple.md` — HUD sobre — barres de référence
 - `docs/deroule-partie-complete.md` — Space Shooter X — déroulé d'UNE partie complète (alerte 1 → alerte 26 = boss final)
 - `docs/direction-artistique-agp.md` — Direction artistique « AGP-OS » — première proposition
 - `docs/editeur-niveaux.md` — Éditeur de niveaux

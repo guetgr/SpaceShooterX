@@ -1,136 +1,56 @@
-/* =====================================================================
-   HUD EN NIVEAU (chargé après style.css et agp.css : ces règles gagnent)
-   Portrait de la camionnette + grade, barres épaisses et brillantes (coque / bouclier / expérience), rendement en gros chiffres, pause,
-   ordre de mission en jauge. Effets : choc et flash à l'impact, éclat vert au soin, alerte coque, reflet qui passe, montée de grade,
-   parallaxe légère (le HUD traîne derrière le vaisseau, sur deux plans : --sx / --sy posés par updateHudSway, ui/hud.js).
-   Repère : zone 400x700 logiques. Lisibilité d'abord : rien au centre de l'écran, rien d'opaque sur le jeu.
-   ===================================================================== */
-#hud{
-  --hud-ink:#050806;                   /* contour des pièces */
-  --hud-panel:linear-gradient(180deg, #1a2621 0%, #0c1310 100%);
-  --hud-bevel:inset 0 1px 0 rgba(255,255,255,.14), inset 0 -2px 0 rgba(0,0,0,.45), 0 2px 0 rgba(0,0,0,.55);
-  padding:8px 10px 0; gap:6px;
-}
-/* voile sombre en haut de l'écran : sépare le HUD du jeu sans le masquer */
-#hud::before{ content:''; position:absolute; left:0; right:0; top:0; height:92px; z-index:-1; pointer-events:none;
-  background:linear-gradient(180deg, rgba(2,5,4,.62) 0%, rgba(2,5,4,.3) 55%, rgba(2,5,4,0) 100%); }
-#hud-top{ align-items:flex-start; gap:8px; translate:calc(var(--sx, 0) * 1px) calc(var(--sy, 0) * 1px); }
-#hud .wave-note{ translate:calc(var(--sx, 0) * .5px) calc(var(--sy, 0) * .5px); }
-#hud #relicRow{ translate:calc(var(--sx, 0) * .3px) calc(var(--sy, 0) * .3px); margin:0 2px; }
-
-/* ---------- bloc gauche : portrait + barres ---------- */
-#hud .hp-wrap{ flex-direction:row; align-items:center; gap:6px; padding:3px 7px 3px 3px; border:2px solid var(--hud-ink); border-radius:6px;
-  background:linear-gradient(180deg, rgba(30,44,38,.82), rgba(10,16,13,.82)); box-shadow:var(--hud-bevel), 0 0 0 1px rgba(190,215,200,.14); }
-.hud-ava{ position:relative; flex:none; width:44px; height:44px; padding:2px; background:var(--agp-yellow);
-  clip-path:polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
-  }
-.hud-ava::before{ content:''; position:absolute; inset:2px; background:radial-gradient(circle at 50% 30%, #4b8a7a 0%, #1b3a32 55%, #0c1a16 100%);
-  clip-path:polygon(6px 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%, 0 6px); }
-.hud-ava img{ position:absolute; left:50%; top:50%; width:34px; height:38px; object-fit:contain; transform:translate(-50%, -52%);
-  filter:brightness(1.35) contrast(1.1) drop-shadow(0 2px 1px rgba(0,0,0,.8)); animation:avaBob 2.4s ease-in-out infinite; }
-@keyframes avaBob{ 50%{ transform:translate(-50%, -58%); } }
-#hud .lvl-badge{ position:absolute; right:0; bottom:0; z-index:2; min-width:22px; height:17px; padding:0 4px 0 3px; display:flex; align-items:center; justify-content:center; gap:2px;
-  background:linear-gradient(180deg, #2fd9bd, #127a69); color:#fff; border:2px solid var(--hud-ink); border-radius:4px 0 0 0;
-  font:normal 14px/1 'SSX Display', monospace; letter-spacing:0;
-  text-shadow:1px 0 0 #031410, -1px 0 0 #031410, 0 1px 0 #031410, 0 -1px 0 #031410, 0 2px 0 rgba(0,0,0,.5); }
-#hud .lvl-badge::before{ content:'GR'; font:normal 5px/1 'SSX Label', monospace; letter-spacing:.5px; color:#c8fff4; text-shadow:none; }
-
-.hud-bars{ display:flex; flex-direction:column; gap:3px; padding-top:1px; }
-#hud .hp-bar-track, #hud .shield-bar-track, #hud .xp-track{ position:relative; overflow:hidden; border:2px solid var(--hud-ink); border-radius:3px;
-  background:linear-gradient(180deg, #050907, #16201b); box-shadow:inset 0 2px 3px rgba(0,0,0,.8), 0 0 0 1px rgba(190,215,200,.18); }
-#hud .hp-bar-track{ width:150px; height:17px; margin:0; }
-#hud .shield-bar-track{ width:150px; height:9px; margin:0; }
-#hud .xp-wrap{ display:block; }
-#hud .xp-track{ width:150px; height:6px; flex:none; }
-
-/* remplissages brillants : bande claire en haut, plus sombre en bas */
-#hud .hp-bar-fill{ overflow:hidden; background:linear-gradient(180deg, #b6ffd0 0%, #45e486 38%, #1fb35c 58%, #12793c 100%); transition:width .18s ease-out; }
-#hud .hp-wrap.hp-mid .hp-bar-fill{ background:linear-gradient(180deg, #ffe7a8 0%, #ffb52b 38%, #ff8d14 58%, #b65406 100%); }
-#hud .hp-wrap.hp-low .hp-bar-fill{ background:linear-gradient(180deg, #ffc0b0 0%, #ff5a3a 38%, #ff2e22 58%, #a3120c 100%); }
-#hud .hp-bar-ghost{ background:linear-gradient(180deg, #fff8e6, #ffd9a8); opacity:.9; }
-#hud .shield-bar-fill{ background:linear-gradient(180deg, #e6f6ff 0%, #8fd2ff 40%, #3f97e0 60%, #2665aa 100%); box-shadow:0 0 8px rgba(127,200,255,.6); }
-#hud .xp-fill{ background:linear-gradient(180deg, #c8fff4, #3fe0c5 50%, #1c9c87); box-shadow:0 0 6px rgba(63,224,197,.7); transition:width .25s ease-out; }
-/* graduations : une tous les 10 % de coque, tous les 12,5 % de bouclier */
-#hud .hp-bar-track::after{ content:''; position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:repeating-linear-gradient(90deg, transparent 0 calc(10% - 1px), rgba(0,0,0,.4) calc(10% - 1px) 10%); }
-#hud .shield-bar-track::after{ content:''; position:absolute; inset:0; pointer-events:none;
-  background:repeating-linear-gradient(90deg, transparent 0 calc(12.5% - 1px), rgba(0,0,0,.45) calc(12.5% - 1px) 12.5%); }
-/* reflet qui passe de temps en temps sur la coque */
-#hud .hp-bar-fill::after{ content:''; position:absolute; top:0; bottom:0; width:26px; left:-30px;
-  background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); animation:hudShine 4.5s ease-in-out infinite; }
-@keyframes hudShine{ 0%, 70%{ left:-30px; } 100%{ left:calc(100% + 4px); } }
-/* points de coque : chiffres contourés, lisibles sur toutes les couleurs */
-.hp-txt{ position:absolute; right:5px; top:50%; z-index:3; transform:translateY(-52%); pointer-events:none;
-  font:normal 13px/1 'SSX Display', monospace; color:#fff; letter-spacing:.5px; font-variant-numeric:tabular-nums;
-  text-shadow:1px 0 0 #000, -1px 0 0 #000, 0 1px 0 #000, 0 -1px 0 #000, 1px 1px 0 #000, -1px 1px 0 #000, 0 2px 0 rgba(0,0,0,.6); }
-
-/* impact : flash blanc + secousse (hud-shake posé par shakeHud) ; soin : éclat vert ; montée de grade : éclair sur l'expérience */
-#hud .hp-bar-track::before, #hud .shield-bar-track::before{ content:''; position:absolute; inset:0; z-index:4; pointer-events:none; background:#fff; opacity:0; }
-#hud .hud-shake::before{ animation:hudHit .28s ease-out; }
-#hud .hud-shake-strong::before{ animation:hudHit .45s ease-out; background:#ffd0c4; }
-@keyframes hudHit{ 0%{ opacity:.85; } 100%{ opacity:0; } }
-#hud .hp-bar-track.heal{ animation:hudHeal .6s ease-out; }
-@keyframes hudHeal{ 0%{ box-shadow:inset 0 2px 3px rgba(0,0,0,.7), 0 0 0 2px #7dffa8, 0 0 14px #5dffa0; } 100%{ box-shadow:inset 0 2px 3px rgba(0,0,0,.7), 0 2px 0 rgba(0,0,0,.5); } }
-#hud .xp-track.lvup{ animation:hudLv .75s ease-out; }
-#hud .xp-track.lvup .xp-fill{ background:linear-gradient(180deg, #fff, #c8fff4); }
-@keyframes hudLv{ 0%{ box-shadow:0 0 0 2px #fff, 0 0 18px #3fe0c5; } 100%{ box-shadow:inset 0 2px 3px rgba(0,0,0,.7), 0 2px 0 rgba(0,0,0,.5); } }
-
-/* alerte coque (moins de 30 %) : le portrait vire au rouge et bat */
-#hud .hp-wrap.hp-low .hud-ava{ animation:avaLow .55s ease-in-out infinite alternate; }
-#hud .hp-wrap.hp-low .hud-ava::before{ background:radial-gradient(circle at 50% 35%, #5a1a14 0%, #1a0806 75%); }
-@keyframes avaLow{ from{ background:var(--agp-red); } to{ background:#ffb0a0; } }
-
-/* ---------- bloc droit : rendement + pause ---------- */
-.hud-right{ display:flex; align-items:flex-start; gap:6px; margin-left:auto; }
-#hud .score-wrap{ text-align:right; padding:1px 2px 0 0; }
-#hud .score-label{ display:block; margin:0 0 2px; font:normal 6px/1 'SSX Label', monospace; letter-spacing:1.5px; color:#b7c7bf; opacity:1;
-  text-shadow:0 1px 0 #000; }
-#hud .score-val{ font:normal 26px/1.05 'SSX Display', monospace; color:#fff6d8; letter-spacing:1px; font-variant-numeric:tabular-nums;
-  text-shadow:2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 2px 2px 0 #000, -2px 2px 0 #000, 2px -2px 0 #000, -2px -2px 0 #000,
-              0 4px 0 rgba(0,0,0,.55), 0 0 14px rgba(255,194,26,.55); }
-#hud .mute-btn{ width:36px; height:36px; padding:0; display:grid; place-items:center; border:2px solid var(--hud-ink); border-radius:6px;
-  background:var(--hud-panel); box-shadow:var(--hud-bevel), inset 0 -4px 0 rgba(255,194,26,.35); }
-#hud .mute-btn:active{ transform:translateY(2px); box-shadow:inset 0 1px 0 rgba(255,255,255,.1), inset 0 -1px 0 rgba(255,194,26,.35); }
-
-/* ---------- ordre de mission : jauge d'avancement derrière le texte ---------- */
-#hud .wave-note{ position:relative; align-self:center; display:flex; align-items:center; gap:5px; min-width:150px; height:20px; padding:0 12px 0 8px; overflow:hidden;
-  background:rgba(7,11,9,.72); border:2px solid var(--hud-ink); border-radius:0; box-shadow:inset 0 0 0 1px rgba(255,194,26,.35), 0 2px 0 rgba(0,0,0,.5);
-  clip-path:polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%);
-  font:normal 8px/1 'SSX Label', monospace; letter-spacing:1px; color:#fff; text-shadow:0 1px 0 #000; }
-.wn-fill{ position:absolute; left:0; top:0; bottom:0; width:0; background:linear-gradient(180deg, rgba(255,194,26,.55), rgba(255,122,43,.35)); transition:width .3s ease-out; }
-.wn-fill::after{ content:''; position:absolute; right:0; top:0; bottom:0; width:2px; background:#ffe58a; box-shadow:0 0 6px #ffc21a; }
-.wn-ico{ position:relative; flex:none; width:12px; height:12px; background:center/12px 12px no-repeat; image-rendering:pixelated; display:none; }
+/* HUD AGP minimal — 400 × 700 pixels logiques. Texte et jauges restent dynamiques. */
+#hud{ padding:10px 12px 0; gap:8px; }
+#hud::before{ content:''; position:absolute; inset:0 0 auto; height:110px; z-index:-1; pointer-events:none;
+  background:linear-gradient(#050907b8, #05090700); }
+#hud-top{ gap:12px; min-height:38px; }
+#hud .hp-wrap{ padding:0; border:0; border-radius:0; background:none; box-shadow:none; flex:1; min-width:0; }
+.hud-bars{ display:flex; flex-direction:column; gap:4px; width:100%; }
+#hud .hp-bar-track{ display:flex; align-items:center; width:100%; height:18px; margin:0; padding:2px; gap:3px; background:#101a17; border:1px solid #34433b; border-radius:0; overflow:hidden; }
+#hud .hp-txt{ position:static; flex:0 0 27px; text-align:center; transform:none; color:#e8efdf; font:normal 10px/1 'SSX Label',monospace; font-variant-numeric:tabular-nums; letter-spacing:0; text-shadow:none; z-index:3; }
+.hp-meter{ position:relative; height:100%; flex:1; overflow:hidden; background:#18251e; }
+#hud .hp-bar-fill{ height:100%; background:#43a86b; transition:width .18s ease-out; animation:none; }
+#hud .hp-bar-ghost{ background:#b8bda3; opacity:.7; }
+.hp-meter::after{ content:''; position:absolute; inset:0; pointer-events:none; background:url('../assets/hud/segments.svg') left top/100% 100%; }
+#hud .hp-low .hp-bar-fill{ background:#c35f50; }
+#hud .hp-low .hp-txt{ color:#f4b5a3; }
+#hud .xp-wrap{ display:flex; align-items:center; gap:6px; height:12px; }
+.xp-level{ flex:none; color:#c7b477; font:normal 6px/1 'SSX Label',monospace; letter-spacing:.5px; }
+.xp-level b{ display:inline-block; font-weight:normal; }
+#hud .xp-track{ flex:1; width:auto; height:4px; border:0; border-radius:0; background:#17282f; box-shadow:none; overflow:hidden; }
+#hud .xp-fill{ height:100%; background:#548ba4; box-shadow:none; transition:width .25s ease-out; }
+#hud .shield-bar-track{ width:100%; height:4px; margin:0; border:0; background:#182b36; border-radius:0; }
+#hud .shield-bar-fill{ background:#88bed0; box-shadow:none; }
+.hud-right{ display:flex; align-items:flex-start; gap:9px; margin-left:auto; }
+#hud .score-wrap{ min-width:67px; text-align:right; padding:0; }
+#hud .score-label{ display:block; font:normal 6px/1 'SSX Label',monospace; letter-spacing:1px; color:#a9b4a9; margin:0 0 4px; }
+#hud .score-val{ font:normal 19px/1 'SSX Display',monospace; font-variant-numeric:tabular-nums; letter-spacing:1px; color:#e7e5d5; text-shadow:0 1px #000; }
+#hud .mute-btn{ display:grid; place-items:center; width:36px; height:36px; padding:0; border:1px solid #34433b; border-radius:2px; background:#101a17cc; box-shadow:none; }
+#hud .mute-btn:active{ background:#34433b; transform:translateY(1px); }
+#hud .wave-note{ position:relative; align-self:center; min-width:0; height:16px; margin:0; padding:2px 7px; border:0; border-left:2px solid #c7b477; border-radius:0; background:#0c1410aa; box-shadow:none; clip-path:none; font:normal 7px/1.2 'SSX Label',monospace; letter-spacing:.6px; }
+#hud .wn-ico{ display:none; }
 .wn-txt{ position:relative; white-space:nowrap; }
-#hud .wave-note[data-type="survive"] .wn-ico{ display:block; background-image:var(--ico-clock); }
-#hud .wave-note[data-type="kill"] .wn-ico{ display:block; background-image:var(--ico-target); }
-#hud .wave-note[data-type="collect"] .wn-ico{ display:block; background-image:var(--ico-frag); }
-#hud .wave-note[data-type="boss"] .wn-ico{ display:block; background-image:var(--ico-skull); }
-#hud .wave-note.done{ box-shadow:inset 0 0 0 1px #5dffa0, 0 0 12px rgba(93,255,160,.6); }
-#hud .wave-note.done .wn-fill{ background:linear-gradient(180deg, rgba(93,255,160,.6), rgba(31,179,92,.4)); }
-#hud .wave-note.done .wn-fill::after{ display:none; }
+.wn-fill{ position:absolute; bottom:0; left:0; height:1px; background:#c7b477; transition:width .3s; }
+#hud #relicRow{ top:51px; right:12px; margin:0; font-size:11px; }
+/* Zone de transmission stable, y compris pendant un incident ou le tutoriel. */
+#game-container #norma{ top:78px; left:12px; right:12px; max-width:none; transform:none; transition:opacity .2s; }
+#norma .nm-body{ width:100%; box-sizing:border-box; min-height:42px; padding:5px 7px; border:0; border-left:2px solid #7c8b74; background:#0c1410c9; }
+#norma .nm-head{ font:normal 6px/1 'SSX Label',monospace; color:#bbaa78; letter-spacing:1px; margin-bottom:4px; }
+#norma .nm-txt{ font:normal 13px/1.25 'SSX Text',monospace; color:#cbd4c9; text-shadow:none; }
+#norma .nm-prog{ margin-top:3px; }
+#norma .nm-prog i{ background:#bbaa78; }
+body.at-home #norma{ display:none; }
+/* Les incidents démarrent après la zone réservée à NORMA. */
+#boss-hp-wrap{ top:151px; }
+#boss-hp-wrap2{ top:187px; }
+#boss-hp-wrap3{ top:223px; }
+.boss-hp-label{ border:0; background:#171211cc; font-size:7px; letter-spacing:1px; padding:2px 5px; }
+.boss-hp-track{ height:6px; border:1px solid #53342e; border-radius:0; background:#211713; }
+.boss-hp-fill{ background:#b86250; }
+#styleHud{ top:264px; border:0; border-left:2px solid #7c8b74; border-radius:0; background:#0c1410aa; box-shadow:none; }
+#hud .hp-bar-track.heal{ animation:hudHeal .6s ease-out; }
+#hud .xp-track.lvup{ animation:hudLevel .75s ease-out; }
+@keyframes hudHeal{ from{ border-color:#a7dcb2; } to{ border-color:#34433b; } }
+@keyframes hudLevel{ from{ background:#d8e8db; } to{ background:#17282f; } }
+@media(prefers-reduced-motion:reduce){ #hud *, #norma{ animation:none!important; transition:none!important; } }
 
-/* ---------- jauge d'incident majeur (boss) ---------- */
-.boss-hp-label{ display:flex; align-items:center; gap:5px; padding:3px 10px 3px 6px; border:2px solid var(--hud-ink); background:linear-gradient(180deg, #3a0f0a, #1a0604);
-  box-shadow:inset 0 0 0 1px rgba(255,68,56,.6), 0 2px 0 rgba(0,0,0,.55); font:normal 8px/1 'SSX Label', monospace; letter-spacing:2px; color:#fff;
-  clip-path:polygon(6px 0, calc(100% - 6px) 0, 100% 50%, calc(100% - 6px) 100%, 6px 100%, 0 50%); }
-.boss-hp-label::before{ content:''; width:12px; height:12px; flex:none; background:var(--ico-skull) center/12px 12px no-repeat; image-rendering:pixelated; }
-.boss-hp-track{ height:12px; border:2px solid var(--hud-ink); border-radius:3px; background:linear-gradient(180deg, #120706, #24100d); overflow:visible;
-  box-shadow:inset 0 2px 3px rgba(0,0,0,.7), 0 0 0 1px rgba(255,68,56,.35), 0 2px 0 rgba(0,0,0,.5); }
-.boss-hp-track::after{ content:''; position:absolute; inset:0; pointer-events:none; background:repeating-linear-gradient(90deg, transparent 0 calc(5% - 1px), rgba(0,0,0,.35) calc(5% - 1px) 5%); }
-.boss-hp-fill{ border-radius:1px; background:linear-gradient(180deg, #ffb3a8 0%, #ff4f4f 38%, #e0262a 60%, #8c0f14 100%); }
-.boss-hp-fill.p2{ background:linear-gradient(180deg, #ffe7a8 0%, #ffb52b 38%, #ff8d14 60%, #b65406 100%); }
-.boss-hp-fill.p3{ background:linear-gradient(180deg, #ffc0d0 0%, #ff2e5a 38%, #e0103a 60%, #800820 100%); }
-.boss-sh-track{ border:2px solid var(--hud-ink); border-radius:2px; height:7px; }
-
-/* ---------- série (rang de style) : même famille de pièces ---------- */
-#styleHud{ border:2px solid var(--hud-ink, #050806); border-radius:4px; background:linear-gradient(180deg, rgba(26,38,33,.85), rgba(12,19,16,.85));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 2px 0 rgba(0,0,0,.55) }
-#styleRank{ font-family:'SSX Display', monospace; text-shadow:2px 0 0 #000, -2px 0 0 #000, 0 2px 0 #000, 0 -2px 0 #000, 0 3px 0 rgba(0,0,0,.5); }
-.style-track{ height:5px; border-radius:2px; background:rgba(0,0,0,.55); box-shadow:inset 0 1px 2px rgba(0,0,0,.8); }
-
-/* transmissions de N.O.R.M.A. : sous l'ordre de mission */
-#norma{ top:92px; }
-
-@media (prefers-reduced-motion: reduce){
-  .hud-ava img, #hud .hp-bar-fill::after, #hud .hp-wrap.hp-low .hud-ava{ animation:none !important; }
-}
+#hud .hp-bar-track::after{ display:none; }
