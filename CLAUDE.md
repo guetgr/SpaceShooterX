@@ -62,7 +62,7 @@ Chaque boss/mob a son module, ses assets (`sprite-factory/tools/make_*_assets.py
 - `build.py` : fichier unique `dist/space-shooter-x.html` (+ `-dev`), vérif `node --check` ; `--inline-phaser` pour embarquer Phaser. `smoke_test.py --dist` le teste.
 - `sim_balance.py grid|campaign|tune` : joueur automatique en avance rapide (équilibrage des niveaux).
 - Assets : `gen_manifest.py` (après tout ajout/suppression dans `assets/`), `gen_ui_icons.py` (icônes d'interface), `import_sprites_niveaux.py <dossier>` (icônes de niveaux PNG), `import_decors_carte.py --w2 --w3 --nuages --orbite` (planètes, nuages, satellite de la carte), `cut_satgun.py` (planche du satellite armé).
-- `editor.html` (racine) : éditeur de niveaux, export dans `src/data/tuning.js` (`docs/editeur-niveaux.md`).
+- `editor.html` (racine) : éditeur de niveaux, export vers les JSON `src/data/levels/` (`docs/editeur-niveaux.md`).
 - Machine de test lente (WebGL logiciel) : FPS non représentatifs ; en headless, `dt` clampé fausse les vitesses. Dans un `page.evaluate`, ne jamais renvoyer un objet Phaser (sérialisation infinie) : terminer par `return 0`.
 
 ## Git
