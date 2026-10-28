@@ -101,8 +101,7 @@ mixin(HomeScene, {
       this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === played.world));
       this.homeSel = played.id;                                                           // toujours le niveau lancé, jamais « le dernier débloqué »
     }
-    const front = firstOpenLevel(p);                                                       // monde où l'on en est : la camionnette y stationne sur la carte stellaire
-    this.homeCurrent = Math.max(0, WORLDS.findIndex(w=> front ? w.id === front.world : w === WORLDS[WORLDS.length - 1]));
+    this.homeCurrent = this.homeWorld;                                                     // la camionnette et le scintillement restent sur le monde visé, pas sur le dernier débloqué
     this.resetMapView(); this.homeMusic(false);
     this.page = 99; this.goHomePage(0, true);                                              // toujours sur la carte à l'arrivée
     this.refreshHome();

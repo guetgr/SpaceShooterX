@@ -64,16 +64,17 @@ mixin(HomeScene, {
       const key = worldPlanetTexture(this, w, 96);
       g.img.setTexture(key).setTint(open ? 0xffffff : 0x2c3050).setScale(open ? GAL_SCALE : GAL_SCALE*0.85);
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
-      const sm = worldSummary(w.id, p);
       g.num.setText(open ? w.name : '').setColor('#cfd6ff');
-      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total) : '').setColor('#ffc21a');
-      g.star.setVisible(open && sm.bossDown).setPosition(g.sub.width/2 + 10, GAL_R + 31);
+      g.sub.setText('');
+      g.star.setVisible(false);
       // anneau : un segment par niveau (vert = terminé, rouge = boss), on laisse les dernières lueurs pour les niveaux restants
       const L = w.levels.length, gap = 0.12, seg = Math.PI*2/L;
       g.ring.clear();
       w.levels.forEach((l, k)=>{
         const done = isLevelDone(l.id, p), a0 = -Math.PI/2 + k*seg + gap/2, a1 = -Math.PI/2 + (k + 1)*seg - gap/2;
-        g.ring.lineStyle(3, done ? 0x7bff9a : (l.type === 'boss' ? 0xff4f6d : 0x4ff2ff), open ? (done ? 0.95 : 0.35) : 0.12);
+        const gold = open && done && completionDefs(l.id) && completionPct(l.id, p.comp[l.id] || {}) >= 100;      // niveau fini à 100 % : quartier en or, brillant
+        if (gold){ g.ring.lineStyle(9, 0xffc21a, 0.22); g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath(); g.ring.lineStyle(5, 0xffc21a, 0.4); g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath(); }
+        g.ring.lineStyle(3, gold ? 0xfff0a0 : (done ? 0x7bff9a : (l.type === 'boss' ? 0xff4f6d : 0x4ff2ff)), open ? (done ? 0.95 : 0.35) : 0.12);
         g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath();
       });
     });
@@ -136,13 +137,15 @@ mixin(HomeScene, {
     this.refreshGalaxy();
     const i = this.homeWorld, pos = this.galaxyPos(i), g = this.galWorlds[i];
     this.galY = Phaser.Math.Clamp(360 - pos.y, this.galMin, this.galMax); this.galVel = 0;
+    this.tweens.killTweensOf(this.vanBase);
+    Object.assign(this.vanBase, { x:pos.x + 40, y:pos.y + this.galY - 4, s:0.15, a:0 });      // la camionnette est invisible pendant le dézoom puis apparaît déjà en place (aucun trajet visible)
     this.setMapDom('galaxy');
     this.galaxy.setVisible(true); this.galA = 0; g.img.setVisible(false); g.glow.setVisible(false);
     this.warpPulse();
     this.tweens.add({ targets:this.planetPos, x:pos.x, y:pos.y + this.galY, s:GAL_SCALE, duration:560, ease:'Cubic.easeInOut' });
     this.tweens.add({ targets:this, orbitA:0, duration:300 });
     this.tweens.add({ targets:this, galA:1, duration:560, ease:'Sine.easeIn', onComplete:()=>{
-      g.img.setVisible(true); g.glow.setVisible(true); this.planet.setVisible(false); this.planetGlow.setVisible(false); this.mapMode = 'galaxy';
+      g.img.setVisible(true); g.glow.setVisible(true); this.planet.setVisible(false); this.planetGlow.setVisible(false); this.mapMode = 'galaxy'; this.vanBase.a = 1;
     } });
   },
 
@@ -150,7 +153,9 @@ mixin(HomeScene, {
   showGalaxyNow(){
     this.mapMode = 'galaxy'; this.homeMusic(true);
     this.refreshGalaxy();
-    this.galY = Phaser.Math.Clamp(360 - this.galaxyPos(this.homeCurrent).y, this.galMin, this.galMax); this.galVel = 0;
+    const pos = this.galaxyPos(this.homeCurrent);
+    this.galY = Phaser.Math.Clamp(360 - pos.y, this.galMin, this.galMax); this.galVel = 0;
+    Object.assign(this.vanBase, { x:pos.x + 40, y:pos.y + this.galY - 4, s:0.15, a:1 });
     this.setMapDom('galaxy');
     this.galaxy.setVisible(true); this.galA = 1; this.orbitA = 0;
     this.planet.setVisible(false); this.planetGlow.setVisible(false);
@@ -160,7 +165,8 @@ mixin(HomeScene, {
   enterWorldView(i){
     if (this.mapMode !== 'galaxy') return;
     this.mapMode = 'moving'; sfx.uiStart();
-    this.homeWorld = i; this.homeMusic(false);                          // le menu du monde choisi
+    this.tweens.killTweensOf(this.vanBase); this.vanBase.a = 0;                  // la camionnette disparaît d'emblée (pas de glissement visible d'un monde à l'autre)
+    this.homeWorld = i; this.homeCurrent = i; this.homeMusic(false);                          // le menu du monde choisi
     const w = WORLDS[i], p = getWorldProgress(), pos = this.galaxyPos(i), g = this.galWorlds[i];
     const memo = this.worldMemo && this.worldMemo[w.id];                  // niveau déjà choisi dans ce monde : on le retrouve
     this.homeSel = (memo && isLevelUnlocked(memo, p)) ? memo : (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
@@ -173,9 +179,9 @@ mixin(HomeScene, {
     this.time.delayedCall(380, ()=>{
       this.setMapDom('world'); this.renderHomeMap(true);
       this.tweens.add({ targets:this, orbitA:1, duration:450 });
-      this.moveHomeVan(0);
+      Object.assign(this.vanBase, { x:GAME_W/2, y:432, s:0.22 });             // replacée sans trajet, toujours invisible
     });
-    this.time.delayedCall(700, ()=>{ this.mapMode = 'world'; });
+    this.time.delayedCall(700, ()=>{ this.mapMode = 'world'; this.vanBase.a = 1; });
   },
 
   tapGalaxy(i){
