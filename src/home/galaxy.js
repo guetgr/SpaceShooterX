@@ -3,6 +3,7 @@
 // voyage en hyperespace, zoom vers un monde, animation de déblocage d'un nouveau monde.
 // Modes de la page CARTE (this.mapMode) : 'world' (un monde et ses niveaux en orbite) · 'galaxy' (vue d'ensemble) · 'moving' (transition).
 const GAL_STEP = 165, GAL_BASE_Y = 500, GAL_R = 50, GAL_SCALE = 0.78;
+const GAL_TAP_SLOP = 14;      // px logiques : en dessous, c'est un toucher et non un glissement
 const GAL_FONT = "'SSX Label',monospace", GAL_FONT2 = "'SSX Text',monospace";
 
 mixin(HomeScene, {
@@ -37,14 +38,19 @@ mixin(HomeScene, {
     this.input.on('pointermove', p=>{
       const d = this.galDrag; if (!d || !p.isDown) return;
       const now = performance.now(), dy = p.y - d.y0; d.moved = Math.max(d.moved, Math.abs(dy));
-      this.galY = d.g0 + dy;
+      if (d.moved < GAL_TAP_SLOP && !d.scroll){ d.last = p.y; d.lt = now; return; }          // zone morte : le tremblement d'un doigt qui touche ne fait pas bouger la carte
+      d.scroll = true;
+      let g = d.g0 + dy;
+      if (g > this.galMax) g = this.galMax + (g - this.galMax)*0.35;                      // résistance élastique au-delà des bornes (pas de tirage libre)
+      else if (g < this.galMin) g = this.galMin + (g - this.galMin)*0.35;
+      this.galY = g;
       if (now > d.lt) this.galVel = this.galVel*0.6 + 0.4*((p.y - d.last)/((now - d.lt)/1000)); d.last = p.y; d.lt = now;
     });
     this.input.on('pointerup', p=>{
       const d = this.galDrag; this.galDrag = null; if (!d) return;
-      if (d.moved < 10 && performance.now() - d.t0 < 400){
+      if (!d.scroll){                                                                      // toucher (même long) sans glissement : ouvre le monde touché
         this.galVel = 0;
-        const hit = this.galWorlds.findIndex(g=> Math.hypot(p.x - g.pos.x, p.y - (g.pos.y + this.galY)) < GAL_R + 8);
+        const hit = this.galWorlds.findIndex(g=>{ const dx = p.x - g.pos.x, dy = p.y - (g.pos.y + this.galY); return Math.hypot(dx, dy) < GAL_R + 14 || (Math.abs(dx) < 80 && dy > GAL_R && dy < GAL_R + 44); });      // planète ou son libellé
         if (hit >= 0) this.tapGalaxy(hit);
       } else if (performance.now() - d.lt > 90) this.galVel = 0;                           // le doigt s'est arrêté avant de lâcher
     });
