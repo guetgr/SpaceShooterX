@@ -109,3 +109,10 @@
 @keyframes rdMoreBob{ 50%{ translate:0 2px; } }
 @keyframes rdMoreBobUp{ 50%{ translate:0 -2px; } }
 @media(prefers-reduced-motion:reduce){ .rd-more .uii{ animation:none; } }
+
+/* Cartes : l'en-tête évite le trombone de l'image (à gauche sur le papier, à droite sur le plan) ; l'icône est collée comme une vignette */
+.rdcard.paper .rd-head,.rdcard.proto .rd-head{ margin-left:19px; }
+.rdcard.blueprint .rd-head,.rdcard.plan .rd-head{ margin-right:19px; }
+.rd-ic{ background:#13201c24; box-shadow:inset 0 0 0 1px #fff3, 1px 1px 0 #0003; transform:rotate(-2deg); }
+.blueprint .rd-ic,.plan .rd-ic{ background:#0a1a2c80; transform:rotate(2deg); }
+.rd-ic{ position:relative; top:5px; }
