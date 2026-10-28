@@ -146,6 +146,16 @@ mixin(HomeScene, {
     } });
   },
 
+  // vue d'ensemble affichée d'emblée (sans animation), centrée sur le monde où l'on en est
+  showGalaxyNow(){
+    this.mapMode = 'galaxy'; this.homeMusic(true);
+    this.refreshGalaxy();
+    this.galY = Phaser.Math.Clamp(360 - this.galaxyPos(this.homeCurrent).y, this.galMin, this.galMax); this.galVel = 0;
+    this.setMapDom('galaxy');
+    this.galaxy.setVisible(true); this.galA = 1; this.orbitA = 0;
+    this.planet.setVisible(false); this.planetGlow.setVisible(false);
+  },
+
   // zoom vers un monde (depuis la route) : il grossit jusqu'à sa place, ses niveaux se mettent en orbite
   enterWorldView(i){
     if (this.mapMode !== 'galaxy') return;

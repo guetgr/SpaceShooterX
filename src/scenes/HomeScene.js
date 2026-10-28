@@ -15,7 +15,7 @@ class HomeScene extends Phaser.Scene{
     this.setupHomeUi();
     this.events.on('wake', ()=> this.enterHome());
     this.events.on('sleep', ()=> this.leaveHome());
-    this.enterHome();
+    this.enterHome(true);
   }
 
   update(time, delta){
