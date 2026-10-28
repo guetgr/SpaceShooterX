@@ -176,4 +176,41 @@ for (const id of Object.keys(docs)){
   const td = docs['w1-tuto'], tf = M.buildSteps(td, cats(td)).flatMap(s=> s.fields).find(f=> f.path.join('.') === 'tutorial.boss.hp');
   d = M.applyFieldValue(td, tf, 900); assert.strictEqual(d.tutorial.boss.hp, 900); assert.strictEqual(td.tutorial.boss.hp, 700);
 }
+
+// sécurité : pollution de prototype, limites du serveur, pas d'aliasing
+{ const doc = docs['w1-l2'], steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
+  const clean = ()=> { assert.strictEqual(({}).hpMul, undefined); assert.strictEqual(({}).x, undefined); assert.strictEqual(Object.prototype.hpMul, undefined); };
+  const base = F('mobs.sat.hpMul');
+  for (const bad of ['__proto__', 'constructor', 'prototype']){
+    const f = Object.assign({}, base, { path:['mobs', bad, 'x'] }), g = Object.assign({}, base, { path:['mobs', 'sat', bad] });
+    assert.throws(()=> M.applyFieldValue(doc, f, 2), /interdit/); assert.throws(()=> M.applyFieldValue(doc, g, 2), /interdit/);
+    const r = Object.assign({}, base, { path:['mobs', bad, 'x'], optional:true, def:1 }); assert.throws(()=> M.applyFieldValue(doc, r, 1), /interdit/);
+    clean();
+  }
+  // un type d'ennemi malveillant dans le document : ignoré, avec ou sans catalogue
+  const evil = clone(doc); evil.spawns.push({ type:'__proto__', from:0, w:1 }, { type:'constructor', from:0, w:1 }, { type:'prototype', from:0, w:1 });
+  [cats(evil), { base:evil }].forEach(c=> { const st = M.buildSteps(evil, c), mobs = st.find(s=> s.id === 'mobs');
+    assert.ok(mobs.fields.every(f=> !['__proto__', 'constructor', 'prototype'].includes(f.path[1])));
+    mobs.fields.forEach(f=> M.applyFieldValue(evil, f, 2)); clean(); });
+  assert.deepStrictEqual(M.mobTypes(evil), ['sat', 'satgun', 'bras']);
+  assert.deepStrictEqual(M.mobTypes(docs['w1-l5']).length, 20);              // sans catalogue : repli sur les types connus
+  assert.deepStrictEqual(M.bossIds({ finalBoss:'__proto__', spawns:[{ type:'constructor' }] }), []);
+  assert.deepStrictEqual(Array.from(M.mobTypes({ spawns:[{ type:'inconnu' }] })), []);
+  assert.deepStrictEqual(M.bossIds({ spawns:[] }), []);
+  // la liste de repli égale le registre ENEMY_STATS
+  assert.deepStrictEqual(M.mobTypes({ spawns:mobCatalog.map(m=> ({ type:m.type })) }), mobCatalog.map(m=> m.type));
+  // limites N.O.R.M.A. et durée
+  const ns = F('events.0.norma.start'), pool = F('norma.start'), box = F('norma.messages');
+  assert.strictEqual(ns.maxLength, 140); assert.strictEqual(ns.noAngle, true);
+  M.applyFieldValue(doc, ns, 'x'.repeat(140)); assert.throws(()=> M.applyFieldValue(doc, ns, 'x'.repeat(141)), /140/);
+  assert.throws(()=> M.applyFieldValue(doc, ns, 'a<b'), /< et >/); assert.throws(()=> M.applyFieldValue(doc, pool, ['ok', 'a>b']), /< et >/); assert.throws(()=> M.applyFieldValue(doc, pool, ['y'.repeat(141)]), /140/);
+  assert.throws(()=> M.applyFieldValue(doc, box, [{ id:'a', when:'levelStart', text:'<b>' }]), /< et >/);
+  assert.throws(()=> M.applyFieldValue(doc, box, [{ id:'a', when:'levelStart', text:'z'.repeat(141) }]), /140/);
+  assert.ok(M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).find(s=> s.id === 'norma').fields.filter(f=> f.path[1] === 'tuto').every(f=> f.maxLength === 140 && f.noAngle));
+  const dur = F('events.0.duration'); assert.strictEqual(dur.minNonZero, 0.1);
+  assert.throws(()=> M.applyFieldValue(doc, dur, 0.05), /0,1|0\.1/); assert.strictEqual(M.applyFieldValue(doc, dur, 0.1).events[0].duration, 0.1); assert.ok(!('duration' in M.applyFieldValue(doc, dur, 0).events[0]));
+  // pas d'aliasing : tableaux et objets du appelant clonés
+  const arr = F('bossTune.ar.gap'), v = [300, 250, 200, 100], d1 = M.applyFieldValue(doc, arr, v); v[0] = 999; assert.strictEqual(d1.bossTune.ar.gap[0], 300);
+  const msgs = [{ id:'a', when:'levelStart', text:'x' }], d2 = M.applyFieldValue(doc, box, msgs); msgs[0].text = 'changé'; msgs.push({}); assert.strictEqual(d2.norma.messages[0].text, 'x'); assert.strictEqual(d2.norma.messages.length, 1);
+  const lines = ['A'], d3 = M.applyFieldValue(doc, pool, lines); lines[0] = 'Z'; assert.strictEqual(d3.norma.start[0], 'A'); }
 console.log('OK : ' + Object.keys(docs).length + ' niveaux, ' + nFields + ' champs, textes du tuto identiques, ordre fixe, chemins uniques, aller-retour applyFieldValue');

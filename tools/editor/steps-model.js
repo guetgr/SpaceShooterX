@@ -83,17 +83,22 @@
   const MOB_FIELDS = [['hpMul', 'PV ×', 'hp', 'PV'], ['dmgMul', 'Dégâts ×', 'dmg', 'dégâts de contact'], ['speedMul', 'Vitesse ×', 'speed', 'px/s'], ['scoreMul', 'Score ×', 'score', 'points']];
 
   /* ---------- chemins ---------- */
-  function getByPath(o, path){ return path.reduce((a, k)=> (a == null ? undefined : a[k]), o); }
+  const hasOwn = (o, k)=> Object.prototype.hasOwnProperty.call(o, k);
+  const FORBIDDEN = ['__proto__', 'constructor', 'prototype'];
+  const checkPath = path=> path.forEach(k=> { if (FORBIDDEN.indexOf(k) >= 0) throw new Error('chemin interdit : ' + k); });
+  function getByPath(o, path){ return path.reduce((a, k)=> (a == null || typeof a !== 'object' || !hasOwn(a, k) ? undefined : a[k]), o); }
   function setPath(o, path, v){
+    checkPath(path);
     let c = o;
     for (let i = 0; i < path.length - 1; i++){
       const k = path[i];
-      if (c[k] == null){ if (typeof path[i + 1] === 'number') throw new Error('chemin sans tableau : ' + path.join('.')); c[k] = {}; }
+      if (!hasOwn(c, k) || c[k] == null){ if (typeof path[i + 1] === 'number') throw new Error('chemin sans tableau : ' + path.join('.')); c[k] = {}; }
       c = c[k];
     }
     c[path[path.length - 1]] = v;
   }
   function removePath(o, path){
+    checkPath(path);
     const parent = getByPath(o, path.slice(0, -1));
     if (parent == null || typeof parent !== 'object') return;
     delete parent[path[path.length - 1]];
@@ -108,16 +113,18 @@
   const baseOf = (catalogs, doc)=> (catalogs && catalogs.base) || doc;
   const evName = (catalogs, kind)=> { const e = ((catalogs && catalogs.eventCatalog) || []).find(x=> x.id === kind); return e ? e.name : kind; };
 
-  function mobTypes(doc){
-    const seen = [];
-    (doc.spawns || []).concat(doc.waves || []).forEach(r=>{ if (r && r.type && seen.indexOf(r.type) < 0) seen.push(r.type); });
+  // types connus d'ENEMY_STATS (src/data/enemy-stats.js) : repli quand mobCatalog est absent (le test vérifie l'égalité avec le registre)
+  const KNOWN_MOBS = ['grunt', 'shooter', 'drone', 'tank', 'swarmer', 'diver', 'turret', 'splitter', 'splitterMini', 'shieldedGrunt', 'mine', 'sat', 'satgun', 'bras', 'pilleur', 'eclaireur', 'bomber', 'sniper', 'healer', 'ghost', 'elite', 'mothership', 'vortex', 'golden', 'kamikaze', 'spider', 'mineDeployed', 'charo'];
+  function mobTypes(doc, catalogs){
+    const cat = (catalogs && catalogs.mobCatalog) || [], known = cat.length ? cat.map(m=> m.type) : KNOWN_MOBS, seen = [];
+    (doc.spawns || []).concat(doc.waves || []).forEach(r=>{ if (r && typeof r.type === 'string' && known.indexOf(r.type) >= 0 && seen.indexOf(r.type) < 0) seen.push(r.type); });
     return seen;
   }
   function bossIds(doc){
     const ids = [];
     const add = id=>{ if (id && ids.indexOf(id) < 0) ids.push(id); };
-    add(BOSS_TUNE_ID[doc.finalBoss]);
-    mobTypes(doc).forEach(t=> add(MOB_TUNE_ID[t]));
+    add(hasOwn(BOSS_TUNE_ID, doc.finalBoss) ? BOSS_TUNE_ID[doc.finalBoss] : null);
+    mobTypes(doc).forEach(t=> add(hasOwn(MOB_TUNE_ID, t) ? MOB_TUNE_ID[t] : null));
     if (doc.finalBoss === 'anneau') add('ec');          // les baies de L'Anneau sortent des éclaireurs
     return ids;
   }
@@ -152,7 +159,7 @@
     return { id:'objective', title:'OBJECTIF', text, fields:f };
   }
   function mobsStep(doc, catalogs){
-    const cat = (catalogs && catalogs.mobCatalog) || [], types = mobTypes(doc).filter(t=> !cat.length || cat.some(m=> m.type === t)), f = [];
+    const cat = (catalogs && catalogs.mobCatalog) || [], types = mobTypes(doc, catalogs), f = [];
     types.forEach(type=>{
       const m = cat.find(x=> x.type === type) || { type, label:type };
       MOB_FIELDS.forEach(([key, label, stat, unit])=>{
@@ -164,8 +171,8 @@
   }
   function eventNormaFields(i){
     return [
-      { path:['events', i, 'norma', 'start'], kind:'text', label:'N.O.R.M.A. · début', help:'Texte à l\'arrivée de l\'événement ; vide = aucun', def:'', optional:true },
-      { path:['events', i, 'norma', 'end'], kind:'text', label:'N.O.R.M.A. · fin', help:'Texte à la fin de l\'événement ; vide = aucun', def:'', optional:true },
+      { path:['events', i, 'norma', 'start'], kind:'text', label:'N.O.R.M.A. · début', help:'Texte à l\'arrivée de l\'événement ; vide = aucun', def:'', optional:true, maxLength:140, noAngle:true },
+      { path:['events', i, 'norma', 'end'], kind:'text', label:'N.O.R.M.A. · fin', help:'Texte à la fin de l\'événement ; vide = aucun', def:'', optional:true, maxLength:140, noAngle:true },
     ];
   }
   function eventSteps(doc, catalogs){
@@ -174,7 +181,7 @@
       const def = cat.find(x=> x.id === e.kind), name = def ? def.name : e.kind;
       const f = [
         N(['events', i, 'at'], 'Déclenchement', 0, 3600, 1, 's', 'Minimum ; attente du slot libre et de la fin du boss', e.at),
-        N(['events', i, 'duration'], 'Durée forcée', 0, 600, 1, 's', '0 = défaut de l\'événement', 0, { optional:true }),
+        N(['events', i, 'duration'], 'Durée forcée', 0, 600, 1, 's', '0 = défaut de l\'événement ; sinon 0,1 s au moins', 0, { optional:true, minNonZero:0.1 }),
       ];
       ((def && def.params) || []).forEach(p=>{
         f.push(N(['events', i, 'params', p.key], p.label, p.min, p.max, p.step, p.unit, p.defByAlert ? 'Défaut variable selon l\'alerte (valeur affichée : alerte 1)' : '', p.def, { optional:true, int:!!p.int, defByAlert:!!p.defByAlert }));
@@ -208,12 +215,12 @@
   }
   function normaStep(doc, catalogs){
     const cat = (catalogs && catalogs.eventCatalog) || [], f = [];
-    Object.keys(NORMA_POOL_LABEL).forEach(pool=> f.push({ path:['norma', pool], kind:'textlist', label:NORMA_POOL_LABEL[pool], help:'Vide = textes d\'origine de N.O.R.M.A. (1 à 20 lignes)', def:[], optional:true, max:20 }));
+    Object.keys(NORMA_POOL_LABEL).forEach(pool=> f.push({ path:['norma', pool], kind:'textlist', label:NORMA_POOL_LABEL[pool], help:'Vide = textes d\'origine de N.O.R.M.A. (1 à 20 lignes de 140 caractères)', def:[], optional:true, max:20, maxLength:140, noAngle:true }));
     f.push({ path:['norma', 'tickEvery'], kind:'numlist', len:2, ordered:true, label:'Intervalle des vannes et avancements', help:'Entre deux transmissions spontanées, mini et maxi', min:5, max:300, step:1, unit:'s', def:[40, 55], optional:true });
-    if (doc.tuto) NORMA_TUTO_KEYS.forEach(k=> f.push({ path:['norma', 'tuto', k], kind:'text', label:'Consigne du tuto · ' + k, help:'Vide = texte d\'origine', def:'', optional:true }));
+    if (doc.tuto) NORMA_TUTO_KEYS.forEach(k=> f.push({ path:['norma', 'tuto', k], kind:'text', label:'Consigne du tuto · ' + k, help:'Vide = texte d\'origine', def:'', optional:true, maxLength:140, noAngle:true }));
     f.push({ path:['norma', 'messages'], kind:'objlist', label:'Boîtes de dialogue', help:'Jusqu\'à 50 ; ref = nature d\'événement (eventStart / eventEnd), at = secondes (when = time)', def:[], optional:true, max:50,
       item:[{ key:'id', kind:'text', label:'Identifiant' }, { key:'when', kind:'select', label:'Quand', options:NORMA_WHEN.map(w=> ({ value:w[0], label:w[1] })) }, { key:'at', kind:'number', label:'Date', min:0, max:3600, step:1, unit:'s' },
-        { key:'ref', kind:'select', label:'Événement', options:cat.map(e=> ({ value:e.id, label:e.name })) }, { key:'text', kind:'text', label:'Texte' }] });
+        { key:'ref', kind:'select', label:'Événement', options:cat.map(e=> ({ value:e.id, label:e.name })) }, { key:'text', kind:'text', label:'Texte', maxLength:140, noAngle:true }] });
     return { id:'norma', title:'N.O.R.M.A.', text:'Transmissions du secteur, réactions au combat et au boss ; horaires dépendants de la partie. Réserve vide = textes d\'origine.', fields:f };
   }
   function reportStep(doc, catalogs){
@@ -261,6 +268,11 @@
     if (typeof v !== 'number' || !isFinite(v)) throw new Error(field.label + ' : nombre requis');
     if (field.min !== undefined && v < field.min || field.max !== undefined && v > field.max) throw new Error(field.label + ' : ' + (what || 'nombre') + ' entre ' + field.min + ' et ' + field.max + ' requis');
     if (field.int && v !== Math.round(v)) throw new Error(field.label + ' : entier requis');
+    if (field.minNonZero !== undefined && v !== 0 && v < field.minNonZero) throw new Error(field.label + ' : 0 ou au moins ' + field.minNonZero + ' requis');
+  }
+  function checkText(field, v){
+    if (typeof v !== 'string' || v.length > (field.maxLength || 10000)) throw new Error(field.label + ' : texte de ' + (field.maxLength || 10000) + ' caractères au plus requis');
+    if (field.noAngle && /[<>]/.test(v)) throw new Error(field.label + ' : les signes < et > sont interdits');
   }
   function checkValue(field, v){
     switch (field.kind){
@@ -272,13 +284,16 @@
         break;
       case 'select': if (!(field.options || []).some(o=> o.value === v)) throw new Error(field.label + ' : choix inconnu'); break;
       case 'bool': if (typeof v !== 'boolean') throw new Error(field.label + ' : booléen requis'); break;
-      case 'text': if (typeof v !== 'string' || v.length > 10000) throw new Error(field.label + ' : texte requis'); break;
+      case 'text': checkText(field, v); break;
       case 'textlist':
         if (!Array.isArray(v) || v.some(x=> typeof x !== 'string')) throw new Error(field.label + ' : liste de textes requise');
+        v.forEach(x=> checkText(field, x));
         if (field.max !== undefined && v.length > field.max) throw new Error(field.label + ' : ' + field.max + ' lignes au plus');
         if (field.options && v.some(x=> !field.options.some(o=> o.value === x))) throw new Error(field.label + ' : choix inconnu');
         break;
-      case 'objlist': if (!Array.isArray(v) || (field.max !== undefined && v.length > field.max) || v.some(x=> !x || typeof x !== 'object')) throw new Error(field.label + ' : liste d\'objets requise'); break;
+      case 'objlist': if (!Array.isArray(v) || (field.max !== undefined && v.length > field.max) || v.some(x=> !x || typeof x !== 'object')) throw new Error(field.label + ' : liste d\'objets requise');
+        (field.item || []).filter(it=> it.kind === 'text').forEach(it=> v.forEach(x=> { if (x[it.key] !== undefined) checkText(it, x[it.key]); }));
+        break;
       default: throw new Error('genre de champ inconnu : ' + field.kind);
     }
   }
@@ -292,7 +307,7 @@
     const out = clone(doc);
     if (field.optional && (reset || (!field.defByAlert && same(value, field.def)))){ removePath(out, field.path); return out; }
     if (reset) throw new Error(field.label + ' : champ obligatoire');
-    setPath(out, field.path, value);
+    setPath(out, field.path, clone(value));
     return out;
   }
 
