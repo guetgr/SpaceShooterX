@@ -47,3 +47,16 @@
 #pageMap #btnLaunch:disabled{opacity:.7;color:#a9bdb0;background:#1a2925}
 #home button:focus-visible,#home summary:focus-visible{outline:2px solid #eef1e7;outline-offset:2px}
 @media(prefers-reduced-motion:reduce){#pageMap *,#pageMap *:before,#pageMap *:after{animation:none!important;transition:none!important}}
+
+/* fiche du vortex (carte des secteurs) : même papier que la fiche d'ordre */
+#pageMap #vortexCard{position:absolute;left:22px;right:22px;bottom:52px;top:auto;width:auto;min-height:0;padding:8px 12px 10px;margin:0;border:1px solid #405248;background:#0c171af5;z-index:6;pointer-events:auto;display:flex;flex-direction:column;gap:2px}
+#vortexCard.hidden{display:none!important}
+#vortexCard .om-no,#vortexCard .om-tag{font-size:5px;letter-spacing:.3px}
+#vortexCard .om-tag{background:#c9a8ff;color:#140c24}
+#vortexCard .lc-name{font-size:9px;margin:2px 0 3px;color:#eef1e7}
+#vortexCard .om-row{padding:2px 0;gap:5px;border-color:#34433b}
+#vortexCard .om-row>span{flex:0 0 78px;font-size:5px}
+#vortexCard .om-row>em{font-size:15px;line-height:1.1}
+#vortexCard .vx-btns{display:flex;flex-direction:column;gap:5px;margin-top:6px}
+#vortexCard .vx-btns .btn{width:100%;margin:0;font-size:9px;padding:9px 8px}
+#vortexCard .vx-btns .btn.secondary{padding:6px 8px;font-size:7px}

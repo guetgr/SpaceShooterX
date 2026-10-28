@@ -4,6 +4,7 @@
   "core/constants.js",
   "core/mixin.js",
   "data/leaderboard.js",
+  "data/vortex.js",
   "data/player-stats.js",
   "data/bestiary.js",
   "data/achievements.js",
