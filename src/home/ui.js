@@ -96,6 +96,11 @@ mixin(HomeScene, {
     const nxt = last ? (nextLevelOf(p.last) || last) : firstOpenLevel(p);                  // on se place sur le niveau qui suit le dernier joué
     this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
     this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
+    const played = !atStart && this._launched && levelById(this._launched);               // retour d'un niveau : on reste dans le monde qu'on vient de jouer
+    if (played){
+      this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === played.world));
+      this.homeSel = (nxt && nxt.world === played.world && isLevelUnlocked(nxt.id, p)) ? nxt.id : played.id;
+    }
     const front = firstOpenLevel(p);                                                       // monde où l'on en est : la camionnette y stationne sur la carte stellaire
     this.homeCurrent = Math.max(0, WORLDS.findIndex(w=> front ? w.id === front.world : w === WORLDS[WORLDS.length - 1]));
     this.resetMapView(); this.homeMusic(false);
@@ -145,6 +150,7 @@ mixin(HomeScene, {
   selectHomeLevel(id){
     if (this.homeSel !== id) sfx.uiSelect();
     this.homeSel = id;
+    const sl = levelById(id); if (sl) (this.worldMemo = this.worldMemo || {})[sl.world] = id;      // mémoire du niveau choisi, par monde (le temps de la session)
     this.renderHomeMap();
   },
 
@@ -245,7 +251,7 @@ mixin(HomeScene, {
   launchLevel(){
     const l = levelById(this.homeSel);
     if (!l || !isLevelUnlocked(l.id) || this._launching) return;
-    this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
+    this._launched = l.id; this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
     const go = ()=>{
       const gs = this.scene.get('game');
       this.scene.setVisible(true, 'game'); gs.input.enabled = true;

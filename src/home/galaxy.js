@@ -162,7 +162,8 @@ mixin(HomeScene, {
     this.mapMode = 'moving'; sfx.uiStart();
     this.homeWorld = i; this.homeMusic(false);                          // le menu du monde choisi
     const w = WORLDS[i], p = getWorldProgress(), pos = this.galaxyPos(i), g = this.galWorlds[i];
-    this.homeSel = (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
+    const memo = this.worldMemo && this.worldMemo[w.id];                  // niveau déjà choisi dans ce monde : on le retrouve
+    this.homeSel = (memo && isLevelUnlocked(memo, p)) ? memo : (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
     this.setHomePlanet(w, !isWorldUnlocked(w.id, p));
     this.planetPos.x = pos.x; this.planetPos.y = pos.y + this.galY; this.planetPos.s = GAL_SCALE;
     this.planet.setVisible(true); this.planetGlow.setVisible(true); g.img.setVisible(false); g.glow.setVisible(false);
