@@ -135,7 +135,7 @@
     const bgOptions = [{ value:null, label:'Planètes au hasard' }].concat(decor.map(d=> ({ value:d.kind, label:d.label })));
     const key = x=> ({ value:x, label:x });
     const text = (doc.intro === 'earth' ? 'Décollage planète' : 'Décollage court') + ' · fond ' + (doc.bg || 'planète aléatoire') + ' · zoom ' + doc.zoom.start.toFixed(2) + ' → ' + doc.zoom.end.toFixed(2) + ' en ' + doc.zoom.seconds + ' s' + (doc.tuto ? ' (temps de partie).' : ' (selon progression).');
-    return { id:'intro', title:'INTRO / CAMERA', text, fields:[
+    const fields = [
       { path:['intro'], kind:'select', label:'Introduction', help:'Décollage planète ou court', def:base.intro === undefined ? null : base.intro, optional:false, options:[{ value:null, label:'Décollage court' }, { value:'earth', label:'Décollage planète' }] },
       N(['zoom', 'start'], 'Zoom · départ', 0.3, 3, 0.01, '×', 'Zoom de la caméra au début de la mission', base.zoom.start),
       N(['zoom', 'end'], 'Zoom · arrivée', 0.3, 3, 0.01, '×', 'Zoom de la caméra à la fin du trajet', base.zoom.end),
@@ -143,7 +143,9 @@
       { path:['bg'], kind:'select', label:'Décor', help:'Fond de niveau', def:base.bg === undefined ? null : base.bg, optional:false, options:bgOptions },
       { path:['audio', 'level'], kind:'textlist', label:'Musique de l\'ordre', help:'1 ou 2 morceaux ; vide = musique d\'origine', def:[], optional:true, max:2, options:(music.level || []).map(key) },
       { path:['audio', 'boss'], kind:'select', label:'Musique du boss', help:'Vide = musique d\'origine', def:'', optional:true, options:[{ value:'', label:'(origine)' }].concat((music.boss || []).map(key)) },
-    ] };
+    ];
+    // le tuto a sa propre musique (src/audio/scene-audio.js : audio n'est lu que hors tuto)
+    return { id:'intro', title:'INTRO / CAMERA', text, fields:doc.tuto ? fields.filter(f=> f.path[0] !== 'audio') : fields };
   }
   function objectiveStep(doc, catalogs){
     const base = baseOf(catalogs, doc), f = [];
@@ -186,7 +188,7 @@
       ((def && def.params) || []).forEach(p=>{
         f.push(N(['events', i, 'params', p.key], p.label, p.min, p.max, p.step, p.unit, p.defByAlert ? 'Défaut variable selon l\'alerte (valeur affichée : alerte 1)' : '', p.def, { optional:true, int:!!p.int, defByAlert:!!p.defByAlert }));
       });
-      eventNormaFields(i).forEach(x=> f.push(x));
+      if (!doc.tuto) eventNormaFields(i).forEach(x=> f.push(x));          // le tuto ignore les textes N.O.R.M.A. des événements (src/ui/norma.js : normaAnchor)
       return { id:'event-' + i, title:'EVENEMENT · ' + name, text:name + ' · ' + e.at + ' s minimum ; attente du slot libre et de la fin du boss. Durée : ' + (e.duration ? e.duration + ' s' : 'défaut de l’événement'), fields:f };
     });
   }
@@ -196,7 +198,7 @@
       { path:['ambient', 'golden'], kind:'bool', label:'Trésorin aléatoire', help:'Actif après 25 s, réarmement 45–80 s', def:base.ambient.golden, optional:false },
       { path:['ambient', 'smallEvents'], kind:'bool', label:'Petits événements aléatoires', help:'Selon la menace, premier délai 20–35 s puis 30–60 s', def:base.ambient.smallEvents, optional:false },
     ];
-    const kinds = cat.filter(e=> e.small && (e.params || []).length);
+    const kinds = doc.tuto ? [] : cat.filter(e=> e.small && (e.params || []).length);          // tuto : GameScene.lvDef est nul, eventTune n'y est pas lu
     kinds.forEach(e=> e.params.forEach(p=>{
       f.push(N(['eventTune', e.id, p.key], p.label, p.min, p.max, p.step, p.unit, p.defByAlert ? 'Défaut variable selon l\'alerte (valeur affichée : alerte 1)' : '', p.def, { optional:true, int:!!p.int, defByAlert:!!p.defByAlert, group:e.name }));
     }));
@@ -215,13 +217,14 @@
   }
   function normaStep(doc, catalogs){
     const cat = (catalogs && catalogs.eventCatalog) || [], f = [];
-    Object.keys(NORMA_POOL_LABEL).forEach(pool=> f.push({ path:['norma', pool], kind:'textlist', label:NORMA_POOL_LABEL[pool], help:'Vide = textes d\'origine de N.O.R.M.A. (1 à 20 lignes de 140 caractères)', def:[], optional:true, max:20, maxLength:140, noAngle:true }));
-    f.push({ path:['norma', 'tickEvery'], kind:'numlist', len:2, ordered:true, label:'Intervalle des vannes et avancements', help:'Entre deux transmissions spontanées, mini et maxi', min:5, max:300, step:1, unit:'s', def:[40, 55], optional:true });
+    if (!doc.tuto) Object.keys(NORMA_POOL_LABEL).forEach(pool=> f.push({ path:['norma', pool], kind:'textlist', label:NORMA_POOL_LABEL[pool], help:'Vide = textes d\'origine de N.O.R.M.A. (1 à 20 lignes de 140 caractères)', def:[], optional:true, max:20, maxLength:140, noAngle:true }));
+    if (!doc.tuto) f.push({ path:['norma', 'tickEvery'], kind:'numlist', len:2, ordered:true, label:'Intervalle des vannes et avancements', help:'Entre deux transmissions spontanées, mini et maxi', min:5, max:300, step:1, unit:'s', def:[40, 55], optional:true });
     if (doc.tuto) NORMA_TUTO_KEYS.forEach(k=> f.push({ path:['norma', 'tuto', k], kind:'text', label:'Consigne du tuto · ' + k, help:'Vide = texte d\'origine', def:'', optional:true, maxLength:140, noAngle:true }));
-    f.push({ path:['norma', 'messages'], kind:'objlist', label:'Boîtes de dialogue', help:'Jusqu\'à 50 ; ref = nature d\'événement (eventStart / eventEnd), at = secondes (when = time)', def:[], optional:true, max:50,
-      item:[{ key:'id', kind:'text', label:'Identifiant' }, { key:'when', kind:'select', label:'Quand', options:NORMA_WHEN.map(w=> ({ value:w[0], label:w[1] })) }, { key:'at', kind:'number', label:'Date', min:0, max:3600, step:1, unit:'s' },
-        { key:'ref', kind:'select', label:'Événement', options:cat.map(e=> ({ value:e.id, label:e.name })) }, { key:'text', kind:'text', label:'Texte', maxLength:140, noAngle:true }] });
-    return { id:'norma', title:'N.O.R.M.A.', text:'Transmissions du secteur, réactions au combat et au boss ; horaires dépendants de la partie. Réserve vide = textes d\'origine.', fields:f };
+    if (!doc.tuto) f.push({ path:['norma', 'messages'], kind:'objlist', label:'Boîtes de dialogue', help:'Jusqu\'à 50 ; ref = nature d\'événement (eventStart / eventEnd), at = secondes (when = time)', def:[], optional:true, max:50,
+      item:[{ key:'id', kind:'text', label:'Identifiant', required:true, unique:true, maxLength:40 }, { key:'when', kind:'select', label:'Quand', required:true, options:NORMA_WHEN.map(w=> ({ value:w[0], label:w[1] })) },
+        { key:'at', kind:'number', label:'Date', min:0, max:3600, step:1, unit:'s', onlyIf:{ key:'when', values:['time'] } },
+        { key:'ref', kind:'select', label:'Événement', options:cat.map(e=> ({ value:e.id, label:e.name })), onlyIf:{ key:'when', values:['eventStart', 'eventEnd'] } }, { key:'text', kind:'text', label:'Texte', required:true, maxLength:140, noAngle:true }] });
+    return { id:'norma', title:'N.O.R.M.A.', text:doc.tuto ? 'Consignes du tutoriel, une par moment clé ; vide = texte d\'origine. Le tuto n\'utilise ni les réserves de textes ni les boîtes des missions.' : 'Transmissions du secteur, réactions au combat et au boss ; horaires dépendants de la partie. Réserve vide = textes d\'origine.', fields:f };
   }
   function reportStep(doc, catalogs){
     const base = baseOf(catalogs, doc);
@@ -274,6 +277,20 @@
     if (typeof v !== 'string' || v.length > (field.maxLength || 10000)) throw new Error(field.label + ' : texte de ' + (field.maxLength || 10000) + ' caractères au plus requis');
     if (field.noAngle && /[<>]/.test(v)) throw new Error(field.label + ' : les signes < et > sont interdits');
   }
+  // un élément d'objlist : clés permises, champs obligatoires (required, ou onlyIf = obligatoire quand l'autre clé vaut l'une des valeurs), bornes, choix, unicité
+  function checkItem(field, x, n, all){
+    const items = field.item || [], at = field.label + ' · n° ' + (n + 1);
+    Object.keys(x).forEach(k=> { if (!items.some(it=> it.key === k)) throw new Error(at + ' : clé inconnue « ' + k + ' »'); });
+    items.forEach(it=>{
+      const v = x[it.key], lab = Object.assign({}, it, { label:at + ' · ' + it.label });
+      const need = it.required || (it.onlyIf && it.onlyIf.values.indexOf(x[it.onlyIf.key]) >= 0);
+      if (v === undefined || v === null || v === ''){ if (need) throw new Error(lab.label + ' : requis'); return; }
+      if (it.kind === 'text'){ checkText(lab, v); if (need && !v.trim()) throw new Error(lab.label + ' : requis'); }
+      else if (it.kind === 'number') checkNumber(lab, v);
+      else if (it.kind === 'select' && !(it.options || []).some(o=> o.value === v)) throw new Error(lab.label + ' : choix inconnu');
+      if (it.unique && all.some((y, m)=> m < n && y[it.key] === v)) throw new Error(lab.label + ' : « ' + v + ' » déjà utilisé');
+    });
+  }
   function checkValue(field, v){
     switch (field.kind){
       case 'number': checkNumber(field, v); break;
@@ -291,8 +308,8 @@
         if (field.max !== undefined && v.length > field.max) throw new Error(field.label + ' : ' + field.max + ' lignes au plus');
         if (field.options && v.some(x=> !field.options.some(o=> o.value === x))) throw new Error(field.label + ' : choix inconnu');
         break;
-      case 'objlist': if (!Array.isArray(v) || (field.max !== undefined && v.length > field.max) || v.some(x=> !x || typeof x !== 'object')) throw new Error(field.label + ' : liste d\'objets requise');
-        (field.item || []).filter(it=> it.kind === 'text').forEach(it=> v.forEach(x=> { if (x[it.key] !== undefined) checkText(it, x[it.key]); }));
+      case 'objlist': if (!Array.isArray(v) || (field.max !== undefined && v.length > field.max) || v.some(x=> !x || typeof x !== 'object' || Array.isArray(x))) throw new Error(field.label + ' : liste d\'objets requise');
+        v.forEach((x, n)=> checkItem(field, x, n, v));
         break;
       default: throw new Error('genre de champ inconnu : ' + field.kind);
     }
@@ -311,6 +328,9 @@
     return out;
   }
 
-  const api = { TUTO_SCHEMA, TUTO_STEP_KEYS, BOSS_TUNE_ID, MOB_TUNE_ID, buildSteps, applyFieldValue, fieldValue, getByPath, mobTypes, bossIds };
+  // clés de premier niveau facultatives dans le JSON, écrites en entier (la surcharge de l'éditeur remplace l'objet ; null = clé retirée)
+  const WHOLE_KEYS = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'];
+
+  const api = { WHOLE_KEYS, TUTO_SCHEMA, TUTO_STEP_KEYS, BOSS_TUNE_ID, MOB_TUNE_ID, buildSteps, applyFieldValue, fieldValue, getByPath, mobTypes, bossIds };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.EditorSteps = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

@@ -155,5 +155,14 @@ with tempfile.TemporaryDirectory() as folder:
     assert not post({'w1-tuto':original['w1-tuto'],'w1-l2':bad})['ok']
     assert (root/'src/data/levels/w1-tuto.json').read_text()==before
     assert not post({'../../escape':tuto})['ok']
+    # export de l'éditeur (étapes) avec les cinq clés facultatives : accepté et écrit tel quel
+    full=copy.deepcopy(original['w1-l2'])
+    full['mobs']={'grunt':{'hpMul':1.5}}; full['bossTune']={'ar':{'hp':2500,'thresh':[70,40,15]}}; full['eventTune']={'meteors':{'tickMs':500}}
+    full['norma']={'start':['Bonjour.'],'tickEvery':[30,60],'messages':[{'id':'m1','when':'time','at':12,'text':'Douze.'},{'id':'m2','when':'eventStart','ref':'meteors','text':'Pluie.'}]}
+    full['audio']={'level':['w1_l2_a']}
+    full['events']=[{'kind':'meteors','at':30,'duration':20,'params':{'tickMs':400},'norma':{'start':'Attention.'}}]
+    assert post({'w1-l2':full})['ok']
+    saved=level_files.read_levels(root)['w1-l2']
+    for k in ['mobs','bossTune','eventTune','norma','audio','events']: assert saved[k]==full[k],k
     server.shutdown()
 print('OK : 16 JSON, mobs et bossTune bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')

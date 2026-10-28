@@ -1,7 +1,9 @@
 "use strict";
 // Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place.
 // L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les valeurs d'origine pour pouvoir revenir en arrière.
-const TUNE_LEVEL_FIELDS = ['threat', 'goal', 'hpMul', 'dmgMul', 'reward', 'waves', 'timelineOnly', 'spawns', 'events', 'spawnClock', 'ambient', 'zoom', 'name', 'bg', 'intro', 'boss', 'finalBoss', 'bossName', 'tutorial'];
+// TUNE_WHOLE : clés facultatives du JSON (mobs, bossTune, eventTune, norma, audio) remplacées EN ENTIER par la surcharge (null = clé retirée), pour qu'une sous-clé effacée dans l'éditeur disparaisse vraiment.
+const TUNE_WHOLE = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'];
+const TUNE_LEVEL_FIELDS = ['threat', 'goal', 'hpMul', 'dmgMul', 'reward', 'waves', 'timelineOnly', 'spawns', 'events', 'spawnClock', 'ambient', 'zoom', 'name', 'bg', 'intro', 'boss', 'finalBoss', 'bossName', 'tutorial'].concat(TUNE_WHOLE);
 const TUTO_TUNE = {};
 const LEVEL_BASE = {};
 
@@ -28,7 +30,11 @@ function applyTuning(ov){
   WORLDS.forEach(w=> w.levels.forEach(l=>{
     const b = LEVEL_BASE[l.id], o = (ov.levels && ov.levels[l.id]) || {};
     TUNE_LEVEL_FIELDS.forEach(k=>{
-      if (k === 'waves'){
+      if (TUNE_WHOLE.indexOf(k) >= 0){
+        const v = o[k] === undefined ? b[k] : o[k];
+        if (v === undefined || v === null) delete l[k]; else l[k] = JSON.parse(JSON.stringify(v));
+      }
+      else if (k === 'waves'){
         const waves = o.waves === undefined ? (b.waves || []) : o.waves;
         if (!Array.isArray(waves) || waves.length > 1000 || waves.some(w=> !w || !BESTIARY_LIST.some(e=> e.type === w.type && !e.bossId && e.type !== 'meteor') || !Number.isFinite(w.at) || w.at < 0 || w.at > 3600 || !Number.isInteger(w.count) || w.count < 1 || w.count > 100 || !Number.isFinite(w.spacing) || w.spacing < 0 || w.spacing > 60)) throw new Error('Vague invalide');
         l.waves = waves.map(w=> ({ type:w.type, at:w.at, count:w.count, spacing:w.spacing }));

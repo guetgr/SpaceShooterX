@@ -128,7 +128,9 @@ for (const id of Object.keys(docs)){
 { const s = M.buildSteps(docs['w1-l2'], cats(docs['w1-l2'])).find(x=> x.id === 'norma');
   assert.deepStrictEqual(s.fields.map(f=> f.path.join('.')), ['norma.start', 'norma.boss', 'norma.progress', 'norma.banter', 'norma.lowhp', 'norma.win', 'norma.lose', 'norma.tickEvery', 'norma.messages']);
   const box = s.fields.at(-1); assert.deepStrictEqual(box.item.map(i=> i.key), ['id', 'when', 'at', 'ref', 'text']);
-  const t = M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).find(x=> x.id === 'norma'); assert.ok(t.fields.some(f=> f.path.join('.') === 'norma.tuto.move')); }
+  const t = M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).find(x=> x.id === 'norma'); assert.ok(t.fields.some(f=> f.path.join('.') === 'norma.tuto.move'));
+  // le tuto ne lit ni audio, ni eventTune, ni les réserves / boîtes N.O.R.M.A., ni events[i].norma : champs absents
+  assert.ok(!M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).some(st=> st.fields.some(f=> ['audio', 'eventTune'].indexOf(f.path[0]) >= 0 || (f.path[0] === 'norma' && f.path[1] !== 'tuto') || (f.path[0] === 'events' && f.path[2] === 'norma'))), 'tuto : champs sans effet'); }
 // intro / caméra : décor et musiques
 { const s = M.buildSteps(docs['w1-l2'], cats(docs['w1-l2'])).find(x=> x.id === 'intro');
   assert.deepStrictEqual(s.fields.map(f=> f.path.join('.')), ['intro', 'zoom.start', 'zoom.end', 'zoom.seconds', 'bg', 'audio.level', 'audio.boss']);
