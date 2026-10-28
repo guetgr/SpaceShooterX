@@ -1,0 +1,464 @@
+{
+ "1:crystal": {
+  "dur": [
+   22034,
+   31472
+  ],
+  "tickMs": 360
+ },
+ "1:meteors": {
+  "dur": [
+   37034,
+   46472
+  ],
+  "tickMs": 700
+ },
+ "1:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 408
+ },
+ "1:mines": {
+  "dur": [
+   22713,
+   35296
+  ],
+  "tickMs": 1000
+ },
+ "1:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "tickMs": null
+ },
+ "1:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "1:spiders": {
+  "dur": [
+   29069,
+   47944
+  ],
+  "tickMs": 650
+ },
+ "1:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "1:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": 602
+ },
+ "1:frenzy": {
+  "dur": [
+   34069,
+   52944
+  ],
+  "tickMs": null
+ },
+ "1:flip": {
+  "dur": [
+   25426,
+   50592
+  ],
+  "tickMs": null
+ },
+ "1:nebula": {
+  "dur": [
+   39069,
+   57944
+  ],
+  "tickMs": null
+ },
+ "1:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "tickMs": null
+ },
+ "1:minibh": {
+  "dur": [
+   32713,
+   45296
+  ],
+  "tickMs": 3200
+ },
+ "1:bigbh": {
+  "dur": [
+   32713,
+   45296
+  ],
+  "tickMs": null
+ },
+ "1:corridor": {
+  "dur": [
+   37713,
+   50296
+  ],
+  "tickMs": 200
+ },
+ "1:eclipse": {
+  "dur": [
+   18492,
+   25413
+  ],
+  "tickMs": null
+ },
+ "1:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "tickMs": null
+ },
+ "1:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "tickMs": 2420
+ },
+ "1:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 80
+ },
+ "1:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "tickMs": null
+ },
+ "1:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": null
+ },
+ "5:crystal": {
+  "dur": [
+   21965,
+   24655
+  ],
+  "tickMs": 360
+ },
+ "5:meteors": {
+  "dur": [
+   36965,
+   39655
+  ],
+  "tickMs": 628
+ },
+ "5:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 360
+ },
+ "5:mines": {
+  "dur": [
+   22621,
+   26206
+  ],
+  "tickMs": 1000
+ },
+ "5:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "tickMs": null
+ },
+ "5:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "5:spiders": {
+  "dur": [
+   28931,
+   34310
+  ],
+  "tickMs": 650
+ },
+ "5:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "5:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": 530
+ },
+ "5:frenzy": {
+  "dur": [
+   33931,
+   39310
+  ],
+  "tickMs": null
+ },
+ "5:flip": {
+  "dur": [
+   25242,
+   32413
+  ],
+  "tickMs": null
+ },
+ "5:nebula": {
+  "dur": [
+   38931,
+   44310
+  ],
+  "tickMs": null
+ },
+ "5:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "tickMs": null
+ },
+ "5:minibh": {
+  "dur": [
+   32621,
+   36206
+  ],
+  "tickMs": 3200
+ },
+ "5:bigbh": {
+  "dur": [
+   32621,
+   36206
+  ],
+  "tickMs": null
+ },
+ "5:corridor": {
+  "dur": [
+   37621,
+   41206
+  ],
+  "tickMs": 200
+ },
+ "5:eclipse": {
+  "dur": [
+   18441,
+   20413
+  ],
+  "tickMs": null
+ },
+ "5:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "tickMs": null
+ },
+ "5:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "tickMs": 2100
+ },
+ "5:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 80
+ },
+ "5:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "tickMs": null
+ },
+ "5:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": null
+ },
+ "10:crystal": {
+  "dur": [
+   21912,
+   31536
+  ],
+  "tickMs": 360
+ },
+ "10:meteors": {
+  "dur": [
+   36912,
+   46536
+  ],
+  "tickMs": 538
+ },
+ "10:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 300
+ },
+ "10:mines": {
+  "dur": [
+   22549,
+   35381
+  ],
+  "tickMs": 1000
+ },
+ "10:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "tickMs": null
+ },
+ "10:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "10:spiders": {
+  "dur": [
+   28824,
+   48072
+  ],
+  "tickMs": 650
+ },
+ "10:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "tickMs": null
+ },
+ "10:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": 440
+ },
+ "10:frenzy": {
+  "dur": [
+   33824,
+   53072
+  ],
+  "tickMs": null
+ },
+ "10:flip": {
+  "dur": [
+   25099,
+   50762
+  ],
+  "tickMs": null
+ },
+ "10:nebula": {
+  "dur": [
+   38824,
+   58072
+  ],
+  "tickMs": null
+ },
+ "10:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "tickMs": null
+ },
+ "10:minibh": {
+  "dur": [
+   32549,
+   45381
+  ],
+  "tickMs": 3200
+ },
+ "10:bigbh": {
+  "dur": [
+   32549,
+   45381
+  ],
+  "tickMs": null
+ },
+ "10:corridor": {
+  "dur": [
+   37549,
+   50381
+  ],
+  "tickMs": 200
+ },
+ "10:eclipse": {
+  "dur": [
+   18402,
+   25460
+  ],
+  "tickMs": null
+ },
+ "10:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "tickMs": null
+ },
+ "10:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "tickMs": 1700
+ },
+ "10:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "tickMs": 80
+ },
+ "10:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "tickMs": null
+ },
+ "10:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "tickMs": null
+ }
+}

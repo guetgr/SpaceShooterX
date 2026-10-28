@@ -43,6 +43,8 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/editor/level-document.js` — (script ponctuel, sans description)
 - `tools/editor/timeline.js` — (script ponctuel, sans description)
 - `tools/enemy_stats_test.py` — Équivalence des stats des mobs (registre src/data/enemy-stats.js) + surcharge par niveau.
+- `tools/event_params_node_test.js` — (script ponctuel, sans description)
+- `tools/event_params_test.py` — Paramètres des événements (EVENT_DEFS) : équivalence avec le comportement d'origine.
 - `tools/gen_codemap.py` — Génère la carte du code dans docs/carte/ (rien à installer : Python 3 seul).
 - `tools/gen_manifest.py` — Régénère assets/manifest.json à partir du contenu de assets/ (à lancer après avoir ajouté/supprimé un fichier).
 - `tools/gen_ui_icons.py` — Dessine les icônes d'interface en pixel art (12x12, contour sombre) et les écrit dans assets/sprites/ui_*.png, puis relance gen_manifest.py.

@@ -73,3 +73,11 @@ Clé optionnelle `bossTune` dans le JSON d'une mission : `"bossTune": { "ar": { 
 - `tunablesApply(lvDef)` (début de `GameScene.create`) remet d'abord les valeurs d'origine puis applique `bossTune` : rien ne fuit d'une partie à l'autre.
 - Antenne-Mère (tuto) : `TUNABLES.antenne` n'est qu'un schéma ; ses valeurs restent dans `tutorial.boss` (refus de `bossTune.antenne`).
 - Ajouter un réglage : une ligne dans `tunables.js` (format décrit en tête de fichier, valeur d'origine dans les bornes), puis `python3 tools/tunables_test.py`.
+
+## Paramètres des événements
+Registre : `src/data/event-params.js` (`EVENT_PARAMS[kind]` = `{ key, label, min, max, step, unit, [int], def }` ; `def` = valeur d'origine, nombre ou `(alerte)=>…` pour reproduire la dépendance au niveau d'alerte). Couvre durée (`dur`, ou `durMin`/`durMax` en secondes), cadence (`tickMs`), nombres par vague ou par tic, vitesses, dégâts, rayons. Ne couvre pas coordonnées, tweens, décor, poids de tirage, seuil d'alerte.
+- Événement programmé : `{ "kind":"meteors", "at":30, "duration":40, "params":{ "tickMs":500 } }`. Niveau entier (tirages aléatoires compris) : `"eventTune": { "meteors": { "tickMs":500 } }`.
+- Priorité (`evParam(sc, kind, key)`) : `params` de l'événement programmé en cours > `eventTune` > valeur d'origine (calculée avec l'alerte courante). `duration` reste prioritaire sur `dur` / `durMin` / `durMax`. Un événement lancé sans `params` après un autre n'hérite de rien.
+- `tools/level_files.py` refuse événement ou clé inconnus, valeur hors bornes ou non entière quand `int:true`. L'éditeur reçoit le schéma dans `eventCatalog[i].params` (valeur par défaut à l'alerte 1, `defByAlert` si elle varie).
+- Ajouter un paramètre : une ligne dans `event-params.js`, remplacer le littéral par `evParam(sc, 'kind', 'key')` (lire la valeur au démarrage si elle sert à du code différé), ajouter la formule d'origine dans `EXPECTED` de `tools/event_params_node_test.js`.
+- Tests sans navigateur : `node tools/event_params_node_test.js` (durées/cadences et défauts == code d'origine, usage, priorité). `tools/event_params_test.py` (navigateur, instantané des effets observés) existe mais n'est plus lancé systématiquement.

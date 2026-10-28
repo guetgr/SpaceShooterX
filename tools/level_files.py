@@ -13,7 +13,7 @@ def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) - {'mobs','bossTune'} != set(original) - {'mobs','bossTune'}: raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs','bossTune','eventTune'} != set(original) - {'mobs','bossTune','eventTune'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -65,6 +65,28 @@ def validate_level(d, original, root=ROOT):
                 else:
                     if not isinstance(v,list) or len(v) != ln: raise ValueError('bossTune.%s.%s : tableau de %d nombres requis' % (bid,path,ln))
                     if not all(number(x,lo,hi) for x in v): raise ValueError('bossTune.%s.%s : chaque nombre doit être entre %g et %g' % (bid,path,lo,hi))
+    def event_registry():
+        # registre lu dans src/data/event-params.js : un événement par ligne « deux espaces, kind: [ », une entrée par ligne « quatre espaces, { key:'x', label:'..', min:a, max:b, ... [int:true,] def:.. »
+        reg, cur = {}, None
+        for line in (root/'src/data/event-params.js').read_text().splitlines():
+            m = re.match(r'^  (\w+): \[$', line)
+            if m: cur = reg.setdefault(m.group(1), {}); continue
+            m = re.match(r"^    \{ key:'(\w+)',.*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
+            if m and cur is not None: cur[m.group(1)] = (float(m.group(2)), float(m.group(3)), ' int:true,' in line)
+        if not any(reg.values()): raise ValueError('événements : aucun paramètre lu dans src/data/event-params.js ; le format « kind: [ » puis « { key:\'x\', label:\'..\', min:a, max:b, » doit être conservé')
+        return reg
+    def check_params(vals, kind, at, reg):
+        if kind not in reg: raise ValueError('%s : événement inconnu « %s » (lus dans src/data/event-params.js)' % (at, kind))
+        if not isinstance(vals,dict): raise ValueError(at + ' : objet requis')
+        for key, v in vals.items():
+            if key not in reg[kind]: raise ValueError('%s.%s : paramètre inconnu' % (at, key))
+            lo, hi, integer = reg[kind][key]
+            if not number(v,lo,hi): raise ValueError('%s.%s : nombre entre %g et %g requis' % (at, key, lo, hi))
+            if integer and v != int(v): raise ValueError('%s.%s : entier requis' % (at, key))
+    ev_reg = event_registry()
+    if 'eventTune' in d:
+        if not isinstance(d['eventTune'],dict): raise ValueError('eventTune : objet requis')
+        for kind, vals in d['eventTune'].items(): check_params(vals, kind, 'eventTune.' + kind, ev_reg)
     for kind in ['spawns','waves','events']:
         if not isinstance(d[kind],list) or len(d[kind])>1000: raise ValueError(kind + ' : liste invalide')
         for row in d[kind]:
@@ -73,7 +95,8 @@ def validate_level(d, original, root=ROOT):
                 if set(row)-{'type','from','w','tier'} or not {'type','from','w'} <= set(row) or row['type'] not in enemies or not number(row['from'],-1,3600) or not number(row['w'],0.01,1000) or not number(row.get('tier',1),1,4): raise ValueError('Pool invalide')
             elif kind=='waves':
                 if set(row)!={'type','at','count','spacing'} or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
-            elif set(row)-{'kind','at','duration'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
+            elif set(row)-{'kind','at','duration','params'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
+            elif 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)
     for key in ['bg','intro','boss','finalBoss','bossName']:
         if not (d[key] is None or isinstance(d[key],str)): raise ValueError(key + ' : texte ou null requis')
     if d['finalBoss'] not in [None,'meteo','araignee','reacteur','anneau','pdg']: raise ValueError('Boss final inconnu')

@@ -444,7 +444,11 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `enterHome` | méthode | `src/home/ui.js` | `HomeScene` |
 | `enterWorldView` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `eSpd` | méthode | `src/enemies/ai.js` | `GameScene` |
+| `evDur` | fonction | `src/data/event-params.js` |  |
+| `evDurRange` | fonction | `src/data/event-params.js` |  |
 | `EVENT_DEFS` | const | `src/data/events.js` |  |
+| `EVENT_PARAMS` | const | `src/data/event-params.js` |  |
+| `evParam` | fonction | `src/data/event-params.js` |  |
 | `evRndX` | const | `src/data/events.js` |  |
 | `explodeFx` | méthode | `src/fx/effects.js` | `GameScene` |
 | `EXPLOSION_SHEET_B64` | const | `src/data/image-assets.js` |  |
@@ -1223,4 +1227,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1216 symboles.
+1220 symboles.

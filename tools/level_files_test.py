@@ -32,10 +32,40 @@ for bt, ok in [({}, True), ({'ar':{'hp':2000,'dmg.missile':20,'gap':[300,250,200
     except ValueError as e: got=False;msg=str(e)
     assert got==ok,(bt,ok)
     if not ok: assert 'bossTune' in msg,(bt,msg)
+def with_event(ev=None, tune=None):
+    doc=copy.deepcopy(original['w1-l1'])
+    if ev is not None: doc['events']=[ev]
+    if tune is not None: doc['eventTune']=tune
+    return doc
+for ev, tune, ok, word in [
+    ({'kind':'meteors','at':30,'duration':40,'params':{'tickMs':500}}, None, True, ''),
+    ({'kind':'meteors','at':30}, None, True, ''),
+    ({'kind':'meteors','at':30,'params':{}}, None, True, ''),
+    ({'kind':'swarm','at':5,'params':{'perWave':12,'tickMs':300}}, {'meteors':{'speedMin':200,'speedMax':300},'plasma':{'contactDmg':20}}, True, ''),
+    ({'kind':'meteors','at':30,'params':{'tickMs':10}}, None, False, 'events.params.meteors.tickMs'),
+    ({'kind':'meteors','at':30,'params':{'tickMs':9000}}, None, False, 'tickMs'),
+    ({'kind':'meteors','at':30,'params':{'nope':1}}, None, False, 'nope'),
+    ({'kind':'meteors','at':30,'params':{'perTick':2.5}}, None, False, 'entier'),
+    ({'kind':'meteors','at':30,'params':{'tickMs':'500'}}, None, False, 'tickMs'),
+    ({'kind':'meteors','at':30,'params':{'tickMs':True}}, None, False, 'tickMs'),
+    ({'kind':'meteors','at':30,'params':[]}, None, False, 'objet'),
+    ({'kind':'meteors','at':30,'extra':1}, None, False, 'Événement invalide'),
+    (None, {'meteors':{'tickMs':500}}, True, ''),
+    (None, {}, True, ''),
+    (None, {'meteorsx':{'tickMs':500}}, False, 'meteorsx'),
+    (None, {'meteors':{'tickMsx':500}}, False, 'tickMsx'),
+    (None, {'meteors':{'tickMs':49}}, False, 'eventTune.meteors.tickMs'),
+    (None, {'meteors':[]}, False, 'objet'),
+    (None, [], False, 'eventTune'),
+]:
+    try: level_files.validate_level(with_event(ev,tune),original['w1-l1']);got=True;msg=''
+    except ValueError as e: got=False;msg=str(e)
+    assert got==ok,(ev,tune,msg)
+    if not ok: assert word in msg,(ev,tune,msg)
 with tempfile.TemporaryDirectory() as folder:
     root=Path(folder);(root/'src/data/worlds').mkdir(parents=True)
     shutil.copytree(level_files.ROOT/'src/data/levels',root/'src/data/levels')
-    for name in ['bestiary.js','events.js','enemy-stats.js','tunables.js']:
+    for name in ['bestiary.js','events.js','enemy-stats.js','tunables.js','event-params.js']:
         shutil.copy(level_files.ROOT/'src/data'/name,root/'src/data'/name)
     serve.R=folder
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(serve.NoCache,directory=folder))

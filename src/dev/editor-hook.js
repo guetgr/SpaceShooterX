@@ -61,7 +61,7 @@
 
   function ready(){
     traceTimeline();
-    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min })), overrides:TUNING_OVERRIDES, bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
+    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min,params:(EVENT_PARAMS[id]||[]).map(r=>({ key:r.key,label:r.label,min:r.min,max:r.max,step:r.step,unit:r.unit,int:!!r.int,def:typeof r.def === 'function' ? r.def(1) : r.def,defByAlert:typeof r.def === 'function' })) })), overrides:TUNING_OVERRIDES, bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
       let image = '';
       try { image = window.__ssxScene.textures.getBase64(e.tex, e.frame); } catch(err) { /* miniature facultative */ }
       return { type:e.type, label:e.label, image };
