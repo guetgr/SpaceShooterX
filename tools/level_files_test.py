@@ -62,6 +62,54 @@ for ev, tune, ok, word in [
     except ValueError as e: got=False;msg=str(e)
     assert got==ok,(ev,tune,msg)
     if not ok: assert word in msg,(ev,tune,msg)
+def with_norma(n=None, evnorma=None, base='w1-l1'):
+    doc=copy.deepcopy(original[base])
+    if n is not None: doc['norma']=n
+    if evnorma is not None: doc['events']=[{'kind':'meteors','at':30,'norma':evnorma}]
+    return doc
+M=lambda **k: dict({'id':'m1','when':'time','at':12,'text':'Transmission.'},**k)
+for n, ev, ok, word in [
+    ({}, None, True, ''),
+    ({'start':['Bonjour.'],'boss':['A'],'progress':['a','b','c'],'banter':['x'],'lowhp':['y'],'win':['z'],'lose':['w'],'tickEvery':[20,30]}, None, True, ''),
+    ({'messages':[M(),M(id='m2',when='levelStart',at=0),M(id='m3',when='eventStart',ref='meteors'),M(id='m4',when='eventEnd',ref='meteors'),M(id='m5',when='bossStart'),M(id='m6',when='win'),M(id='m7',when='lose',hold=True)]}, None, True, ''),
+    (None, {'start':'Annonce.','end':'Fin.'}, True, ''),
+    ({'start':[]}, None, False, 'norma.start'),
+    ({'start':['a']*21}, None, False, 'norma.start'),
+    ({'start':'a'}, None, False, 'norma.start'),
+    ({'start':['']}, None, False, 'norma.start[0]'),
+    ({'start':['   ']}, None, False, 'vide'),
+    ({'start':['x'*141]}, None, False, '140'),
+    ({'start':['a <b>']}, None, False, 'interdits'),
+    ({'bossPhase':['a']}, None, False, 'bossPhase'),
+    ({'tickEvery':[30,20]}, None, False, 'tickEvery'),
+    ({'tickEvery':[4,20]}, None, False, 'tickEvery'),
+    ({'tickEvery':[20,301]}, None, False, 'tickEvery'),
+    ({'tickEvery':[20]}, None, False, 'tickEvery'),
+    ({'tuto':{'move':'a'}}, None, False, 'tutoriel'),
+    ({'messages':[M(),M()]}, None, False, 'déjà utilisé'),
+    ({'messages':[M(when='bossPhase')]}, None, False, 'when'),
+    ({'messages':[M(at=3601)]}, None, False, 'at'),
+    ({'messages':[M(at=None)]}, None, False, 'at'),
+    ({'messages':[M(when='eventStart')]}, None, False, 'ref'),
+    ({'messages':[M(when='eventEnd',ref='nope')]}, None, False, 'ref'),
+    ({'messages':[M(text='')]}, None, False, 'text'),
+    ({'messages':[M(text='<i>')]}, None, False, 'interdits'),
+    ({'messages':[M(hold='oui')]}, None, False, 'hold'),
+    ({'messages':[M(extra=1)]}, None, False, 'messages[0]'),
+    ({'messages':'x'}, None, False, 'messages'),
+    ([], None, False, 'norma'),
+    (None, {'start':''}, False, 'events.norma.start'),
+    (None, {'end':'<b>'}, False, 'interdits'),
+    (None, {'middle':'a'}, False, 'events.norma'),
+]:
+    try: level_files.validate_level(with_norma(n,ev),original['w1-l1']);got=True;msg=''
+    except ValueError as e: got=False;msg=str(e)
+    assert got==ok,(n,ev,msg)
+    if not ok: assert word in msg,(n,ev,msg)
+tn=with_norma({'tuto':{'move':'Avancez.','win':'Bravo.'}},base='w1-tuto');level_files.validate_level(tn,original['w1-tuto'])
+tn['norma']['tuto']['zzz']='a'
+try: level_files.validate_level(tn,original['w1-tuto']);raise SystemExit('tuto inconnu accepté')
+except ValueError: pass
 with tempfile.TemporaryDirectory() as folder:
     root=Path(folder);(root/'src/data/worlds').mkdir(parents=True)
     shutil.copytree(level_files.ROOT/'src/data/levels',root/'src/data/levels')

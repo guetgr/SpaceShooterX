@@ -13,7 +13,7 @@ def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) - {'mobs','bossTune','eventTune'} != set(original) - {'mobs','bossTune','eventTune'}: raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs','bossTune','eventTune','norma'} != set(original) - {'mobs','bossTune','eventTune','norma'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -83,6 +83,44 @@ def validate_level(d, original, root=ROOT):
             lo, hi, integer = reg[kind][key]
             if not number(v,lo,hi): raise ValueError('%s.%s : nombre entre %g et %g requis' % (at, key, lo, hi))
             if integer and v != int(v): raise ValueError('%s.%s : entier requis' % (at, key))
+    def norma_text(t, at):
+        if not isinstance(t,str) or not 1 <= len(t) <= 140: raise ValueError('%s : texte de 1 à 140 caractères requis' % at)
+        if '<' in t or '>' in t: raise ValueError('%s : les signes < et > sont interdits' % at)
+        if not t.strip(): raise ValueError('%s : texte vide' % at)
+    def check_norma(n):
+        if not isinstance(n,dict): raise ValueError('norma : objet requis')
+        allowed = {'start','boss','progress','banter','lowhp','win','lose','tickEvery','tuto','messages'}
+        for k in n:
+            if k not in allowed: raise ValueError('norma.%s : clé inconnue (permises : %s)' % (k, ', '.join(sorted(allowed))))
+        for pool in ['start','boss','progress','banter','lowhp','win','lose']:
+            if pool in n:
+                if not isinstance(n[pool],list) or not 1 <= len(n[pool]) <= 20: raise ValueError('norma.%s : liste de 1 à 20 textes requise' % pool)
+                for i, t in enumerate(n[pool]): norma_text(t, 'norma.%s[%d]' % (pool,i))
+        if 'tickEvery' in n:
+            t = n['tickEvery']
+            if not isinstance(t,list) or len(t) != 2 or not all(number(x,5,300) for x in t) or t[0] > t[1]: raise ValueError('norma.tickEvery : deux nombres de secondes entre 5 et 300, le premier inférieur ou égal au second')
+        if 'tuto' in n:
+            if not d.get('tuto'): raise ValueError('norma.tuto : réservé au tutoriel (w1-tuto)')
+            if not isinstance(n['tuto'],dict): raise ValueError('norma.tuto : objet requis')
+            for k, t in n['tuto'].items():
+                if k not in ['move','shoot','boss','aim','ring','p2','p3','win','lose']: raise ValueError('norma.tuto.%s : consigne inconnue' % k)
+                norma_text(t, 'norma.tuto.' + k)
+        if 'messages' in n:
+            if not isinstance(n['messages'],list) or len(n['messages']) > 50: raise ValueError('norma.messages : liste de 50 boîtes au plus requise')
+            ids = set()
+            for i, m in enumerate(n['messages']):
+                at = 'norma.messages[%d]' % i
+                if not isinstance(m,dict) or set(m)-{'id','when','at','ref','text','hold'}: raise ValueError(at + ' : objet avec id, when, at, ref, text, hold requis')
+                if not isinstance(m.get('id'),str) or not m['id'].strip() or len(m['id']) > 40: raise ValueError(at + '.id : identifiant de 1 à 40 caractères requis')
+                if m['id'] in ids: raise ValueError(at + '.id : identifiant « %s » déjà utilisé' % m['id'])
+                ids.add(m['id'])
+                if m.get('when') not in ['levelStart','time','eventStart','eventEnd','bossStart','win','lose']: raise ValueError(at + '.when : levelStart, time, eventStart, eventEnd, bossStart, win ou lose requis')
+                if m['when'] == 'time' and not number(m.get('at'),0,3600): raise ValueError(at + '.at : secondes entre 0 et 3600 requises')
+                if 'at' in m and not number(m['at'],0,3600): raise ValueError(at + '.at : secondes entre 0 et 3600 requises')
+                if m['when'] in ['eventStart','eventEnd'] and m.get('ref') not in events: raise ValueError(at + '.ref : nature d\'événement connue requise (lue dans src/data/events.js)')
+                if 'hold' in m and not isinstance(m['hold'],bool): raise ValueError(at + '.hold : booléen requis')
+                norma_text(m.get('text'), at + '.text')
+    if 'norma' in d: check_norma(d['norma'])
     ev_reg = event_registry()
     if 'eventTune' in d:
         if not isinstance(d['eventTune'],dict): raise ValueError('eventTune : objet requis')
@@ -95,8 +133,12 @@ def validate_level(d, original, root=ROOT):
                 if set(row)-{'type','from','w','tier'} or not {'type','from','w'} <= set(row) or row['type'] not in enemies or not number(row['from'],-1,3600) or not number(row['w'],0.01,1000) or not number(row.get('tier',1),1,4): raise ValueError('Pool invalide')
             elif kind=='waves':
                 if set(row)!={'type','at','count','spacing'} or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
-            elif set(row)-{'kind','at','duration','params'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
-            elif 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)
+            elif set(row)-{'kind','at','duration','params','norma'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
+            else:
+                if 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)
+                if 'norma' in row:
+                    if not isinstance(row['norma'],dict) or set(row['norma'])-{'start','end'}: raise ValueError('events.norma : objet avec start et/ou end requis')
+                    for k, t in row['norma'].items(): norma_text(t, 'events.norma.' + k)
     for key in ['bg','intro','boss','finalBoss','bossName']:
         if not (d[key] is None or isinstance(d[key],str)): raise ValueError(key + ' : texte ou null requis')
     if d['finalBoss'] not in [None,'meteo','araignee','reacteur','anneau','pdg']: raise ValueError('Boss final inconnu')
