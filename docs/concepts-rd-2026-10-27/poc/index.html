@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AGP — Proof of concept R&D</title>
+  <style>
+    @font-face{font-family:"SSX Label";src:url("../../../assets/fonts/ChakraPetch-600.woff2") format("woff2");font-display:swap}
+    @font-face{font-family:"SSX Text";src:url("../../../assets/fonts/ChakraPetch-400.woff2") format("woff2");font-display:swap}
+    :root{color-scheme:dark;--yellow:#ffce27;--paper:#e9d7b6;--ink:#24231f;--blue:#b8e4ef;--metal:#78877f}
+    *{box-sizing:border-box}
+    html,body{min-height:100%;margin:0}
+    body{display:grid;place-items:center;padding:24px;background:radial-gradient(circle at 50% 0,#17241f 0,#080c0b 46%,#030504 100%);color:#eef1e7;font-family:"SSX Text",monospace}
+    button{font:inherit}
+    .demo{display:grid;grid-template-columns:minmax(0,400px) 270px;gap:28px;align-items:center}
+    .phone{position:relative;width:400px;height:700px;overflow:hidden;border:1px solid #3a493f;background:#070b0c url("../../../assets/rd/runtime/dossier-background.png") center/cover no-repeat;box-shadow:0 28px 70px #000,0 0 0 7px #101714,0 0 0 8px #3a473f}
+    .phone::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(#020504c9 0 9%,transparent 17% 88%,#020504ee 96%);z-index:1}
+    .topbar{position:absolute;inset:0 0 auto;height:72px;z-index:5;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:9px 13px;border-bottom:1px solid #526052;background:linear-gradient(#0b110fed,#070b09c9);font-family:"SSX Label",monospace}
+    .brand{font-size:22px;letter-spacing:1px;color:#f5f0d5}.brand i{color:var(--yellow);font-style:normal}
+    .pilot{text-align:center;font-size:8px;letter-spacing:1.4px;color:#aab5ae}.pilot b{display:block;margin-top:3px;color:#f2e5bd;font-size:10px}
+    .parts{text-align:right;color:var(--yellow);font-size:12px}.parts small{display:block;color:#809088;font-size:6px;letter-spacing:1px}
+    .folder-head{position:absolute;left:43px;right:43px;top:526px;z-index:4;padding:7px 10px 6px;color:#342d25;background:#dfcfafed;box-shadow:0 3px 4px #0007;text-shadow:0 1px #fff8;transform:rotate(-.25deg);clip-path:polygon(0 3px,72% 0,74% 4px,100% 2px,99% 100%,28% 98%,27% 100%,1% 97%)}
+    .folder-kicker{font-family:"SSX Label";font-size:7px;letter-spacing:1.5px;color:#5a5145}
+    .folder-title{display:flex;align-items:end;justify-content:space-between;border-bottom:1px solid #7d6c55;padding:1px 0 5px;font-family:"SSX Label"}
+    .folder-title strong{font-size:12px;letter-spacing:1px}.folder-title span{font-size:8px;color:#675b4a}
+    .progress{height:3px;margin-top:5px;background:#8b765854}.progress i{display:block;height:100%;width:33%;background:#b48326;transition:width .3s ease}
+    .tabs{position:absolute;left:45px;top:112px;z-index:4;width:310px;height:56px}
+    .tab{position:absolute;top:0;width:118px;height:36px;padding:0;border:0;background:none;color:#2e291f;cursor:pointer;font-family:"SSX Label";font-size:6px;line-height:1;letter-spacing:.5px;text-align:center;transition:transform .16s ease,filter .16s ease}
+    .tab:nth-child(1){left:0;z-index:1}.tab:nth-child(2){left:47px;top:3px;z-index:2}.tab:nth-child(3){left:94px;top:6px;z-index:3}.tab:nth-child(4){left:141px;top:9px;z-index:4}.tab:nth-child(5){left:188px;top:12px;z-index:5}
+    .tab::before{content:"";position:absolute;inset:0;background:center/100% 100% no-repeat;filter:drop-shadow(0 2px 2px #0008)}
+    .tab:nth-child(1)::before{background-image:url("../../../assets/rd/tabs/runtime/tab-red.png")}.tab:nth-child(2)::before{background-image:url("../../../assets/rd/tabs/runtime/tab-ochre.png")}.tab:nth-child(3)::before{background-image:url("../../../assets/rd/tabs/runtime/tab-teal.png")}.tab:nth-child(4)::before{background-image:url("../../../assets/rd/tabs/runtime/tab-blue.png")}.tab:nth-child(5)::before{background-image:url("../../../assets/rd/tabs/runtime/tab-olive.png")}
+    .tab b,.tab span{position:absolute;z-index:1;left:13px;width:32px}.tab b{top:8px;font-size:6px}.tab span{top:17px;font-family:"SSX Text";font-size:9px;letter-spacing:0}.tab[aria-selected="true"]{transform:translateY(-5px);filter:brightness(1.18)}.tab[aria-selected="true"] b::before{content:"• ";color:#fff}.tab:focus-visible,.ticket:focus-visible{outline:2px solid #fff;outline-offset:2px}
+    .cards{position:absolute;z-index:3;inset:0;pointer-events:none;counter-reset:tech}
+    .card{position:absolute;width:270px;height:130px;margin:0;padding:19px 18px 35px 24px;border:0;background-position:center;background-size:100% 100%;background-repeat:no-repeat;color:var(--ink);filter:drop-shadow(0 2px 2px #0007);counter-increment:tech;pointer-events:auto}
+    .card.paper{background-image:url("../../../assets/rd/runtime/card-paper.png")}
+    .card.blueprint{background-image:url("../../../assets/rd/runtime/card-blueprint.png");color:var(--blue)}
+    .card.locked{padding-right:72px;background-image:url("../../../assets/rd/runtime/envelope-locked.png");color:#362c21}
+    .tree-lines{position:absolute;inset:0;z-index:2;width:400px;height:700px;pointer-events:none;overflow:visible}.tree-lines path{fill:none;stroke:#5c4936;stroke-width:1.2;stroke-dasharray:4 3;opacity:.72}.tree-lines circle{fill:#dbc28e;stroke:#5c4936;stroke-width:1.2}
+    .page-note{position:absolute;z-index:3;left:306px;width:48px;color:#455963;font:italic 8px/1.05 "Bradley Hand","Segoe Print","Comic Sans MS",cursive;letter-spacing:.1px;transform:rotate(-2deg);opacity:.86;pointer-events:none}.page-note::before{content:"←";position:absolute;left:-13px;top:8px;color:#6b5540;font-size:11px}.page-note b{display:block;margin-bottom:2px;color:#5e4532;font-size:8px;text-decoration:underline;text-decoration-thickness:1px}.page-note span{display:block}.pn-plan{top:181px}.pn-proto{top:269px;transform:rotate(1.5deg)}.pn-ranks{top:359px}.pn-spe{top:449px;transform:rotate(1deg)}
+    .identity{display:grid;grid-template-columns:27px 1fr auto;align-items:center;gap:6px;min-height:27px;border-bottom:1px solid currentColor;padding-bottom:3px}
+    .icon{display:grid;place-items:center;width:25px;height:25px;border:1px solid currentColor;background:#13201c18;font-size:15px;filter:saturate(.65)}
+    .name{font-family:"SSX Label";font-size:9px;line-height:1.1;letter-spacing:.7px}.tag{padding:3px 4px;border:1px solid currentColor;font-family:"SSX Label";font-size:5px;letter-spacing:.8px}
+    .desc{min-height:25px;margin:5px 0 4px;font-size:11px;line-height:1.02}.blueprint .desc{color:#abd0da}.locked .desc{color:#5d4d3c}
+    .meta{position:absolute;left:24px;bottom:9px;display:flex;align-items:center;gap:4px;max-width:96px;font-family:"SSX Label";font-size:4px;letter-spacing:.25px}.meta b{font-size:6px}.holes{display:flex;gap:2px;margin-left:auto}.holes i{display:block;width:6px;height:6px;border:1px solid currentColor;border-radius:50%;box-shadow:inset 1px 1px 2px #0006}.holes i.on{background:var(--yellow);border-color:#9c7110}
+    .hand-note{position:absolute;left:24px;right:18px;top:73px;height:17px;overflow:hidden;color:#435661;font:italic 9px/1.05 "Bradley Hand","Segoe Print","Comic Sans MS",cursive;letter-spacing:.1px;transform:rotate(-.5deg);opacity:.9}.hand-note::before{content:"↳ ";font-weight:700}.blueprint .hand-note{color:#82c5d3;transform:rotate(.4deg)}.locked .hand-note{right:66px;color:#674d3b}
+    .ticket{position:absolute;right:14px;bottom:8px;min-width:116px;min-height:25px;padding:3px 7px;border:1px dashed #70591f;background:#c4a44f;color:#2b2416;box-shadow:none;cursor:pointer;font-family:"SSX Label";font-size:6px;letter-spacing:.5px;text-transform:uppercase;clip-path:polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px)}.ticket small{display:block;margin-top:1px;font-family:"SSX Text";font-size:9px;letter-spacing:0}.blueprint .ticket{background:#c59a25;border-style:solid}.ticket:disabled{cursor:default;background:#7f7762;color:#3f3a2e;box-shadow:none}.ticket:not(:disabled):active{transform:translateY(1px)}
+    .locked .ticket{left:24px;right:auto;bottom:10px;min-width:132px;background:#665c49;border-color:#4d4436;color:#ddd0b8}.stamp{position:absolute;right:18px;bottom:12px;padding:4px 7px;border:2px solid #487247;color:#365d37;opacity:.74;transform:rotate(-5deg);font-family:"SSX Label";font-size:8px;letter-spacing:1px}
+    .note{position:absolute;left:24px;bottom:12px;font-family:"SSX Label";font-size:5px;color:#73634e}.blueprint .note{color:#8ab8c4}
+    .bottom{position:absolute;z-index:5;inset:auto 0 0;height:62px;display:grid;grid-template-columns:repeat(3,1fr);align-items:end;padding:0 8px 10px;background:linear-gradient(transparent,#050806 45%)}
+    .bottom button{height:35px;border:0;border-top:1px solid #506057;background:#0a100dd9;color:#87958d;font-family:"SSX Label";font-size:7px;letter-spacing:1px}.bottom button.on{border-top:3px solid var(--yellow);color:#f1e6bd;background:#151a11e8}
+    .toast{position:absolute;z-index:8;left:50%;top:82px;max-width:300px;padding:7px 12px;border:1px solid #9b7721;background:#0b100ded;color:#ffe080;font-family:"SSX Label";font-size:7px;letter-spacing:.8px;text-align:center;opacity:0;transform:translate(-50%,-7px);pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    .info{align-self:center}.info h1{margin:0 0 12px;padding-top:15px;border-top:5px solid var(--yellow);font:600 20px/1.15 "SSX Label";letter-spacing:.8px}.info p{margin:0 0 12px;color:#a8b6ad;font-size:15px;line-height:1.35}.info ul{margin:18px 0 0;padding:0;list-style:none;color:#d3d9d4;font:600 11px/1.5 "SSX Label"}.info li{padding:8px 0;border-bottom:1px solid #26332c}.info b{color:var(--yellow)}.hint{color:#76857d!important;font-size:12px!important}
+    .movable{touch-action:none}.editing .movable{cursor:grab;outline:1px dashed #ffce27;outline-offset:2px}.editing .page-note{pointer-events:auto}.editing .movable.dragging{cursor:grabbing;outline-style:solid}.editing .movable::after{content:attr(data-layout-label);position:absolute;left:2px;top:-13px;z-index:20;padding:2px 4px;background:#101511;color:#ffda55;font:6px/1 "SSX Label";letter-spacing:.4px;white-space:nowrap}.resize-handle{display:none;position:absolute;right:-5px;bottom:-5px;z-index:25;width:15px;height:15px;border:2px solid #111;background:#ffce27;cursor:nwse-resize;clip-path:polygon(100% 0,100% 100%,0 100%)}.editing .card .resize-handle{display:block}
+    .editor{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px}.editor button{min-height:35px;border:1px solid #59675f;background:#121a16;color:#d8e0da;font:7px/1.2 "SSX Label";letter-spacing:.6px;cursor:pointer}.editor button.primary{border-color:#a67c16;background:#ffce27;color:#18160f}.editor button.wide{grid-column:1/-1}.editor button.on{box-shadow:0 0 0 2px #ffce2744 inset;color:#ffdc64}.layout-output{grid-column:1/-1;width:100%;height:82px;padding:7px;border:1px solid #334038;background:#080c0a;color:#91a39a;font:10px/1.25 ui-monospace,monospace;resize:vertical}.save-note{grid-column:1/-1;margin:0!important;font-size:11px!important;color:#7f9086!important}
+    @media(max-width:760px){body{padding:0;background:#050806}.demo{display:block}.info{display:none}.phone{width:min(100vw,400px);height:min(100dvh,700px);border:0;box-shadow:none}.card{font-size:clamp(11px,3vw,12px)}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="demo">
+    <section class="phone" aria-label="Prototype interactif de l’écran R&D">
+      <header class="topbar">
+        <div class="brand">AGP<i>.</i></div>
+        <div class="pilot">DOSSIER PILOTE<b>GAËTAN</b></div>
+        <div class="parts"><small>COMPOSANTS</small><span id="parts">240</span> ◈</div>
+      </header>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      <svg class="tree-lines" id="treeLines" viewBox="0 0 400 700" aria-hidden="true"></svg>
+      <div class="page-note pn-plan movable" data-layout-id="note-plan" data-layout-label="NOTE PLAN" aria-hidden="true"><b>1 · PLAN</b><span>à récupérer pendant une mission</span></div>
+      <div class="page-note pn-proto movable" data-layout-id="note-proto" data-layout-label="NOTE PROTO" aria-hidden="true"><b>2 · PROTO</b><span>à financer avec les composants</span></div>
+      <div class="page-note pn-ranks movable" data-layout-id="note-ranks" data-layout-label="NOTE RANGS" aria-hidden="true"><b>3 · RANGS</b><span>un essai après l’autre</span></div>
+      <div class="page-note pn-spe movable" data-layout-id="note-spe" data-layout-label="NOTE SPE" aria-hidden="true"><b>4 · SPE</b><span>après validation des rangs</span></div>
+
+      <nav class="tabs movable" data-layout-id="tabs" data-layout-label="ONGLETS" aria-label="Secteurs R&D">
+        <button class="tab" data-sector="0" aria-selected="true"><b>S1</b><span>1/3</span></button>
+        <button class="tab" data-sector="1" aria-selected="false"><b>S2</b><span>1/3</span></button>
+        <button class="tab" data-sector="2" aria-selected="false"><b>S3</b><span>0/3</span></button>
+        <button class="tab" data-sector="3" aria-selected="false"><b>S4</b><span>0/2</span></button>
+        <button class="tab" data-sector="4" aria-selected="false"><b>S5</b><span>0/2</span></button>
+      </nav>
+
+      <header class="folder-head movable" data-layout-id="header" data-layout-label="EN-TÊTE">
+        <div class="folder-kicker">ARCHIVES TECHNIQUES · NIVEAU D’ACCRÉDITATION B</div>
+        <div class="folder-title"><strong id="sectorName">SECTEUR 1 · ORBITE BASSE</strong><span id="sectorCount">2 / 3</span></div>
+        <div class="progress"><i id="progress"></i></div>
+      </header>
+
+      <section class="cards" id="cards" aria-live="polite"></section>
+
+      <nav class="bottom" aria-label="Navigation principale">
+        <button>ATELIER</button><button>MISSIONS</button><button class="on">R&amp;D</button>
+      </nav>
+    </section>
+
+    <aside class="info">
+      <h1>R&amp;D — dossier de terrain</h1>
+      <p>Les trois pochettes sont reliées comme un arbre. Les notes au stylo expliquent l’essai en cours, le prochain gain ou la condition de déblocage.</p>
+      <ul>
+        <li><b>Intercalaires physiques</b> : change de secteur.</li>
+        <li><b>Plan bleu</b> : lance le prototype.</li>
+        <li><b>Pochette papier</b> : achète le rang suivant.</li>
+        <li><b>Enveloppe</b> : montre un plan à récupérer.</li>
+        <li><b>Notes manuscrites</b> : détail de la prochaine étude.</li>
+      </ul>
+      <p class="hint">Les achats sont simulés et disparaissent au rechargement de la page.</p>
+      <div class="editor" aria-label="Éditeur de placement">
+        <button class="primary wide" id="toggleEdit">ACTIVER LE PLACEMENT</button>
+        <button id="resetLayout">RÉINITIALISER</button>
+        <button id="copyLayout">COPIER LE JSON</button>
+        <button class="wide" id="saveLayout">SAUVEGARDER layout-rd.json</button>
+        <textarea class="layout-output" id="layoutOutput" readonly aria-label="Coordonnées du placement"></textarea>
+        <p class="save-note">Déplace les cadres pointillés. Tire le coin jaune d’une pochette pour la redimensionner, puis remplace `docs/concepts-rd-2026-10-27/layout-rd.json` avec le fichier sauvegardé.</p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const sectors = [
+      {
+        name:"SECTEUR 1 · ORBITE BASSE",
+        cards:[
+          {icon:"⌁",name:"LASER CONTINU",tag:"ARME",desc:"Remplace le tir standard par un faisceau perforant.",hand:"essai 04 stable — prochain gain : dégâts +15 %",state:"paper",rank:3,max:5,cost:70},
+          {icon:"◎",name:"LASER AUTO-CIBLEUR",tag:"ARME",desc:"Verrouille automatiquement l’ennemi le plus proche.",hand:"calibrer le verrouillage avant le tir multiple",state:"blueprint",rank:0,max:4,cost:30},
+          {icon:"↗",name:"MISSILES À GUIDAGE",tag:"RAMPE",desc:"Plan signalé dans le rapport de l’ordre 03.",hand:"récupérer le plan avant toute fabrication",state:"locked",rank:0,max:4,cost:0}
+        ]
+      },
+      {
+        name:"SECTEUR 2 · CHANTIER LUNAIRE",
+        cards:[
+          {icon:"◉",name:"DRONE SATELLITE",tag:"MODULE",desc:"Un drone orbite autour du véhicule et tire de manière autonome.",hand:"revoir l’alimentation — cadence +12 % au prochain rang",state:"paper",rank:1,max:4,cost:90},
+          {icon:"✹",name:"MISSILES DE DÉMOLITION",tag:"RAMPE",desc:"Rampe lourde conçue pour briser les formations denses.",hand:"essai prévu : augmenter le rayon d’explosion",state:"blueprint",rank:0,max:4,cost:60},
+          {icon:"▰",name:"BLINDAGE LOURD",tag:"CHÂSSIS",desc:"Autorisation liée à la neutralisation de l’ordre 08.",hand:"échantillon retenu par le contrôle du secteur",state:"locked",rank:0,max:5,cost:0}
+        ]
+      },
+      {
+        name:"SECTEUR 3 · CEINTURE ROUGE",
+        cards:[
+          {icon:"⚡",name:"ARC ÉLECTRIQUE",tag:"MODULE",desc:"Décharge en chaîne entre plusieurs cibles proches.",hand:"isoler la bobine — ajouter un arc après validation",state:"blueprint",rank:0,max:3,cost:100},
+          {icon:"◇",name:"CANON EXPÉRIMENTAL",tag:"ARME",desc:"Dossier classé. Signature du commandement nécessaire.",hand:"signature du commandement toujours manquante",state:"locked",rank:0,max:4,cost:0},
+          {icon:"◌",name:"PULSAR",tag:"DÉFENSE",desc:"Le signal du prototype n’a pas encore été localisé.",hand:"chercher la fréquence dans les relevés de mission",state:"locked",rank:0,max:3,cost:0}
+        ]
+      },
+      {
+        name:"SECTEUR 4 · ZONE INTERDITE",
+        cards:[
+          {icon:"◉",name:"TROU NOIR",tag:"ANOMALIE",desc:"Archive scellée. Secteur non cartographié par l’AGP.",hand:"ne pas ouvrir sans relevé gravitationnel complet",state:"locked",rank:0,max:2,cost:0},
+          {icon:"✦",name:"ÉCLATS",tag:"ARME",desc:"Rapport incomplet. Origine du plan encore inconnue.",hand:"retrouver le fragment témoin dans les archives",state:"locked",rank:0,max:2,cost:0}
+        ]
+      },
+      {
+        name:"SECTEUR 5 · PROTOCOLE NOIR",
+        cards:[
+          {icon:"↺",name:"CONTRAT DE RAPATRIEMENT",tag:"CLASSÉ",desc:"Autorisation du commandement requise avant consultation.",hand:"protocole de retour : deuxième charge à confirmer",state:"locked",rank:0,max:3,cost:0},
+          {icon:"▧",name:"DOSSIER OMÉGA",tag:"CLASSÉ",desc:"Contenu effacé des archives de terrain.",hand:"copie papier absente — vérifier le coffre AGP",state:"locked",rank:0,max:1,cost:0}
+        ]
+      }
+    ];
+
+    let activeSector = 0;
+    let components = 240;
+    const cardsEl = document.getElementById("cards");
+    const partsEl = document.getElementById("parts");
+    const toastEl = document.getElementById("toast");
+    const phoneEl = document.querySelector(".phone");
+    const outputEl = document.getElementById("layoutOutput");
+    const treeLinesEl = document.getElementById("treeLines");
+    let toastTimer;
+    let editing = false;
+
+    const DEFAULT_LAYOUT = {
+      header:{x:43,y:526,w:314,h:69},
+      tabs:{x:45,y:112,w:310,h:56},
+      "card-0":{x:52,y:166,w:250,h:118},
+      "card-1":{x:52,y:286,w:250,h:118},
+      "card-2":{x:52,y:406,w:250,h:118},
+      "note-plan":{x:306,y:181,w:48,h:51},
+      "note-proto":{x:306,y:269,w:48,h:51},
+      "note-ranks":{x:306,y:359,w:48,h:43},
+      "note-spe":{x:306,y:449,w:48,h:43}
+    };
+
+    function loadLayout(){
+      try{return {...DEFAULT_LAYOUT,...JSON.parse(localStorage.getItem("agp-rd-layout-v4") || "{}")}}
+      catch(_){return structuredClone(DEFAULT_LAYOUT)}
+    }
+
+    let layout = loadLayout();
+
+    function applyLayout(){
+      document.querySelectorAll("[data-layout-id]").forEach(el=>{
+        const pos = layout[el.dataset.layoutId];
+        if(!pos) return;
+        el.style.left = pos.x + "px";
+        el.style.top = pos.y + "px";
+        el.style.width = pos.w + "px";
+        if(pos.h) el.style.height = pos.h + "px";
+        if(el.classList.contains("folder-head")) el.style.right = "auto";
+      });
+      updateLayoutOutput();
+    }
+
+    function currentLayout(){
+      const items = structuredClone(layout);
+      document.querySelectorAll("[data-layout-id]").forEach(el=>{
+        items[el.dataset.layoutId] = {
+          x:Math.round(el.offsetLeft),y:Math.round(el.offsetTop),
+          w:Math.round(el.offsetWidth),h:Math.round(el.offsetHeight)
+        };
+      });
+      return {version:4,canvas:{width:400,height:700},items};
+    }
+
+    function updateLayoutOutput(){
+      if(!outputEl) return;
+      outputEl.value = JSON.stringify(currentLayout(),null,2);
+      drawTreeLines();
+    }
+
+    function drawTreeLines(){
+      const cards = [...document.querySelectorAll(".card")];
+      const tabs = document.querySelector(".tabs");
+      if(!cards.length || !tabs) return;
+      const rootX = Math.max(48,Math.min(...cards.map(card=>card.offsetLeft)) - 11);
+      const startY = tabs.offsetTop + tabs.offsetHeight - 8;
+      const centers = cards.map(card=>Math.round(card.offsetTop + card.offsetHeight / 2));
+      const paths = [`M ${rootX} ${startY} L ${rootX} ${centers.at(-1)}`];
+      centers.forEach((y,index)=>paths.push(`M ${rootX} ${y} L ${cards[index].offsetLeft + 3} ${y}`));
+      treeLinesEl.innerHTML = `<path d="${paths.join(" ")}"></path>` + centers.map(y=>`<circle cx="${rootX}" cy="${y}" r="3"></circle>`).join("");
+    }
+
+    function commitLayout(){
+      layout = currentLayout().items;
+      try{localStorage.setItem("agp-rd-layout-v4",JSON.stringify(layout))}catch(_){}
+      updateLayoutOutput();
+    }
+
+    function pips(card){
+      return Array.from({length:card.max},(_,i)=>`<i class="${i<card.rank?"on":""}"></i>`).join("");
+    }
+
+    function cardHtml(card,index){
+      const complete = card.state === "paper" && card.rank >= card.max;
+      const locked = card.state === "locked";
+      const label = locked ? "PLAN À RÉCUPÉRER" : card.state === "blueprint" ? "FABRIQUER LE PROTOTYPE" : complete ? "DOSSIER CLOS" : `RANG ${card.rank+1}/${card.max}`;
+      const sub = locked ? "Consulter les missions" : complete ? "Toutes les études sont validées" : `${card.cost} ◈`;
+      return `<article class="card ${card.state} movable" data-card="${index}" data-layout-id="card-${index}" data-layout-label="POCHETTE ${index+1}">
+        <div class="identity"><span class="icon">${card.icon}</span><strong class="name">${card.name}</strong><span class="tag">${card.tag}</span></div>
+        <p class="desc">${card.desc}</p>
+        <span class="hand-note">${card.hand}</span>
+        ${locked ? "" : `<div class="meta"><span>PLAN <b>OUI</b></span><span>PROTO <b>${card.state === "paper" ? "OUI" : "NON"}</b></span><span class="holes">${pips(card)}</span></div>`}
+        ${complete ? `<span class="stamp">VALIDÉ</span>` : `<button class="ticket" ${locked ? "disabled" : ""} data-action="${index}">${label}<small>${sub}</small></button>`}
+        <i class="resize-handle" aria-hidden="true"></i>
+      </article>`;
+    }
+
+    function render(){
+      const sector = sectors[activeSector];
+      cardsEl.innerHTML = sector.cards.map(cardHtml).join("");
+      const ready = sector.cards.filter(card=>card.state === "paper").length;
+      document.getElementById("sectorName").textContent = sector.name;
+      document.getElementById("sectorCount").textContent = `${ready} / ${sector.cards.length}`;
+      document.getElementById("progress").style.width = `${ready / sector.cards.length * 100}%`;
+      document.querySelectorAll(".tab").forEach((tab,i)=>{
+        tab.setAttribute("aria-selected",String(i === activeSector));
+        const got = sectors[i].cards.filter(card=>card.state === "paper").length;
+        tab.querySelector("span").textContent = `${got}/${sectors[i].cards.length}`;
+      });
+      partsEl.textContent = components;
+      applyLayout();
+    }
+
+    function toast(message){
+      toastEl.textContent = message;
+      toastEl.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=>toastEl.classList.remove("show"),1800);
+    }
+
+    document.querySelector(".tabs").addEventListener("click",event=>{
+      if(editing) return;
+      const tab = event.target.closest(".tab");
+      if(!tab) return;
+      activeSector = Number(tab.dataset.sector);
+      cardsEl.scrollTop = 0;
+      render();
+    });
+
+    cardsEl.addEventListener("click",event=>{
+      if(editing) return;
+      const button = event.target.closest("[data-action]");
+      if(!button) return;
+      const card = sectors[activeSector].cards[Number(button.dataset.action)];
+      if(components < card.cost){toast("COMPOSANTS INSUFFISANTS");return}
+      components -= card.cost;
+      if(card.state === "blueprint"){
+        card.state = "paper";
+        card.rank = 1;
+        card.cost += 25;
+        toast("PROTOTYPE AJOUTÉ AU DOSSIER");
+      }else{
+        card.rank += 1;
+        card.cost += 15;
+        toast(card.rank >= card.max ? "ÉTUDE VALIDÉE" : "RANG AUTORISÉ");
+      }
+      render();
+    });
+
+    phoneEl.addEventListener("pointerdown",event=>{
+      if(!editing) return;
+      const item = event.target.closest(".movable");
+      if(!item) return;
+      event.preventDefault();
+      event.stopPropagation();
+      item.classList.add("dragging");
+      const resize = !!event.target.closest(".resize-handle");
+      const start = {
+        px:event.clientX,py:event.clientY,x:item.offsetLeft,y:item.offsetTop,
+        w:item.offsetWidth,h:item.offsetHeight
+      };
+      const scale = phoneEl.getBoundingClientRect().width / phoneEl.offsetWidth;
+
+      function move(moveEvent){
+        const dx = (moveEvent.clientX - start.px) / scale;
+        const dy = (moveEvent.clientY - start.py) / scale;
+        if(resize && item.classList.contains("card")){
+          const width = Math.max(220,Math.min(320,Math.round(start.w + dx)));
+          item.style.width = width + "px";
+          item.style.height = Math.round(width * .48) + "px";
+        }else{
+          const x = Math.max(0,Math.min(400 - item.offsetWidth,Math.round(start.x + dx)));
+          const y = Math.max(74,Math.min(638 - item.offsetHeight,Math.round(start.y + dy)));
+          item.style.left = x + "px";
+          item.style.top = y + "px";
+        }
+        updateLayoutOutput();
+      }
+
+      function end(){
+        item.classList.remove("dragging");
+        window.removeEventListener("pointermove",move);
+        window.removeEventListener("pointerup",end);
+        commitLayout();
+      }
+
+      window.addEventListener("pointermove",move);
+      window.addEventListener("pointerup",end,{once:true});
+    });
+
+    document.getElementById("toggleEdit").addEventListener("click",event=>{
+      editing = !editing;
+      phoneEl.classList.toggle("editing",editing);
+      event.currentTarget.classList.toggle("on",editing);
+      event.currentTarget.textContent = editing ? "TERMINER LE PLACEMENT" : "ACTIVER LE PLACEMENT";
+      updateLayoutOutput();
+    });
+
+    document.getElementById("resetLayout").addEventListener("click",()=>{
+      layout = structuredClone(DEFAULT_LAYOUT);
+      localStorage.removeItem("agp-rd-layout-v4");
+      applyLayout();
+      toast("PLACEMENT RÉINITIALISÉ");
+    });
+
+    document.getElementById("copyLayout").addEventListener("click",async()=>{
+      const value = JSON.stringify(currentLayout(),null,2);
+      try{await navigator.clipboard.writeText(value)}
+      catch(_){outputEl.select();document.execCommand("copy")}
+      toast("COORDONNÉES COPIÉES");
+    });
+
+    document.getElementById("saveLayout").addEventListener("click",async()=>{
+      const value = JSON.stringify(currentLayout(),null,2);
+      try{
+        if(window.showSaveFilePicker){
+          const handle = await showSaveFilePicker({
+            suggestedName:"layout-rd.json",
+            types:[{description:"Configuration JSON",accept:{"application/json":[".json"]}}]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(value);
+          await writable.close();
+        }else{
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(new Blob([value],{type:"application/json"}));
+          link.download = "layout-rd.json";
+          link.click();
+          URL.revokeObjectURL(link.href);
+        }
+        toast("PLACEMENT SAUVEGARDÉ");
+      }catch(error){if(error.name !== "AbortError") toast("ÉCHEC DE LA SAUVEGARDE")}
+    });
+
+    render();
+  </script>
+</body>
+</html>

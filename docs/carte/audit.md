@@ -40,12 +40,16 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
+- `tools/editor/level-document.js` — (script ponctuel, sans description)
+- `tools/editor/timeline.js` — (script ponctuel, sans description)
 - `tools/gen_codemap.py` — Génère la carte du code dans docs/carte/ (rien à installer : Python 3 seul).
 - `tools/gen_manifest.py` — Régénère assets/manifest.json à partir du contenu de assets/ (à lancer après avoir ajouté/supprimé un fichier).
 - `tools/gen_ui_icons.py` — Dessine les icônes d'interface en pixel art (12x12, contour sombre) et les écrit dans assets/sprites/ui_*.png, puis relance gen_manifest.py.
 - `tools/home_test.py` — Test headless de l'accueil : pages (glisser, onglets), paramètres, arbre, retour. python tools/home_test.py
 - `tools/import_decors_carte.py` — Importe les décors de la carte du monde livrés en PNG à fond transparent : planètes des mondes 2 et 3, nuages de la Terre, satellite en orbite
 - `tools/import_sprites_niveaux.py` — Importe les icônes de niveaux livrées en PNG (256x256, fond transparent) : PNG RGBA -> assets/sprites/*.webp, puis relance gen_manifest.py. (Planètes,
+- `tools/level_files.py` — Niveaux JSON : lecture, validation et cache JS pour scripts classiques/builds.
+- `tools/level_files_test.py` — Validation et export des missions JSON dans un dossier temporaire.
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 - `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
@@ -55,6 +59,8 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/sim_balance.py` — Simulateur d'équilibrage des niveaux : un joueur automatique joue les niveaux en avance rapide (~60x le temps réel), sans affichage ni son.
 - `tools/smoke_test.py` — Test de fumée headless : charge le jeu, lance une partie, vérifie qu'il n'y a aucune erreur JS.
 - `tools/techs_test.py` — Technologies en mission : le chargement remplace l'arbre. Rien n'est actif au départ ; chaque technologie emportée s'ASSEMBLE par une carte
+- `tools/timeline_export_test.py` — Vérifie l'export HTTP dans un dossier temporaire, sans toucher aux réglages du jeu.
+- `tools/timeline_test.js` — Contrat des vagues : application, remise à zéro, temps, redémarrage et saturation.
 
 ## Documents (`docs/`, racine)
 
@@ -91,9 +97,11 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/concepts-hud-2026-10-27/prompt-hud-bureaucratique.md` — HUD — fiche de service AGP
 - `docs/concepts-hud-2026-10-27/prompt-hud-minimal.md` — HUD minimal
 - `docs/concepts-hud-2026-10-27/prompt-hud-simple.md` — HUD sobre — barres de référence
+- `docs/concepts-rd-2026-10-27/direction-rd-cartes.md` — R&D — le dossier de cartes techniques
+- `docs/concepts-rd-2026-10-27/implementation-sprites-rd.md` — R&D — plan d’intégration et découpage des sprites
 - `docs/deroule-partie-complete.md` — Space Shooter X — déroulé d'UNE partie complète (alerte 1 → alerte 26 = boss final)
 - `docs/direction-artistique-agp.md` — Direction artistique « AGP-OS » — première proposition
-- `docs/editeur-niveaux.md` — Éditeur de niveaux
+- `docs/editeur-niveaux.md` — Éditeur des missions — timeline et JSON
 - `docs/menu-accueil.md` — Menu d'accueil, mondes et progression
 - `docs/musique-suno.md` — Space Shooter X — cahier des charges de la musique (pour Suno)
 - `docs/niveaux-alerte.md` — Space Shooter X — ce que fait le jeu à CHAQUE niveau d'alerte (relevé dans le code)
@@ -105,6 +113,8 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée
 - `docs/suno-prompts.md` — Space Shooter X — les prompts Suno (version finale : 22 prompts = 44 morceaux pour 42 pistes)
 - `docs/superpowers/plans/2026-10-27-atelier-v3.md` — Étape 2 — sauvegarde v3 et atelier à six postes : plan d'implémentation
+- `docs/superpowers/plans/2026-10-27-plans-pieces.md` — Étape 4 — plans de technologie et pièces de secteur lâchés en mission : plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-rd-emplacements.md` — Étape 3 — R&D par technologie, emplacements, chargement et assemblage en mission : plan d'implémentation
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées
+- `docs/superpowers/specs/2026-10-28-level-builder.md` — Space Shooter X — Spécification du Level Builder

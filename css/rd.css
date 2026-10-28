@@ -1,23 +1,99 @@
-/* Page R&D (page de droite de l'accueil) : fiches de technologies, dans le repère logique 400 × 700. */
-.ttab .tt-s{ font-size:9px; letter-spacing:1px; }
-.ttab.locked{ opacity:.45; }
-.rdcard{ position:relative; display:flex; flex-direction:column; gap:6px; margin:0 0 8px; padding:9px; background:rgba(12,18,15,.94); border:1px solid #243029; }
-.rdcard.aff{ border-color:var(--agp-yellow,#ffce27); }
-.rdcard.noplan{ opacity:.78; }
-.rd-head{ display:flex; align-items:center; gap:7px; }
-.rd-ic{ flex:0 0 auto; display:inline-flex; }
-.rd-nm{ flex:1; font-size:8px; letter-spacing:1px; color:#eef1e7; }
-.rd-tag{ font-size:6px; padding:3px 5px; background:#3b3220; color:var(--agp-yellow,#ffce27); }
-.rd-desc{ font-family:var(--vt); font-size:15px; line-height:1.05; color:#a9bdb0; }
-.rd-st{ display:flex; flex-wrap:wrap; align-items:center; gap:3px 10px; font-family:var(--vt); font-size:14px; line-height:1; color:#82978b; }
-.rd-st b{ font-weight:400; color:#cddbd1; }
-.rd-pips{ display:inline-flex; gap:2px; }
-.rd-pips i{ width:7px; height:7px; border:1px solid #46584b; background:#142019; }
-.rd-pips i.f{ background:#ffce27; border-color:#ffce27; }
-.rd-buy{ width:100%; min-height:44px; display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:2px 6px; padding:6px 8px; border:0; background:#ffce27; color:#152019; font-size:7px; text-align:center; }
-.rd-buy small{ flex-basis:100%; font-family:var(--vt); font-size:13px; line-height:1; }
-.rd-buy:disabled{ background:#26352d; color:#7f9387; }
-.rd-buy .uii{ vertical-align:middle; }
-.rd-locked{ padding:26px 10px; text-align:center; font-size:9px; letter-spacing:2px; color:#c08a5a; }
-.rd-locked small{ display:block; margin-top:8px; font-family:var(--vt); font-size:15px; letter-spacing:0; color:#82978b; }
-@media (prefers-reduced-motion: reduce){ .rdcard{ transition:none; } }
+/* Catalogue R&D — cahier de terrain, repère logique 400 × 700. */
+#pageTree{
+  position:relative; display:block; padding:0; overflow:hidden; text-align:left; color:#24231f;
+  background:#080b0a url('../assets/rd/runtime/dossier-background.png') center top/400px 700px no-repeat;
+  --rd-paper:#e9d7b6; --rd-ink:#24231f; --rd-blue:#b8e4ef;
+}
+#pageTree::after{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:linear-gradient(#020504b8 0 9%,transparent 17% 88%,#020504e8 99%);
+}
+
+/* Placement validé dans layout-rd.json v4. */
+.tree-tabs{ position:absolute; z-index:5; left:45px; top:112px; width:310px; height:56px; margin:0; padding:0; overflow:visible; pointer-events:auto; }
+.ttab{
+  position:absolute; top:0; width:47px; height:36px; padding:0; border:0; background:none; color:#2e291f; opacity:1;
+  display:block; text-align:center; font-family:var(--px); font-size:6px; line-height:1; letter-spacing:.5px;
+  transition:transform .16s ease,filter .16s ease;
+}
+.ttab:nth-child(1){ left:0; z-index:1; --tab:var(--rd-tab-red); }
+.ttab:nth-child(2){ left:47px; top:3px; z-index:2; --tab:var(--rd-tab-ochre); }
+.ttab:nth-child(3){ left:94px; top:6px; z-index:3; --tab:var(--rd-tab-teal); }
+.ttab:nth-child(4){ left:141px; top:9px; z-index:4; --tab:var(--rd-tab-blue); }
+.ttab:nth-child(5){ left:188px; top:12px; z-index:5; --tab:var(--rd-tab-olive); }
+.ttab:last-child{ width:118px; }
+.ttab::before{ content:''; position:absolute; left:0; top:0; width:118px; height:36px; z-index:-1; background:var(--tab) center/100% 100% no-repeat; filter:drop-shadow(0 2px 2px #0008); }
+.ttab .tt-s,.ttab .tt-p{ position:absolute; left:13px; width:32px; color:inherit; }
+.ttab .tt-s{ top:8px; font-size:6px; letter-spacing:.4px; }
+.ttab .tt-p{ top:17px; font-family:var(--vt); font-size:9px; line-height:1; }
+.ttab.on{ transform:translateY(-5px); filter:brightness(1.18); color:#211e18; background:none; border:0; box-shadow:none; }
+.ttab.on .tt-s::before{ content:'• '; color:#fff; }
+.ttab.locked{ opacity:.58; filter:saturate(.35) brightness(.72); }
+.tt-dot{ position:absolute; top:3px; left:40px; width:6px; height:6px; background:#fff5bc; border:1px solid #5e4919; box-shadow:0 0 5px #fff5bc; transform:rotate(45deg); animation:ttDot 1.3s ease-in-out infinite; }
+
+.tree-scroll{
+  position:absolute; z-index:3; left:41px; top:166px; width:261px; height:358px; padding:0 0 0 11px;
+  overflow-x:visible; overflow-y:auto; touch-action:pan-y; pointer-events:auto; scrollbar-width:none; scroll-snap-type:y proximity;
+}
+.tree-scroll::-webkit-scrollbar{ display:none; }
+.rdcard{
+  position:relative; box-sizing:border-box; display:block; flex:none; width:250px; height:118px; margin:0 0 2px; padding:17px 16px 31px 22px;
+  border:0; color:var(--rd-ink); background-position:center; background-size:100% 100%; background-repeat:no-repeat;
+  filter:drop-shadow(0 2px 2px #0007); scroll-snap-align:start; overflow:visible;
+}
+.rdcard.paper,.rdcard.proto{ background-image:var(--rd-card-paper); }
+.rdcard.blueprint,.rdcard.plan{ color:#9fd5e2; background-image:var(--rd-card-blueprint); }
+.rdcard.locked,.rdcard.noplan{ padding-right:62px; color:#362c21; background-image:var(--rd-card-locked); opacity:1; }
+.rdcard.aff{ filter:drop-shadow(0 2px 2px #0007) drop-shadow(0 0 4px rgba(255,206,39,.42)); }
+.rd-head{ display:grid; grid-template-columns:25px minmax(0,1fr) auto; align-items:center; gap:6px; min-height:25px; padding-bottom:3px; border-bottom:1px solid currentColor; }
+.rd-ic{ display:grid; place-items:center; width:25px; height:25px; border:1px solid currentColor; background:#13201c18; overflow:hidden; }
+.rd-ic img{ width:21px!important; height:21px!important; }
+.rd-nm{ min-width:0; color:inherit; font-family:var(--px); font-size:7.5px; line-height:1.1; letter-spacing:.5px; }
+.rd-tag{ padding:3px 4px; border:1px solid currentColor; color:inherit; background:none; font-family:var(--px); font-size:5px; letter-spacing:.5px; }
+.rd-desc{ height:23px; margin:4px 0 0; overflow:hidden; color:inherit; font-family:var(--vt); font-size:10.5px; line-height:1.02; }
+.blueprint .rd-desc{ color:#abd0da; }.locked .rd-desc{ display:none; }
+.rd-hand{ position:absolute; left:22px; right:16px; top:68px; height:15px; overflow:hidden; color:#435661; font:italic 8px/1.05 'Bradley Hand','Segoe Print','Comic Sans MS',cursive; transform:rotate(-.5deg); opacity:.92; }
+.rd-hand::before{ content:'↳ '; font-weight:700; }
+.blueprint .rd-hand{ color:#82c5d3; transform:rotate(.4deg); }.locked .rd-hand{ right:60px; color:#674d3b; }
+.rd-st{ position:absolute; left:22px; bottom:8px; display:flex; align-items:center; gap:4px; max-width:101px; color:#73634e; font-family:var(--px); font-size:4px; line-height:1; letter-spacing:.2px; }
+.blueprint .rd-st{ color:#8ab8c4; }.locked .rd-st{ display:none; }
+.rd-st b{ color:inherit; font-size:5px; font-weight:700; }
+.rd-pips{ display:flex; gap:1px; margin-left:1px; }
+.rd-pips i{ width:4px; height:4px; border:1px solid currentColor; border-radius:50%; background:transparent; }
+.rd-pips i.f{ border-color:#9c7110; background:#ffce27; }
+.rd-buy{
+  position:absolute; right:13px; bottom:7px; width:116px; min-height:24px; padding:3px 6px; border:1px dashed #70591f;
+  display:block; background:#c4a44f; color:#2b2416; font-family:var(--px); font-size:5.5px; line-height:1.15; letter-spacing:.35px; text-align:center;
+  clip-path:polygon(4px 0,100% 0,100% calc(100% - 4px),calc(100% - 4px) 100%,0 100%,0 4px);
+}
+.rd-buy small{ display:block; margin-top:1px; font-family:var(--vt); font-size:8px; line-height:1; letter-spacing:0; }
+.blueprint .rd-buy{ background:#c59a25; border-style:solid; }
+.locked .rd-buy{ left:22px; right:auto; width:132px; background:#665c49; border-color:#4d4436; color:#ddd0b8; }
+.rd-buy:disabled{ cursor:default; background:#7f7762; color:#3f3a2e; opacity:1; }
+.rd-stamp{ position:absolute; right:17px; bottom:11px; padding:4px 7px; border:2px solid #487247; color:#365d37; opacity:.74; transform:rotate(-5deg); font-family:var(--px); font-size:7px; letter-spacing:1px; }
+
+.rd-tree-lines{ position:absolute; inset:0; z-index:2; width:400px; height:700px; pointer-events:none; }
+.rd-tree-lines path{ fill:none; stroke:#5c4936; stroke-width:1.2; stroke-dasharray:4 3; opacity:.72; }
+.rd-tree-lines circle{ fill:#dbc28e; stroke:#5c4936; stroke-width:1.2; }
+.rd-page-note{ position:absolute; z-index:4; left:306px; width:48px; color:#455963; font:italic 8px/1.05 'Bradley Hand','Segoe Print','Comic Sans MS',cursive; letter-spacing:.1px; transform:rotate(-2deg); opacity:.88; pointer-events:none; }
+.rd-page-note::before{ content:'←'; position:absolute; left:-13px; top:8px; color:#6b5540; font-size:11px; }
+.rd-page-note b{ display:block; margin-bottom:2px; color:#5e4532; font-size:8px; text-decoration:underline; text-decoration-thickness:1px; }
+.rd-page-note span{ display:block; }
+.rd-note-plan{ top:181px; height:51px; }.rd-note-proto{ top:269px; height:51px; transform:rotate(1.5deg); }
+.rd-note-ranks{ top:359px; height:43px; }.rd-note-spe{ top:449px; height:43px; transform:rotate(1deg); }
+
+.tree-bhead{
+  position:absolute; z-index:4; left:43px; top:526px; width:314px; height:69px; display:block; padding:7px 10px 6px;
+  color:#342d25; background:#dfcfafed; box-shadow:0 3px 4px #0007; text-shadow:0 1px #fff8; transform:rotate(-.25deg);
+  clip-path:polygon(0 3px,72% 0,74% 4px,100% 2px,99% 100%,28% 98%,27% 100%,1% 97%);
+}
+.tree-bhead > u{ display:block; color:#5a5145; text-decoration:none; font-family:var(--px); font-size:6px; line-height:1.1; letter-spacing:1.1px; }
+.tree-sector{ display:flex; align-items:end; justify-content:space-between; gap:8px; padding:2px 0 5px; border-bottom:1px solid #7d6c55; }
+#treeBName{ min-width:0; overflow:hidden; color:#342d25; font-family:var(--px); font-size:10px; line-height:1.05; letter-spacing:.6px; text-shadow:0 1px #fff8; white-space:nowrap; text-overflow:ellipsis; }
+#treeBProg{ flex:none; color:#675b4a; font-family:var(--px); font-size:7px; font-weight:400; }
+.tree-bbar{ height:3px; margin-top:5px; background:#8b765854; }
+.tree-bbar i{ display:block; height:100%; width:0; background:#b48326; box-shadow:none; transition:width .3s ease; }
+.rd-locked{ position:absolute; left:11px; top:35px; width:250px; padding:28px 14px; color:#6b422e; background:#d9c59d; border:1px solid #735d43; text-align:center; font-family:var(--px); font-size:8px; letter-spacing:1px; transform:rotate(-1deg); box-shadow:0 3px 5px #0006; }
+.rd-locked small{ display:block; margin-top:8px; color:#4e4a3f; font-family:var(--vt); font-size:13px; line-height:1.05; letter-spacing:0; }
+
+@media(prefers-reduced-motion:reduce){ .ttab,.tree-bbar i,.rdcard{ transition:none; scroll-behavior:auto; } }

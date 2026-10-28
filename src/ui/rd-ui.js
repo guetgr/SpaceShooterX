@@ -30,20 +30,35 @@ mixin(GameScene, {
     const e = rdEntry(meta, t.id), max = techMaxRang(t), b = this.rdButton(meta, t);
     let pips = ''; for (let k = 1; k <= max; k++) pips += '<i class="' + (k <= e.rang ? 'f' : '') + '"></i>';
     const state = !e.plan ? 'noplan' : !e.proto ? 'plan' : 'proto';
-    return '<div class="rdcard ' + state + (b.can ? ' aff' : '') + '" data-tech="' + t.id + '"><div class="rd-head"><span class="rd-ic">' + pxImg(t.icon, 24) + '</span><b class="rd-nm">' + t.name + '</b>' + (t.tag ? '<span class="rd-tag">' + t.tag + '</span>' : '') + '</div>' +
+    const paper = !e.plan ? 'locked' : !e.proto ? 'blueprint' : 'paper';
+    const next = e.rang < max ? rdUpgradeAt(t, e.rang + 1) : null;
+    const level = t.plan && levelById(t.plan);
+    const hand = !e.plan ? 'récupérer le plan' + (level ? ' dans « ' + level.name.toLowerCase() + ' »' : ' pendant une mission') :
+      !e.proto ? 'plan classé — financer le prototype avant les essais' : next ? 'essai ' + String(e.rang + 1).padStart(2, '0') + ' — prochain gain : ' + next.name.toLowerCase() :
+      e.spe ? 'dossier validé — prêt pour le chargement' : t.spe ? 'rangs validés — spécialisation : ' + t.spe.name.toLowerCase() : 'rangs validés — spécialisation encore en conception';
+    return '<article class="rdcard ' + state + ' ' + paper + (b.can ? ' aff' : '') + '" data-tech="' + t.id + '"><div class="rd-head"><span class="rd-ic">' + pxImg(t.icon, 24) + '</span><b class="rd-nm">' + t.name + '</b>' + (t.tag ? '<span class="rd-tag">' + t.tag + '</span>' : '') + '</div>' +
       '<div class="rd-desc">' + t.desc + '</div>' +
-      '<div class="rd-st"><span>PLAN <b>' + (e.plan ? 'OUI' : 'NON') + '</b></span><span>PROTOTYPE <b>' + (e.proto ? 'OUI' : 'NON') + '</b></span><span class="rd-pips">' + pips + '</span><span>SPE <b>' + (e.spe ? 'OUI' : (t.spe ? 'NON' : '—')) + '</b></span></div>' +
-      '<button class="rd-buy"' + (b.can ? '' : ' disabled') + ' data-what="' + (b.what || '') + '">' + b.html + '</button></div>';
+      '<span class="rd-hand">' + hand + '</span>' +
+      '<div class="rd-st"><span>PLAN <b>' + (e.plan ? 'OUI' : 'NON') + '</b></span><span>PROTO <b>' + (e.proto ? 'OUI' : 'NON') + '</b></span><span class="rd-pips">' + pips + '</span></div>' +
+      '<button class="rd-buy"' + (b.can ? '' : ' disabled') + ' data-what="' + (b.what || '') + '">' + b.html + '</button>' + (e.spe ? '<span class="rd-stamp">VALIDE</span>' : '') + '</article>';
   },
 
   renderRd(){
     const meta = this.meta = getMeta(), world = this.rdWorld(), idx = WORLDS.indexOf(world) + 1;
-    document.getElementById('pageTree').style.setProperty('--c', '#ffd76a');
+    const page = document.getElementById('pageTree');
+    page.style.setProperty('--c', '#ffd76a');
+    const art = document.documentElement;
+    if (!art.style.getPropertyValue('--rd-card-paper')){
+      art.style.setProperty('--rd-card-paper', 'url("' + asset('rd/runtime/card-paper.png') + '")');
+      art.style.setProperty('--rd-card-blueprint', 'url("' + asset('rd/runtime/card-blueprint.png') + '")');
+      art.style.setProperty('--rd-card-locked', 'url("' + asset('rd/runtime/envelope-locked.png') + '")');
+      ['red','ochre','teal','blue','olive'].forEach(c=> art.style.setProperty('--rd-tab-' + c, 'url("' + asset('rd/tabs/runtime/tab-' + c + '.png') + '")'));
+    }
     document.getElementById('treeTabs').innerHTML = WORLDS.map((w, i)=>{
       const open = isWorldUnlocked(w.id), list = TECHS.filter(t=> t.sector === i + 1 && techAvailable(t));
       const buy = open && list.some(t=>{ const s = rdNextStep(meta, t.id); return s && rdCanBuy(meta, t.id, s).ok; });
       const got = list.filter(t=> rdEntry(meta, t.id).proto).length;
-      return '<button class="ttab' + (w === world ? ' on' : '') + (open ? '' : ' locked') + '" style="--c:#ffd76a" data-id="' + w.id + '"><span class="tt-s">S' + (i + 1) + '</span><span class="tt-p">' + (open ? got + '/' + list.length : uiIco('lock')) + '</span>' + (buy ? '<i class="tt-dot"></i>' : '') + '</button>';
+      return '<button class="ttab' + (w === world ? ' on' : '') + (open ? '' : ' locked') + '" data-id="' + w.id + '" aria-pressed="' + (w === world) + '"><span class="tt-s">S' + (i + 1) + '</span><span class="tt-p">' + (open ? got + '/' + list.length : uiIco('lock')) + '</span>' + (buy ? '<i class="tt-dot"></i>' : '') + '</button>';
     }).join('');
     document.getElementById('treeBName').textContent = 'SECTEUR ' + idx + ' · ' + world.name;
     document.getElementById('treeBSub').textContent = this._rdNote || 'Catalogue R&D';
