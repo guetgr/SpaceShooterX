@@ -4,14 +4,14 @@
 
 > **Refonte de la progression (branche `progression-agp`, fusionnée dans `main` le 28 oct. 2026)** : design `docs/superpowers/specs/2026-10-27-progression-design.md`, plan `docs/superpowers/plans/2026-10-27-progression-agp.md`. Étapes 1 (composants visibles), 2 (sauvegarde v3 + atelier, plan `docs/superpowers/plans/2026-10-27-atelier-v3.md`), 3 (R&D par technologie, baies d'équipement, assemblage en mission, plan `docs/superpowers/plans/2026-10-27-rd-emplacements.md`) et 6a (textes des secteurs 2 et 3) faites ; étapes 4 (plans et pièces de secteur lâchés en mission) et 5 (distinctions RH, livrées) à planifier une par une.
 
-> **Garage en pause (27 octobre 2026)** : lire [docs/REPRISE-GARAGE.md](docs/REPRISE-GARAGE.md) pour l’état de la branche `codex/atelier-personnalisation`, les assets validés et la suite prévue.
+> **Garage en pause (27 octobre 2026)** : lire [docs/REPRISE-GARAGE.md](docs/REPRISE-GARAGE.md) pour l’état du garage (ancienne branche `codex/atelier-personnalisation`, fusionnée dans `main` et supprimée), les assets validés et la suite prévue.
 
 ## 1. Où on en est
 Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers AGP. Boucle : **accueil → carte des secteurs → ordre de mission → rapport d'intervention**, avec catalogue R&D (arbre), cartes de montée de niveau, reliques, fusions, boss, événements, succès, pactes, bestiaire. **3 secteurs, 16 niveaux** (tuto + 5 par secteur), encore à équilibrer. La partie infinie n'existe plus qu'en `?dev`.
 
 ### Branches
 - `main` contient tout (HUD en niveau, refonte de la progression, éditeur de niveaux complet).
-- Branches distantes déjà fusionnées, supprimables sur GitHub : `atelier-v3`, `editeur-de-niveau`, `hud-agp`, `menu-accueil`, `direction-agp`, `responsive`, `carte-du-code`, `carte-monde-vivante`, `boss-antenne-mere`, `codex/atelier-personnalisation`, etc.
+- Une seule branche : `main`. Toutes les branches de sujet précédentes sont fusionnées et supprimées (GitHub et local).
 
 ## 2. Ce qui a été fait (du plus récent au plus ancien)
 - **Éditeur de niveaux complet (28 oct. 2026)** : les 16 missions sont des JSON (`src/data/levels/`, `schemaVersion` 2, cache généré `level-data.js`) ; clés réglables par registres bornés (`mobs`, `bossTune`, `eventTune` / `events[i].params`, `norma` et boîtes N.O.R.M.A., `audio`, `bg` / `intro` / `zoom`), panneau ETAPES DU NIVEAU, validateur client + serveur (mêmes cas : `tools/fixtures/invalid_levels.json`), export UTF-8 qui ne réécrit que les fichiers modifiés, `python3 tools/level_files.py --migrate`. Guide, clés et recettes : `docs/editeur-niveaux.md`. **Pas fait** : tâche 8 (laboratoire de comparaison brouillon / publié) reportée, pas d'équilibrage ; **la suite en jeu (smoke, level, home, perks, enemy_stats, tunables, event_params) n'a pas été relancée depuis la tâche 2 : à lancer avant de pousser** ; la checklist manuelle de l'éditeur est dans `docs/editeur-niveaux.md` (« À vérifier à la main »). **Mineurs reportés** : `SPAWN_TABLE` dupliquée dans 11 JSON ; `/__editor/save` (ancien export vers `tuning.js`) retiré ; `bras.cooldown` non ordonné ; clés de musique vérifiées contre les tables de `music.js`, pas contre les fichiers audio.

@@ -1,6 +1,6 @@
 # Space Shooter X — captures de référence
 
-Captures du jeu en format mobile portrait (840 × 1520 px), prises le 26 octobre 2026 sur la branche `codex/atelier-personnalisation`. Elles montrent l'interface AGP-OS et la camionnette dans plusieurs contextes.
+Captures du jeu en format mobile portrait (840 × 1520 px), prises le 26 octobre 2026 sur l'ancienne branche `codex/atelier-personnalisation` (fusionnée dans `main`). Elles montrent l'interface AGP-OS et la camionnette dans plusieurs contextes.
 
 | Image | Moment montré |
 |---|---|

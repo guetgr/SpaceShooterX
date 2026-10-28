@@ -1,7 +1,7 @@
 # Garage AGP — point de reprise
 
 Date : 27 octobre 2026. Travail mis en pause à la demande de Gaëtan.
-Branche : `codex/atelier-personnalisation`. Ne pas reprendre la production graphique sans nouvelle demande.
+Branche d'origine : `codex/atelier-personnalisation` (fusionnée dans `main`, supprimée). Ne pas reprendre la production graphique sans nouvelle demande.
 
 ## Direction validée
 
