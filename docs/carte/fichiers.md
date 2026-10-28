@@ -379,7 +379,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`music.js`** — Lecture de la musique : MusicLoop, FileMusic, instance globale music.
 
-- Définit : `MusicLoop`, `MUSIC_SLOTS`, `MUSIC_MENU_WORLD`, `MUSIC_LEVEL`, `MUSIC_BOSS`, `MUSIC_BOSS_KEYS`, `musicLen`, `MUSIC_BAR_S`, `FileMusic`, `music`
+- Définit : `MusicLoop`, `MUSIC_SLOTS`, `MUSIC_MENU_WORLD`, `MUSIC_LEVEL`, `MUSIC_BOSS`, `MUSIC_BOSS_KEYS`, `musicLevelKeys`, `musicBossKeys`, `musicLen`, `MUSIC_BAR_S`, `FileMusic`, `music`
 - Méthodes de la classe `MusicLoop` : `constructor`, `setIntensity`, `ensure`, `setMuted`, `applyVol`, `setScene`, `start`, `startProc`, `pump`, `stepSec`, `setMood`, `note`, `drum`, `playStep`, `stop`
 - Méthodes de la classe `FileMusic` : `constructor`, `supported`, `ensure`, `slotNow`, `keysOf`, `pickKey`, `load`, `keepSet`, `housekeeping`, `start`, `stop`, `tick`, `switchTo`
 
@@ -438,7 +438,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`bg-monde.js`** — Méthodes de GameScene — fonds propres à un monde : la planète du monde reste visible, un décor par niveau (`bg` dans data/worlds/*.js). Fonds du monde 1 : 'horizon' (le bord de la Terre en bas) · 'debris' (la Terre au loin, la Lun
 
-- Définit : `wbgRng`
+- Définit : `WORLD_BG_KINDS`, `wbgRng`
 - Méthodes ajoutées à `GameScene` (mixin) : `worldBgKind`, `buildWorldBg`, `updateWorldBg`, `wbgTextures`, `wbgGradient`, `wbgGlowAt`, `wbgEarthTexture`, `wbgAtmosphere`, `wbgPaintDebris`, `wbgBuild_horizon`, `wbgBuild_debris`, `wbgBuild_station`, `wbgPaintCrystal`, `wbgBuild_cristaux`, `wbgBuild_patrouille`, `wbgPaintPaper`, `wbgBuild_direction`
 
 **`pickups.js`** — Méthodes de GameScene — cristaux d'XP, soins, mob doré.

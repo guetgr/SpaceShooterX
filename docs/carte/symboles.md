@@ -701,7 +701,9 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `MUSIC_LEVEL` | const | `src/audio/music.js` |  |
 | `MUSIC_MENU_WORLD` | const | `src/audio/music.js` |  |
 | `MUSIC_SLOTS` | const | `src/audio/music.js` |  |
+| `musicBossKeys` | const | `src/audio/music.js` |  |
 | `musicLen` | const | `src/audio/music.js` |  |
+| `musicLevelKeys` | const | `src/audio/music.js` |  |
 | `MusicLoop` | classe | `src/audio/music.js` |  |
 | `muzzleY` | méthode | `src/bosses/core.js` | `GameScene` |
 | `n` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
@@ -1228,6 +1230,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `wbgRng` | fonction | `src/world/bg-monde.js` |  |
 | `wbgTextures` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `weaponTierFor` | fonction | `src/data/meta.js` |  |
+| `WORLD_BG_KINDS` | const | `src/world/bg-monde.js` |  |
 | `worldBgKind` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `worldById` | fonction | `src/data/worlds.js` |  |
 | `worldPlanetTexture` | fonction | `src/gfx/planets.js` |  |
@@ -1239,4 +1242,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1232 symboles.
+1235 symboles.

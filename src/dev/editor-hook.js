@@ -2,7 +2,7 @@
 // Pont entre le jeu et l'éditeur de niveaux (editor.html). Inactif sans ?edit dans l'URL.
 //   ?edit=play : aperçu jouable dans l'éditeur   ·   ?edit=bot : jeu caché où tourne le joueur automatique (tools/sim/bot.js)
 // Protocole (postMessage vers/depuis la page parente, même origine) :
-//   jeu → éditeur : { ssx:1, type:'ready', mode, levels, base, defaults, overrides }   puis   { type:'bot-progress'|'bot-done', … }
+//   jeu → éditeur : { ssx:1, type:'ready', mode, levels, base, defaults, overrides, decorCatalog:[{kind,label}], musicCatalog:{level:[clés],boss:[clés]} }   puis   { type:'bot-progress'|'bot-done', … }
 //   éditeur → jeu : { type:'apply', overrides }  ·  { type:'play', levelId, overrides }  ·  { type:'bot', levelId, overrides, seeds, skill, budget }
 (function(){
   const q = new URLSearchParams(location.search);
@@ -59,9 +59,17 @@
     },300);
   }
 
+  // décors (kind → libellé ; null = planètes au hasard) et musiques connues, pour les listes de l'éditeur (JSON seulement)
+  const DECOR_LABELS = { horizon:'Horizon terrestre', debris:'Débris en orbite', station:'Station AGP', cristaux:'Champ de cristaux', patrouille:'Couloir de patrouille', direction:'Siège de la direction' };
+  function decorCatalog(){ return WORLD_BG_KINDS.map(kind=> ({ kind, label:DECOR_LABELS[kind] || kind })); }
+  function musicCatalog(){
+    const uniq = a=> Array.from(new Set(a));
+    return { level:uniq([].concat(...Object.values(MUSIC_LEVEL))), boss:uniq(MUSIC_BOSS_KEYS) };
+  }
+
   function ready(){
     traceTimeline();
-    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min,params:(EVENT_PARAMS[id]||[]).map(r=>({ key:r.key,label:r.label,min:r.min,max:r.max,step:r.step,unit:r.unit,int:!!r.int,def:typeof r.def === 'function' ? r.def(1) : r.def,defByAlert:typeof r.def === 'function' })) })), overrides:TUNING_OVERRIDES, bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
+    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min,params:(EVENT_PARAMS[id]||[]).map(r=>({ key:r.key,label:r.label,min:r.min,max:r.max,step:r.step,unit:r.unit,int:!!r.int,def:typeof r.def === 'function' ? r.def(1) : r.def,defByAlert:typeof r.def === 'function' })) })), overrides:TUNING_OVERRIDES, decorCatalog:decorCatalog(), musicCatalog:musicCatalog(), bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
       let image = '';
       try { image = window.__ssxScene.textures.getBase64(e.tex, e.frame); } catch(err) { /* miniature facultative */ }
       return { type:e.type, label:e.label, image };

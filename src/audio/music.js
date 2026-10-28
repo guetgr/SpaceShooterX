@@ -122,6 +122,10 @@ const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'
 
 const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 
+// surcharge par ordre (`audio` du JSON, posée dans la scène par scene-audio.js : sc.lvAudio) ; sans elle, ces deux fonctions rendent l'entrée d'origine des tables
+const musicLevelKeys = (s, id) => (s && s.lvAudio && s.lvAudio.level && s.lvl === id) ? s.lvAudio.level : MUSIC_LEVEL[id];
+const musicBossKeys = (s, id) => (s && s.lvAudio && s.lvAudio.boss && s.fbId && id === 'fb_' + s.fbId) ? [s.lvAudio.boss] : MUSIC_BOSS[id];
+
 const musicLen = key => (typeof MUSIC_LEN === 'object' && MUSIC_LEN[key]) || (MUSIC_BOSS_KEYS.includes(key) ? 56 : 48);
 
 const MUSIC_BAR_S = 2, MUSIC_GAIN = 1.0;
@@ -148,12 +152,12 @@ class FileMusic{
       return 'menu';
     }
     if (s.tutoLevel) return 'tutoniv';
-    if (s.fboss && MUSIC_BOSS['fb_' + s.fboss]) return 'boss:fb_' + s.fboss;                   // boss de fin d'ordre (monde 1) : sa propre musique dès qu'il entre
+    if (s.fboss && musicBossKeys(s, 'fb_' + s.fboss)) return 'boss:fb_' + s.fboss;                   // boss de fin d'ordre (monde 1) : sa propre musique dès qu'il entre
     if (s.boss) return (s.bossId && MUSIC_BOSS[s.bossId]) ? 'boss:' + s.bossId : 'boss';
-    if (s.lvl && MUSIC_LEVEL[s.lvl]) return 'lvl:' + s.lvl;                                    // ordre du monde 1 : sa musique
+    if (s.lvl && musicLevelKeys(s, s.lvl)) return 'lvl:' + s.lvl;                                    // ordre du monde 1 : sa musique
     return (s.alert || 1) <= 4 ? 'tier1' : 'tier2';
   }
-  keysOf(slot){ return slot.indexOf('boss:') === 0 ? MUSIC_BOSS[slot.slice(5)] : slot.indexOf('lvl:') === 0 ? MUSIC_LEVEL[slot.slice(4)] : slot.indexOf('mw:') === 0 ? MUSIC_MENU_WORLD[slot.slice(3)] : MUSIC_SLOTS[slot]; }
+  keysOf(slot){ const sc = this.o.scene; return slot.indexOf('boss:') === 0 ? musicBossKeys(sc, slot.slice(5)) : slot.indexOf('lvl:') === 0 ? musicLevelKeys(sc, slot.slice(4)) : slot.indexOf('mw:') === 0 ? MUSIC_MENU_WORLD[slot.slice(3)] : MUSIC_SLOTS[slot]; }
   pickKey(slot){ const ks = this.keysOf(slot); const i = this.vi[slot] || 0; this.vi[slot] = i + 1; return ks[i % ks.length]; }
   load(key){
     if (this.buf[key]) return Promise.resolve(this.buf[key]);
@@ -180,8 +184,8 @@ class FileMusic{
       const k = n > 4 ? [ks[i % n], ks[(i + 1) % n]] : ks.slice();                              // 8 morceaux de dézoom : on ne garde en mémoire que le suivant et celui d'après
       if (this.cur && !k.includes(this.cur.key)) k.push(this.cur.key); return k;
     }
-    if (sc.lvl && (MUSIC_LEVEL[sc.lvl] || sc.fbId)){                                          // ordre du monde 1 : ses 2 morceaux + ceux de son boss (il peut arriver à tout moment)
-      const k = (MUSIC_LEVEL[sc.lvl] || []).slice(); if (sc.fbId && MUSIC_BOSS['fb_' + sc.fbId]) k.push(...MUSIC_BOSS['fb_' + sc.fbId]);
+    if (sc.lvl && (musicLevelKeys(sc, sc.lvl) || sc.fbId)){                                          // ordre du monde 1 : ses 2 morceaux + ceux de son boss (il peut arriver à tout moment)
+      const k = (musicLevelKeys(sc, sc.lvl) || []).slice(); if (sc.fbId && musicBossKeys(sc, 'fb_' + sc.fbId)) k.push(...musicBossKeys(sc, 'fb_' + sc.fbId));
       if (this.cur && !k.includes(this.cur.key)) k.push(this.cur.key); return k;
     }
     const slot = this.slotNow(), isB = slot.indexOf('boss') === 0, base = isB ? (sc.bossId && sc.bossId.indexOf('tuto') === 0 ? 'tutoniv' : (sc.alert || 1) <= 4 ? 'tier1' : 'tier2') : slot;   // pendant un boss on garde aussi la musique du niveau

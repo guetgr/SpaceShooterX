@@ -37,7 +37,7 @@ mixin(GameScene, {
       // musiques dédiées par ordre et par boss du monde 1 (assets/audio/music/w1_*, w1b_*), posées par la fusion de origin/main (PR musique du 27 oct.)
       const d = this.lvDef, fb = (d && d.finalBoss) || null, B = fb && ({ meteo:this.mt, araignee:this.ar, reacteur:this.rx, anneau:this.an, pdg:this.pd })[fb];
       music.setScene({ mode:'game', alert:this.alertLevel, boss:this.bossActive, bossId:(this.currentBoss && this.currentBoss.bossId) || null,
-        lvl:d ? d.id : null, fbId:fb, fboss:(fb && (B || d.type === 'boss')) ? fb : null });          // choix du morceau: ordre en cours, boss de fin d'ordre (monde 1), sinon niveau d'alerte, boss
+        lvl:d ? d.id : null, lvAudio:(d && d.audio) || null, fbId:fb, fboss:(fb && (B || d.type === 'boss')) ? fb : null });          // choix du morceau: ordre en cours, boss de fin d'ordre (monde 1), sinon niveau d'alerte, boss
     }
   },
 });

@@ -54,6 +54,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/import_sprites_niveaux.py` — Importe les icônes de niveaux livrées en PNG (256x256, fond transparent) : PNG RGBA -> assets/sprites/*.webp, puis relance gen_manifest.py. (Planètes,
 - `tools/level_files.py` — Niveaux JSON : lecture, validation et cache JS pour scripts classiques/builds.
 - `tools/level_files_test.py` — Validation et export des missions JSON dans un dossier temporaire.
+- `tools/level_look_test.js` — (script ponctuel, sans description)
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 - `tools/norma_level_test.js` — (script ponctuel, sans description)
 - `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.

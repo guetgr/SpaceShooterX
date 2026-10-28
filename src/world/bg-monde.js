@@ -4,6 +4,8 @@
 // · 'cristaux' (champ de cristaux turquoise) · 'patrouille' (couloir balisé, feux rouges/verts) · 'direction' (le siège : rais dorés, contrats qui flottent).
 // Les décors sont dessinés dans deux conteneurs (derrière / devant les étoiles) en coordonnées d'ÉCRAN (0..GAME_W, 0..GAME_H) :
 // à chaque image on les met à l'échelle 1/zoom pour annuler le dézoom de la caméra (le décor garde la même composition à toute distance).
+// liste des décors proposés par l'éditeur et validés par tools/level_files.py (ligne lue telle quelle) ; node tools/level_look_test.js vérifie qu'elle égale les méthodes wbgBuild_* ci-dessous
+const WORLD_BG_KINDS = ['horizon', 'debris', 'station', 'cristaux', 'patrouille', 'direction'];
 function wbgRng(seed){ let s = seed >>> 0; return ()=> ((s = (s*1664525 + 1013904223) >>> 0) / 4294967296); }
 
 mixin(GameScene, {

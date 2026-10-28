@@ -9,11 +9,37 @@ def read_levels(root=ROOT):
     folder = root / 'src/data/levels'
     return {name: json.loads((folder / (name + '.json')).read_text()) for name in json.loads((folder / 'index.json').read_text())}
 
+def bg_kinds(root=ROOT):
+    """Décors permis : ligne « const WORLD_BG_KINDS = ['a', 'b', ...]; » de src/world/bg-monde.js (node tools/level_look_test.js la compare aux méthodes wbgBuild_*)."""
+    m = re.search(r"^const WORLD_BG_KINDS = \[([^\]]*)\];", (root/'src/world/bg-monde.js').read_text(), re.M)
+    kinds = re.findall(r"'(\w+)'", m.group(1)) if m else []
+    if not kinds: raise ValueError("bg : aucun décor lu dans src/world/bg-monde.js ; la ligne « const WORLD_BG_KINDS = ['horizon', …]; » doit être conservée")
+    return kinds
+
+def music_tables(root=ROOT):
+    """Clés de musique de src/audio/music.js : tables `const MUSIC_LEVEL = {…};` et `const MUSIC_BOSS = {…};` (valeurs = listes de clés entre apostrophes, éventuellement sur plusieurs lignes, fin de table = « };»)."""
+    text = (root/'src/audio/music.js').read_text()
+    out = {}
+    for name in ['MUSIC_LEVEL','MUSIC_BOSS']:
+        m = re.search(r'^const ' + name + r' = \{(.*?)\};', text, re.M | re.S)
+        out[name] = set(re.findall(r"'(\w+)'", re.sub(r"'[\w-]+'\s*:|\b\w+\s*:", '', m.group(1)))) if m else set()
+        if not out[name]: raise ValueError('audio : aucune clé lue pour ' + name + ' dans src/audio/music.js ; le format « const ' + name + ' = { id:[\'clé\', …], … }; » doit être conservé')
+    return out
+
+def check_audio(a, root=ROOT):
+    if not isinstance(a,dict) or not a or set(a) - {'level','boss'}: raise ValueError('audio : objet avec level et/ou boss requis')
+    tables = music_tables(root)
+    if 'level' in a:
+        if not isinstance(a['level'],list) or not 1 <= len(a['level']) <= 2 or any(not isinstance(k,str) for k in a['level']): raise ValueError('audio.level : 1 ou 2 clés de musique requises')
+        for k in a['level']:
+            if k not in tables['MUSIC_LEVEL']: raise ValueError('audio.level : clé de musique inconnue « %s » (clés de MUSIC_LEVEL dans src/audio/music.js)' % k)
+    if 'boss' in a and (not isinstance(a['boss'],str) or a['boss'] not in tables['MUSIC_BOSS']): raise ValueError('audio.boss : clé de musique de boss inconnue (clés de MUSIC_BOSS dans src/audio/music.js)')
+
 def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) - {'mobs','bossTune','eventTune','norma'} != set(original) - {'mobs','bossTune','eventTune','norma'}: raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs','bossTune','eventTune','norma','audio'} != set(original) - {'mobs','bossTune','eventTune','norma','audio'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -143,9 +169,13 @@ def validate_level(d, original, root=ROOT):
         if not (d[key] is None or isinstance(d[key],str)): raise ValueError(key + ' : texte ou null requis')
     if d['finalBoss'] not in [None,'meteo','araignee','reacteur','anneau','pdg']: raise ValueError('Boss final inconnu')
     if d['boss'] not in [None,'dread','faucheuse','ruche','prisme','kraken','eclipse','hydre']: raise ValueError('Boss inconnu')
-    if d['intro'] not in [None,'earth']: raise ValueError('Introduction inconnue')
-    if d['bg'] not in [None,'horizon','debris','station','cristaux','patrouille','direction']: raise ValueError('Décor inconnu')
-    if min(d['zoom'].values()) <= 0: raise ValueError('Zoom positif requis')
+    if d['intro'] not in [None,'earth']: raise ValueError('intro : « earth » ou null requis')
+    kinds = bg_kinds(root)
+    if d['bg'] is not None and d['bg'] not in kinds: raise ValueError('bg : décor inconnu « %s » (permis : %s ; null = planètes au hasard ; liste lue dans src/world/bg-monde.js)' % (d['bg'], ', '.join(kinds)))
+    z = d['zoom']
+    if not number(z['start'],0.3,3) or not number(z['end'],0.3,3): raise ValueError('zoom.start et zoom.end : nombres entre 0,3 et 3 requis')
+    if not number(z['seconds'],5,600): raise ValueError('zoom.seconds : durée entre 5 et 600 secondes requise')
+    if 'audio' in d: check_audio(d['audio'], root)
     if any(type(v)!=bool for v in d['ambient'].values()): raise ValueError('Activation ambiante invalide')
     if d.get('tutorial'):
         for group in d['tutorial'].values():

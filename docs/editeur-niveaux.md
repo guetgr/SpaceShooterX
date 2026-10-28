@@ -100,3 +100,12 @@ Bloc `norma` optionnel dans le JSON d'une mission (code : `src/data/level-norma.
 - **Limites** : chaque texte 1 à 140 caractères, sans `<` ni `>`, non vide. Jamais pendant l'intro, les cartes d'amélioration, la pause ou l'écran de fin (garde de `normaTick`) ; une transmission à la fois.
 - **Ton** : froide, polie, sarcastique, jamais bloquante ; courte, lisible d'un coup d'œil en plein combat (voir `docs/brief-univers-agp.md`).
 - Test sans navigateur : `node tools/norma_level_test.js`.
+
+## Décor, caméra et musique
+Réglés par le JSON de la mission, sans code par niveau. Sans ces clés (ou avec `bg: null`), le jeu se comporte comme avant.
+- **`bg`** : `null` (planètes tirées au hasard, `pickBgZone`) ou un décor de la liste `WORLD_BG_KINDS` (`src/world/bg-monde.js`) : `horizon`, `debris`, `station`, `cristaux`, `patrouille`, `direction`. La validation (`tools/level_files.py`) lit cette ligne `const WORLD_BG_KINDS = [...]` ; `node tools/level_look_test.js` vérifie qu'elle égale les méthodes `wbgBuild_*` : ajouter un décor = écrire la méthode ET l'ajouter à la liste.
+- **`intro`** : `null` ou `"earth"` (décollage depuis la Terre, planète du fond dévoilée après).
+- **`zoom`** : `{ start, end, seconds }` ; `start` et `end` entre 0,3 et 3, `seconds` entre 5 et 600.
+- **`audio`** (optionnel) : `{ "level": ["w1_l1_a", "w1_l1_b"], "boss": "w1b_pdg_a" }`. `level` : 1 ou 2 clés parmi celles de `MUSIC_LEVEL` (`src/audio/music.js`), remplace les morceaux de l'ordre ; `boss` : une clé parmi celles de `MUSIC_BOSS`, remplace le morceau du boss de fin d'ordre (`finalBoss`). Chaque champ est facultatif ; un autre boss ou un boss de passage garde sa musique. Les tables sont lues par le validateur dans `music.js` (`const MUSIC_LEVEL = {…};` et `const MUSIC_BOSS = {…};`). Code : `musicLevelKeys` / `musicBossKeys` (`music.js`), `lvAudio` posé par `scene-audio.js` ; sans `audio`, elles rendent l'entrée d'origine de la table.
+- **Éditeur** : le message `ready` du jeu apporte `decorCatalog` (`[{ kind, label }]`) et `musicCatalog` (`{ level: [clés], boss: [clés] }`) (`src/dev/editor-hook.js`).
+- Test : `node tools/level_look_test.js` ; cas refusés dans `tools/level_files_test.py`.

@@ -111,9 +111,30 @@ tn=with_norma({'tuto':{'move':'Avancez.','win':'Bravo.'}},base='w1-tuto');level_
 tn['norma']['tuto']['zzz']='a'
 try: level_files.validate_level(tn,original['w1-tuto']);raise SystemExit('tuto inconnu accepté')
 except ValueError: pass
+def with_look(**k):
+    doc=copy.deepcopy(original['w1-l1']); doc.update(k); return doc
+def zoom(**k):
+    z=dict(original['w1-l1']['zoom']); z.update(k); return {'zoom':z}
+for kw,ok,word in [
+    ({'bg':'horizon'},True,''),({'bg':None},True,''),({'bg':'direction'},True,''),
+    ({'bg':'volcan'},False,'bg'),({'bg':3},False,'bg'),
+    ({'intro':'earth'},True,''),({'intro':None},True,''),({'intro':'mars'},False,'intro'),
+    (zoom(start=0.3,end=3,seconds=5),True,''),(zoom(start=0.2),False,'zoom.start'),(zoom(end=3.5),False,'zoom.end'),(zoom(seconds=4),False,'zoom.seconds'),(zoom(seconds=601),False,'zoom.seconds'),
+    ({'audio':{'level':['w1_l2_a','w1_l2_b'],'boss':'w1b_pdg_a'}},True,''),({'audio':{'level':['w1_l2_a']}},True,''),({'audio':{'boss':'bossd_a'}},True,''),
+    ({'audio':{'level':['zzz']}},False,'audio.level'),({'audio':{'level':[]}},False,'audio.level'),({'audio':{'level':['w1_l1_a','w1_l1_b','w1_l2_a']}},False,'audio.level'),
+    ({'audio':{'level':'w1_l1_a'}},False,'audio.level'),({'audio':{'level':['w1b_pdg_a']}},False,'audio.level'),
+    ({'audio':{'boss':'zzz'}},False,'audio.boss'),({'audio':{'boss':['w1b_pdg_a']}},False,'audio.boss'),({'audio':{'boss':'w1_l1_a'}},False,'audio.boss'),
+    ({'audio':{}},False,'audio'),({'audio':{'tempo':1}},False,'audio'),({'audio':[]},False,'audio'),
+]:
+    try: level_files.validate_level(with_look(**kw),original['w1-l1']);got=True;msg=''
+    except ValueError as e: got=False;msg=str(e)
+    assert got==ok,(kw,msg)
+    if not ok: assert word in msg,(kw,msg)
 with tempfile.TemporaryDirectory() as folder:
     root=Path(folder);(root/'src/data/worlds').mkdir(parents=True)
     shutil.copytree(level_files.ROOT/'src/data/levels',root/'src/data/levels')
+    for rel in ['src/world/bg-monde.js','src/audio/music.js']:
+        (root/rel).parent.mkdir(parents=True,exist_ok=True); shutil.copy(level_files.ROOT/rel,root/rel)
     for name in ['bestiary.js','events.js','enemy-stats.js','tunables.js','event-params.js']:
         shutil.copy(level_files.ROOT/'src/data'/name,root/'src/data'/name)
     serve.R=folder
