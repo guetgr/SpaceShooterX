@@ -2,7 +2,7 @@
 // Pont entre le jeu et l'éditeur de niveaux (editor.html). Inactif sans ?edit dans l'URL.
 //   ?edit=play : aperçu jouable dans l'éditeur   ·   ?edit=bot : jeu caché où tourne le joueur automatique (tools/sim/bot.js)
 // Protocole (postMessage vers/depuis la page parente, même origine) :
-//   jeu → éditeur : { ssx:1, type:'ready', mode, levels, base, defaults, overrides, decorCatalog:[{kind,label}], musicCatalog:{level:[clés],boss:[clés]} }   puis   { type:'bot-progress'|'bot-done', … }
+//   jeu → éditeur : { ssx:1, type:'ready', mode, levels, base, defaults, overrides, decorCatalog:[{kind,label}], musicCatalog:{level:[clés],boss:[clés]}, tunablesCatalog:{ id:[{path,label,min,max,step,unit,help,len?,def}] }, mobCatalog:[{type,label,hp,dmg,score,speed}] }   puis   { type:'bot-progress'|'bot-done', … }
 //   éditeur → jeu : { type:'apply', overrides }  ·  { type:'play', levelId, overrides }  ·  { type:'bot', levelId, overrides, seeds, skill, budget }
 (function(){
   const q = new URLSearchParams(location.search);
@@ -67,9 +67,30 @@
     return { level:uniq([].concat(...Object.values(MUSIC_LEVEL))), boss:uniq(MUSIC_BOSS_KEYS) };
   }
 
+  // réglages des boss / mobs spéciaux (TUNABLES) avec la valeur d'origine capturée ; l'Antenne-Mère (schéma seul) prend celles du tuto
+  function tunablesCatalog(){
+    const tuto = (LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS).boss, out = {};
+    Object.keys(TUNABLES).forEach(id=>{
+      out[id] = TUNABLES[id].map(r=>{
+        const def = TUNABLES_PRISTINE[id] ? TUNABLES_PRISTINE[id][r.path] : tuto[r.path];
+        const o = { path:r.path, label:r.label, min:r.min, max:r.max, step:r.step, unit:r.unit, help:r.help, def:Array.isArray(def) ? def.slice() : def };
+        if (r.len) o.len = r.len;
+        return o;
+      });
+    });
+    return out;
+  }
+  // stats d'origine des ennemis (affichage seulement ; les surcharges sont des multiplicateurs)
+  function mobCatalog(){
+    return Object.keys(ENEMY_STATS).map(type=>{
+      const st = ENEMY_STATS[type], b = BESTIARY_LIST.find(e=> e.type === type);
+      return { type, label:b ? b.label : type, hp:st.hp, dmg:st.dmg, score:st.score, speed:st.vyBetween ? (st.vyBetween[0] + st.vyBetween[1]) / 2 : st.vy };
+    });
+  }
+
   function ready(){
     traceTimeline();
-    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min,params:(EVENT_PARAMS[id]||[]).map(r=>({ key:r.key,label:r.label,min:r.min,max:r.max,step:r.step,unit:r.unit,int:!!r.int,def:typeof r.def === 'function' ? r.def(1) : r.def,defByAlert:typeof r.def === 'function' })) })), overrides:TUNING_OVERRIDES, decorCatalog:decorCatalog(), musicCatalog:musicCatalog(), bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
+    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min,params:(EVENT_PARAMS[id]||[]).map(r=>({ key:r.key,label:r.label,min:r.min,max:r.max,step:r.step,unit:r.unit,int:!!r.int,def:typeof r.def === 'function' ? r.def(1) : r.def,defByAlert:typeof r.def === 'function' })) })), overrides:TUNING_OVERRIDES, decorCatalog:decorCatalog(), musicCatalog:musicCatalog(), tunablesCatalog:tunablesCatalog(), mobCatalog:mobCatalog(), bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
       let image = '';
       try { image = window.__ssxScene.textures.getBase64(e.tex, e.frame); } catch(err) { /* miniature facultative */ }
       return { type:e.type, label:e.label, image };
