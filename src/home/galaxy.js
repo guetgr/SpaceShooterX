@@ -172,7 +172,7 @@ mixin(HomeScene, {
 
   // remet la page CARTE en vue « monde » (retour d'un niveau, premier affichage)
   resetMapView(){
-    this.orbitRotation = 0;
+    this.orbitRotation = null;
     if(this.orbitTween) this.orbitTween.stop();
     this.mapMode = 'world'; this.galVel = 0; this.galDrag = null; this.galForceLock = -1;
     this.galaxy.setVisible(false); this.galA = 0;

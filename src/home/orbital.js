@@ -2,6 +2,8 @@
 // Route ouverte, inclinée en 3D puis projetée dans le repère logique 400 × 700.
 // Les traits Phaser et les cibles HTML partagent exactement cette projection.
 const HOME_ORBIT_VIEW = { cx:200, cy:270, radius:117, orbit:143, tilt:-0.48, distance:660 };
+// angle où la route passe pile au milieu de l'écran, côté avant (x = 0 après inclinaison)
+const HOME_ORBIT_FRONT = Math.atan2(HOME_ORBIT_VIEW.orbit*Math.cos(HOME_ORBIT_VIEW.tilt), 75*Math.sin(HOME_ORBIT_VIEW.tilt));
 function homeOrbitPoint(t, rotation = 0){
   const v = HOME_ORBIT_VIEW, a = 2.5 - t*4.7 + rotation;
   const x = v.orbit*Math.cos(a), y = 75*Math.sin(a), z = 100*Math.sin(a);
@@ -11,25 +13,23 @@ function homeOrbitPoint(t, rotation = 0){
 }
 mixin(HomeScene, {
   initOrbitalUi(){
-    this.orbitRotation = 0;
+    this.orbitRotation = null;      // null : pas encore placé, le premier focus se fait sans animation
   },
   // passe au niveau précédent/suivant du monde affiché (direction -1/1) : swipe sur la planète, ou clic direct sur un niveau visible (renderHomeMap)
   stepOrbitLevel(direction){
     const levels=WORLDS[this.homeWorld].levels, i=levels.findIndex(l=>l.id===this.homeSel);
     const next=levels[i+direction]; if(next) this.selectHomeLevel(next.id);
   },
+  // amène toujours le niveau sélectionné au milieu de l'écran (devant la planète) : toute la route tourne autour de lui
   focusOrbitalLevel(){
     if(this.orbitTween) this.orbitTween.stop();
     const levels=WORLDS[this.homeWorld].levels, i=levels.findIndex(l=>l.id===this.homeSel);
-    const t=i/Math.max(1,levels.length-1), point=homeOrbitPoint(t,this.orbitRotation||0);
-    if(!point.hidden) return;
-    if(this.orbitTween) this.orbitTween.stop();
-    // Amène une mission occultée sur la partie avant, sans boucler la progression.
-    let target=1.4-(2.5-t*4.7), current=this.orbitRotation||0;
+    const t=i/Math.max(1,levels.length-1);
+    let target=HOME_ORBIT_FRONT-(2.5-t*4.7), current=this.orbitRotation;
+    if(current==null || matchMedia('(prefers-reduced-motion: reduce)').matches){this.orbitRotation=target;return;}
     while(target-current>Math.PI) target-=Math.PI*2;
     while(target-current<-Math.PI) target+=Math.PI*2;
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches){this.orbitRotation=target;return;}
-    this.orbitTween=this.tweens.add({targets:this,orbitRotation:target,duration:650,ease:'Cubic.easeInOut'});
+    this.orbitTween=this.tweens.add({targets:this,orbitRotation:target,duration:450,ease:'Cubic.easeOut'});
   },
   updateOrbitalUi(){
     if(this.page!==0 || this.mapMode!=='world') return;

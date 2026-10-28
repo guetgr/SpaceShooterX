@@ -97,3 +97,22 @@
 .rd-locked small{ display:block; margin-top:8px; color:#4e4a3f; font-family:var(--vt); font-size:13px; line-height:1.05; letter-spacing:0; }
 
 @media(prefers-reduced-motion:reduce){ .ttab,.tree-bbar i,.rdcard{ transition:none; scroll-behavior:auto; } }
+
+/* Indice de défilement de la liste des technologies : chevron discret, sans interaction */
+.rd-more{ position:absolute; z-index:4; left:41px; width:261px; height:16px; display:flex; justify-content:center; pointer-events:none; opacity:.5; }
+.rd-more[hidden]{ display:none; }
+.rd-more-down{ top:508px; align-items:flex-end; background:linear-gradient(transparent,#02050466); }
+.rd-more-up{ top:166px; align-items:flex-start; background:linear-gradient(#02050466,transparent); }
+.rd-more .uii{ opacity:.8; animation:rdMoreBob 2.4s ease-in-out infinite; }
+.rd-more-down .uii{ transform:rotate(90deg); }
+.rd-more-up .uii{ transform:rotate(-90deg); animation-name:rdMoreBobUp; }
+@keyframes rdMoreBob{ 50%{ translate:0 2px; } }
+@keyframes rdMoreBobUp{ 50%{ translate:0 -2px; } }
+@media(prefers-reduced-motion:reduce){ .rd-more .uii{ animation:none; } }
+
+/* Cartes : l'en-tête évite le trombone de l'image (à gauche sur le papier, à droite sur le plan) ; l'icône est collée comme une vignette */
+.rdcard.paper .rd-head,.rdcard.proto .rd-head{ margin-left:19px; }
+.rdcard.blueprint .rd-head,.rdcard.plan .rd-head{ margin-right:19px; }
+.rd-ic{ background:#13201c24; box-shadow:inset 0 0 0 1px #fff3, 1px 1px 0 #0003; transform:rotate(-2deg); }
+.blueprint .rd-ic,.plan .rd-ic{ background:#0a1a2c80; transform:rotate(2deg); }
+.rd-ic{ position:relative; top:5px; }
