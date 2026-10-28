@@ -27,14 +27,14 @@ mixin(GameScene, {
     const ev = this.lvEvents[0];
     if (ev && this.lvT >= ev.at){
       const slot = EVENT_DEFS[ev.kind].small ? 'curSmall' : 'curEvent';
-      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, ev.duration == null ? undefined : ev.duration * 1000, ev.params); }
+      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, ev.duration == null ? undefined : ev.duration * 1000, ev.params, ev.norma); }
     }
     if (this.tuto) return;
     const g = d.goal || {};
     if (d.type === 'boss'){
-      if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; if (d.finalBoss === 'pdg') this.pdStart(); else this.spawnBoss(d.boss); }       // le boss du monde 1 est « Le PDG » (bosses/pdg.js), pas le Dreadnought
+      if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; if (d.finalBoss === 'pdg'){ this.normaAnchor('bossStart'); this.pdStart(); } else this.spawnBoss(d.boss); }       // le boss du monde 1 est « Le PDG » (bosses/pdg.js), pas le Dreadnought
     } else if (d.finalBoss){                                     // niveau de survie qui finit par un boss : il arrive quand le temps est écoulé, la victoire vient de sa destruction
-      if (!this.ar && !this.mt && !this.rx && !this.an && this.levelProgress().frac >= 1 && !this.curEvent){ if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else this.arStart(); }
+      if (!this.ar && !this.mt && !this.rx && !this.an && this.levelProgress().frac >= 1 && !this.curEvent){ this.normaAnchor('bossStart'); if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else this.arStart(); }
     } else if (this.levelProgress().frac >= 1) this.levelWin();
   },
 

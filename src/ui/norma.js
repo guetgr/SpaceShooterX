@@ -6,8 +6,8 @@ const Norma = {
   _last: {}, _q: [], _showing: false, _lastAt: -1e9, _tw: null, _hide: null,
 
   // ligne au hasard dans une réserve, sans répéter deux fois de suite la même
-  pick(pool){
-    const a = AGP_LINES[pool] || []; if (!a.length) return '';
+  pick(pool, lvDef){
+    const a = lvDef ? normaLines(lvDef, pool) : (AGP_LINES[pool] || []); if (!a.length) return '';
     let i; do { i = Math.floor(Math.random() * a.length); } while (a.length > 1 && i === this._last[pool]);
     this._last[pool] = i; return a[i];
   },
@@ -83,9 +83,9 @@ const Norma = {
   },
 
   // commentaire du rapport de fin de mission
-  report(kind, grade){
+  report(kind, grade, lvDef){
     if (kind === 'win' && (grade === 'SS' || grade === 'SSS')) return this.pick('hiGrade');
-    return this.pick(kind);
+    return this.pick(kind, lvDef);
   },
 };
 
@@ -94,6 +94,7 @@ mixin(GameScene, {
   normaStart(){
     Norma.reset(); this._normaLow = false; this._normaCd = Phaser.Math.Between(28000, 38000); this._normaProg = 0;
     { const e = Norma.el(); if (e){ e.classList.remove('low'); e.classList.toggle('tuto', !!this.tuto); } }
+    this._normaPlan = this.tuto ? null : normaPlan(this.lvDef); this._normaMan = false;       // boîtes ajoutées à la main dans le JSON du niveau
     if (this.tuto) return;                         // tuto : les consignes viennent de game/tuto.js (tutoSay)
     const pool = 'start';
     // la transmission part quelques secondes après la fin du décollage (jamais pendant l'intro, ni pendant un menu)
@@ -102,22 +103,38 @@ mixin(GameScene, {
       ev.remove(false);
       this.time.delayedCall(2200, ()=>{
         if (!this.running) return;
-        Norma.say(Norma.pick(pool), { prio:true });
+        const m = normaPlanTake(this._normaPlan, 'levelStart');
+        Norma.say(m ? m.text : Norma.pick(pool, this.lvDef), { prio:true, hold:m ? m.hold : false });
         const g = this.globalGearSummary(); if (g) Norma.say(g, { gap:0 });         // 2e transmission : les atouts globaux (R&D) actifs
       });
     } });
   },
-  normaBoss(){ if (!this.tuto) Norma.say(Norma.pick('boss'), { prio:true }); },
-  normaLow(){ if (!this.tuto) Norma.say(Norma.pick('lowhp'), { gap:6000 }); },
+  normaBoss(){ if (!this.tuto && !this.normaAnchor('bossStart')) Norma.say(Norma.pick('boss', this.lvDef), { prio:true }); },
+  normaLow(){ if (!this.tuto) Norma.say(Norma.pick('lowhp', this.lvDef), { gap:6000 }); },
+
+  // boîte N.O.R.M.A. ajoutée à la main sur une ancre (bossStart, ou événement : when = 'eventStart'/'eventEnd' + ref = nature) ; `own` = texte propre à l'occurrence (events[i].norma). Renvoie true si une transmission part.
+  normaAnchor(when, ref, own){
+    if (this.tuto || !this._normaPlan) return false;
+    const m = normaText(own) ? { text:own, hold:false } : normaPlanTake(this._normaPlan, when, ref);
+    if (!m) return false;
+    Norma.say(m.text, { prio:true, hold:m.hold }); return true;
+  },
+  // texte du rapport de fin pour une boîte `win` / `lose` ajoutée à la main (chaîne vide sinon)
+  normaEndText(when){ const m = this._normaPlan && normaPlanTake(this._normaPlan, when); return m ? m.text : ''; },
 
   // transmissions régulières en mission (hors tuto) : avancement de l'ordre (une fois par palier de 25%) sinon une vanne, environ toutes les 40-55 s
   normaTick(delta){
     if (this.tuto || !this.lvDef) return;
+    if (this._normaPlan && !this.introActive){                     // boîtes horaires : une à la fois, la suivante attend la fin de la précédente
+      if (!Norma._showing) this._normaMan = false;
+      const m = this._normaMan ? null : normaPlanDue(this._normaPlan, this.lvT);
+      if (m){ m.done = true; this._normaMan = true; Norma.say(m.text, { prio:true, hold:m.hold }); }
+    }
     this._normaCd -= delta; if (this._normaCd > 0) return;
-    this._normaCd = Phaser.Math.Between(40000, 55000);
+    { const te = normaTickEvery(this.lvDef); this._normaCd = Phaser.Math.Between(te[0], te[1]); }
     const frac = this.levelProgress().frac, steps = [0.25, 0.5, 0.75];
     const si = steps.findIndex(s=> frac >= s && this._normaProg < s);
     this._normaProg = Math.max(this._normaProg, frac);
-    Norma.say(si >= 0 ? AGP_LINES.progress[si] : Norma.pick('banter'));
+    Norma.say(si >= 0 ? (normaLines(this.lvDef, 'progress')[si] || Norma.pick('banter', this.lvDef)) : Norma.pick('banter', this.lvDef));
   },
 });

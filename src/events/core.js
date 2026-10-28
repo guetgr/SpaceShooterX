@@ -147,19 +147,20 @@ mixin(GameScene, {
   finishNebula(n, inside){ n.phase = 'leave'; if (inside){ sfx.nebulaExit(); sfx.setNebula(false); sfx._nebOn = false; } },
 
   // EVENEMENTS ALEATOIRES (toutes les 80-140 s): pluie de cristaux, tempête de météorites, boss surprise
-  startEvent(kind, dur, params){
+  startEvent(kind, dur, params, norma){
     const al = this.alertLevel, low = this.hp < this.stats.maxHp*0.5;
     if (!kind){
       const list = Object.keys(EVENT_DEFS).filter(k=> al >= EVENT_DEFS[k].min && !EVENT_DEFS[k].small && !(k === 'nebula' && this.neb)).map(k=>({ k, w: EVENT_DEFS[k].w(al, low) }));
       let roll = Math.random() * list.reduce((t,e)=> t + e.w, 0); kind = list[0].k;
       for (const e of list){ if (roll < e.w){ kind = e.k; break; } roll -= e.w; }
     }
-    const d = EVENT_DEFS[kind], ev = { kind, t: 0, tick: 0, params: params || null };
+    const d = EVENT_DEFS[kind], ev = { kind, t: 0, tick: 0, params: params || null, norma: norma || null };
     this[d.small ? 'curSmall' : 'curEvent'] = ev;              // posé avant le calcul de la durée : evParam y lit les paramètres de l'événement programmé
     ev.t = dur || d.dur(al, this);
     this.notice(d.name, d.sub);
     sfx.eventStart(kind);
     if (d.start) d.start(this);
+    this.normaAnchor('eventStart', kind, ev.norma && ev.norma.start);
   },
 
   updateEvent(delta){
@@ -172,7 +173,7 @@ mixin(GameScene, {
         ev.tick = d.tickMs ? d.tickMs(this.alertLevel, this) : 1e9;
         if (d.tick) d.tick(this, vx, vy, ev);
       }
-      if (ev.t <= 0){ if (d && d.end) d.end(this); if (this[slot] === ev) this[slot] = null; }
+      if (ev.t <= 0){ if (d && d.end) d.end(this); if (this[slot] === ev) this[slot] = null; this.normaAnchor('eventEnd', ev.kind, ev.norma && ev.norma.end); }
     });
   },
 

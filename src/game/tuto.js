@@ -21,7 +21,7 @@ mixin(GameScene, {
     this.tutoUiClear(); this.tutoStepEnter(true);
   },
   // une transmission de N.O.R.M.A. (la seule boîte de texte du tuto). hold : la consigne reste affichée ; sinon elle s'efface après lecture.
-  tutoSay(key, hold){ Norma.say(AGP_LINES.tuto[key], { prio:true, hold:!!hold }); },
+  tutoSay(key, hold){ Norma.say(normaTutoLine(levelById('w1-tuto'), key), { prio:true, hold:!!hold }); },
   tutoSfx(name, x){ try { sfx.play(name, { pan: this.panOf(x) }); } catch(e){ /* ignore */ } },
 
   /* ---------- ÉTAPES PÉDAGOGIQUES ---------- */
