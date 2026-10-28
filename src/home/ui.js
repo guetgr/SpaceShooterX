@@ -196,13 +196,11 @@ mixin(HomeScene, {
       '<div class="om-row om-risk"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
       '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
       (l.type === 'tuto' ? '' : this.loadoutLine()) +
-      this.finitionLine(l, p) +
-      '<details class="om-details"><summary>DETAILS · N.O.R.M.A.</summary><div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div></details>';
+      this.finitionLine(l, p);
+    $('menuNormaTxt').textContent = unl ? agpBrief(l) : AGP_LINES.locked;               // la note de service est dite par N.O.R.M.A., au-dessus de la fiche (présentation des transmissions en mission)
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
     if ($('btnLoadout')) $('btnLoadout').onclick = ()=>{ sfx.uiSelect(); this.goHomePage(-1); AtelierGarage.openSection('baies'); };
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
-    const tip=$('levelCard').querySelector('.completion-tip');
-    if(tip) $('levelCard').querySelector('.om-details').appendChild(tip);
     this.focusOrbitalLevel();
     this.updateOrbitalUi();
     this.setHomeVanTier(l.threat);

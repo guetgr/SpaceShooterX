@@ -22,14 +22,14 @@
 #mapOrbit .nd-num{font-size:7px;left:auto;right:-6px;top:-8px;bottom:auto;padding:3px;background:#101a17;color:#cbd4c9;border:1px solid #405248}
 #mapOrbit .node.sel .nd-num{color:#ffce27;border-color:#ffce27}
 #mapOrbit .node-pct{display:none}
-#pageMap #levelCard{position:absolute;top:412px;left:22px;right:22px;bottom:48px;width:auto;min-height:0;padding:7px 12px;margin:0;border:1px solid #405248;background:#0c171af5;z-index:2;pointer-events:auto;overflow:hidden;display:flex;flex-direction:column}
+#pageMap #levelCard{position:absolute;top:442px;left:22px;right:22px;bottom:48px;width:auto;min-height:0;padding:7px 12px;margin:0;border:1px solid #405248;background:#0c171af5;z-index:2;pointer-events:auto;overflow:hidden;display:flex;flex-direction:column}
 #pageMap[data-mode=galaxy] #levelCard{display:none}
 #pageMap #levelCard:before{display:none}
 #levelCard .om-top{margin-bottom:3px;gap:3px;flex:none}
 #levelCard .om-no,#levelCard .om-tag{font-size:5px;letter-spacing:.3px}
 #levelCard .om-tag{background:#c7b477}
 #levelCard .lc-name{font-size:9px;margin-bottom:3px;color:#eef1e7;flex:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#levelCard .om-row{padding:2px 0;gap:5px;border-color:#34433b;flex:none}
+#levelCard .om-row{padding:1px 0;gap:5px;border-color:#34433b;flex:none}
 #levelCard .om-row>span{flex:0 0 51px;font-size:5px}
 #levelCard .om-row>em{font-size:15px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #levelCard .om-pips u{width:5px;height:6px}
@@ -38,7 +38,7 @@
 #levelCard .lc-comp b{color:#eef1e7;white-space:nowrap}
 #levelCard .lc-comp i{flex:1;height:4px;position:relative;background:#263b32}
 #levelCard .lc-comp i u{display:block;height:100%;background:#43a86b}
-#levelCard .completion-tip{font-size:12px;color:#a9bdb0;margin:3px 0}
+#levelCard .completion-tip{display:none}
 #levelCard .completion-na{font-size:11px;color:#a9bdb0}
 #levelCard .om-details{margin-top:3px;flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
 #levelCard .om-details summary{cursor:pointer;font-size:6px;min-height:20px;display:flex;align-items:center;color:#c7b477;flex:none}
@@ -60,3 +60,10 @@
 #vortexCard .vx-btns{display:flex;flex-direction:column;gap:5px;margin-top:6px}
 #vortexCard .vx-btns .btn{width:100%;margin:0;font-size:9px;padding:9px 8px}
 #vortexCard .vx-btns .btn.secondary{padding:6px 8px;font-size:7px}
+
+/* N.O.R.M.A. au-dessus de la fiche d'ordre : même présentation que ses transmissions en mission (visage + boîte, cf. hud.css) */
+#pageMap #menuNorma{position:absolute;top:391px;left:22px;right:22px;z-index:2;display:flex;gap:6px;align-items:flex-start;pointer-events:none}
+#menuNorma .nm-body{flex:1;min-width:0;box-sizing:border-box;min-height:38px;padding:4px 7px;border:0;border-left:2px solid #7c8b74;background:#0c1410c9}
+#menuNorma .nm-head{font:normal 6px/1 'SSX Label',monospace;color:#bbaa78;letter-spacing:1px;margin-bottom:4px}
+#menuNorma .nm-txt{font:normal 13px/1.2 'SSX Text',monospace;color:#cbd4c9;text-shadow:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#pageMap[data-mode=galaxy] #menuNorma{display:none}

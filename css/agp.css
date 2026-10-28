@@ -286,10 +286,11 @@
 .go-extra{ margin:3px 0 0; font-size:16px; line-height:1; text-align:left; color:#3b463e; }
 .go-extra div{ padding:1px 0; }
 .go-extra .go-near{ color:#8a4a00; } .go-extra .go-boss{ color:#a02a20; }
-.rp-norma{ margin-top:5px; padding:5px 8px 6px; background:#0a100d; border:2px solid var(--agp-ink); }
-.rp-norma .rp-lab{ color:var(--agp-yellow); }
-.rp-norma p{ margin:2px 0 0; font-family:var(--vt); font-size:18px; line-height:1; color:#8dffb8; min-height:36px; }
-.rp-norma p.typing::after{ content:'█'; margin-left:2px; animation:blink .5s steps(2) infinite; }
+.rp-norma{ display:flex; gap:6px; align-items:flex-start; margin-top:6px; }      /* même présentation que les transmissions en mission : visage + boîte (.nm-av / .nm-body) */
+.rp-norma .nm-body{ flex:1; min-width:0; min-height:44px; }
+.rp-norma .nm-txt{ min-height:36px; }
+.rp-norma .nm-txt.typing::after{ content:'█'; margin-left:2px; animation:blink .5s steps(2) infinite; }
+.rp-norma:has(.typing) .nm-mouth{ animation:nmTalk .2s steps(2) infinite; }
 @keyframes blink{ 50%{ opacity:0; } }
 .new-best{ margin:8px 8px 0; padding:2px 6px; text-align:center; font-family:var(--px); font-size:7px; letter-spacing:1px; color:#14110a; background:#ffd75a; }
 /* le document défile seul ; les boutons restent fixes en bas de l'écran */
