@@ -12,6 +12,7 @@
   "data/atelier.js",
   "data/techs.js",
   "data/events.js",
+  "data/event-params.js",
   "data/enemy-stats.js",
   "ui/pixel-icons.js",
   "ui/ui-icons.js",

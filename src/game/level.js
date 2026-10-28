@@ -27,7 +27,7 @@ mixin(GameScene, {
     const ev = this.lvEvents[0];
     if (ev && this.lvT >= ev.at){
       const slot = EVENT_DEFS[ev.kind].small ? 'curSmall' : 'curEvent';
-      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, (ev.duration == null ? EVENT_DEFS[ev.kind].dur(this.alertLevel) : ev.duration * 1000)); }
+      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, ev.duration == null ? undefined : ev.duration * 1000, ev.params); }
     }
     if (this.tuto) return;
     const g = d.goal || {};

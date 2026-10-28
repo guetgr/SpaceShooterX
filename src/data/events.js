@@ -7,8 +7,8 @@
 const evRndX = (sc, m)=>{ const v = sc.visibleXRange(m||20); return Phaser.Math.Between(v.min, v.max); };
 
 const EVENT_DEFS = {
-  crystal:  { min:1, name:'PLUIE DE CRISTAUX', sub:'Ramasse tout ce que tu peux !', w:()=>7, dur:()=>Phaser.Math.Between(20000,35000), tickMs:()=>360,
-              tick:(sc,vx,vy)=>{ const n = 1 + Math.floor(sc.alertLevel/3); for (let i=0;i<n;i++) sc.spawnGemAt(Phaser.Math.Between(vx.min, vx.max), vy.min - 10, Math.random() < 0.2 ? 6 : 3, Math.random() < 0.2 ? 'gemL' : 'gemM', Phaser.Math.Between(90, 130)); } },
+  crystal:  { min:1, name:'PLUIE DE CRISTAUX', sub:'Ramasse tout ce que tu peux !', w:()=>7, dur:(a,sc)=>evDurRange(sc,'crystal'), tickMs:(a,sc)=>evParam(sc,'crystal','tickMs'),
+              tick:(sc,vx,vy)=>{ const n = evParam(sc,'crystal','perTick'), big = evParam(sc,'crystal','bigChance'), f0 = evParam(sc,'crystal','fallMin'), f1 = evParam(sc,'crystal','fallMax'); for (let i=0;i<n;i++) sc.spawnGemAt(Phaser.Math.Between(vx.min, vx.max), vy.min - 10, Math.random() < big ? 6 : 3, Math.random() < big ? 'gemL' : 'gemM', Phaser.Math.Between(f0, f1)); } },
   meteors:  { min:1, name:'TEMPETE DE METEORITES', sub:'Esquive les rochers !', w:()=>7, dur:()=>Phaser.Math.Between(35000,50000), tickMs:(a)=>Math.max(300, 700 - 18*(a-1)),
               start:(sc)=>{ sc._meteorStyle = Phaser.Math.Between(0, 2); },          // une seule couleur par pluie (rouge, bleu ou violet)
               end:(sc)=>{ sc._meteorStyle = undefined; },

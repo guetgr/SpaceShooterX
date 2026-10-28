@@ -11,7 +11,7 @@ mixin(GameScene, {
       let roll = Math.random() * list.reduce((t,e)=> t + e.w, 0), kind = list[0].k;
       for (const e of list){ if (roll < e.w){ kind = e.k; break; } roll -= e.w; }
       used.add(kind);
-      const dur = EVENT_DEFS[kind].dur(al), first = this.evPlan.length === 0;
+      const dur = EVENT_DEFS[kind].dur(al, this), first = this.evPlan.length === 0;
       const earliest = lastEnd + (first ? 4 : Phaser.Math.Between(4, 9)), latest = end - dur/1000 - 2;
       if (!first && latest < earliest) continue;                          // pas la place: on essaie un événement plus court
       const at = (latest <= earliest) ? earliest : Phaser.Math.FloatBetween(earliest, Math.min(latest, earliest + (first ? 14 : 8)));   // au moins 1 par intervalle (le boss attend la fin s'il le faut)
@@ -147,15 +147,16 @@ mixin(GameScene, {
   finishNebula(n, inside){ n.phase = 'leave'; if (inside){ sfx.nebulaExit(); sfx.setNebula(false); sfx._nebOn = false; } },
 
   // EVENEMENTS ALEATOIRES (toutes les 80-140 s): pluie de cristaux, tempête de météorites, boss surprise
-  startEvent(kind, dur){
+  startEvent(kind, dur, params){
     const al = this.alertLevel, low = this.hp < this.stats.maxHp*0.5;
     if (!kind){
       const list = Object.keys(EVENT_DEFS).filter(k=> al >= EVENT_DEFS[k].min && !EVENT_DEFS[k].small && !(k === 'nebula' && this.neb)).map(k=>({ k, w: EVENT_DEFS[k].w(al, low) }));
       let roll = Math.random() * list.reduce((t,e)=> t + e.w, 0); kind = list[0].k;
       for (const e of list){ if (roll < e.w){ kind = e.k; break; } roll -= e.w; }
     }
-    const d = EVENT_DEFS[kind];
-    this[d.small ? 'curSmall' : 'curEvent'] = { kind, t: dur || d.dur(al), tick: 0 };
+    const d = EVENT_DEFS[kind], ev = { kind, t: 0, tick: 0, params: params || null };
+    this[d.small ? 'curSmall' : 'curEvent'] = ev;              // posé avant le calcul de la durée : evParam y lit les paramètres de l'événement programmé
+    ev.t = dur || d.dur(al, this);
     this.notice(d.name, d.sub);
     sfx.eventStart(kind);
     if (d.start) d.start(this);
@@ -168,7 +169,7 @@ mixin(GameScene, {
       const d = EVENT_DEFS[ev.kind];
       ev.t -= delta; ev.tick -= delta;
       if (ev.tick <= 0 && d){
-        ev.tick = d.tickMs ? d.tickMs(this.alertLevel) : 1e9;
+        ev.tick = d.tickMs ? d.tickMs(this.alertLevel, this) : 1e9;
         if (d.tick) d.tick(this, vx, vy, ev);
       }
       if (ev.t <= 0){ if (d && d.end) d.end(this); if (this[slot] === ev) this[slot] = null; }
