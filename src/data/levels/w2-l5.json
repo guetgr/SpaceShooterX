@@ -10,7 +10,7 @@
     "first": 250
   },
   "world": "w2",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "tuto": false,
   "goal": {},
   "waves": [],

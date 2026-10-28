@@ -13,7 +13,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 20
     },
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "goal": {},
     "waves": [],
     "events": [],
@@ -130,7 +130,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 40
     },
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "events": [],
@@ -189,7 +189,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "mission",
@@ -254,7 +254,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "mission",
@@ -319,7 +319,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 70
     },
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "events": [],
@@ -354,7 +354,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 150
     },
     "world": "w1",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "goal": {},
     "waves": [],
@@ -496,7 +496,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w2",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -638,7 +638,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w2",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -781,7 +781,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w2",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -928,7 +928,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w2",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -1064,7 +1064,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 250
     },
     "world": "w2",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "goal": {},
     "waves": [],
@@ -1208,7 +1208,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w3",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -1344,7 +1344,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 130
     },
     "world": "w3",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "events": [],
@@ -1488,7 +1488,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w3",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -1635,7 +1635,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "world": "w3",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "waves": [],
     "spawnClock": "difficulty",
@@ -1771,7 +1771,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "first": 300
     },
     "world": "w3",
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "tuto": false,
     "goal": {},
     "waves": [],

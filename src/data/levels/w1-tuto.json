@@ -10,7 +10,7 @@
     "first": 20
   },
   "world": "w1",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "goal": {},
   "waves": [],
   "events": [],

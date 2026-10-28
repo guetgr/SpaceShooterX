@@ -18,7 +18,7 @@
     }
   ],
   "world": "w2",
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "tuto": false,
   "waves": [],
   "spawnClock": "difficulty",
