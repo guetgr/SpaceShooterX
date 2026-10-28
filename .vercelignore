@@ -1,9 +1,7 @@
 sources/
 docs/
-tools/
+tools/*
+!tools/editor/
 backups/
 dist/
 *.md
-
-
-editor.html
