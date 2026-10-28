@@ -198,5 +198,32 @@ with tempfile.TemporaryDirectory() as folder:
         try: level_files.validate_level(bd,bd); raise SystemExit('version %r acceptée'%(bad_v,))
         except ValueError as e: assert 'schemaVersion' in str(e)
     assert level_files.migrate_doc(level_files.migrate_doc(d1))==level_files.migrate_doc(d1)
+    # garde du serveur : origine, Content-Type, Host
+    import http.client
+    def raw(headers,path='/__editor/validate-level',body=None):
+        c=http.client.HTTPConnection('127.0.0.1',server.server_port); c.putrequest(path and 'POST',path,skip_host=True,skip_accept_encoding=True)
+        data=json.dumps({'levels':{'w1-tuto':original['w1-tuto']}}).encode() if body is None else body
+        for k,v in {**headers,'Content-Length':str(len(data))}.items(): c.putheader(k,v)
+        c.endheaders(); c.send(data); st=c.getresponse().status; c.close(); return st
+    host='127.0.0.1:%d'%server.server_port; js='application/json'
+    assert raw({'Host':host,'Content-Type':js})==200
+    assert raw({'Host':host,'Content-Type':js+'; charset=utf-8','Origin':'http://localhost:%d'%server.server_port})==200
+    assert raw({'Host':host,'Content-Type':js,'Origin':'http://127.0.0.1:%d'%server.server_port})==200
+    assert raw({'Host':host,'Content-Type':js,'Origin':'http://evil.example'})==403
+    assert raw({'Host':host,'Content-Type':js,'Origin':'http://localhost:1'})==403
+    assert raw({'Host':host,'Content-Type':'text/plain'})==415
+    assert raw({'Host':host})==415
+    assert raw({'Host':'evil.example:%d'%server.server_port,'Content-Type':js})==421
+    assert raw({'Host':'evil.example','Content-Type':js})==421
+    assert raw({'Host':host,'Content-Type':js},'/__editor/levels',b'{}')==400  # garde passée, document refusé
+    assert raw({'Host':host,'Content-Type':'text/plain'},'/__editor/levels')==415
+    assert raw({'Host':host,'Content-Type':js},'/__editor/save')==404
+    assert level_files.read_levels(root)['w1-tuto']['tutorial']['sats']['hp']==42
+    # nom de niveau : 1 à 40 caractères, sans < ni >
+    for nm,ok in [('CEINTURE DE DEBRIS',True),('A'*40,True),('',False),('A'*41,False),('<b>x</b>',False),('a>b',False),(5,False)]:
+        nd=copy.deepcopy(original['w1-l1']);nd['name']=nm
+        try: level_files.validate_level(nd,original['w1-l1']);got=True
+        except ValueError as e: got=False;assert 'name' in str(e)
+        assert got==ok,(nm,ok)
     server.shutdown()
 print('OK : 16 JSON, mobs et bossTune bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')

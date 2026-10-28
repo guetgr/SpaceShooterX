@@ -70,7 +70,6 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/sim_balance.py` — Simulateur d'équilibrage des niveaux : un joueur automatique joue les niveaux en avance rapide (~60x le temps réel), sans affichage ni son.
 - `tools/smoke_test.py` — Test de fumée headless : charge le jeu, lance une partie, vérifie qu'il n'y a aucune erreur JS.
 - `tools/techs_test.py` — Technologies en mission : le chargement remplace l'arbre. Rien n'est actif au départ ; chaque technologie emportée s'ASSEMBLE par une carte
-- `tools/timeline_export_test.py` — Vérifie l'export HTTP dans un dossier temporaire, sans toucher aux réglages du jeu.
 - `tools/timeline_test.js` — Contrat des vagues : application, remise à zéro, temps, redémarrage et saturation.
 - `tools/tunables_test.py` — Réglages internes des boss / mobs spéciaux (src/data/tunables.js, lvDef.bossTune).
 

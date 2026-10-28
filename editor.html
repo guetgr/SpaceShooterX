@@ -139,7 +139,8 @@ function renderList(){
   S.levels.forEach(l=>{
     if (l.world !== w){ w = l.world; const h = document.createElement('h3'); h.textContent = l.worldName; L.appendChild(h); }
     const e = document.createElement('div'); e.className = 'lv' + (l.id === S.sel ? ' sel' : ''); e.dataset.id = l.id;
-    e.innerHTML = '<i></i><span class="n">' + (l.tuto ? '?' : l.num) + '</span><span>' + l.name + '</span><span class="t">' + l.type + '</span>';
+    e.innerHTML = '<i></i><span class="n"></span><span class="nm"></span><span class="t"></span>';
+    e.children[1].textContent = l.tuto ? '?' : l.num; e.children[2].textContent = l.name; e.children[3].textContent = l.type;
     e.onclick = ()=>{ S.sel = l.id; S.botRes = null; renderList(); renderForm(); renderResults(); };
     L.appendChild(e);
   });
@@ -234,6 +235,7 @@ window.addEventListener('message', ev=>{
   } else if (m.type === 'ready' && m.mode === 'bot'){ S.botReady = true; $('btnBot').disabled = false; }
   else if (m.type === 'bot-progress'){ $('botBar').firstChild.style.width = Math.round(m.done / m.total * 100) + '%'; }
   else if (m.type === 'bot-done'){ S.botRes = Object.assign({ levelId:m.levelId, results:m.results }, { skill:$('skill').selectedOptions[0].textContent }); $('btnBot').disabled = false; $('botBar').style.display = 'none'; renderResults(); }
+  else if (m.type === 'apply-error') toast('Réglages refusés par le jeu : ' + m.error, true);
   else if (m.type === 'bot-error'){ $('btnBot').disabled = false; $('botBar').style.display = 'none'; toast('Bot : ' + m.error, true); }
 });
 $('list').addEventListener('input', ()=>{});

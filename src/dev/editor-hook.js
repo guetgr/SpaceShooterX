@@ -135,10 +135,12 @@
   window.addEventListener('message', ev=>{
     if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
     const m = ev.data;
-    if (m.type === 'apply') applyTuning(m.overrides);
-    else if (m.type === 'play'){ applyTuning(m.overrides); launch(m.levelId); }
-    else if (m.type === 'bot') runBot(m);
-    else if (m.type === 'snapshot') send({ type:'snapshot', levels:snapshot() });
+    try {
+      if (m.type === 'apply') applyTuning(m.overrides);
+      else if (m.type === 'play'){ applyTuning(m.overrides); launch(m.levelId); }
+      else if (m.type === 'bot') runBot(m);
+      else if (m.type === 'snapshot') send({ type:'snapshot', levels:snapshot() });
+    } catch(e){ send({ type:'apply-error', error:String(e && e.message || e) }); }
   });
   const wait = setInterval(()=>{ if (window.__ssxScene && window.__ssxScene.scene.isActive('home')){ clearInterval(wait); ready(); } }, 200);
 })();

@@ -114,6 +114,8 @@ Les cas invalides communs au client et au serveur sont écrits une fois dans `to
 - `node tools/norma_level_test.js`, `node tools/event_params_node_test.js`, `node tools/level_look_test.js` : N.O.R.M.A., paramètres d'événement, décor/musique (sans navigateur).
 - `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.
 
+**Protections du serveur** : les POST sous `/__editor/` exigent `Content-Type: application/json` (415), un en-tête `Host` local `localhost` / `127.0.0.1` avec le port d'écoute (421, contre le DNS rebinding) et, si `Origin` est présent, la même origine locale (403) ; une page tierce ne peut donc pas écrire les niveaux. L'ancien point d'entrée `/__editor/save` (écriture de `tuning.js`) a été supprimé. Un nom de niveau fait 1 à 40 caractères, sans `<` ni `>`.
+
 Après une modification de `tools/serve.py`, redémarrer le serveur. Les sauvegardes de progression des joueurs sont isolées dans l’aperçu et le bot.
 
 ## Réglages des boss

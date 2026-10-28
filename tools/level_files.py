@@ -78,6 +78,7 @@ def validate_level(d, original, root=ROOT):
             import math
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value): raise ValueError(at + ' : nombre fini requis')
         elif isinstance(ref, str) and (not isinstance(value,str) or len(value)>10000): raise ValueError(at + ' : texte invalide')
+    if not isinstance(d.get('name'),str) or not 1 <= len(d['name']) <= 40 or '<' in d['name'] or '>' in d['name']: raise ValueError('name : 1 à 40 caractères, sans < ni >')
     for key in ['name','threat','hpMul','dmgMul','reward','goal','zoom','ambient','tutorial']:
         if key in original: shape(d[key],original[key],key)
     if not 1 <= d['threat'] <= 20 or d['hpMul'] <= 0 or d['dmgMul'] <= 0: raise ValueError('Difficulté invalide')
