@@ -175,13 +175,14 @@
       const c = evCat(e.kind);
       if (c && typeof c.min === 'number' && c.min > threat) warn('Événement « ' + e.kind + ' » (à ' + e.at + ' s) : prévu pour une alerte ' + c.min + ' ou plus, la menace du niveau est ' + threat + ' ; il démarre quand même, avec les valeurs de l\'alerte ' + threat);
     });
-    // un seul événement à la fois par emplacement (petits / grands, level.js) : le second attend la fin du premier
-    const sorted = events.slice().sort((a, b)=> a.at - b.at);
-    for (let i = 1; i < sorted.length; i++){
-      const a = sorted[i - 1], b = sorted[i], ca = evCat(a.kind), cb = evCat(b.kind);
-      if (ca && cb && !!ca.small !== !!cb.small) continue;
-      if (b.at - a.at < 5) warn('Événements « ' + a.kind + ' » (' + a.at + ' s) et « ' + b.kind + ' » (' + b.at + ' s) à moins de 5 s : un seul à la fois, le second attendra la fin du premier');
-      else if (typeof a.duration === 'number' && b.at < a.at + a.duration) warn('Événement « ' + b.kind + ' » (' + b.at + ' s) : « ' + a.kind + ' » dure jusqu\'à ' + (a.at + a.duration) + ' s, il attendra la fin');
+    // emplacements d'événements : src/game/level.js:28-30 (un événement programmé ne démarre que si son emplacement est libre : `!this[slot]`, slot = curSmall si EVENT_DEFS[kind].small, sinon curEvent)
+    // et src/events/core.js:158 (startEvent pose l'événement dans le même emplacement). Deux GRANDS événements ne se chevauchent donc jamais : le second attend la fin du premier.
+    // Deux petits événements, ou un petit et un grand, ne se gênent pas par ce mécanisme (petits : curSmall, grands : curEvent) ; on ne les signale pas. Seuls les grands (non `small`) sont jugés.
+    const big = events.filter(e=> { const c = evCat(e.kind); return c && !c.small; }).sort((a, b)=> a.at - b.at);
+    for (let i = 1; i < big.length; i++){
+      const a = big[i - 1], b = big[i];
+      if (b.at - a.at < 5) warn('Grands événements « ' + a.kind + ' » (' + a.at + ' s) et « ' + b.kind + ' » (' + b.at + ' s) à moins de 5 s : un seul grand événement à la fois, le second attendra la fin du premier');
+      else if (typeof a.duration === 'number' && b.at < a.at + a.duration) warn('Grand événement « ' + b.kind + ' » (' + b.at + ' s) : « ' + a.kind + ' » dure jusqu\'à ' + (a.at + a.duration) + ' s, il attendra la fin');
     }
     if (secs != null) events.forEach(e=> { if (e.at > secs) warn('Événement « ' + e.kind + ' » à ' + e.at + ' s : après la fin de l\'objectif (' + secs + ' s), il ne sera jamais joué'); });
     const messages = (isObj(doc.norma) && Array.isArray(doc.norma.messages)) ? doc.norma.messages : [];
@@ -206,6 +207,14 @@
     return { errors, warnings };
   }
 
-  const api = { validateLevel };
+  // texte du toast d'export refusé : pour chaque niveau en erreur, sa première erreur (3 niveaux au plus, puis « … et N autres »). list = [{ id, errors:[…] }]
+  function exportRefusal(list){
+    const bad = (list || []).filter(x=> x.errors && x.errors.length);
+    if (!bad.length) return '';
+    const shown = bad.slice(0, 3).map(x=> x.id + ' : ' + x.errors[0]);
+    return 'Export refusé : ' + shown.join(' ; ') + (bad.length > 3 ? ' … et ' + (bad.length - 3) + ' autres' : '') + ' (détail dans le bandeau du niveau).';
+  }
+
+  const api = { validateLevel, exportRefusal };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.EditorValidator = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

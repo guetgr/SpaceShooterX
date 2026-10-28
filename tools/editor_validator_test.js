@@ -57,11 +57,13 @@ const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
   const r = W(L1, { events:[{ kind:'mines', at:10 }] }); assert.deepStrictEqual(r.errors, []); assert.ok(has(r, 'prévu pour une alerte 3'));
   assert.ok(!has(W(L1, { threat:3, events:[{ kind:'mines', at:10 }] }), 'prévu pour une alerte'));
 }
-{ // deux événements proches : même emplacement (grands) ; un petit et un grand ne se gênent pas ; durée connue
-  assert.ok(has(W(L1, { events:[{ kind:'crystal', at:10 }, { kind:'meteors', at:13 }] }), 'moins de 5 s'));
-  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10 }, { kind:'swarm', at:11 }] }), 'moins de 5 s'));
+{ // deux GRANDS événements seulement (level.js:28-30 : un emplacement par taille) ; petit+petit et petit+grand ne se gênent pas
+  assert.ok(has(W(L1, { events:[{ kind:'crystal', at:10 }, { kind:'meteors', at:13 }] }), 'Grands événements'));                 // grand + grand
+  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10 }, { kind:'swarm', at:11 }] }), 'moins de 5 s'));                      // grand + petit
+  assert.ok(!has(W(L1, { events:[{ kind:'swarm', at:10 }, { kind:'goldrush', at:11 }] }), 'moins de 5 s'));                     // petit + petit
   assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10 }, { kind:'meteors', at:30 }] }), 'attendra'));
   assert.ok(has(W(L1, { events:[{ kind:'crystal', at:10, duration:25 }, { kind:'meteors', at:30 }] }), 'attendra la fin'));
+  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10, duration:25 }, { kind:'swarm', at:30 }] }), 'attendra la fin'));
 }
 { // après la fin de l'objectif (survive 60 s) ; kill : pas de règle
   assert.ok(has(W(L1, { events:[{ kind:'crystal', at:61 }] }), 'après la fin de l\'objectif'));
@@ -94,6 +96,14 @@ const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
 { // musique de boss sans boss final
   assert.ok(has(W('w2-l1', { audio:{ boss:musicCatalog.boss[0] } }), 'audio.boss est ignoré'));
   assert.ok(!has(W(L1, { audio:{ boss:musicCatalog.boss[0] } }), 'audio.boss est ignoré'));
+}
+// toast d'export : première erreur par niveau, 3 niveaux au plus
+{
+  const E = require('./editor/validator.js').exportRefusal, mk = (id, ...errors)=> ({ id, errors });
+  assert.strictEqual(E([mk('a'), mk('b')]), '');
+  assert.strictEqual(E([mk('w1-l2', 'Pool invalide', 'autre')]), 'Export refusé : w1-l2 : Pool invalide (détail dans le bandeau du niveau).');
+  assert.strictEqual(E([mk('a', 'x'), mk('b'), mk('c', 'y')]), 'Export refusé : a : x ; c : y (détail dans le bandeau du niveau).');
+  assert.strictEqual(E([mk('a', '1'), mk('b', '2'), mk('c', '3'), mk('d', '4'), mk('e', '5')]), 'Export refusé : a : 1 ; b : 2 ; c : 3 … et 2 autres (détail dans le bandeau du niveau).');
 }
 // erreurs : un document sans catalogue ne plante pas ; un document non objet est refusé
 assert.deepStrictEqual(validateLevel(docs[L1], {}).errors, []);

@@ -204,8 +204,8 @@ $('btnBot').onclick = ()=>{
 $('btnReset').onclick = ()=>{ if (!confirm('Remettre TOUS les réglages aux valeurs d\'origine ? (rien n\'est écrit tant que tu n\'exportes pas)')) return; S.ov = { tuto:{}, levels:{} }; changed(); renderForm(); };
 $('btnSave').onclick = async ()=>{
   try {
-    const bad = S.levels.filter(l=> validateOf(l.id).errors.length).map(l=> l.id);
-    if (bad.length){ toast('Export refusé : erreurs dans ' + bad.join(', ') + ' (voir le bandeau en haut du niveau).', true); return; }
+    const msg = EditorValidator.exportRefusal(S.levels.map(l=> ({ id:l.id, errors:validateOf(l.id).errors })));
+    if (msg){ toast(msg, true); return; }
   } catch(e){ toast('Validation indisponible (' + e.message + ') : le serveur vérifiera à l\'export.', true); }
   const levels = Object.fromEntries(S.levels.map(l=> [l.id, editorLevelDocument(l.id)]));
   const snapshot = JSON.stringify(S.ov);
