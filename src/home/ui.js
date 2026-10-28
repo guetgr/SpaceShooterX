@@ -48,9 +48,12 @@ mixin(HomeScene, {
       if (!pts.has(e.pointerId)) return;
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
       if (pts.size === 2 && pinch0 && Math.abs(pinchDist() - pinch0) > 60){ pinch0 = 0; if (canGalaxy()) this.enterGalaxy(); }
+
+      if (down && pts.size === 1 && canGalaxy()) this.orbitDragMove(e.clientX - sx, e.clientY - sy, box.getBoundingClientRect().width / GAME_W);
     });
-    const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; };
+    const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; this.orbitDragEnd(0, 0); };
     box.addEventListener('pointercancel', pinchEnd);
+    box.addEventListener('click', e=>{ if (this._orbitDragged && performance.now() - this._orbitDragged < 350){ e.stopPropagation(); e.preventDefault(); } }, true);      // un glissement ne déclenche pas le clic sur un niveau
     box.addEventListener('wheel', e=>{ if (e.deltaY > 20 && !e.target.closest('#levelCard') && canGalaxy()) this.enterGalaxy(); }, { passive:true });
     box.addEventListener('pointerdown', e=>{
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
@@ -61,10 +64,11 @@ mixin(HomeScene, {
       if (e.target.closest && e.target.closest('#treeTabs') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
     });
     box.addEventListener('pointerup', e=>{
-      pinchEnd(e);
+      pts.delete(e.pointerId); pinch0 = 0;
       if (!down) return; down = false;
       if (!this.homeOn || document.querySelector('.overlay:not(.hidden)')) return;
       const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (this.orbitDragEnd(dx, performance.now() - st)) return;
       if (dy > 90 && dy > Math.abs(dx)*1.5 && performance.now() - st < 700 && canGalaxy()){ this.enterGalaxy(); return; }
       if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5 && performance.now() - st < 700){
         // sur la carte du monde (planète + niveaux en orbite) : glisser passe d'un niveau à l'autre, pas d'une page à l'autre

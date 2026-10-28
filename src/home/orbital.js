@@ -13,6 +13,7 @@ function homeOrbitPoint(t, rotation = 0){
 }
 mixin(HomeScene, {
   initOrbitalUi(){
+    this.orbitDrag = null;
     this.orbitRotation = null;      // null : pas encore placé, le premier focus se fait sans animation
   },
   // passe au niveau précédent/suivant du monde affiché (direction -1/1) : swipe sur la planète, ou clic direct sur un niveau visible (renderHomeMap)
@@ -30,6 +31,30 @@ mixin(HomeScene, {
     while(target-current>Math.PI) target-=Math.PI*2;
     while(target-current<-Math.PI) target+=Math.PI*2;
     this.orbitTween=this.tweens.add({targets:this,orbitRotation:target,duration:450,ease:'Cubic.easeOut'});
+  },
+  // glissement horizontal sur la carte : la route suit le doigt ; au relâchement elle s'arrête sur le niveau le plus proche (un coup sec avance d'au moins un niveau)
+  orbitDragMove(dx, dy, scale){
+    const levels=WORLDS[this.homeWorld].levels, n=levels.length, i=levels.findIndex(l=>l.id===this.homeSel);
+    if(n<2 || i<0) return;
+    if(!this.orbitDrag){
+      if(Math.abs(dx)<10 || Math.abs(dx)<Math.abs(dy)*1.2) return;
+      if(this.orbitTween) this.orbitTween.stop();
+      this.orbitDrag={ i, base:HOME_ORBIT_FRONT-(2.5-i/(n-1)*4.7), step:4.7/(n-1), px:70*scale, x0:dx };
+    }
+    const d=this.orbitDrag, move=(d.x0-dx)/d.px;                     // en niveaux : doigt vers la gauche = niveau suivant
+    const f=Math.max(-0.25, Math.min(n-1-d.i+0.25, move));           // léger jeu au-delà des extrémités
+    this.orbitRotation=d.base+f*d.step;
+  },
+  // relâchement : retourne true s'il y avait un glissement en cours
+  orbitDragEnd(dx, ms){
+    const d=this.orbitDrag; if(!d) return false;
+    this.orbitDrag=null; this._orbitDragged=performance.now();
+    const levels=WORLDS[this.homeWorld].levels, n=levels.length;
+    let f=(this.orbitRotation-d.base)/d.step;
+    if(ms<350 && Math.abs(f)<1 && Math.abs(f)>0.15) f=Math.sign(f);  // coup de doigt rapide : au moins un niveau
+    const j=Math.max(0, Math.min(n-1, d.i+Math.round(f)));
+    if(j!==d.i) this.selectHomeLevel(levels[j].id); else this.focusOrbitalLevel();
+    return true;
   },
   updateOrbitalUi(){
     if(this.page!==0 || this.mapMode!=='world') return;
