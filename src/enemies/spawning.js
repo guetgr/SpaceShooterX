@@ -68,196 +68,197 @@ mixin(GameScene, {
     const hpScale = this.hpScaleNow();
     const speedScale = 1 + this.difficultyTier*0.08;
 
+    const st = enemyStat(type, this.lvDef);
     if (type === 'grunt'){
-      e.hp = 12*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = (55+Math.random()*30)*speedScale;
-      e.scoreValue = 8;
-      e.contactDamage = 8;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'shooter'){
-      e.hp = 20*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 46*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(140,260);
       e.fireCd = Phaser.Math.Between(900,1700);
-      e.scoreValue = 16;
-      e.contactDamage = 10;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'drone'){
-      e.hp = 9*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 34*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.wobble = Math.random()*1000;
       e.baseX = x;
-      e.scoreValue = 12;
-      e.contactDamage = 8;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'tank'){
-      e.hp = 60*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 24*speedScale;
-      e.scoreValue = 30;
-      e.contactDamage = 16;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
       e.stopY = Phaser.Math.Between(180,320);
       e.fireCd = Phaser.Math.Between(1400,2200);
     } else if (type === 'swarmer'){
-      e.hp = 5*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = (110+Math.random()*30)*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.wobble = Math.random()*1000;
       e.baseX = x;
-      e.scoreValue = 6;
-      e.contactDamage = 6;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'diver'){
-      e.hp = 8*hpScale; e.maxHp = e.hp;
-      e.scoreValue = 10;
-      e.contactDamage = 10;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
       const angle = Phaser.Math.Angle.Between(x, spawnY, this.player.x, this.player.y);
-      this.physics.velocityFromRotation(angle, 130*speedScale, e.body.velocity);
+      this.physics.velocityFromRotation(angle, enemyVy(st, speedScale), e.body.velocity);
       e.setFlipY(false);
       e.rotation = angle + Math.PI/2;
     } else if (type === 'turret'){
-      e.hp = 25*hpScale; e.maxHp = e.hp;
-      e.scoreValue = 20;
-      e.contactDamage = 4;
-      e.body.velocity.y = 20;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(100,180);
       e.fireCd = Phaser.Math.Between(800,1400);
       e.burstLeft = 0;
     } else if (type === 'splitter'){
-      e.hp = 18*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 50*speedScale;
-      e.scoreValue = 14;
-      e.contactDamage = 8;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'splitterMini'){
-      e.hp = 6*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 70*speedScale;
-      e.scoreValue = 4;
-      e.contactDamage = 5;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'shieldedGrunt'){
-      e.hp = 10*hpScale; e.maxHp = e.hp;
-      e.shieldHp = 15*hpScale; e.shieldMaxHp = e.shieldHp;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.shieldHp = st.shield*hpScale; e.shieldMaxHp = e.shieldHp;
       e.shieldRegenDelay = 0;
-      e.body.velocity.y = 60*speedScale;
-      e.scoreValue = 18;
-      e.contactDamage = 9;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'mine'){
-      e.hp = 20*hpScale; e.maxHp = e.hp;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
       e.mineDropTimer = Phaser.Math.Between(2200, 3200);
-      e.body.velocity.y = 18;
-      e.scoreValue = 10;
-      e.contactDamage = 22;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'sat'){
-      e.hp = 22*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = Phaser.Math.Between(55, 90)*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.baseX = x; e.driftX = Phaser.Math.Between(-18, 18); e.ph = Math.random()*6.28; e.wobble = 0;
-      e.scoreValue = 12;
-      e.contactDamage = 9;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'satgun'){
-      e.hp = 32*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 42*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
       e.stopY = Phaser.Math.Between(120, 200);
       e.fireCd = Phaser.Math.Between(1500, 2200);
       e.charging = false;
-      e.scoreValue = 26;
-      e.contactDamage = 8;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'bras'){
-      e.hp = BRAS.hp*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 40*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
       e.stopY = Phaser.Math.Between(120, 190);
       this.brasInit(e);
-      e.scoreValue = 40;
-      e.contactDamage = 10;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'pilleur'){
-      e.hp = PIL.hp*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 36*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
       e.stopY = Phaser.Math.Between(110, 170);
       this.pilInit(e);
-      e.scoreValue = 45;
-      e.contactDamage = 9;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'eclaireur'){
-      e.hp = EC.hp*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 40*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.baseX = x; e.ph = Math.random()*6.28; e.wobble = 0;
       e.stopY = Phaser.Math.Between(120, 190);
       this.ecInit(e);
-      e.scoreValue = 40;
-      e.contactDamage = 9;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'bomber'){
-      e.hp = 16*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 40*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.wobble = Math.random()*1000;
       e.baseX = x;
       e.fireCd = Phaser.Math.Between(1600,2200);
-      e.scoreValue = 20;
-      e.contactDamage = 8;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'sniper'){
-      e.hp = 14*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 30;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(110,190);
       e.fireCd = Phaser.Math.Between(1600,2400);
       e.telegraphing = false;
-      e.scoreValue = 22;
-      e.contactDamage = 6;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'healer'){
-      e.hp = 12*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 45*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.wobble = Math.random()*1000;
       e.baseX = x;
       e.pulseCd = 3000;
-      e.scoreValue = 24;
-      e.contactDamage = 6;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'ghost'){
-      e.hp = 16*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 70*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.wobble = Math.random()*1000;
       e.baseX = x;
       e.phaseCd = 1500;
       e.phased = false;
-      e.scoreValue = 18;
-      e.contactDamage = 10;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'elite'){
-      e.hp = 120*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 30*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(150,240);
       e.fireCd = Phaser.Math.Between(1200,1800);
-      e.scoreValue = 60;
-      e.contactDamage = 20;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'mothership'){
-      e.hp = 45*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 25*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(120,200);
       e.spawnCd = 3000;
-      e.scoreValue = 35;
-      e.contactDamage = 10;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'vortex'){
-      e.hp = 30*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 16;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(160,260);
-      e.scoreValue = 26;
-      e.contactDamage = 5;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'golden'){
-      e.hp = 10*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 0;
-      e.scoreValue = 60;
-      e.contactDamage = 1;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'kamikaze'){
-      e.hp = 14*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 55*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.kState = 'drift'; e.kT = 0; e.baseX = x;
-      e.scoreValue = 14;
-      e.contactDamage = 1;        // les dégâts viennent de son explosion, pas du contact
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;        // les dégâts viennent de son explosion, pas du contact
     } else if (type === 'spider'){
-      e.hp = 18*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 44*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(130,240);
       e.baseX = x; e.sway = Math.random()*6;
       e.fireCd = Phaser.Math.Between(1500,2500);
-      e.scoreValue = 18;
-      e.contactDamage = 9;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     } else if (type === 'charo'){
-      e.hp = 24*hpScale; e.maxHp = e.hp;
-      e.body.velocity.y = 50*speedScale;
+      e.hp = st.hp*hpScale; e.maxHp = e.hp;
+      e.body.velocity.y = enemyVy(st, speedScale);
       e.stopY = Phaser.Math.Between(130,250);
       e.fireCd = Phaser.Math.Between(800,1500);
-      e.scoreValue = 20;
-      e.contactDamage = 11;
+      e.scoreValue = st.score;
+      e.contactDamage = st.dmg;
     }
 
     // niveau 4+ : une partie des mobs entre par les côtés et traverse l'écran (de quoi te faire bouger)

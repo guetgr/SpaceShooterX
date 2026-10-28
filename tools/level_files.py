@@ -13,7 +13,7 @@ def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) != set(original): raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs'} != set(original) - {'mobs'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -34,6 +34,14 @@ def validate_level(d, original, root=ROOT):
     events = set(re.findall(r'^  (\w+):', (root/'src/data/events.js').read_text(), re.M))
     def number(v,lo,hi):
         return type(v) in (int,float) and lo <= v <= hi
+    if 'mobs' in d:
+        known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(), re.M))
+        if not isinstance(d['mobs'],dict): raise ValueError('mobs : objet requis')
+        for mob, mul in d['mobs'].items():
+            if mob not in known: raise ValueError('mobs : type de mob inconnu « %s »' % mob)
+            if not isinstance(mul,dict) or set(mul) - {'hpMul','dmgMul','speedMul','scoreMul'}: raise ValueError('mobs.%s : seuls hpMul, dmgMul, speedMul et scoreMul sont permis' % mob)
+            for k, v in mul.items():
+                if not number(v,0.1,10): raise ValueError('mobs.%s.%s : nombre entre 0,1 et 10 requis' % (mob,k))
     for kind in ['spawns','waves','events']:
         if not isinstance(d[kind],list) or len(d[kind])>1000: raise ValueError(kind + ' : liste invalide')
         for row in d[kind]:

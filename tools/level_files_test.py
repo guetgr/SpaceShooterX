@@ -20,10 +20,16 @@ for key in ['id','world','type','tuto','schemaVersion']:
     try: level_files.validate_level(bad,original['w1-tuto'])
     except ValueError: pass
     else: raise AssertionError(key)
+for mobs, ok in [({}, True), ({'grunt':{'hpMul':1.5,'speedMul':10}}, True), ({'grunt':{'hpMul':0.1}}, True), ({'gruntx':{'hpMul':2}}, False), ({'grunt':{'hpMul':0.05}}, False), ({'grunt':{'hpMul':11}}, False), ({'grunt':{'hp':2}}, False), ({'grunt':{'hpMul':'2'}}, False), ({'grunt':{'hpMul':True}}, False), ([], False)]:
+    doc=copy.deepcopy(original['w1-l1']);doc['mobs']=mobs
+    try: level_files.validate_level(doc,original['w1-l1']);got=True
+    except ValueError as e: got=False;msg=str(e)
+    assert got==ok,(mobs,ok)
+    if not ok: assert 'mobs' in msg and msg,(mobs,msg)
 with tempfile.TemporaryDirectory() as folder:
     root=Path(folder);(root/'src/data/worlds').mkdir(parents=True)
     shutil.copytree(level_files.ROOT/'src/data/levels',root/'src/data/levels')
-    for name in ['bestiary.js','events.js']:
+    for name in ['bestiary.js','events.js','enemy-stats.js']:
         shutil.copy(level_files.ROOT/'src/data'/name,root/'src/data'/name)
     serve.R=folder
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(serve.NoCache,directory=folder))
@@ -44,4 +50,4 @@ with tempfile.TemporaryDirectory() as folder:
     assert (root/'src/data/levels/w1-tuto.json').read_text()==before
     assert not post({'../../escape':tuto})['ok']
     server.shutdown()
-print('OK : 16 JSON, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')
+print('OK : 16 JSON, mobs bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')

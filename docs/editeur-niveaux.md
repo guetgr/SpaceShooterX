@@ -44,11 +44,22 @@ Les identifiants, le secteur et le type de mission restent fixes dans cette vers
 
 Une vague après la victoire ne prolonge pas la mission. Pour une mission de collecte ou d’élimination, la date du boss dépend de la progression réelle. Un événement peut attendre la libération de son emplacement.
 
+## PV et stats des mobs
+
+Les valeurs de base des mobs (PV, dégâts de contact, vitesse verticale de départ, score) sont dans `src/data/enemy-stats.js` (`ENEMY_STATS`). Une mission peut les multiplier avec la clé optionnelle `mobs` de son JSON :
+
+```json
+"mobs": { "grunt": { "hpMul": 1.5, "speedMul": 0.8 } }
+```
+
+Champs permis : `hpMul` (PV et bouclier de départ), `dmgMul` (dégâts de contact), `speedMul` (vitesse verticale de départ), `scoreMul` (score). Chaque multiplicateur est un nombre de 0,1 à 10 ; un champ absent vaut 1, et une mission sans `mobs` se comporte exactement comme avant. Un type de mob inconnu ou une valeur hors bornes est refusé par la validation. Le multiplicateur s'ajoute à l'échelle de difficulté, il ne la remplace pas. Les minuteurs, positions d'arrêt et cadences de tir ne sont pas concernés.
+
 ## Vérifications
 
 - `node tools/check_worlds.js` : structure et progression des secteurs.
 - `node tools/timeline_test.js` : horaires, quantité, réinitialisation et saturation des vagues.
 - `python3 tools/level_files_test.py` : validation et export JSON dans un dossier temporaire.
+- `python3 tools/enemy_stats_test.py` : stats des 27 types identiques à `tools/enemy_stats_snapshot.json` (`--write` pour le régénérer, seulement si un changement de valeurs est voulu) et surcharge `mobs`.
 - `python3 tools/level_files.py` : génération du cache depuis les JSON.
 - `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.
 

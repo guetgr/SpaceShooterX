@@ -423,6 +423,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ENEMY_DMG_PER_ALERT` | const | `src/data/balance.js` |  |
 | `ENEMY_DMG_TIME_MAX` | const | `src/data/balance.js` |  |
 | `ENEMY_HARD_CAP` | const | `src/core/constants.js` |  |
+| `ENEMY_STATS` | const | `src/data/enemy-stats.js` |  |
 | `enemyDmgMul` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `enemyOnScreen` | méthode | `src/combat/damage.js` | `GameScene` |
 | `enemyOnScreenLoose` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
@@ -432,6 +433,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `enemyShootHeavy` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `enemyShootSpread` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `enemySnipeShot` | méthode | `src/enemies/ai.js` | `GameScene` |
+| `enemyStat` | fonction | `src/data/enemy-stats.js` |  |
+| `enemyVy` | fonction | `src/data/enemy-stats.js` |  |
 | `ensure` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `ensure` | méthode | `src/audio/music.js` | `FileMusic` |
 | `ensureCtx` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
@@ -1213,4 +1216,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1206 symboles.
+1209 symboles.
