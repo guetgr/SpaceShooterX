@@ -216,7 +216,7 @@ mixin(GameScene, {
     const rec = this.tutoBank(); if (!rec) return;
     const host = document.getElementById('gameover').parentNode, d = rec.after - rec.before, full = rec.after >= 100;
     const el = document.createElement('div'); el.id = 'tutoEnd'; el.className = 'overlay fadein' + (victory ? ' win' : '');
-    const nx = completionNext(TUTO_ID);
+    const nx = completionNext(TUTO_ID), nextLv = victory && nextLevelOf(TUTO_ID), nextId = nextLv && nextLv.id;
     const rows = rec.rows.map((r, i)=>{
       const pc = Math.round(r.best * r.w), gain = Math.round((r.best - r.prev) * r.w), ok = r.best >= 0.999;
       return '<div class="te-row' + (ok ? ' ok' : '') + '" style="animation-delay:' + (0.5 + i*0.18) + 's"><span class="te-l">' + (ok ? uiIco('check') + ' ' : '') + r.label + '</span><span class="te-v">' + pc + '/' + r.w + (gain > 0 ? ' <em>+' + gain + '</em>' : '') + '</span><div class="te-b"><i style="width:' + Math.round(r.best*100) + '%"></i></div></div>';
@@ -231,10 +231,12 @@ mixin(GameScene, {
       (full ? '<div class="go-unlock">' + uiIco('star') + ' FINITION 100% — PARFAIT ' + uiIco('star') + '</div>' : (nx ? '<div class="te-next">IL TE MANQUE <b>' + (100 - rec.after) + '%</b> · ' + nx.tip.toUpperCase() + ' <em>+' + nx.missing + '%</em></div>' : '')) +
       (d <= 0 ? '<div class="te-next">Cette partie : ' + rec.runPct + '% · record ' + rec.after + '%</div>' : '') +
       '</div>' +
-      '<button class="btn" id="teRetry">' + (full ? 'REFAIRE LA FORMATION' : 'REFAIRE · VISER ' + (COMPLETION_STEPS.find(s=> s > rec.after) || 100) + '%') + '</button><button class="btn secondary" id="teHome">RETOUR AU BUREAU</button>';
+      (victory && nextId ? '<button class="btn" id="teNext">CONTINUER</button>' : '') +      // victoire : on enchaîne l'histoire ; seul un accident ramène à l'accueil (sans proposer de rejouer)
+      (victory ? '<button class="btn secondary" id="teRetry">' + (full ? 'REFAIRE LA FORMATION' : 'REFAIRE · VISER ' + (COMPLETION_STEPS.find(s=> s > rec.after) || 100) + '%') + '</button>' : '<button class="btn" id="teHome">RETOUR AU BUREAU</button>');
     host.appendChild(el);
-    el.querySelector('#teRetry').onclick = ()=>{ sfx.resume(); this.tutoCleanup(); this.scene.restart({ autoStart:true, tuto:true }); };
-    el.querySelector('#teHome').onclick = ()=>{ this.tutoFinish(); };
+    if (el.querySelector('#teRetry')) el.querySelector('#teRetry').onclick = ()=>{ sfx.resume(); this.tutoCleanup(); this.scene.restart({ autoStart:true, tuto:true }); };
+    if (el.querySelector('#teNext')) el.querySelector('#teNext').onclick = ()=>{ sfx.uiStart(); this.tutoCleanup(); this.scene.restart({ autoStart:true, levelId:nextId }); };
+    if (el.querySelector('#teHome')) el.querySelector('#teHome').onclick = ()=>{ this.tutoFinish(); };
     // le % monte à l'écran (compteur + barre)
     const t0 = performance.now(), n = el.querySelector('#teN'), f = el.querySelector('#teFill');
     requestAnimationFrame(()=>{ f.style.transition = 'width 1.1s cubic-bezier(.2,.8,.2,1) .25s'; f.style.width = rec.after + '%'; });
