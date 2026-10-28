@@ -110,7 +110,8 @@ def validate_level(d, original, root=ROOT):
             ids = set()
             for i, m in enumerate(n['messages']):
                 at = 'norma.messages[%d]' % i
-                if not isinstance(m,dict) or set(m)-{'id','when','at','ref','text','hold'}: raise ValueError(at + ' : objet avec id, when, at, ref, text, hold requis')
+                if isinstance(m,dict) and 'hold' in m: raise ValueError(at + '.hold : hold n\'est pas supporté sur les boîtes ; utilisez un texte court')
+                if not isinstance(m,dict) or set(m)-{'id','when','at','ref','text'}: raise ValueError(at + ' : objet avec id, when, at, ref, text requis')
                 if not isinstance(m.get('id'),str) or not m['id'].strip() or len(m['id']) > 40: raise ValueError(at + '.id : identifiant de 1 à 40 caractères requis')
                 if m['id'] in ids: raise ValueError(at + '.id : identifiant « %s » déjà utilisé' % m['id'])
                 ids.add(m['id'])
@@ -118,7 +119,6 @@ def validate_level(d, original, root=ROOT):
                 if m['when'] == 'time' and not number(m.get('at'),0,3600): raise ValueError(at + '.at : secondes entre 0 et 3600 requises')
                 if 'at' in m and not number(m['at'],0,3600): raise ValueError(at + '.at : secondes entre 0 et 3600 requises')
                 if m['when'] in ['eventStart','eventEnd'] and m.get('ref') not in events: raise ValueError(at + '.ref : nature d\'événement connue requise (lue dans src/data/events.js)')
-                if 'hold' in m and not isinstance(m['hold'],bool): raise ValueError(at + '.hold : booléen requis')
                 norma_text(m.get('text'), at + '.text')
     if 'norma' in d: check_norma(d['norma'])
     ev_reg = event_registry()

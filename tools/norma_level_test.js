@@ -33,14 +33,15 @@ assert.deepStrictEqual(Array.from(normaLines(lv, 'start')), ['A', 'B']);
 assert.deepStrictEqual(Array.from(normaLines(lv, 'banter')), ['v']);
 assert.strictEqual(normaLines(lv, 'lowhp'), AGP_LINES.lowhp);
 assert.deepStrictEqual(Array.from(normaTickEvery(lv)), [10000, 20000]);
-assert.deepStrictEqual(Array.from(normaTickEvery({ norma:{ tickEvery:[30, 20] } })), [40000, 55000]);
+for (const bad of [[30, 20], [4, 20], [20, 301], [20], 'x']) assert.deepStrictEqual(Array.from(normaTickEvery({ norma:{ tickEvery:bad } })), [40000, 55000]);
+assert.deepStrictEqual(Array.from(normaTickEvery({ norma:{ tickEvery:[5, 300] } })), [5000, 300000]);
 Norma._last = {}; assert.strictEqual(Norma.pick('boss', lv), 'C'); assert.strictEqual(Norma.pick('boss', lv), 'C');
 assert.strictEqual(normaTutoLine(lv, 'move'), 'Avancez.'); assert.strictEqual(normaTutoLine(lv, 'shoot'), AGP_LINES.tuto.shoot);
 assert.strictEqual(Norma.report('win', 'B', lv), 'gagné');
 
 // (3) plan : horaire trié, une fois chacun, ancres
 const lv3 = { norma:{ messages:[
-  { id:'t2', when:'time', at:30, text:'deux' }, { id:'t1', when:'time', at:10, text:'un', hold:true },
+  { id:'t2', when:'time', at:30, text:'deux' }, { id:'t1', when:'time', at:10, text:'un' },
   { id:'s', when:'levelStart', text:'début' }, { id:'e1', when:'eventStart', ref:'meteors', text:'météores' }, { id:'e2', when:'eventStart', ref:'meteors', text:'météores bis' },
   { id:'f', when:'eventEnd', ref:'meteors', text:'fini' }, { id:'b', when:'bossStart', text:'boss' }, { id:'w', when:'win', text:'ok' }, { id:'l', when:'lose', text:'ko' },
   { id:'x', when:'time', at:5, text:'   ' }, { id:'y', when:'time', at:6, text:'' }, { id:'z', when:'bossPhase', text:'hors périmètre' } ] } };
@@ -66,11 +67,19 @@ assert.strictEqual(sc.normaAnchor('eventStart', 'meteors'), true); assert.strict
 assert.strictEqual(sc.normaAnchor('eventEnd', 'swarm'), false);
 assert.strictEqual(sc.normaAnchor('bossStart'), true); assert.strictEqual(sc.normaAnchor('bossStart'), false);
 assert.strictEqual(sc.normaEndText('win'), 'ok'); assert.strictEqual(sc.normaEndText('win'), '');
+// événements : une fois par partie, sur la 1re occurrence ; eventEnd sans boîte eventStart part quand même
+{ const s2 = Object.assign({ tuto:false }, methods); s2._normaPlan = normaPlan({ norma:{ messages:[{ id:'only-end', when:'eventEnd', ref:'swarm', text:'fin seule' }, { id:'one', when:'eventStart', ref:'meteors', text:'une fois' }] } });
+  said.length = 0;
+  assert.strictEqual(s2.normaAnchor('eventStart', 'swarm'), false);
+  assert.strictEqual(s2.normaAnchor('eventEnd', 'swarm'), true); assert.strictEqual(said.at(-1).text, 'fin seule');
+  assert.strictEqual(s2.normaAnchor('eventEnd', 'swarm'), false);
+  assert.strictEqual(s2.normaAnchor('eventStart', 'meteors'), true); assert.strictEqual(s2.normaAnchor('eventStart', 'meteors'), false);
+  assert.strictEqual(said.length, 2); }
 // tuto : jamais
 const tu = Object.assign({}, sc, { tuto:true }); said.length = 0; assert.strictEqual(tu.normaAnchor('bossStart'), false); assert.strictEqual(said.length, 0);
 // normaTick : horaire, jamais en intro, un à la fois
 said.length = 0; sc._normaPlan = normaPlan(lv3); sc.lvT = 11; sc.introActive = true; sc.normaTick(16); assert.strictEqual(said.length, 0);
-sc.introActive = false; sc.normaTick(16); assert.deepStrictEqual(Array.from([said.length, said[0].text, said[0].o.hold]), [1, 'un', true]);
+sc.introActive = false; sc.normaTick(16); assert.deepStrictEqual(Array.from([said.length, said[0].text, said[0].o.hold]), [1, 'un', undefined]);
 Norma._showing = true; sc.lvT = 40; sc.normaTick(16); assert.strictEqual(said.length, 1);           // la précédente est encore affichée
 Norma._showing = false; sc.normaTick(16); assert.strictEqual(said.at(-1).text, 'deux'); sc.normaTick(16); assert.strictEqual(said.length, 2);
 // normaTick : intervalle des vannes lu du JSON, sinon 40-55 s

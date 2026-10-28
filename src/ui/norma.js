@@ -104,7 +104,7 @@ mixin(GameScene, {
       this.time.delayedCall(2200, ()=>{
         if (!this.running) return;
         const m = normaPlanTake(this._normaPlan, 'levelStart');
-        Norma.say(m ? m.text : Norma.pick(pool, this.lvDef), { prio:true, hold:m ? m.hold : false });
+        Norma.say(m ? m.text : Norma.pick(pool, this.lvDef), { prio:true });
         const g = this.globalGearSummary(); if (g) Norma.say(g, { gap:0 });         // 2e transmission : les atouts globaux (R&D) actifs
       });
     } });
@@ -115,9 +115,9 @@ mixin(GameScene, {
   // boîte N.O.R.M.A. ajoutée à la main sur une ancre (bossStart, ou événement : when = 'eventStart'/'eventEnd' + ref = nature) ; `own` = texte propre à l'occurrence (events[i].norma). Renvoie true si une transmission part.
   normaAnchor(when, ref, own){
     if (this.tuto || !this._normaPlan) return false;
-    const m = normaText(own) ? { text:own, hold:false } : normaPlanTake(this._normaPlan, when, ref);
+    const m = normaText(own) ? { text:own } : normaPlanTake(this._normaPlan, when, ref);
     if (!m) return false;
-    Norma.say(m.text, { prio:true, hold:m.hold }); return true;
+    Norma.say(m.text, { prio:true }); return true;
   },
   // texte du rapport de fin pour une boîte `win` / `lose` ajoutée à la main (chaîne vide sinon)
   normaEndText(when){ const m = this._normaPlan && normaPlanTake(this._normaPlan, when); return m ? m.text : ''; },
@@ -128,7 +128,7 @@ mixin(GameScene, {
     if (this._normaPlan && !this.introActive){                     // boîtes horaires : une à la fois, la suivante attend la fin de la précédente
       if (!Norma._showing) this._normaMan = false;
       const m = this._normaMan ? null : normaPlanDue(this._normaPlan, this.lvT);
-      if (m){ m.done = true; this._normaMan = true; Norma.say(m.text, { prio:true, hold:m.hold }); }
+      if (m){ m.done = true; this._normaMan = true; Norma.say(m.text, { prio:true }); }
     }
     this._normaCd -= delta; if (this._normaCd > 0) return;
     { const te = normaTickEvery(this.lvDef); this._normaCd = Phaser.Math.Between(te[0], te[1]); }

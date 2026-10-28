@@ -71,7 +71,7 @@ M=lambda **k: dict({'id':'m1','when':'time','at':12,'text':'Transmission.'},**k)
 for n, ev, ok, word in [
     ({}, None, True, ''),
     ({'start':['Bonjour.'],'boss':['A'],'progress':['a','b','c'],'banter':['x'],'lowhp':['y'],'win':['z'],'lose':['w'],'tickEvery':[20,30]}, None, True, ''),
-    ({'messages':[M(),M(id='m2',when='levelStart',at=0),M(id='m3',when='eventStart',ref='meteors'),M(id='m4',when='eventEnd',ref='meteors'),M(id='m5',when='bossStart'),M(id='m6',when='win'),M(id='m7',when='lose',hold=True)]}, None, True, ''),
+    ({'messages':[M(),M(id='m2',when='levelStart',at=0),M(id='m3',when='eventStart',ref='meteors'),M(id='m4',when='eventEnd',ref='meteors'),M(id='m5',when='bossStart'),M(id='m6',when='win'),M(id='m7',when='lose')]}, None, True, ''),
     (None, {'start':'Annonce.','end':'Fin.'}, True, ''),
     ({'start':[]}, None, False, 'norma.start'),
     ({'start':['a']*21}, None, False, 'norma.start'),
@@ -94,7 +94,8 @@ for n, ev, ok, word in [
     ({'messages':[M(when='eventEnd',ref='nope')]}, None, False, 'ref'),
     ({'messages':[M(text='')]}, None, False, 'text'),
     ({'messages':[M(text='<i>')]}, None, False, 'interdits'),
-    ({'messages':[M(hold='oui')]}, None, False, 'hold'),
+    ({'messages':[M(hold=True)]}, None, False, 'pas supporté'),
+    ({'messages':[M(hold=False)]}, None, False, 'pas supporté'),
     ({'messages':[M(extra=1)]}, None, False, 'messages[0]'),
     ({'messages':'x'}, None, False, 'messages'),
     ([], None, False, 'norma'),
