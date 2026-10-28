@@ -16,7 +16,7 @@ original = level_files.read_levels()
 assert len(original) == 16 and 'w1-tuto' in original
 for doc in original.values(): level_files.validate_level(doc,doc)
 # documents invalides communs avec tools/editor_validator_test.js (tools/fixtures/invalid_levels.json) : même refus, même message
-fixtures = json.loads((Path(__file__).parent/'fixtures/invalid_levels.json').read_text())['cases']
+fixtures = json.loads((Path(__file__).parent/'fixtures/invalid_levels.json').read_text(encoding='utf-8'))['cases']
 for case in fixtures:
     doc=copy.deepcopy(original[case['level']]); doc.update(copy.deepcopy(case['set']))
     try: level_files.validate_level(doc,original[case['level']]);msg=None
@@ -157,7 +157,7 @@ with tempfile.TemporaryDirectory() as folder:
     assert level_files.read_levels(root)['w1-tuto']['tutorial']['sats']['hp']==30
     assert post({'w1-tuto':tuto})['ok']
     assert level_files.read_levels(root)['w1-tuto']['tutorial']['sats']['hp']==42
-    assert '42' in (root/'src/data/worlds/level-data.js').read_text()
+    assert '42' in (root/'src/data/worlds/level-data.js').read_text(encoding='utf-8')
     before=(root/'src/data/levels/w1-tuto.json').read_text()
     bad=copy.deepcopy(original['w1-l2']);bad['events']=[{'kind':'missing','at':1}]
     assert not post({'w1-tuto':original['w1-tuto'],'w1-l2':bad})['ok']
@@ -172,5 +172,31 @@ with tempfile.TemporaryDirectory() as folder:
     assert post({'w1-l2':full})['ok']
     saved=level_files.read_levels(root)['w1-l2']
     for k in ['mobs','bossTune','eventTune','norma','audio','events']: assert saved[k]==full[k],k
+    # UTF-8 / octets : l'export des 16 documents inchangés ne modifie aucun fichier ; une valeur changée ne réécrit que son JSON + le cache
+    def snap(): return {f.name:(f.read_bytes(),f.stat().st_mtime_ns) for f in list((root/'src/data/levels').glob('*.json'))+[root/'src/data/worlds/level-data.js']}
+    for name,doc in level_files.read_levels(root).items(): assert level_files.dump_level(doc).encode('utf-8')==(root/'src/data/levels'/(name+'.json')).read_bytes(),name
+    for f in (level_files.ROOT/'src/data/levels').glob('*.json'): assert b'\r' not in f.read_bytes(),f
+    docs=level_files.read_levels(root)
+    assert len(docs)==16 and all(d['schemaVersion']==2 for d in docs.values())
+    import time; time.sleep(0.05)
+    a=snap(); assert post(docs)['ok']; assert snap()==a,'export inchangé : aucun fichier réécrit'
+    one=copy.deepcopy(docs); one['w1-l1']['threat']=one['w1-l1']['threat']+1; assert post(one)['ok']
+    b=snap(); diff=sorted(k for k in b if b[k]!=a[k]); assert diff==['level-data.js','w1-l1.json'],diff
+    assert not (root/'src/data/levels/index.json.tmp').exists() and not list((root/'src/data/levels').glob('*.tmp'))
+    c=snap(); level_files.generate(root); assert snap()==c,'level-data.js déterministe'
+    # accents : écrits en UTF-8 réel, pas en \\uXXXX
+    assert 'é'.encode('utf-8') in level_files.dump_level({'name':'Éclaireur é'}).encode('utf-8') and b'\\u' not in level_files.dump_level({'name':'é'}).encode('utf-8')
+    # migration v1 -> v2 : idempotente, refuse les autres versions
+    for f in (root/'src/data/levels').glob('w*.json'):
+        d=json.loads(f.read_text(encoding='utf-8')); d['schemaVersion']=1; f.write_bytes(level_files.dump_level(d).encode('utf-8'))
+    first=level_files.migrate(root); assert len(first)==16,first
+    snap1=snap(); assert level_files.migrate(root)==[] and snap()==snap1,'migrer deux fois = migrer une fois'
+    assert all(json.loads(f.read_text(encoding='utf-8'))['schemaVersion']==2 for f in (root/'src/data/levels').glob('w*.json'))
+    d1=copy.deepcopy(docs['w1-l1']); d1['schemaVersion']=1; level_files.validate_level(d1,d1)
+    for bad_v in [0,3,'2',None,True]:
+        bd=copy.deepcopy(docs['w1-l1']); bd['schemaVersion']=bad_v
+        try: level_files.validate_level(bd,bd); raise SystemExit('version %r acceptée'%(bad_v,))
+        except ValueError as e: assert 'schemaVersion' in str(e)
+    assert level_files.migrate_doc(level_files.migrate_doc(d1))==level_files.migrate_doc(d1)
     server.shutdown()
 print('OK : 16 JSON, mobs et bossTune bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')

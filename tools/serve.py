@@ -82,8 +82,7 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
                 backups = {key: p.read_bytes() for key,p in paths.items()}
                 try:
                     for key,p in paths.items():
-                        text = json.dumps(docs[key], ensure_ascii=False, indent=2) + '\n'
-                        tmp = p.with_suffix('.json.tmp'); tmp.write_text(text); tmp.replace(p)
+                        level_files.write_if_changed(p, level_files.dump_level(docs[key]))
                     level_files.generate(root)
                 except Exception:
                     for key,p in paths.items(): p.write_bytes(backups[key])

@@ -7,18 +7,45 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def read_levels(root=ROOT):
     folder = root / 'src/data/levels'
-    return {name: json.loads((folder / (name + '.json')).read_text()) for name in json.loads((folder / 'index.json').read_text())}
+    return {name: json.loads((folder / (name + '.json')).read_text(encoding='utf-8')) for name in json.loads((folder / 'index.json').read_text(encoding='utf-8'))}
+
+SCHEMA_VERSIONS = (1, 2)
+
+def dump_level(doc):
+    """Texte canonique d'un document (UTF-8, indent 2, clés dans l'ordre du document, saut de ligne final) : identique sous Windows et Mac."""
+    return json.dumps(doc, ensure_ascii=False, indent=2) + '\n'
+
+def write_if_changed(path, text):
+    """Écrit en UTF-8 sans conversion de fin de ligne, seulement si le contenu change ; renvoie True si le fichier a été réécrit."""
+    data = text.encode('utf-8')
+    if path.exists() and path.read_bytes() == data: return False
+    tmp = path.with_name(path.name + '.tmp'); tmp.write_bytes(data); tmp.replace(path)
+    return True
+
+def migrate_doc(d):
+    """v1 -> v2 : même forme (les blocs mobs/bossTune/eventTune/norma/audio et events[i].params/norma sont facultatifs), seul schemaVersion change. Idempotent."""
+    if type(d.get('schemaVersion')) is not int or d['schemaVersion'] not in SCHEMA_VERSIONS: raise ValueError('schemaVersion %r non supportée (1 ou 2)' % (d.get('schemaVersion'),))
+    out = dict(d); out['schemaVersion'] = 2
+    return out
+
+def migrate(root=ROOT):
+    """Réécrit en v2 les documents v1 de src/data/levels ; renvoie la liste des fichiers modifiés, puis régénère le cache JS."""
+    changed = []
+    for name, doc in read_levels(root).items():
+        if write_if_changed(root / 'src/data/levels' / (name + '.json'), dump_level(migrate_doc(doc))): changed.append(name)
+    generate(root)
+    return changed
 
 def bg_kinds(root=ROOT):
     """Décors permis : ligne « const WORLD_BG_KINDS = ['a', 'b', ...]; » de src/world/bg-monde.js (node tools/level_look_test.js la compare aux méthodes wbgBuild_*)."""
-    m = re.search(r"^const WORLD_BG_KINDS = \[([^\]]*)\];", (root/'src/world/bg-monde.js').read_text(), re.M)
+    m = re.search(r"^const WORLD_BG_KINDS = \[([^\]]*)\];", (root/'src/world/bg-monde.js').read_text(encoding='utf-8'), re.M)
     kinds = re.findall(r"'(\w+)'", m.group(1)) if m else []
     if not kinds: raise ValueError("bg : aucun décor lu dans src/world/bg-monde.js ; la ligne « const WORLD_BG_KINDS = ['horizon', …]; » doit être conservée")
     return kinds
 
 def music_tables(root=ROOT):
     """Clés de musique de src/audio/music.js : tables `const MUSIC_LEVEL = {…};` et `const MUSIC_BOSS = {…};` (valeurs = listes de clés entre apostrophes, éventuellement sur plusieurs lignes, fin de table = « };»)."""
-    text = (root/'src/audio/music.js').read_text()
+    text = (root/'src/audio/music.js').read_text(encoding='utf-8')
     out = {}
     for name in ['MUSIC_LEVEL','MUSIC_BOSS']:
         m = re.search(r'^const ' + name + r' = \{(.*?)\};', text, re.M | re.S)
@@ -38,6 +65,7 @@ def check_audio(a, root=ROOT):
 def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
+    if type(d.get('schemaVersion')) is not int or d['schemaVersion'] not in SCHEMA_VERSIONS: raise ValueError('schemaVersion %r non supportée (1 ou 2)' % (d.get('schemaVersion'),))
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
     if set(d) - {'mobs','bossTune','eventTune','norma','audio'} != set(original) - {'mobs','bossTune','eventTune','norma','audio'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
@@ -55,14 +83,14 @@ def validate_level(d, original, root=ROOT):
     if not 1 <= d['threat'] <= 20 or d['hpMul'] <= 0 or d['dmgMul'] <= 0: raise ValueError('Difficulté invalide')
     if any(v <= 0 for v in d['goal'].values()): raise ValueError('Objectif positif requis')
     if type(d['timelineOnly']) != int or d['timelineOnly'] not in [0,1] or d['spawnClock'] not in ['mission','difficulty']: raise ValueError('Mode de spawn invalide')
-    enemies = set(re.findall(r"type:'([^']+)'", (root/'src/data/bestiary.js').read_text())) - {'meteor'}
+    enemies = set(re.findall(r"type:'([^']+)'", (root/'src/data/bestiary.js').read_text(encoding='utf-8'))) - {'meteor'}
     enemies = {e for e in enemies if not e.startswith('boss')}
-    events = set(re.findall(r'^  (\w+):', (root/'src/data/events.js').read_text(), re.M))
+    events = set(re.findall(r'^  (\w+):', (root/'src/data/events.js').read_text(encoding='utf-8'), re.M))
     def number(v,lo,hi):
         return type(v) in (int,float) and lo <= v <= hi
     if d['type'] in ('kill','collect') and (0 if d['timelineOnly'] == 1 else len(d['spawns'])) + len(d['waves']) == 0 and not d.get('tuto'): raise ValueError('Objectif impossible : aucun ennemi ne peut apparaître (ni réserve ni vague)')
     if 'mobs' in d:
-        known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(), re.M))
+        known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(encoding='utf-8'), re.M))
         if not known: raise ValueError('mobs : aucune entrée lue dans src/data/enemy-stats.js ; le format « deux espaces, nom: { » doit être conservé')
         if not isinstance(d['mobs'],dict): raise ValueError('mobs : objet requis')
         for mob, mul in d['mobs'].items():
@@ -73,7 +101,7 @@ def validate_level(d, original, root=ROOT):
     if 'bossTune' in d:
         # registre lu dans src/data/tunables.js : un id par ligne « deux espaces, id: [ », une entrée par ligne « quatre espaces, { path:'x', [len:N,] ... min:a, max:b »
         reg, cur = {}, None
-        for line in (root/'src/data/tunables.js').read_text().splitlines():
+        for line in (root/'src/data/tunables.js').read_text(encoding='utf-8').splitlines():
             m = re.match(r'^  (\w+): \[$', line)
             if m: cur = reg.setdefault(m.group(1), {}); continue
             m = re.match(r"^    \{ path:'([^']+)',(?: len:(\d+),)?(?: ordered:'(asc|desc)',)? .*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
@@ -97,7 +125,7 @@ def validate_level(d, original, root=ROOT):
     def event_registry():
         # registre lu dans src/data/event-params.js : un événement par ligne « deux espaces, kind: [ », une entrée par ligne « quatre espaces, { key:'x', label:'..', min:a, max:b, ... [int:true,] def:.. »
         reg, cur = {}, None
-        for line in (root/'src/data/event-params.js').read_text().splitlines():
+        for line in (root/'src/data/event-params.js').read_text(encoding='utf-8').splitlines():
             m = re.match(r'^  (\w+): \[$', line)
             if m: cur = reg.setdefault(m.group(1), {}); continue
             m = re.match(r"^    \{ key:'(\w+)',.*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
@@ -196,8 +224,10 @@ def generate(root=ROOT):
     for d in defs.values(): validate_level(d,d,root)
     text='"use strict";\n// Généré depuis data/levels/*.json par tools/level_files.py ; ne pas éditer.\nconst LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || ' + json.dumps(defs,ensure_ascii=False,indent=2) + ';\n'
     target=root/'src/data/worlds/level-data.js'
-    if not target.exists() or target.read_text()!=text: target.write_text(text)
+    write_if_changed(target,text)
     return defs
 
 if __name__=='__main__':
+    import sys
+    if '--migrate' in sys.argv: print('migrés en v2 : ' + (', '.join(migrate()) or 'aucun (déjà en v2)'))
     print(str(len(generate()))+' niveaux JSON compilés')
