@@ -26,7 +26,6 @@ mixin(HomeScene, {
     };
     $('tabTree').onclick = ()=> this.goHomePage(1);
     $('btnGalaxy').onclick = ()=> this.enterGalaxy();
-    $('btnBackWorld').onclick = ()=> this.enterWorldView(this.homeWorld);
     $('btnLaunch').onclick = ()=> this.launchLevel();
     Motion.bindPress();
     Norma.startTicker(document.getElementById('homeTicker'), ()=> this.homeOn);

@@ -52,7 +52,7 @@ try:
   page.locator('#btnGalaxy').click();page.wait_for_timeout(900)
   assert page.locator('#pageMap').get_attribute('data-mode')=='galaxy'
   assert not page.locator('.home-window').is_visible()
-  page.locator('#btnBackWorld').click();page.wait_for_timeout(900)
+  page.locator('#tabMap').click();page.wait_for_timeout(900)
   assert page.locator('.home-window').is_visible()
   page.emulate_media(reduced_motion='reduce')
   page.evaluate("window.__ssxScene.scene.get('home').selectHomeLevel(WORLDS[0].levels[5].id)")

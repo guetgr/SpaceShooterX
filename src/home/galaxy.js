@@ -65,8 +65,8 @@ mixin(HomeScene, {
       g.img.setTexture(key).setTint(open ? 0xffffff : 0x2c3050).setScale(open ? GAL_SCALE : GAL_SCALE*0.85);
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
       const sm = worldSummary(w.id, p);
-      g.num.setText(open ? w.name : '? ? ?').setColor(open ? '#cfd6ff' : '#5a6290');
-      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total) : 'ACCES REFUSE').setColor(open ? '#ffc21a' : '#7a5a4a');
+      g.num.setText(open ? w.name : '').setColor('#cfd6ff');
+      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total) : '').setColor('#ffc21a');
       g.star.setVisible(open && sm.bossDown).setPosition(g.sub.width/2 + 10, GAL_R + 31);
       // anneau : un segment par niveau (vert = terminé, rouge = boss), on laisse les dernières lueurs pour les niveaux restants
       const L = w.levels.length, gap = 0.12, seg = Math.PI*2/L;
