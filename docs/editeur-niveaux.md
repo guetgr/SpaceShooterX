@@ -64,3 +64,12 @@ Champs permis : `hpMul` (PV et bouclier de départ), `dmgMul` (dégâts de conta
 - `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.
 
 Après une modification de `tools/serve.py`, redémarrer le serveur. Les sauvegardes de progression des joueurs sont isolées dans l’aperçu et le bot.
+
+## Réglages des boss
+Clé optionnelle `bossTune` dans le JSON d'une mission : `"bossTune": { "ar": { "hp": 2000, "dmg.missile": 20, "gap": [300, 250, 200, 100] } }`.
+- Ids : `ar` (Araignée), `mt` (Météo), `rx` (Réacteur), `an` (Anneau), `pd` (PDG), `bras`, `pil` (Pilleur), `ec` (Éclaireur). Chemins pointés dans la constante du module (`hp`, `count.beam`, `dmg.contact`…) ; un tableau se donne en entier, de la même longueur.
+- Registre : `src/data/tunables.js` (`TUNABLES`, libellé, bornes, pas, unité, aide). `tools/level_files.py` refuse id ou chemin inconnu, valeur hors bornes, tableau de mauvaise longueur.
+- Seuls les nombres sont réglables. Coordonnées, régions, géométrie de sprite et séquences d'attaques restent dans le code.
+- `tunablesApply(lvDef)` (début de `GameScene.create`) remet d'abord les valeurs d'origine puis applique `bossTune` : rien ne fuit d'une partie à l'autre.
+- Antenne-Mère (tuto) : `TUNABLES.antenne` n'est qu'un schéma ; ses valeurs restent dans `tutorial.boss` (refus de `bossTune.antenne`).
+- Ajouter un réglage : une ligne dans `tunables.js` (format décrit en tête de fichier, valeur d'origine dans les bornes), puis `python3 tools/tunables_test.py`.

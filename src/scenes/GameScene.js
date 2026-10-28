@@ -7,6 +7,7 @@ class GameScene extends Phaser.Scene{
     this.sandbox = !!(data && data.sandbox);
     this.input.enabled = true;
     this.lvDef = (data && data.levelId && levelById(data.levelId)) || null;      // niveau d'un monde (sinon: partie infinie historique)
+    tunablesApply(this.lvDef);      // réglages internes des boss et mobs spéciaux : remise à zéro puis surcharges du niveau (data/tunables.js)
     this.tuto = !!(data && data.tuto);
     this.cameras.main.setBackgroundColor(0x05040c);
     this.running = false;

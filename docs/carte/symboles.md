@@ -1094,6 +1094,13 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `treeLegacyRefund` | fonction | `src/data/meta.js` |  |
 | `tryDodge` | méthode | `src/player/damage.js` | `GameScene` |
 | `tryDodgePlayerBullets` | méthode | `src/enemies/ai.js` | `GameScene` |
+| `TUNABLE_ROOTS` | const | `src/data/tunables.js` |  |
+| `tunablePathGet` | fonction | `src/data/tunables.js` |  |
+| `TUNABLES` | const | `src/data/tunables.js` |  |
+| `TUNABLES_PRISTINE` | const | `src/data/tunables.js` |  |
+| `tunablesApply` | fonction | `src/data/tunables.js` |  |
+| `tunablesCapture` | fonction | `src/data/tunables.js` |  |
+| `tunableSet` | fonction | `src/data/tunables.js` |  |
 | `TUNE_LEVEL_FIELDS` | const | `src/data/tuning-apply.js` |  |
 | `tuneMerge` | fonction | `src/data/tuning-apply.js` |  |
 | `TUNING_OVERRIDES` | const | `src/data/tuning.js` |  |
@@ -1216,4 +1223,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1209 symboles.
+1216 symboles.

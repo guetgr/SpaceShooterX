@@ -93,6 +93,7 @@
   "bosses/reacteur.js",
   "bosses/anneau.js",
   "bosses/pdg.js",
+  "data/tunables.js",
   "combat/damage.js",
   "ui/hud.js",
   "systems/combo.js",

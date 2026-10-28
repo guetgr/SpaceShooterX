@@ -13,7 +13,7 @@ def validate_level(d, original, root=ROOT):
     if not isinstance(d, dict) or d.get('id') != original['id'] or d.get('world') != original['world'] or d.get('type') != original['type']:
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) - {'mobs'} != set(original) - {'mobs'}: raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs','bossTune'} != set(original) - {'mobs','bossTune'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -43,6 +43,28 @@ def validate_level(d, original, root=ROOT):
             if not isinstance(mul,dict) or set(mul) - {'hpMul','dmgMul','speedMul','scoreMul'}: raise ValueError('mobs.%s : seuls hpMul, dmgMul, speedMul et scoreMul sont permis' % mob)
             for k, v in mul.items():
                 if not number(v,0.1,10): raise ValueError('mobs.%s.%s : nombre entre 0,1 et 10 requis' % (mob,k))
+    if 'bossTune' in d:
+        # registre lu dans src/data/tunables.js : un id par ligne « deux espaces, id: [ », une entrée par ligne « quatre espaces, { path:'x', [len:N,] ... min:a, max:b »
+        reg, cur = {}, None
+        for line in (root/'src/data/tunables.js').read_text().splitlines():
+            m = re.match(r'^  (\w+): \[$', line)
+            if m: cur = reg.setdefault(m.group(1), {}); continue
+            m = re.match(r"^    \{ path:'([^']+)',(?: len:(\d+),)? .*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
+            if m and cur is not None: cur[m.group(1)] = (int(m.group(2)) if m.group(2) else None, float(m.group(3)), float(m.group(4)))
+        if not any(reg.values()): raise ValueError('bossTune : aucun réglage lu dans src/data/tunables.js ; le format « id: [ » puis « { path:\'x\', min:a, max:b, » doit être conservé')
+        if not isinstance(d['bossTune'],dict): raise ValueError('bossTune : objet requis')
+        for bid, vals in d['bossTune'].items():
+            if bid == 'antenne': raise ValueError('bossTune.antenne : refusé, les réglages de l\'Antenne-Mère sont dans tutorial.boss du tutoriel')
+            if bid not in reg: raise ValueError('bossTune : boss ou mob inconnu « %s » (lus dans src/data/tunables.js)' % bid)
+            if not isinstance(vals,dict): raise ValueError('bossTune.%s : objet requis' % bid)
+            for path, v in vals.items():
+                if path not in reg[bid]: raise ValueError('bossTune.%s.%s : réglage inconnu' % (bid,path))
+                ln, lo, hi = reg[bid][path]
+                if ln is None:
+                    if not number(v,lo,hi): raise ValueError('bossTune.%s.%s : nombre entre %g et %g requis' % (bid,path,lo,hi))
+                else:
+                    if not isinstance(v,list) or len(v) != ln: raise ValueError('bossTune.%s.%s : tableau de %d nombres requis' % (bid,path,ln))
+                    if not all(number(x,lo,hi) for x in v): raise ValueError('bossTune.%s.%s : chaque nombre doit être entre %g et %g' % (bid,path,lo,hi))
     for kind in ['spawns','waves','events']:
         if not isinstance(d[kind],list) or len(d[kind])>1000: raise ValueError(kind + ' : liste invalide')
         for row in d[kind]:

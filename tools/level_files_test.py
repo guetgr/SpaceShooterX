@@ -26,10 +26,16 @@ for mobs, ok in [({}, True), ({'grunt':{'hpMul':1.5,'speedMul':10}}, True), ({'g
     except ValueError as e: got=False;msg=str(e)
     assert got==ok,(mobs,ok)
     if not ok: assert 'mobs' in msg and msg,(mobs,msg)
+for bt, ok in [({}, True), ({'ar':{'hp':2000,'dmg.missile':20,'gap':[300,250,200,100]}}, True), ({'ar':{'hp':49}}, False), ({'ar':{'hp':20001}}, False), ({'ar':{'hpx':5}}, False), ({'arx':{'hp':5}}, False), ({'ar':{'gap':[300,250,200]}}, False), ({'ar':{'gap':[300,250,200,5000]}}, False), ({'ar':{'gap':5}}, False), ({'ar':{'hp':'2000'}}, False), ({'ar':{'hp':True}}, False), ({'ar':[]}, False), ({'antenne':{'hp':100}}, False), ({'bras':{'cooldown':[0,1500,1900,2100],'hp':60}}, True), ([], False)]:
+    doc=copy.deepcopy(original['w1-l1']);doc['bossTune']=bt
+    try: level_files.validate_level(doc,original['w1-l1']);got=True
+    except ValueError as e: got=False;msg=str(e)
+    assert got==ok,(bt,ok)
+    if not ok: assert 'bossTune' in msg,(bt,msg)
 with tempfile.TemporaryDirectory() as folder:
     root=Path(folder);(root/'src/data/worlds').mkdir(parents=True)
     shutil.copytree(level_files.ROOT/'src/data/levels',root/'src/data/levels')
-    for name in ['bestiary.js','events.js','enemy-stats.js']:
+    for name in ['bestiary.js','events.js','enemy-stats.js','tunables.js']:
         shutil.copy(level_files.ROOT/'src/data'/name,root/'src/data'/name)
     serve.R=folder
     server=http.server.ThreadingHTTPServer(('127.0.0.1',0),functools.partial(serve.NoCache,directory=folder))
@@ -50,4 +56,4 @@ with tempfile.TemporaryDirectory() as folder:
     assert (root/'src/data/levels/w1-tuto.json').read_text()==before
     assert not post({'../../escape':tuto})['ok']
     server.shutdown()
-print('OK : 16 JSON, mobs bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')
+print('OK : 16 JSON, mobs et bossTune bornés, validation, aperçu sans écriture, sauvegarde tutoriel, rejet transactionnel, chemins bornés')

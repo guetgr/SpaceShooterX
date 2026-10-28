@@ -100,27 +100,28 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 92 | `src/bosses/reacteur.js` | Méthodes de GameScene — boss « Le Réacteur » (boss de fin du niveau `w1-l3`, `finalBoss:'reacteur'` dans data/worlds/monde-1.js). Autonome comme l'Araignée et la Météo : son état est dans `this.rx`. Il IRRADIE : RAYONNEMENT (le cœ |
 | 93 | `src/bosses/anneau.js` | Méthodes de GameScene — boss « L'Anneau » (boss de fin du niveau `w1-l4`, `finalBoss:'anneau'` dans data/worlds/monde-1.js). Autonome comme l'Araignée, la Météo et le Réacteur : son état est dans `this.an`. Une station orbitale do |
 | 94 | `src/bosses/pdg.js` | Méthodes de GameScene — boss final « Le PDG dans sa tour » (boss de fin du niveau `w1-l5`, `finalBoss:'pdg'` dans data/worlds/monde-1.js). Autonome comme les autres boss de fin : son état est dans `this.pd`. Il a quatre attaques e |
-| 95 | `src/combat/damage.js` | Méthodes de GameScene — collisions et dégâts sur les ennemis, mort des ennemis. |
-| 96 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. |
-| 97 | `src/systems/combo.js` | Méthodes de GameScene — combo et rang de style (multiplicateur d'XP). |
-| 98 | `src/systems/overdrive.js` | Méthodes de GameScene — Overdrive. |
-| 99 | `src/systems/relics-fusions.js` | Méthodes de GameScene — choix de reliques et fusions. |
-| 100 | `src/world/pickups.js` | Méthodes de GameScene — cristaux d'XP, soins, mob doré. |
-| 101 | `src/world/composants.js` | Méthodes de GameScene — composants ◆ : lâchés par les machines détruites, ramassés à l'aimant, comptés dans le HUD (règles : data/composants.js). |
-| 102 | `src/world/meteors.js` | Méthodes de GameScene — météorites. |
-| 103 | `src/events/core.js` | Méthodes de GameScene — planification et déroulement des événements, nébuleuse. |
-| 104 | `src/events/types.js` | Méthodes de GameScene — les différents événements : frappes, couloir, éclipse, EMP, glace, plasma, vortex magnétique. |
-| 105 | `src/events/forces.js` | Méthodes de GameScene — puits de gravité et forces. |
-| 106 | `src/enemies/squads-shields.js` | Méthodes de GameScene — escouades, boucliers ennemis, esquive coordonnée. |
-| 107 | `src/systems/skills.js` | Méthodes de GameScene — compétences actives : ralenti, dernier souffle, foudre en chaîne, updateSkills. |
-| 108 | `src/player/damage.js` | Méthodes de GameScene — dégâts subis par le joueur : armure, bouclier, esquive, réflexion. |
-| 109 | `src/player/skin.js` | Méthodes de GameScene — apparence (teinte) de la camionnette. Les effets qui teintent le vaisseau (dégâts, glace) passent par ici pour ne pas effacer l'apparence choisie. |
-| 110 | `src/player/progression.js` | Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau. |
-| 111 | `src/fx/particles.js` | Méthodes de GameScene — particules : bris de bouclier, traînée de réacteur, impacts. |
-| 112 | `src/fx/juice.js` | JUICE — retour de sensation (« game feel ») centralisé. Trois outils, tous réglés ICI : juiceStop(kind)         arrêt sur image très court (hit-stop) : le temps de jeu se fige ~50-110 ms sur les impacts qui comptent |
-| 113 | `src/main.js` | Point d'entrée : configuration Phaser et démarrage. |
+| 95 | `src/data/tunables.js` | Registre des réglages internes des boss et mobs spéciaux (éditeur de niveaux, JSON `bossTune`). Les constantes AR / MT / RX / AN / PD / BRAS / PIL / EC restent dans leurs modules ; ce fichier ne liste que leurs NOMBRES réglables |
+| 96 | `src/combat/damage.js` | Méthodes de GameScene — collisions et dégâts sur les ennemis, mort des ennemis. |
+| 97 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. |
+| 98 | `src/systems/combo.js` | Méthodes de GameScene — combo et rang de style (multiplicateur d'XP). |
+| 99 | `src/systems/overdrive.js` | Méthodes de GameScene — Overdrive. |
+| 100 | `src/systems/relics-fusions.js` | Méthodes de GameScene — choix de reliques et fusions. |
+| 101 | `src/world/pickups.js` | Méthodes de GameScene — cristaux d'XP, soins, mob doré. |
+| 102 | `src/world/composants.js` | Méthodes de GameScene — composants ◆ : lâchés par les machines détruites, ramassés à l'aimant, comptés dans le HUD (règles : data/composants.js). |
+| 103 | `src/world/meteors.js` | Méthodes de GameScene — météorites. |
+| 104 | `src/events/core.js` | Méthodes de GameScene — planification et déroulement des événements, nébuleuse. |
+| 105 | `src/events/types.js` | Méthodes de GameScene — les différents événements : frappes, couloir, éclipse, EMP, glace, plasma, vortex magnétique. |
+| 106 | `src/events/forces.js` | Méthodes de GameScene — puits de gravité et forces. |
+| 107 | `src/enemies/squads-shields.js` | Méthodes de GameScene — escouades, boucliers ennemis, esquive coordonnée. |
+| 108 | `src/systems/skills.js` | Méthodes de GameScene — compétences actives : ralenti, dernier souffle, foudre en chaîne, updateSkills. |
+| 109 | `src/player/damage.js` | Méthodes de GameScene — dégâts subis par le joueur : armure, bouclier, esquive, réflexion. |
+| 110 | `src/player/skin.js` | Méthodes de GameScene — apparence (teinte) de la camionnette. Les effets qui teintent le vaisseau (dégâts, glace) passent par ici pour ne pas effacer l'apparence choisie. |
+| 111 | `src/player/progression.js` | Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau. |
+| 112 | `src/fx/particles.js` | Méthodes de GameScene — particules : bris de bouclier, traînée de réacteur, impacts. |
+| 113 | `src/fx/juice.js` | JUICE — retour de sensation (« game feel ») centralisé. Trois outils, tous réglés ICI : juiceStop(kind)         arrêt sur image très court (hit-stop) : le temps de jeu se fige ~50-110 ms sur les impacts qui comptent |
+| 114 | `src/main.js` | Point d'entrée : configuration Phaser et démarrage. |
 
-**113 fichiers listés** (+ `src/boot.js`, chargeur). Les tailles et numéros de ligne ne sont volontairement pas affichés : ils changeraient à chaque modification et provoqueraient des conflits entre collaborateurs (retrouver un nom avec Grep).
+**114 fichiers listés** (+ `src/boot.js`, chargeur). Les tailles et numéros de ligne ne sont volontairement pas affichés : ils changeraient à chaque modification et provoqueraient des conflits entre collaborateurs (retrouver un nom avec Grep).
 
 ## Détail par fichier
 
@@ -258,6 +259,10 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 **`enemy-art.js`** — Table ENEMY_ART : quelle planche/animation pour quel ennemi.
 
 - Définit : `ENEMY_ART`
+
+**`tunables.js`** — Registre des réglages internes des boss et mobs spéciaux (éditeur de niveaux, JSON `bossTune`). Les constantes AR / MT / RX / AN / PD / BRAS / PIL / EC restent dans leurs modules ; ce fichier ne liste que leurs NOMBRES réglables
+
+- Définit : `TUNABLES`, `TUNABLE_ROOTS`, `TUNABLES_PRISTINE`, `tunablePathGet`, `tunablesCapture`, `tunableSet`, `tunablesApply`
 
 ### `src/ui/`
 
