@@ -1,0 +1,101 @@
+{
+  "id": "w1-tuto",
+  "name": "TUTORIEL",
+  "type": "tuto",
+  "threat": 1,
+  "tuto": true,
+  "bg": "horizon",
+  "reward": {
+    "clear": 10,
+    "first": 20
+  },
+  "world": "w1",
+  "schemaVersion": 1,
+  "goal": {},
+  "waves": [],
+  "events": [],
+  "spawnClock": "mission",
+  "spawns": [],
+  "intro": null,
+  "boss": null,
+  "finalBoss": null,
+  "bossName": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
+  "zoom": {
+    "start": 1.35,
+    "end": 1.0,
+    "seconds": 90
+  },
+  "ambient": {
+    "golden": false,
+    "smallEvents": false
+  },
+  "tutorial": {
+    "steps": {
+      "moveNeed": 420,
+      "satTarget": 12,
+      "bossWait": 3.6,
+      "maxMove": 30,
+      "maxShoot": 90
+    },
+    "sats": {
+      "hp": 30,
+      "speedMin": 60,
+      "speedMax": 105,
+      "slowSpeed": 55,
+      "drift": 22,
+      "score": 25,
+      "contactDmg": 10,
+      "spawnCdStart": 1500,
+      "spawnCdEnd": 650,
+      "rampTime": 40,
+      "capBase": 3,
+      "capExtra": 3,
+      "capEvery": 14
+    },
+    "debris": {
+      "min": 5,
+      "max": 8,
+      "dmg": 7,
+      "speedMin": 75,
+      "speedMax": 150
+    },
+    "boss": {
+      "hp": 700,
+      "p2": 0.66,
+      "p3": 0.33,
+      "contactDmg": 15,
+      "killScore": 500,
+      "aimCd": 1500,
+      "aimCd3": 1100,
+      "aimDmg": 9,
+      "aimSpeed": 230,
+      "ringCd": 4200,
+      "ringCount": 16,
+      "ringGap": 2,
+      "ringDmg": 8,
+      "ringSpeed": 135,
+      "rainCd": 1700,
+      "rainDmg": 8,
+      "rainSpeed": 265,
+      "spiralCd": 140,
+      "spiralDmg": 7,
+      "spiralSpeed": 150
+    },
+    "comp": {
+      "sats": 30,
+      "boss": 35,
+      "win": 15,
+      "clean": 20,
+      "hitPenalty": 0.25
+    },
+    "rewards": {
+      "m25": 5,
+      "m50": 10,
+      "m75": 15,
+      "m100": 40
+    }
+  }
+}

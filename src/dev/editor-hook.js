@@ -20,8 +20,52 @@
     const cur = {}; WORLDS.forEach(w=> w.levels.forEach(l=>{ const o = {}; TUNE_LEVEL_FIELDS.forEach(k=>{ if (l[k] !== undefined) o[k] = JSON.parse(JSON.stringify(l[k])); }); cur[l.id] = o; }));
     return cur;
   }
+  function traceTimeline(){
+    if (mode !== 'play') return;
+    let pending = [], lastScene = null, lastBoss = '';
+    const log = (sc,kind,label)=>{ pending.push({at:Math.round((sc.tuto ? sc.tutoT || 0 : sc.lvT || 0)*100)/100,kind,label}); };
+    const methods = {
+      levelInit: ()=> 'Début de mission',
+      spawnMeteor: ()=> 'Météorite',
+      makeBossPart: args=> 'Pièce de boss : '+args[3],
+      spawnOneEnemy: args=> 'Mob : '+args[0],
+      tutoSpawnSat: args=> 'Satellite pédagogique'+(args[0]?' lent':''),
+      tutoKillSat: ()=> 'Satellite détruit → débris',
+      startEvent: args=> 'Événement : '+args[0],
+      spawnGolden: ()=> 'Trésorin',
+      spawnBoss: args=> 'Boss : '+(args[0]||'tirage'),
+      tutoStepEnter: ()=> 'Étape pédagogique',
+      tutoSpawnBoss: ()=> 'Antenne-Mère',
+      tutoSay: args=> 'N.O.R.M.A. : '+args[0],
+      mtStart: ()=> 'La Météo', arStart: ()=> 'Araignée de tri', rxStart: ()=> 'Réacteur', anStart: ()=> 'Anneau', pdStart: ()=> 'PDG',
+      levelWin: ()=> 'Victoire', tutoBossDie: ()=> 'Tutoriel terminé'
+    };
+    Object.entries(methods).forEach(([name,label])=>{
+      const original = GameScene.prototype[name]; if (!original) return;
+      GameScene.prototype[name] = function(...args){
+        const result = original.apply(this,args);
+        if (name === 'levelInit'){pending=[];lastBoss='';send({type:'timeline-reset'});return result;}
+        if (name !== 'spawnOneEnemy' || result) log(this,name,label(args));
+        return result;
+      };
+    });
+    setInterval(()=>{
+      const sc=window.__ssxScene; if (!sc) return;
+      if (sc !== lastScene){lastScene=sc;lastBoss='';pending=[];send({type:'timeline-reset'});}
+      const bosses=[sc.mt,sc.ar,sc.rx,sc.an,sc.pd,sc.tutoBoss,sc.currentBoss].filter(Boolean);
+      const state=bosses.map(b=>[b.bossId||'boss',b.phase,b.st,b.atk,b.mode,b.state].filter(x=>x!==undefined).join(' / ')).join('; ');
+      if (state && state!==lastBoss){lastBoss=state;log(sc,'boss-state',state);}
+      if(pending.length){send({type:'timeline-trace',levelId:sc.tuto?'w1-tuto':sc.lvDef&&sc.lvDef.id,entries:pending});pending=[];}
+    },300);
+  }
+
   function ready(){
-    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:TUTO_DEFAULTS, overrides:TUNING_OVERRIDES });
+    traceTimeline();
+    send({ type:'ready', mode, levels:levelList(), base:LEVEL_BASE, defaults:LEVEL_BASE['w1-tuto'].tutorial || TUTO_DEFAULTS, documents:JSON.parse(JSON.stringify(LEVEL_FILES)), eventCatalog:Object.entries(EVENT_DEFS).map(([id,e])=>({ id,name:e.name,small:!!e.small,min:e.min })), overrides:TUNING_OVERRIDES, bestiary:BESTIARY_LIST.filter(e=> !e.bossId && e.type !== 'meteor').map(e=>{
+      let image = '';
+      try { image = window.__ssxScene.textures.getBase64(e.tex, e.frame); } catch(err) { /* miniature facultative */ }
+      return { type:e.type, label:e.label, image };
+    }) });
   }
   function launch(levelId){
     const sc = window.__ssxScene, l = levelById(levelId); if (!sc || !l) return;

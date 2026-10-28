@@ -98,7 +98,7 @@ mixin(GameScene, {
     });
   },
   tutoSpawnLogic(delta){          // étape 1 : aucun satellite · étape 2 : un seul, lent, puis des vagues de plus en plus serrées
-    if (TUTO_STEPS[this.tutoStep].id !== 'shoot') return;
+    if (levelById(TUTO_ID).timelineOnly === 1 || TUTO_STEPS[this.tutoStep].id !== 'shoot') return;
     const alive = this.tutoSats.length;
     this.tutoSpawnCd -= delta; if (this.tutoSpawnCd > 0) return;
     if (this.tutoKills < 1){ if (alive < 1){ this.tutoSpawnCd = 900; this.tutoSpawnSat(true); } return; }

@@ -40,16 +40,16 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `firerate`, `damage`, `spread`, `speed`, `magnet`, `life`, `shield`, `pierce`, `bulletspeed`
 
-## `src/data/worlds/monde-1.js` (7)
+## `src/data/worlds/monde-1.js` (1)
 
-`w1`, `w1-tuto`, `w1-l1`, `w1-l2`, `w1-l3`, `w1-l4`, `w1-l5`
+`w1`
 
-## `src/data/worlds/monde-2.js` (6)
+## `src/data/worlds/monde-2.js` (1)
 
-`w2`, `w2-l1`, `w2-l2`, `w2-l3`, `w2-l4`, `w2-l5`
+`w2`
 
-## `src/data/worlds/monde-3.js` (6)
+## `src/data/worlds/monde-3.js` (1)
 
-`w3`, `w3-l1`, `w3-l2`, `w3-l3`, `w3-l4`, `w3-l5`
+`w3`
 
-152 ids au total.
+136 ids au total.

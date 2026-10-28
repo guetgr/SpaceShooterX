@@ -1,0 +1,66 @@
+{
+  "id": "w1-l4",
+  "name": "PATROUILLE",
+  "type": "kill",
+  "threat": 2,
+  "bg": "patrouille",
+  "goal": {
+    "count": 40
+  },
+  "spawns": [
+    {
+      "type": "sat",
+      "from": 0,
+      "w": 6
+    },
+    {
+      "type": "satgun",
+      "from": 6,
+      "w": 6
+    },
+    {
+      "type": "eclaireur",
+      "from": 6,
+      "w": 6,
+      "tier": 1
+    },
+    {
+      "type": "bras",
+      "from": 14,
+      "w": 4,
+      "tier": 1
+    },
+    {
+      "type": "pilleur",
+      "from": 18,
+      "w": 3,
+      "tier": 1
+    }
+  ],
+  "finalBoss": "anneau",
+  "reward": {
+    "clear": 35,
+    "first": 70
+  },
+  "world": "w1",
+  "schemaVersion": 1,
+  "tuto": false,
+  "waves": [],
+  "events": [],
+  "spawnClock": "mission",
+  "intro": null,
+  "boss": null,
+  "bossName": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
+  "zoom": {
+    "start": 1.27,
+    "end": 0.8200000000000001,
+    "seconds": 70
+  },
+  "ambient": {
+    "golden": true,
+    "smallEvents": true
+  }
+}

@@ -123,6 +123,7 @@ mixin(GameScene, {
   // plus le niveau d'alerte est haut, plus on dézoome vite et loin (et ça continue
   // doucement avec le temps) — ça laisse la place à plus d'ennemis à l'écran
   computeZoom(){
+    if (this.tuto){ const z=levelById('w1-tuto').zoom; return Phaser.Math.Linear(z.start,z.end,Math.min(1,this.elapsed/z.seconds)); }
     if (this.lvDef) return this.levelZoom();               // niveau d'un monde : dézoom lié à l'avancement du niveau (voir game/level.js)
     const a = this.alertLevel;
     const dur = ZOOM_DURATION / (1 + 0.25*(a-1));

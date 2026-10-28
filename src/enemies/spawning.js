@@ -3,13 +3,14 @@
 mixin(GameScene, {
   /* ---------- SPAWNING ---------- */
   spawnEnemy(){
+    if (this.lvDef && this.lvDef.timelineOnly === 1) return;
     // niveau d'alerte élevé = les types d'ennemis plus vicieux arrivent plus tôt
     const t = this.elapsed + (this.alertLevel-1)*12;
     // pool of available types grows over time — more variety the longer you survive
     const pool = [];
     if (this.lvDef && this.lvDef.spawns){            // niveau avec sa propre liste d'ennemis
-      this.lvDef.spawns.forEach(sp=>{ if (this.lvT >= sp.from) pool.push({ type:sp.type, w: sp.w || (SPAWN_TABLE.find(x=> x.type === sp.type) || { w:10 }).w }); });
-      if (!pool.length) pool.push({ type:'grunt', w:1 });
+      this.lvDef.spawns.forEach(sp=>{ if (this.lvDef.spawnClock === 'difficulty' ? t > sp.from : this.lvT >= sp.from) pool.push({ type:sp.type, w: sp.w || (SPAWN_TABLE.find(x=> x.type === sp.type) || { w:10 }).w }); });
+      if (!pool.length) return;
     } else SPAWN_TABLE.forEach(sp=>{ if (t > sp.at) pool.push({ type:sp.type, w:sp.w }); });
 
     if (this._onlySpiders){ pool.length = 0; pool.push({ type:'spider', w:1 }); }      // événement forêt d'araignées

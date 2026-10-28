@@ -1,26 +1,55 @@
-# Éditeur de niveaux
+# Éditeur des missions — timeline et JSON
 
-Outil de conception pour régler la **justesse** des niveaux : réglages en direct, test à la main, test par joueur automatique, export dans le dépôt.
-Ouvrir <http://localhost:8080/editor.html> (serveur : `py tools/serve.py 8080`). Pas fait pour la prod (`editor.html` est dans `.vercelignore`).
+Lancer `python3 tools/serve.py 8080`, puis ouvrir `http://localhost:8080/editor.html`.
 
-## Utilisation
-1. Choisir un niveau à gauche (le tuto est en premier). Le centre liste ses réglages (curseur + champ ; la valeur d'origine s'affiche en orange avec ↺ quand elle est modifiée).
-2. **▶ TESTER** lance le niveau dans l'aperçu (iframe `?edit=play`). Pour le tuto, les réglages agissent **en direct** pendant la partie ; pour les autres niveaux, au prochain TESTER.
-3. **🤖 LANCER** fait jouer le bot N parties (iframe cachée `?edit=bot`, `tools/sim/bot.js`) : taux de victoire vs cible (tuto 90 %, normal 80 %, boss 55 %, bande ±12), durée, PV mini, coups reçus, finition moyenne, durée de chaque étape du tuto. Profil : débutant / moyen / expert ; « arbre ◆ » = puissance du joueur (fragments dépensés dans l'arbre).
-4. **💾 EXPORTER** écrit `src/data/tuning.js` (via `tools/serve.py`, POST `/__editor/save` ; sans serveur : le fichier est téléchargé). Recharger le jeu pour le voir.
+## Un fichier par mission
 
-## Où sont les réglages
-| Fichier | Rôle |
-|---|---|
-| `src/data/tuning-defaults.js` | Valeurs par défaut du tuto (`TUTO_DEFAULTS`), écrit à la main. |
-| `src/data/tuning.js` | **Généré** : `TUNING_OVERRIDES` = seulement ce qui diffère (tuto + niveaux : `threat`, `goal`, `hpMul`, `dmgMul`, `reward`). |
-| `src/data/tuning-apply.js` | Fusionne défauts + surcharges : `TUTO_TUNE` (lu par `game/tuto.js`), niveaux de `WORLDS` modifiés en place ; `applyTuning(ov)`. |
-| `src/dev/editor-hook.js` | Pont jeu ↔ éditeur (postMessage), actif seulement avec `?edit`. |
-| `src/data/completion.js` | Finition en % : poids et récompenses lus dans `TUTO_TUNE`. |
+Les **16 missions, tutoriel compris**, ont leur source dans `src/data/levels/<id>.json`. `index.json` fixe leur ordre. Le jeu en développement charge ces JSON au démarrage. Les fichiers des secteurs ne contiennent plus les paramètres des missions.
 
-Les iframes utilisent `?sandbox` (sauvegarde **en mémoire**, voir `src/boot.js`) : tester ou lancer le bot n'abîme pas la progression.
-Ajouter un réglage au tuto : l'ajouter à `TUTO_DEFAULTS`, le lire via `TUTO_TUNE` dans `tuto.js`, puis une ligne dans `TUTO_SCHEMA` (`editor.html`).
+Chaque document contient l’identité, l’objectif, les récompenses, le décor, l’introduction, le zoom, la menace, les multiplicateurs, les pools de mobs, les vagues, les événements programmés, les événements aléatoires activés et les références de boss. `w1-tuto.json` contient aussi tous les paramètres pédagogiques auparavant dans `TUTO_DEFAULTS` : déplacement, satellites, débris, boss, finition et récompenses.
 
-## Limites
-- Le bot juge la difficulté relative, pas le plaisir de jeu. Il tourne dans la page : l'éditeur se fige quelques secondes à chaque partie simulée.
-- Seuls les nombres sont exportés (le serveur refuse tout le reste). Les événements et listes d'ennemis des niveaux ne sont pas encore éditables.
+Les comportements communs (IA, attaques des boss, effets des événements, musique et textes N.O.R.M.A.) restent dans leurs modules partagés. Les JSON définissent leurs paramètres de mission et leurs références ; ils ne recopient pas le moteur de combat. Les constantes globales du tutoriel dans `tuning-defaults.js` servent encore de secours aux anciens outils, mais les valeurs utilisées par le jeu et l’éditeur viennent du JSON.
+
+`src/data/worlds/level-data.js` est un **cache généré**, jamais une source à éditer. `python3 tools/level_files.py` le régénère. Le serveur au démarrage, l’export et le build le régénèrent automatiquement. Ce cache permet aux outils Node et au build HTML autonome de conserver leur chargement synchrone.
+
+## Lire la timeline
+
+- **Vagues** : apparitions garanties à une heure définie, avec quantité et intervalle.
+- **Pools** : bandes indiquant quels mobs sont éligibles au tirage aléatoire, satellites compris. Leur poids représente une fréquence relative, pas une quantité garantie.
+- **Événements** : heure minimale de déclenchement ; un emplacement occupé ou un boss peut les retarder. La durée peut être forcée ou laissée au défaut de l’événement.
+- **Objectif et boss** : marqueur horaire pour la survie ; condition explicite pour la collecte ou les éliminations.
+- **Tutoriel** : étapes conditionnelles, premier satellite lent, cadence progressive, débris à la destruction, alerte, Antenne-Mère et phases de ses attaques.
+- **Ambiance** : introduction, caméra, aléas, transmissions et musique.
+
+Les déclenchements dépendant du joueur n’ont volontairement pas de fausse heure précise. Le **journal de la partie** affiche les apparitions et transitions réellement observées pendant TESTER (500 entrées récentes, réinitialisées à chaque lancement). Ce journal n’est pas un enregistrement exhaustif de chaque projectile ou son.
+
+## Modifier et tester
+
+1. Choisir une mission à gauche, y compris le tutoriel.
+2. Choisir une miniature dans le bestiaire, régler arrivée/quantité/intervalle, cliquer **AJOUTER** ou cliquer dans sa piste.
+3. Glisser le bloc pour déplacer la vague. Les champs permettent un réglage précis, une duplication ou une suppression.
+4. Modifier les pools et les événements dans les réglages sous la timeline. **Remplacer les apparitions aléatoires** coupe le pool de mobs ; dans le tutoriel, cette option coupe les satellites pédagogiques automatiques. Les événements et renforts des boss restent indépendants.
+5. **TESTER** redémarre la mission avec le document en mémoire. Le bot reçoit les mêmes modifications.
+6. **EXPORTER** valide et enregistre les 16 documents JSON. Aucun export ne se fait implicitement pendant un test.
+
+Une vague SATELLITE dans le tutoriel utilise le vrai satellite pédagogique (`tutoSpawnSat`) : ses PV, ses débris et sa destruction comptent pour l’objectif du tutoriel. Les autres mobs ajoutés sont des ennemis standards ; ils ne remplacent pas le compteur de satellites.
+
+Les secondes des vagues et événements sont mesurées après l’introduction. Les anciens pools des secteurs 2 et 3 conservent leur horloge historique `difficulty` (temps de partie + 12 × (menace − 1)), indiquée dans l’éditeur. Changer `spawnClock` en `mission` permet de travailler uniquement en temps de mission.
+
+## Édition JSON
+
+Le panneau **FICHIER JSON COMPLET** permet de lire, copier, modifier et télécharger le document de la mission. **ACTUALISER DEPUIS LA TIMELINE** recharge les dernières modifications visuelles dans le champ. **VALIDER ET APPLIQUER** vérifie le document auprès du serveur puis l’applique en mémoire. **EXPORTER** écrit les fichiers.
+
+Les identifiants, le secteur et le type de mission restent fixes dans cette version. Le serveur rejette les types d’ennemis ou d’événements inconnus, les horaires invalides et les structures incohérentes avant toute écriture. Les boss et météorites utilisent leurs moteurs spécifiques et sont visibles comme événements ou références, pas comme mobs standards.
+
+Une vague après la victoire ne prolonge pas la mission. Pour une mission de collecte ou d’élimination, la date du boss dépend de la progression réelle. Un événement peut attendre la libération de son emplacement.
+
+## Vérifications
+
+- `node tools/check_worlds.js` : structure et progression des secteurs.
+- `node tools/timeline_test.js` : horaires, quantité, réinitialisation et saturation des vagues.
+- `python3 tools/level_files_test.py` : validation et export JSON dans un dossier temporaire.
+- `python3 tools/level_files.py` : génération du cache depuis les JSON.
+- `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.
+
+Après une modification de `tools/serve.py`, redémarrer le serveur. Les sauvegardes de progression des joueurs sont isolées dans l’aperçu et le bot.

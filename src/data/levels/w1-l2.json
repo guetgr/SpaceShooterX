@@ -1,0 +1,59 @@
+{
+  "id": "w1-l2",
+  "name": "CEINTURE DE DEBRIS",
+  "type": "survive",
+  "threat": 1,
+  "bg": "station",
+  "goal": {
+    "seconds": 75
+  },
+  "spawns": [
+    {
+      "type": "sat",
+      "from": 0,
+      "w": 8
+    },
+    {
+      "type": "satgun",
+      "from": 10,
+      "w": 6
+    },
+    {
+      "type": "bras",
+      "from": 20,
+      "w": 4,
+      "tier": 1
+    }
+  ],
+  "finalBoss": "araignee",
+  "reward": {
+    "clear": 25,
+    "first": 50
+  },
+  "events": [
+    {
+      "kind": "meteors",
+      "at": 30
+    }
+  ],
+  "world": "w1",
+  "schemaVersion": 1,
+  "tuto": false,
+  "waves": [],
+  "spawnClock": "mission",
+  "intro": null,
+  "boss": null,
+  "bossName": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
+  "zoom": {
+    "start": 1.31,
+    "end": 0.91,
+    "seconds": 67.5
+  },
+  "ambient": {
+    "golden": true,
+    "smallEvents": true
+  }
+}

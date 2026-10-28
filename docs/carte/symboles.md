@@ -587,6 +587,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `leaveHome` | méthode | `src/home/ui.js` | `HomeScene` |
 | `LEVEL_BASE` | const | `src/data/tuning-apply.js` |  |
 | `LEVEL_COMPLETION` | const | `src/data/completion.js` |  |
+| `LEVEL_FILES` | const | `src/data/worlds/level-data.js` |  |
 | `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
@@ -1212,4 +1213,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1205 symboles.
+1206 symboles.

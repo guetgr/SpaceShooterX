@@ -1,0 +1,136 @@
+{
+  "id": "w3-l5",
+  "name": "LE DIRECTEUR",
+  "type": "boss",
+  "threat": 7,
+  "boss": "ruche",
+  "bossName": "LE DIRECTEUR DE TRAITEMENT",
+  "reward": {
+    "clear": 120,
+    "first": 300
+  },
+  "world": "w3",
+  "schemaVersion": 1,
+  "tuto": false,
+  "goal": {},
+  "waves": [],
+  "events": [],
+  "spawnClock": "difficulty",
+  "spawns": [
+    {
+      "type": "grunt",
+      "from": -1,
+      "w": 38
+    },
+    {
+      "type": "diver",
+      "from": 8,
+      "w": 16
+    },
+    {
+      "type": "shooter",
+      "from": 12,
+      "w": 22
+    },
+    {
+      "type": "turret",
+      "from": 20,
+      "w": 12
+    },
+    {
+      "type": "drone",
+      "from": 28,
+      "w": 16
+    },
+    {
+      "type": "splitter",
+      "from": 35,
+      "w": 14
+    },
+    {
+      "type": "shieldedGrunt",
+      "from": 45,
+      "w": 12
+    },
+    {
+      "type": "mine",
+      "from": 50,
+      "w": 10
+    },
+    {
+      "type": "tank",
+      "from": 55,
+      "w": 12
+    },
+    {
+      "type": "bomber",
+      "from": 65,
+      "w": 12
+    },
+    {
+      "type": "sniper",
+      "from": 75,
+      "w": 10
+    },
+    {
+      "type": "swarmer",
+      "from": 80,
+      "w": 18
+    },
+    {
+      "type": "healer",
+      "from": 95,
+      "w": 9
+    },
+    {
+      "type": "ghost",
+      "from": 110,
+      "w": 12
+    },
+    {
+      "type": "elite",
+      "from": 130,
+      "w": 8
+    },
+    {
+      "type": "mothership",
+      "from": 140,
+      "w": 8
+    },
+    {
+      "type": "vortex",
+      "from": 150,
+      "w": 7
+    },
+    {
+      "type": "charo",
+      "from": 100,
+      "w": 11
+    },
+    {
+      "type": "kamikaze",
+      "from": 22,
+      "w": 14
+    },
+    {
+      "type": "spider",
+      "from": 30,
+      "w": 11
+    }
+  ],
+  "bg": null,
+  "intro": null,
+  "finalBoss": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
+  "zoom": {
+    "start": 1.27,
+    "end": 0.75,
+    "seconds": 70
+  },
+  "ambient": {
+    "golden": true,
+    "smallEvents": true
+  }
+}

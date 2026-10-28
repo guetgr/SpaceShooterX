@@ -116,5 +116,6 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/superpowers/plans/2026-10-27-plans-pieces.md` — Étape 4 — plans de technologie et pièces de secteur lâchés en mission : plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-rd-emplacements.md` — Étape 3 — R&D par technologie, emplacements, chargement et assemblage en mission : plan d'implémentation
+- `docs/superpowers/plans/2026-10-28-editeur-complet.md` — Éditeur de niveaux complet — plan de travail
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées
 - `docs/superpowers/specs/2026-10-28-level-builder.md` — Space Shooter X — Spécification du Level Builder

@@ -181,7 +181,7 @@ mixin(GameScene, {
 
   // petits événements: minuteur à part (30-60 s), n'importe quand, y compris avant le 1er boss et par-dessus un gros événement; jamais pendant un combat de vrai boss (sauf un boss bonus, rare)
   updateSmallEvents(delta){
-    if (this.sandbox || this.introActive) return;
+    if (this.sandbox || this.introActive || (this.lvDef && this.lvDef.ambient && !this.lvDef.ambient.smallEvents)) return;
     this.smallCd -= delta;
     if (this.smallCd > 0 || this.curSmall) return;
     const al = this.alertLevel, rearm = ()=>{ this.smallCd = Phaser.Math.Between(30000, 60000) * (al >= 8 ? 0.8 : 1); };

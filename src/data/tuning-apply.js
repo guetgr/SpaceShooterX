@@ -1,7 +1,7 @@
 "use strict";
 // Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place.
 // L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les valeurs d'origine pour pouvoir revenir en arrière.
-const TUNE_LEVEL_FIELDS = ['threat', 'goal', 'hpMul', 'dmgMul', 'reward'];
+const TUNE_LEVEL_FIELDS = ['threat', 'goal', 'hpMul', 'dmgMul', 'reward', 'waves', 'timelineOnly', 'spawns', 'events', 'spawnClock', 'ambient', 'zoom', 'name', 'bg', 'intro', 'boss', 'finalBoss', 'bossName', 'tutorial'];
 const TUTO_TUNE = {};
 const LEVEL_BASE = {};
 
@@ -21,12 +21,20 @@ WORLDS.forEach(w=> w.levels.forEach(l=>{
 
 function applyTuning(ov){
   ov = ov || {};
-  const t = tuneMerge(TUTO_DEFAULTS, ov.tuto);
+  const tb = (LEVEL_BASE['w1-tuto'] || {}).tutorial || TUTO_DEFAULTS;
+  const td = ((ov.levels || {})['w1-tuto'] || {}).tutorial || tb;
+  const t = tuneMerge(td, ov.tuto);
   Object.keys(t).forEach(k=>{ TUTO_TUNE[k] = t[k]; });
   WORLDS.forEach(w=> w.levels.forEach(l=>{
     const b = LEVEL_BASE[l.id], o = (ov.levels && ov.levels[l.id]) || {};
     TUNE_LEVEL_FIELDS.forEach(k=>{
-      if (b[k] && typeof b[k] === 'object') l[k] = Object.assign({}, b[k], o[k]);
+      if (k === 'waves'){
+        const waves = o.waves === undefined ? (b.waves || []) : o.waves;
+        if (!Array.isArray(waves) || waves.length > 1000 || waves.some(w=> !w || !BESTIARY_LIST.some(e=> e.type === w.type && !e.bossId && e.type !== 'meteor') || !Number.isFinite(w.at) || w.at < 0 || w.at > 3600 || !Number.isInteger(w.count) || w.count < 1 || w.count > 100 || !Number.isFinite(w.spacing) || w.spacing < 0 || w.spacing > 60)) throw new Error('Vague invalide');
+        l.waves = waves.map(w=> ({ type:w.type, at:w.at, count:w.count, spacing:w.spacing }));
+      }
+      else if (Array.isArray(b[k]) || Array.isArray(o[k])) l[k] = JSON.parse(JSON.stringify(o[k] === undefined ? b[k] : o[k]));
+      else if (b[k] && typeof b[k] === 'object') l[k] = Object.assign({}, b[k], o[k]);
       else if (o[k] !== undefined) l[k] = o[k];
       else if (b[k] !== undefined) l[k] = b[k];
       else delete l[k];

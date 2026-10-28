@@ -103,7 +103,7 @@ if (/[?&]sandbox\b/.test(location.search)) {
     });
   }
 
-  Promise.all([getJson('assets/manifest.json'), getJson('src/scripts.json')])
+  Promise.all([getJson('assets/manifest.json'), getJson('src/scripts.json'), getJson('src/data/levels/index.json').then(ids=> Promise.all(ids.map(id=> getJson('src/data/levels/' + id + '.json')))).then(levels=>{ window.__LEVEL_FILES = Object.fromEntries(levels.map(l=> [l.id,l])); })])
     .then(([assets, scripts]) => {
       let done = 0;
       return Promise.all(assets.map(a => loadAsset(a).then(() => progress(0.9 * ++done / assets.length))))

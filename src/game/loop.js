@@ -50,7 +50,7 @@ mixin(GameScene, {
     this.goldCd -= delta; this.eventCd -= delta;
     if (this.goldCd <= 0){
       this.goldCd = Phaser.Math.Between(45000, 80000);
-      if (!this.bossActive && this.elapsed > 25) this.spawnGolden();
+      if (!this.bossActive && this.elapsed > 25 && (!this.lvDef || !this.lvDef.ambient || this.lvDef.ambient.golden)) this.spawnGolden();
     }
     this.updateEventPlan();
     this.updateEvent(delta);

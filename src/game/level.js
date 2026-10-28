@@ -6,20 +6,30 @@ mixin(GameScene, {
   // appelé à la fin de create() : remet à zéro l'état du niveau
   levelInit(){
     this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; this._ecRet = null;
-    const d = this.lvDef;
+    const d = this.lvDef || (this.tuto ? levelById('w1-tuto') : null);
+    this.lvWaves = [];
+    ((d && d.waves) || []).forEach(w=>{ for (let i=0;i<w.count;i++) this.lvWaves.push({ type:w.type, at:w.at + i*w.spacing }); });
+    this.lvWaves.sort((a,b)=> a.at-b.at);
     this.lvEvents = d ? (d.events || []).slice().sort((a, b)=> a.at - b.at) : [];
     if (d){ this.nextBossAt = 1e9; this._double1 = true; }       // ni boss périodique ni double boss : le boss du monde arrive à la fin de son niveau
   },
 
   levelUpdate(delta){
-    const d = this.lvDef;
-    if (!d || this.lvEnding || this.introActive) return;
+    const d = this.lvDef || (this.tuto ? levelById('w1-tuto') : null);
+    if (!d || this.lvEnding || this.introActive || (this.tuto && this.tutoDone)) return;
     this.lvT += delta/1000;
+    // Une entrée n'est consommée que si le spawn réussit (plafond physique existant).
+    while (this.lvWaves.length && this.lvWaves[0].at <= this.lvT){
+      if (this.tuto && this.lvWaves[0].type === 'sat') this.tutoSpawnSat(false);
+      else if (!this.spawnOneEnemy(this.lvWaves[0].type)) break;
+      this.lvWaves.shift();
+    }
     const ev = this.lvEvents[0];
     if (ev && this.lvT >= ev.at){
       const slot = EVENT_DEFS[ev.kind].small ? 'curSmall' : 'curEvent';
-      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, EVENT_DEFS[ev.kind].dur(this.alertLevel)); }
+      if (!this[slot] && !this.realBossAlive()){ this.lvEvents.shift(); this.startEvent(ev.kind, (ev.duration == null ? EVENT_DEFS[ev.kind].dur(this.alertLevel) : ev.duration * 1000)); }
     }
+    if (this.tuto) return;
     const g = d.goal || {};
     if (d.type === 'boss'){
       if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; if (d.finalBoss === 'pdg') this.pdStart(); else this.spawnBoss(d.boss); }       // le boss du monde 1 est « Le PDG » (bosses/pdg.js), pas le Dreadnought

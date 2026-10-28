@@ -8,6 +8,9 @@
 En développement on n'a pas besoin de build : `serve.bat` sert directement les fichiers de src/.
 Le build est pour publier (Play Store / Capacitor / test d'un fichier autonome).
 """
+from level_files import generate
+generate()
+
 import base64, json, mimetypes, os, re, subprocess, sys
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
