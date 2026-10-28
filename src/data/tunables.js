@@ -4,7 +4,8 @@
 // (scalaires et tableaux de nombres). Coordonnées (bays, anchors, ports...), régions, géométrie de sprite et séquences d'attaques n'y sont pas.
 // FORMAT (lu par tools/level_files.py, à conserver) : un id par ligne `  id: [`, puis une entrée par ligne commençant par quatre espaces
 //   `{ path:'dmg.missile', [len:N,] label:'...', min:0, max:60, step:1, unit:'...', help:'...' },`
-//   path = chemin pointé dans la constante (« count.beam », « thresh ») ; len = tableau de N nombres (à fournir en entier, bornes par élément).
+//   path = chemin pointé dans la constante (« count.beam », « thresh ») ; len = tableau de N nombres (à fournir en entier, bornes par élément) ;
+//   ordered:'desc'|'asc' (après len, facultatif) = le tableau doit être décroissant / croissant (paliers d'usure) : refusé sinon par level_files.py et l'éditeur.
 // JSON : "bossTune": { "ar": { "hp": 2000, "dmg.missile": 20, "gap": [300, 250, 200, 100] } }
 // tunablesApply(lvDef) est appelé au début de chaque mission (GameScene.create) : il remet D'ABORD toutes les valeurs d'origine, PUIS applique lvDef.bossTune.
 // AJOUTER UN RÉGLAGE : ajouter une ligne ici (chemin existant dans la constante, valeur d'origine dans les bornes), relancer tools/tunables_test.py.
@@ -12,7 +13,7 @@ const TUNABLES = {
   // Araignée de tri (bosses/araignee.js, AR)
   ar: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie de l\'Araignée de tri' },
-    { path:'thresh', len:3, label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'thresh', len:3, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
     { path:'count.missiles', len:4, label:'Missiles', min:0, max:20, step:1, unit:'par attaque', help:'Missiles par attaque, par état d\'usure' },
     { path:'count.scrap', len:4, label:'Ferraille', min:0, max:20, step:1, unit:'par attaque', help:'Débris de ferraille par attaque, par état d\'usure' },
     { path:'count.beam', len:4, label:'Faisceau', min:0.1, max:10, step:0.1, unit:'par attaque', help:'Durée du faisceau en secondes, par état d\'usure' },
@@ -28,7 +29,7 @@ const TUNABLES = {
   // La Météo (bosses/meteo.js, MT)
   mt: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie de La Météo' },
-    { path:'thresh', len:3, label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'thresh', len:3, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
     { path:'count.storm', len:4, label:'Éclairs', min:0, max:20, step:1, unit:'par attaque', help:'Éclairs par attaque, par état d\'usure' },
     { path:'count.hail', len:4, label:'Grêle', min:0, max:20, step:1, unit:'par attaque', help:'Salves de grêle par attaque, par état d\'usure' },
     { path:'count.front', len:4, label:'Fronts', min:0, max:20, step:1, unit:'par attaque', help:'Rideaux orageux par attaque, par état d\'usure' },
@@ -44,7 +45,7 @@ const TUNABLES = {
   // Le Réacteur (bosses/reacteur.js, RX)
   rx: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Réacteur' },
-    { path:'thresh', len:3, label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'thresh', len:3, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
     { path:'critR', label:'Rayon du point faible', min:10, max:120, step:1, unit:'px', help:'Taille de la zone de coup critique' },
     { path:'count.ray', len:4, label:'Anneaux', min:0, max:20, step:1, unit:'par attaque', help:'Anneaux de rayonnement par attaque, par état d\'usure' },
     { path:'count.rods', len:4, label:'Barres', min:0, max:20, step:1, unit:'par attaque', help:'Volées de barres par attaque, par état d\'usure' },
@@ -61,7 +62,7 @@ const TUNABLES = {
   // L'Anneau (bosses/anneau.js, AN)
   an: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie de L\'Anneau' },
-    { path:'thresh', len:3, label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'thresh', len:3, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
     { path:'critR', label:'Rayon du point faible', min:10, max:120, step:1, unit:'px', help:'Taille de la zone de coup critique' },
     { path:'spin', len:4, label:'Rotation de l\'anneau', min:0, max:3, step:0.01, unit:'x', help:'Vitesse de rotation de l\'anneau, par état d\'usure (il se grippe)' },
     { path:'dmg.beam', label:'Dégâts rayon', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts d\'un rayon' },
@@ -72,10 +73,10 @@ const TUNABLES = {
   // Le PDG dans sa tour (bosses/pdg.js, PD)
   pd: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie de la tour du PDG' },
-    { path:'thresh', len:3, label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'thresh', len:3, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état suivant (3 paliers décroissants)' },
     { path:'critR', label:'Rayon du point faible', min:10, max:120, step:1, unit:'px', help:'Taille de la zone de coup critique' },
     { path:'mob.hp', label:'PV vaisseau', min:20, max:5000, step:10, unit:'PV', help:'Points de vie d\'un vaisseau « Le PDG »' },
-    { path:'mob.states', len:3, label:'États du vaisseau', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fractions de vie des états d\'usure du vaisseau' },
+    { path:'mob.states', len:3, ordered:'desc', label:'États du vaisseau', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fractions de vie des états d\'usure du vaisseau' },
     { path:'guard.hp', label:'PV agent', min:20, max:5000, step:10, unit:'PV', help:'Points de vie d\'un agent de sécurité' },
     { path:'guard.crack', label:'Fissure de l\'agent', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle l\'agent gelé se fissure' },
     { path:'dmg.orb', label:'Dégâts pièce', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts d\'une pièce d\'or' },
@@ -86,7 +87,7 @@ const TUNABLES = {
   // Bras écartés (enemies/bras.js, BRAS)
   bras: [
     { path:'hp', label:'PV', min:5, max:2000, step:5, unit:'PV', help:'Points de vie du mob Bras écartés' },
-    { path:'states', len:3, label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'states', len:3, ordered:'desc', label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
     { path:'cooldown', len:4, label:'Pause entre salves', min:0, max:10000, step:50, unit:'ms', help:'Pause entre deux salves selon le tier d\'intelligence (le premier élément, tier 1, n\'est pas utilisé)' },
     { path:'shotSpeed', label:'Vitesse du tir', min:20, max:800, step:10, unit:'px/s', help:'Vitesse des projectiles' },
     { path:'shotDmg', label:'Dégâts du tir', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts d\'un projectile' },
@@ -96,7 +97,7 @@ const TUNABLES = {
   // Pilleur de cristaux (enemies/pilleur.js, PIL)
   pil: [
     { path:'hp', label:'PV', min:5, max:2000, step:5, unit:'PV', help:'Points de vie du Pilleur de cristaux' },
-    { path:'states', len:3, label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'states', len:3, ordered:'desc', label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
     { path:'rs', label:'Portée d\'aspiration', min:20, max:600, step:5, unit:'px', help:'Distance à laquelle il aspire les cristaux' },
     { path:'cap', label:'Capacité du réservoir', min:1, max:100, step:1, unit:'cristaux', help:'Cristaux stockés avant le laser plein' },
     { path:'dmg.beam', label:'Dégâts du laser', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts du laser continu' },
@@ -104,7 +105,7 @@ const TUNABLES = {
   // Éclaireur de patrouille (enemies/eclaireur.js, EC)
   ec: [
     { path:'hp', label:'PV', min:5, max:2000, step:5, unit:'PV', help:'Points de vie de l\'Éclaireur de patrouille' },
-    { path:'states', len:3, label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
+    { path:'states', len:3, ordered:'desc', label:'États d\'usure', min:0.01, max:0.99, step:0.01, unit:'fraction', help:'Fraction de vie sous laquelle on passe à l\'état suivant (3 paliers décroissants)' },
     { path:'reach', label:'Portée du faisceau', min:100, max:3000, step:50, unit:'unités', help:'Portée du projecteur ; doit couvrir tout l\'écran' },
     { path:'dmg.orb', label:'Dégâts du tir', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts d\'un tir de canon latéral' },
   ],

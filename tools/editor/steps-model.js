@@ -2,7 +2,7 @@
 // Modèle des « étapes » de l'éditeur de niveaux : sans DOM, chargeable dans le navigateur (globalThis.EditorSteps) et dans node (module.exports).
 //   buildSteps(doc, catalogs) -> Step[]   avec   Step  = { id, title, text, fields: Field[] }
 //     Field = { path:(string|number)[], kind:'number'|'numlist'|'select'|'text'|'textlist'|'objlist'|'bool', label, help?, def, optional,
-//               min?, max?, step?, unit?, int?, len? (numlist), ordered? (numlist), options? ([{value,label}] select / choix d'un textlist), max? (textlist : nombre de lignes),
+//               min?, max?, step?, unit?, int?, len? (numlist), ordered? (numlist : true/'asc' = croissant, 'desc' = décroissant), options? ([{value,label}] select / choix d'un textlist), max? (textlist : nombre de lignes),
 //               item? ([{key,kind,label,options?}] objlist), defByAlert? (le défaut dépend de l'alerte : jamais effacé en retombant dessus), group? (sous-bloc) }
 //   applyFieldValue(doc, field, value) -> nouveau document (copie), lève une Error si la valeur est invalide.
 //   catalogs = { eventCatalog, decorCatalog, musicCatalog, tunablesCatalog, mobCatalog, base? } (tous facultatifs ; base = document d'origine pour les défauts).
@@ -206,7 +206,7 @@
   }
   function tunableField(id, r){
     const common = { path:['bossTune', id, r.path], label:r.label, help:r.help || '', def:r.def, optional:true, group:TUNE_LABEL[id] || id, min:r.min, max:r.max, step:r.step, unit:r.unit || '' };
-    return r.len ? Object.assign(common, { kind:'numlist', len:r.len }) : Object.assign(common, { kind:'number' });
+    return r.len ? Object.assign(common, { kind:'numlist', len:r.len, ordered:r.ordered || false }) : Object.assign(common, { kind:'number' });
   }
   function bossStep(doc, catalogs){
     const tc = (catalogs && catalogs.tunablesCatalog) || {}, ids = bossIds(doc), f = [];
@@ -297,7 +297,8 @@
       case 'numlist':
         if (!Array.isArray(v) || v.length !== field.len) throw new Error(field.label + ' : tableau de ' + field.len + ' nombres requis');
         v.forEach(x=> checkNumber(field, x));
-        if (field.ordered && v.some((x, i)=> i && x < v[i - 1])) throw new Error(field.label + ' : valeurs croissantes requises');
+        if (field.ordered === 'desc' && v.some((x, i)=> i && x > v[i - 1])) throw new Error(field.label + ' : valeurs décroissantes requises (paliers dans l\'ordre)');
+        else if (field.ordered && field.ordered !== 'desc' && v.some((x, i)=> i && x < v[i - 1])) throw new Error(field.label + ' : valeurs croissantes requises');
         break;
       case 'select': if (!(field.options || []).some(o=> o.value === v)) throw new Error(field.label + ' : choix inconnu'); break;
       case 'bool': if (typeof v !== 'boolean') throw new Error(field.label + ' : booléen requis'); break;

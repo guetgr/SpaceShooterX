@@ -60,6 +60,7 @@ def validate_level(d, original, root=ROOT):
     events = set(re.findall(r'^  (\w+):', (root/'src/data/events.js').read_text(), re.M))
     def number(v,lo,hi):
         return type(v) in (int,float) and lo <= v <= hi
+    if d['type'] in ('kill','collect') and (0 if d['timelineOnly'] == 1 else len(d['spawns'])) + len(d['waves']) == 0 and not d.get('tuto'): raise ValueError('Objectif impossible : aucun ennemi ne peut apparaître (ni réserve ni vague)')
     if 'mobs' in d:
         known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(), re.M))
         if not known: raise ValueError('mobs : aucune entrée lue dans src/data/enemy-stats.js ; le format « deux espaces, nom: { » doit être conservé')
@@ -75,8 +76,8 @@ def validate_level(d, original, root=ROOT):
         for line in (root/'src/data/tunables.js').read_text().splitlines():
             m = re.match(r'^  (\w+): \[$', line)
             if m: cur = reg.setdefault(m.group(1), {}); continue
-            m = re.match(r"^    \{ path:'([^']+)',(?: len:(\d+),)? .*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
-            if m and cur is not None: cur[m.group(1)] = (int(m.group(2)) if m.group(2) else None, float(m.group(3)), float(m.group(4)))
+            m = re.match(r"^    \{ path:'([^']+)',(?: len:(\d+),)?(?: ordered:'(asc|desc)',)? .*? min:(-?[\d.]+), max:(-?[\d.]+),", line)
+            if m and cur is not None: cur[m.group(1)] = (int(m.group(2)) if m.group(2) else None, float(m.group(4)), float(m.group(5)), m.group(3))
         if not any(reg.values()): raise ValueError('bossTune : aucun réglage lu dans src/data/tunables.js ; le format « id: [ » puis « { path:\'x\', min:a, max:b, » doit être conservé')
         if not isinstance(d['bossTune'],dict): raise ValueError('bossTune : objet requis')
         for bid, vals in d['bossTune'].items():
@@ -85,12 +86,14 @@ def validate_level(d, original, root=ROOT):
             if not isinstance(vals,dict): raise ValueError('bossTune.%s : objet requis' % bid)
             for path, v in vals.items():
                 if path not in reg[bid]: raise ValueError('bossTune.%s.%s : réglage inconnu' % (bid,path))
-                ln, lo, hi = reg[bid][path]
+                ln, lo, hi, order = reg[bid][path]
                 if ln is None:
                     if not number(v,lo,hi): raise ValueError('bossTune.%s.%s : nombre entre %g et %g requis' % (bid,path,lo,hi))
                 else:
                     if not isinstance(v,list) or len(v) != ln: raise ValueError('bossTune.%s.%s : tableau de %d nombres requis' % (bid,path,ln))
                     if not all(number(x,lo,hi) for x in v): raise ValueError('bossTune.%s.%s : chaque nombre doit être entre %g et %g' % (bid,path,lo,hi))
+                    if order == 'desc' and any(v[i] > v[i-1] for i in range(1,len(v))): raise ValueError('bossTune.%s.%s : valeurs décroissantes requises (paliers dans l\'ordre)' % (bid,path))
+                    if order == 'asc' and any(v[i] < v[i-1] for i in range(1,len(v))): raise ValueError('bossTune.%s.%s : valeurs croissantes requises' % (bid,path))
     def event_registry():
         # registre lu dans src/data/event-params.js : un événement par ligne « deux espaces, kind: [ », une entrée par ligne « quatre espaces, { key:'x', label:'..', min:a, max:b, ... [int:true,] def:.. »
         reg, cur = {}, None
@@ -109,6 +112,10 @@ def validate_level(d, original, root=ROOT):
             lo, hi, integer = reg[kind][key]
             if not number(v,lo,hi): raise ValueError('%s.%s : nombre entre %g et %g requis' % (at, key, lo, hi))
             if integer and v != int(v): raise ValueError('%s.%s : entier requis' % (at, key))
+        # paires mini/maxi du registre (clés « xxxMin » / « xxxMax » du même événement) : mini <= maxi quand les deux sont données
+        for key in vals:
+            if key.endswith('Min') and key[:-3] + 'Max' in vals and vals[key] > vals[key[:-3] + 'Max']:
+                raise ValueError('%s : %s doit être inférieur ou égal à %s' % (at, key, key[:-3] + 'Max'))
     def norma_text(t, at):
         if not isinstance(t,str) or not 1 <= len(t) <= 140: raise ValueError('%s : texte de 1 à 140 caractères requis' % at)
         if '<' in t or '>' in t: raise ValueError('%s : les signes < et > sont interdits' % at)
@@ -162,6 +169,7 @@ def validate_level(d, original, root=ROOT):
             elif set(row)-{'kind','at','duration','params','norma'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
             else:
                 if 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)
+                if 'duration' in row and any(k in ('dur','durMin','durMax') for k in row.get('params',{})): raise ValueError('events.%s : duration et params.dur/durMin/durMax sont ambigus, duration l\'emporte : retirez l\'un des deux' % row['kind'])
                 if 'norma' in row:
                     if not isinstance(row['norma'],dict) or set(row['norma'])-{'start','end'}: raise ValueError('events.norma : objet avec start et/ou end requis')
                     for k, t in row['norma'].items(): norma_text(t, 'events.norma.' + k)

@@ -15,6 +15,14 @@ import serve
 original = level_files.read_levels()
 assert len(original) == 16 and 'w1-tuto' in original
 for doc in original.values(): level_files.validate_level(doc,doc)
+# documents invalides communs avec tools/editor_validator_test.js (tools/fixtures/invalid_levels.json) : même refus, même message
+fixtures = json.loads((Path(__file__).parent/'fixtures/invalid_levels.json').read_text())['cases']
+for case in fixtures:
+    doc=copy.deepcopy(original[case['level']]); doc.update(copy.deepcopy(case['set']))
+    try: level_files.validate_level(doc,original[case['level']]);msg=None
+    except ValueError as e: msg=str(e)
+    if case['expect'] is None: assert msg is None,(case['id'],msg)
+    else: assert msg is not None and case['expect'] in msg,(case['id'],case['expect'],msg)
 for key in ['id','world','type','tuto','schemaVersion']:
     bad=copy.deepcopy(original['w1-tuto']);bad[key]='invalid'
     try: level_files.validate_level(bad,original['w1-tuto'])

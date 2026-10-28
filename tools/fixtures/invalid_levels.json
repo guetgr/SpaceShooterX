@@ -1,0 +1,550 @@
+{
+ "_doc": "Documents invalides communs à tools/editor_validator_test.js et tools/level_files_test.py : chaque cas part du niveau `level`, remplace les clés de premier niveau de `set`, et doit être refusé avec `expect` dans le message (expect null = document valide).",
+ "cases": [
+  {
+   "id": "valid-pair-egal",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "params": {
+       "durMin": 20,
+       "durMax": 20,
+       "speedMin": 200,
+       "speedMax": 300
+      }
+     }
+    ]
+   },
+   "expect": null
+  },
+  {
+   "id": "valid-paliers-egaux",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "ar": {
+      "thresh": [
+       50,
+       50,
+       20
+      ]
+     }
+    }
+   },
+   "expect": null
+  },
+  {
+   "id": "valid-duration-seule",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "duration": 20,
+      "params": {
+       "tickMs": 500
+      }
+     }
+    ]
+   },
+   "expect": null
+  },
+  {
+   "id": "valid-bras-cooldown",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "bras": {
+      "cooldown": [
+       0,
+       1500,
+       1900,
+       2100
+      ],
+      "states": [
+       0.7,
+       0.4,
+       0.2
+      ]
+     }
+    }
+   },
+   "expect": null
+  },
+  {
+   "id": "pair-events-dur",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "params": {
+       "durMin": 40,
+       "durMax": 20
+      }
+     }
+    ]
+   },
+   "expect": "durMin doit être inférieur ou égal à durMax"
+  },
+  {
+   "id": "pair-events-speed",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "params": {
+       "speedMin": 300,
+       "speedMax": 200
+      }
+     }
+    ]
+   },
+   "expect": "speedMin doit être inférieur ou égal à speedMax"
+  },
+  {
+   "id": "pair-eventtune-fall",
+   "level": "w1-l1",
+   "set": {
+    "eventTune": {
+     "crystal": {
+      "fallMin": 200,
+      "fallMax": 100
+     }
+    }
+   },
+   "expect": "fallMin doit être inférieur ou égal à fallMax"
+  },
+  {
+   "id": "pair-eventtune-fire",
+   "level": "w1-l1",
+   "set": {
+    "eventTune": {
+     "shieldwall": {
+      "fireMin": 5000,
+      "fireMax": 1000
+     }
+    }
+   },
+   "expect": "fireMin doit être inférieur ou égal à fireMax"
+  },
+  {
+   "id": "ambigu-dur",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "swarm",
+      "at": 5,
+      "duration": 10,
+      "params": {
+       "dur": 5
+      }
+     }
+    ]
+   },
+   "expect": "ambigus"
+  },
+  {
+   "id": "ambigu-durmin",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "duration": 10,
+      "params": {
+       "durMin": 5
+      }
+     }
+    ]
+   },
+   "expect": "duration l'emporte"
+  },
+  {
+   "id": "ordre-ar-thresh",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "ar": {
+      "thresh": [
+       20,
+       45,
+       70
+      ]
+     }
+    }
+   },
+   "expect": "bossTune.ar.thresh : valeurs décroissantes"
+  },
+  {
+   "id": "ordre-bras-states",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "bras": {
+      "states": [
+       0.2,
+       0.5,
+       0.7
+      ]
+     }
+    }
+   },
+   "expect": "bossTune.bras.states : valeurs décroissantes"
+  },
+  {
+   "id": "ordre-pd-mobstates",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "pd": {
+      "mob.states": [
+       0.1,
+       0.4,
+       0.7
+      ]
+     }
+    }
+   },
+   "expect": "bossTune.pd.mob.states : valeurs décroissantes"
+  },
+  {
+   "id": "norma-cle-inconnue",
+   "level": "w1-l1",
+   "set": {
+    "norma": {
+     "messages": [
+      {
+       "id": "a",
+       "when": "levelStart",
+       "text": "Bonjour",
+       "foo": 1
+      }
+     ]
+    }
+   },
+   "expect": "norma.messages[0] : objet avec id"
+  },
+  {
+   "id": "norma-hold",
+   "level": "w1-l1",
+   "set": {
+    "norma": {
+     "messages": [
+      {
+       "id": "a",
+       "when": "levelStart",
+       "text": "Bonjour",
+       "hold": 3
+      }
+     ]
+    }
+   },
+   "expect": "norma.messages[0].hold"
+  },
+  {
+   "id": "norma-id-double",
+   "level": "w1-l1",
+   "set": {
+    "norma": {
+     "messages": [
+      {
+       "id": "a",
+       "when": "levelStart",
+       "text": "A"
+      },
+      {
+       "id": "a",
+       "when": "win",
+       "text": "B"
+      }
+     ]
+    }
+   },
+   "expect": "déjà utilisé"
+  },
+  {
+   "id": "norma-texte-angle",
+   "level": "w1-l1",
+   "set": {
+    "norma": {
+     "win": [
+      "a<b"
+     ]
+    }
+   },
+   "expect": "les signes < et > sont interdits"
+  },
+  {
+   "id": "norma-ref-inconnue",
+   "level": "w1-l1",
+   "set": {
+    "norma": {
+     "messages": [
+      {
+       "id": "a",
+       "when": "eventStart",
+       "ref": "nope",
+       "text": "A"
+      }
+     ]
+    }
+   },
+   "expect": "norma.messages[0].ref"
+  },
+  {
+   "id": "evenement-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "nope",
+      "at": 5
+     }
+    ]
+   },
+   "expect": "Événement invalide"
+  },
+  {
+   "id": "evenement-at-negatif",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": -1
+     }
+    ]
+   },
+   "expect": "Événement invalide"
+  },
+  {
+   "id": "params-hors-bornes",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "params": {
+       "tickMs": 10
+      }
+     }
+    ]
+   },
+   "expect": "events.params.meteors.tickMs"
+  },
+  {
+   "id": "params-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "eventTune": {
+     "meteors": {
+      "nope": 1
+     }
+    }
+   },
+   "expect": "eventTune.meteors.nope : paramètre inconnu"
+  },
+  {
+   "id": "params-entier",
+   "level": "w1-l1",
+   "set": {
+    "events": [
+     {
+      "kind": "meteors",
+      "at": 30,
+      "params": {
+       "perTick": 2.5
+      }
+     }
+    ]
+   },
+   "expect": "entier requis"
+  },
+  {
+   "id": "bosstune-hors-bornes",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "ar": {
+      "hp": 49
+     }
+    }
+   },
+   "expect": "bossTune.ar.hp"
+  },
+  {
+   "id": "bosstune-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "arx": {
+      "hp": 100
+     }
+    }
+   },
+   "expect": "boss ou mob inconnu"
+  },
+  {
+   "id": "bosstune-antenne",
+   "level": "w1-l1",
+   "set": {
+    "bossTune": {
+     "antenne": {
+      "hp": 100
+     }
+    }
+   },
+   "expect": "bossTune.antenne"
+  },
+  {
+   "id": "mob-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "mobs": {
+     "gruntx": {
+      "hpMul": 2
+     }
+    }
+   },
+   "expect": "type de mob inconnu"
+  },
+  {
+   "id": "mob-hors-bornes",
+   "level": "w1-l1",
+   "set": {
+    "mobs": {
+     "grunt": {
+      "hpMul": 11
+     }
+    }
+   },
+   "expect": "mobs.grunt.hpMul"
+  },
+  {
+   "id": "pool-type-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "spawns": [
+     {
+      "type": "nope",
+      "from": 0,
+      "w": 1
+     }
+    ]
+   },
+   "expect": "Pool invalide"
+  },
+  {
+   "id": "vague-invalide",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "grunt",
+      "at": 5,
+      "count": 0,
+      "spacing": 1
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "decor-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "bg": "nope"
+   },
+   "expect": "bg : décor inconnu"
+  },
+  {
+   "id": "boss-final-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "finalBoss": "nope"
+   },
+   "expect": "Boss final inconnu"
+  },
+  {
+   "id": "audio-niveau-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "audio": {
+     "level": [
+      "nope"
+     ]
+    }
+   },
+   "expect": "clé de musique inconnue"
+  },
+  {
+   "id": "audio-boss-inconnu",
+   "level": "w1-l1",
+   "set": {
+    "audio": {
+     "boss": "nope"
+    }
+   },
+   "expect": "audio.boss"
+  },
+  {
+   "id": "menace-hors-bornes",
+   "level": "w1-l1",
+   "set": {
+    "threat": 50
+   },
+   "expect": "Difficulté invalide"
+  },
+  {
+   "id": "objectif-nul",
+   "level": "w1-l1",
+   "set": {
+    "goal": {
+     "seconds": 0
+    }
+   },
+   "expect": "Objectif positif requis"
+  },
+  {
+   "id": "objectif-impossible",
+   "level": "w1-l4",
+   "set": {
+    "spawns": [],
+    "waves": []
+   },
+   "expect": "Objectif impossible"
+  },
+  {
+   "id": "objectif-impossible-timelineonly",
+   "level": "w1-l4",
+   "set": {
+    "timelineOnly": 1,
+    "waves": []
+   },
+   "expect": "Objectif impossible"
+  },
+  {
+   "id": "zoom-hors-bornes",
+   "level": "w1-l1",
+   "set": {
+    "zoom": {
+     "start": 1.3,
+     "end": 1,
+     "seconds": 1
+    }
+   },
+   "expect": "zoom.seconds"
+  }
+ ]
+}

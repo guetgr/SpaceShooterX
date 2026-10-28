@@ -75,6 +75,7 @@
         const def = TUNABLES_PRISTINE[id] ? TUNABLES_PRISTINE[id][r.path] : tuto[r.path];
         const o = { path:r.path, label:r.label, min:r.min, max:r.max, step:r.step, unit:r.unit, help:r.help, def:Array.isArray(def) ? def.slice() : def };
         if (r.len) o.len = r.len;
+        if (r.ordered) o.ordered = r.ordered;
         return o;
       });
     });
