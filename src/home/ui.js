@@ -87,7 +87,7 @@ mixin(HomeScene, {
     music.setScene({ mode:'menu', menuWorld: w ? w.order : 0, galaxy: !!galaxy });
   },
 
-  enterHome(){
+  enterHome(atStart){
     this.homeOn = true; this._launching = false;
     Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
@@ -102,6 +102,7 @@ mixin(HomeScene, {
     this.resetMapView(); this.homeMusic(false);
     this.page = 99; this.goHomePage(0, true);                                              // toujours sur la carte à l'arrivée
     this.refreshHome();
+    if (atStart) this.showGalaxyNow();                                                      // au démarrage du jeu : on arrive sur la carte des secteurs (pas au retour d'un niveau)
     // nouveau monde débloqué depuis la dernière visite : voyage animé sur la carte stellaire (jamais en mode DEV, où tout est ouvert)
     if (!DEV_SEE_ALL){
       const k = WORLDS.findIndex((w, i)=> i > 0 && isWorldUnlocked(w.id, p) && !wasWorldSeen('w:' + w.id));
