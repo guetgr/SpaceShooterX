@@ -52,6 +52,7 @@ details .body{ padding:4px 12px 10px; }
 .verdict{ margin-top:6px; padding:6px 8px; border-left:4px solid var(--dim); } .verdict.ok{ border-color:var(--green); color:var(--green); } .verdict.easy{ border-color:var(--cyan); color:var(--cyan); } .verdict.hard{ border-color:var(--red); color:var(--red); }
 .opts{ display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; } .opts select,.opts input{ background:#05040c; border:2px solid var(--line); padding:2px 6px; } .opts input{ width:80px; }
 table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align:right; padding:1px 4px; border-top:1px solid #1d1a38; } td:first-child,th:first-child{ text-align:left; } th{ color:var(--dim); font-weight:normal; }
+.val{ margin:6px 0 10px; padding:6px 10px; border:2px solid var(--line); font-size:16px; } .val:empty{ display:none; } .val .e{ color:var(--red); } .val .w{ color:var(--amber); } .val .t{ color:var(--dim); }
 .toast{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--panel2); border:2px solid var(--cyan); padding:8px 16px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:9; } .toast.show{ opacity:1; } .toast.err{ border-color:var(--red); }
 @media (max-width:1000px){ main{ grid-template-columns:1fr; } aside{ border-right:0; border-bottom:2px solid var(--line); max-height:200px; } .right{ border-left:0; } }
 </style>
@@ -90,6 +91,7 @@ table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align
 <script src="tools/editor/steps-model.js"></script>
 <script src="tools/editor/level-document.js"></script>
 <script src="tools/editor/timeline.js"></script>
+<script src="tools/editor/validator.js"></script>
 <script src="tools/editor/steps-ui.js"></script>
 <script>
 "use strict";
@@ -115,7 +117,21 @@ function refreshChrome(){
   $('btnSave').classList.toggle('dirty', dirty()); $('btnSave').textContent = dirty() ? '💾 EXPORTER *' : '💾 EXPORTER';
   document.querySelectorAll('.lv').forEach(e=> e.classList.toggle('mod', levelModified(e.dataset.id)));
 }
-function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); if(S.refreshTimeline)S.refreshTimeline(); if(S.refreshSteps)S.refreshSteps(); }
+/* validation (tools/editor/validator.js) : erreurs = ce que le serveur refuse (bloquent EXPORTER), avertissements = indicatifs. Jamais bloquant en cas de plantage du validateur. */
+function validateOf(id){
+  const cat = { eventCatalog:S.eventCatalog, tunablesCatalog:S.tunablesCatalog, mobCatalog:S.mobCatalog, bestiary:S.bestiary, decorCatalog:S.decorCatalog, musicCatalog:S.musicCatalog };
+  return EditorValidator.validateLevel(editorLevelDocument(id), cat);
+}
+function refreshBanner(){
+  const b = $('valBanner'); if (!b) return;
+  try {
+    const r = validateOf(S.sel); b.replaceChildren();
+    const add = (cls, text)=> { const d = document.createElement('div'); d.className = cls; d.textContent = text; b.appendChild(d); };
+    r.errors.forEach(e=> add('e', 'ERREUR · ' + e)); r.warnings.forEach(w=> add('w', 'AVERTISSEMENT · ' + w));
+    if (r.errors.length) add('t', 'EXPORTER est refusé tant qu\'il reste une erreur.');
+  } catch(e){ b.textContent = 'Validation indisponible : ' + e.message; }
+}
+function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); refreshBanner(); if(S.refreshTimeline)S.refreshTimeline(); if(S.refreshSteps)S.refreshSteps(); }
 
 /* ---------- liste des niveaux ---------- */
 function renderList(){
@@ -139,6 +155,7 @@ function renderForm(){
   h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 3 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
   F.appendChild(h);
   S.refreshSteps = null;
+  const vb = document.createElement('div'); vb.id = 'valBanner'; vb.className = 'val'; F.appendChild(vb); refreshBanner();
   renderTimeline(F, l);
   renderSteps(F, l);                 // étapes : tous les réglages du niveau (tools/editor/steps-ui.js)
   renderLevelDocument(F, l);
@@ -186,6 +203,10 @@ $('btnBot').onclick = ()=>{
 };
 $('btnReset').onclick = ()=>{ if (!confirm('Remettre TOUS les réglages aux valeurs d\'origine ? (rien n\'est écrit tant que tu n\'exportes pas)')) return; S.ov = { tuto:{}, levels:{} }; changed(); renderForm(); };
 $('btnSave').onclick = async ()=>{
+  try {
+    const bad = S.levels.filter(l=> validateOf(l.id).errors.length).map(l=> l.id);
+    if (bad.length){ toast('Export refusé : erreurs dans ' + bad.join(', ') + ' (voir le bandeau en haut du niveau).', true); return; }
+  } catch(e){ toast('Validation indisponible (' + e.message + ') : le serveur vérifiera à l\'export.', true); }
   const levels = Object.fromEntries(S.levels.map(l=> [l.id, editorLevelDocument(l.id)]));
   const snapshot = JSON.stringify(S.ov);
   try {
