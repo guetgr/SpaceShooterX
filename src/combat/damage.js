@@ -249,10 +249,11 @@ mixin(GameScene, {
           mini.play(miniArt.anim);
           mini.body.setSize(miniArt.body[0], miniArt.body[1]);
           const hpScale = this.hpScaleNow();
-          mini.hp = 6*hpScale; mini.maxHp = mini.hp;
-          mini.body.velocity.y = 70*(1+this.difficultyTier*0.08);
-          mini.scoreValue = 4;
-          mini.contactDamage = 5;
+          const st = enemyStat('splitterMini', this.lvDef);
+          mini.hp = st.hp*hpScale; mini.maxHp = mini.hp;
+          mini.body.velocity.y = enemyVy(st, 1+this.difficultyTier*0.08);
+          mini.scoreValue = st.score;
+          mini.contactDamage = st.dmg;
         }
       });
     }

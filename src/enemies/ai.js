@@ -441,11 +441,12 @@ mixin(GameScene, {
     mini.setScale(0.055);
     mini.enemyType = 'mineDeployed';
     mini.body.setSize(90,90);
-    mini.body.velocity.y = 14;
+    const st = enemyStat('mineDeployed', this.lvDef);
+    mini.body.velocity.y = enemyVy(st, 1);
     const hpScale = this.hpScaleNow();
-    mini.hp = 8*hpScale; mini.maxHp = mini.hp;
-    mini.scoreValue = 6;
-    mini.contactDamage = 14;
+    mini.hp = st.hp*hpScale; mini.maxHp = mini.hp;
+    mini.scoreValue = st.score;
+    mini.contactDamage = st.dmg;
     this.spawnHitParticles(x, y, 4);
   },
 

@@ -482,6 +482,13 @@
   "y": -70,
   "z": 0
  },
+ "1:mineDeployed": {
+  "contactDamage": 14,
+  "hp": 11.2,
+  "maxHp": 11.2,
+  "scoreValue": 6,
+  "vy": 14
+ },
  "1:mothership": {
   "_depth": 4,
   "_displayOriginX": 52,
@@ -856,6 +863,20 @@
   "x": 70,
   "y": -70,
   "z": 0
+ },
+ "1:splitterMini#0": {
+  "contactDamage": 5,
+  "hp": 8.399999999999999,
+  "maxHp": 8.399999999999999,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
+ },
+ "1:splitterMini#1": {
+  "contactDamage": 5,
+  "hp": 8.399999999999999,
+  "maxHp": 8.399999999999999,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
  },
  "1:swarmer": {
   "_depth": 4,
@@ -1485,6 +1506,13 @@
   "y": -70,
   "z": 0
  },
+ "3:mineDeployed": {
+  "contactDamage": 14,
+  "hp": 11.2,
+  "maxHp": 11.2,
+  "scoreValue": 6,
+  "vy": 14
+ },
  "3:mothership": {
   "_depth": 4,
   "_displayOriginX": 52,
@@ -1859,6 +1887,20 @@
   "x": 206,
   "y": -70,
   "z": 0
+ },
+ "3:splitterMini#0": {
+  "contactDamage": 5,
+  "hp": 8.399999999999999,
+  "maxHp": 8.399999999999999,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
+ },
+ "3:splitterMini#1": {
+  "contactDamage": 5,
+  "hp": 8.399999999999999,
+  "maxHp": 8.399999999999999,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
  },
  "3:swarmer": {
   "_depth": 4,
@@ -2558,6 +2600,13 @@
   "y": -70,
   "z": 0
  },
+ "6:mineDeployed": {
+  "contactDamage": 14,
+  "hp": 14.559999999999999,
+  "maxHp": 14.559999999999999,
+  "scoreValue": 6,
+  "vy": 14
+ },
  "6:mothership": {
   "_depth": 4,
   "_displayOriginX": 52,
@@ -2981,6 +3030,20 @@
   "x": 86,
   "y": -70,
   "z": 0
+ },
+ "6:splitterMini#0": {
+  "contactDamage": 5,
+  "hp": 10.919999999999998,
+  "maxHp": 10.919999999999998,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
+ },
+ "6:splitterMini#1": {
+  "contactDamage": 5,
+  "hp": 10.919999999999998,
+  "maxHp": 10.919999999999998,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
  },
  "6:swarmer": {
   "_depth": 4,
@@ -3681,6 +3744,13 @@
   "y": -70,
   "z": 0
  },
+ "9:mineDeployed": {
+  "contactDamage": 14,
+  "hp": 19.599999999999998,
+  "maxHp": 19.599999999999998,
+  "scoreValue": 6,
+  "vy": 14
+ },
  "9:mothership": {
   "_aShield": true,
   "_depth": 4,
@@ -4095,6 +4165,20 @@
   "x": 370,
   "y": -70,
   "z": 0
+ },
+ "9:splitterMini#0": {
+  "contactDamage": 5,
+  "hp": 14.7,
+  "maxHp": 14.7,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
+ },
+ "9:splitterMini#1": {
+  "contactDamage": 5,
+  "hp": 14.7,
+  "maxHp": 14.7,
+  "scoreValue": 4,
+  "vy": 81.19999999999999
  },
  "9:swarmer": {
   "_depth": 4,

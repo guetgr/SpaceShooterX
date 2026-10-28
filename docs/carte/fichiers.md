@@ -19,7 +19,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 11 | `src/data/atelier.js` | Atelier : les six postes de la camionnette, en cinq niveaux Mk I à V. Stats de base permanentes, toujours actives, hors emplacement. Achat : composants ◆ (Mk I à V) + pièces de secteur (Mk III à V). Design : docs/superpowers/specs |
 | 12 | `src/data/techs.js` | Technologies : le catalogue de la R&D. On récupère un plan (1re victoire d'un ordre), on prototype, on améliore (rangs), on spécialise ; on en emporte 1 à 5 selon les boss vaincus et on les ASSEMBLE en mission par des cartes. Desi |
 | 13 | `src/data/events.js` | Événements aléatoires (EVENT_DEFS). |
-| 14 | `src/data/enemy-stats.js` | Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js). COUVRE : hp (avant hpScale), dmg (dégâts de contact), score, vitesse verticale de départ |
+| 14 | `src/data/enemy-stats.js` | Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js), plus les deux apparitions secondaires : splitterMini (combat/damage.js, mort d'un splitter) et mineDeployed (enemies/ai.js deployMine). |
 | 15 | `src/ui/pixel-icons.js` | Icônes pixel : réduit les émojis en 16x16 avec contour. |
 | 16 | `src/ui/ui-icons.js` | Icônes d'interface en pixel art (12x12, dessinées par tools/gen_ui_icons.py) : elles remplacent les glyphes / émojis de l'interface. uiIco('lock', 12)  -> HTML <img> prêt à insérer dans un innerHTML (12 px dans le texte, 24 px pou |
 | 17 | `src/data/meta.js` | Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, R&D (rd), chargement ; niveau d'alerte de la partie infinie. Les sauvegardes d'avant la R&D (`ssx_meta_v2`, ou v3 sans clé `rd`) sont lues et co |
@@ -183,7 +183,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 - Définit : `evRndX`, `EVENT_DEFS`
 
-**`enemy-stats.js`** — Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js). COUVRE : hp (avant hpScale), dmg (dégâts de contact), score, vitesse verticale de départ
+**`enemy-stats.js`** — Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js), plus les deux apparitions secondaires : splitterMini (combat/damage.js, mort d'un splitter) et mineDeployed (enemies/ai.js deployMine).
 
 - Définit : `ENEMY_STATS`, `enemyStat`, `enemyVy`
 

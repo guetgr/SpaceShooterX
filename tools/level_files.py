@@ -36,9 +36,10 @@ def validate_level(d, original, root=ROOT):
         return type(v) in (int,float) and lo <= v <= hi
     if 'mobs' in d:
         known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(), re.M))
+        if not known: raise ValueError('mobs : aucune entrée lue dans src/data/enemy-stats.js ; le format « deux espaces, nom: { » doit être conservé')
         if not isinstance(d['mobs'],dict): raise ValueError('mobs : objet requis')
         for mob, mul in d['mobs'].items():
-            if mob not in known: raise ValueError('mobs : type de mob inconnu « %s »' % mob)
+            if mob not in known: raise ValueError('mobs : type de mob inconnu « %s » (types lus dans src/data/enemy-stats.js : entrées « deux espaces, nom: { »)' % mob)
             if not isinstance(mul,dict) or set(mul) - {'hpMul','dmgMul','speedMul','scoreMul'}: raise ValueError('mobs.%s : seuls hpMul, dmgMul, speedMul et scoreMul sont permis' % mob)
             for k, v in mul.items():
                 if not number(v,0.1,10): raise ValueError('mobs.%s.%s : nombre entre 0,1 et 10 requis' % (mob,k))

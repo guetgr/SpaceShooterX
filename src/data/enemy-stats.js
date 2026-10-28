@@ -1,5 +1,7 @@
 "use strict";
-// Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js).
+// Registre des stats de base des ennemis, extrait de spawnOneEnemy (src/enemies/spawning.js), plus les deux apparitions
+// secondaires : splitterMini (combat/damage.js, mort d'un splitter) et mineDeployed (enemies/ai.js deployMine).
+// FORMAT : une entrée par ligne, commençant par deux espaces puis `nom: {` (tools/level_files.py lit les clés ainsi).
 // COUVRE : hp (avant hpScale), dmg (dégâts de contact), score, vitesse verticale de départ
 //   vy (+ vyRand : étendue aléatoire flottante ; vyBetween : tirage entier [min,max] ; noScale : non multipliée par la difficulté),
 //   shield (bouclier de base du shieldedGrunt, avant hpScale). Valeurs IDENTIQUES au code d'origine.
@@ -34,6 +36,7 @@ const ENEMY_STATS = {
   golden:        { hp:10, dmg:1, score:60, vy:0, noScale:true },
   kamikaze:      { hp:14, dmg:1, score:14, vy:55 },
   spider:        { hp:18, dmg:9, score:18, vy:44 },
+  mineDeployed:  { hp:8, dmg:14, score:6, vy:14, noScale:true },   // mines larguées (ai.js deployMine)
   charo:         { hp:24, dmg:11, score:20, vy:50 },
 };
 
