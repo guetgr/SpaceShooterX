@@ -244,7 +244,7 @@
 /* ===================================================================
    RAPPORT D'INTERVENTION (écran de fin de mission)
    =================================================================== */
-#gameover{ justify-content:center; padding:10px 12px; overflow-y:auto; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
+#gameover{ justify-content:flex-start; padding:0; overflow:hidden; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
 #gameover.win, #gameover:not(.win){ --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
 .rp-doc{
   position:relative; width:100%; max-width:340px; padding:8px 24px 11px; text-align:left; color:var(--agp-ink); background-color:var(--agp-paper);
@@ -292,10 +292,13 @@
 .rp-norma p.typing::after{ content:'█'; margin-left:2px; animation:blink .5s steps(2) infinite; }
 @keyframes blink{ 50%{ opacity:0; } }
 .new-best{ margin:8px 8px 0; padding:2px 6px; text-align:center; font-family:var(--px); font-size:7px; letter-spacing:1px; color:#14110a; background:#ffd75a; }
-#gameover > .btn{ width:100%; max-width:340px; margin-top:6px; font-size:10px; letter-spacing:1px; padding:9px 10px; }
-#gameover > .btn.secondary{ margin-top:5px; padding:7px 10px; min-width:0; font-size:8px; }
-#gameover > .btn:not(.secondary) + .btn:not(.secondary){ margin-top:8px; }
-#gameover > .btn:not(.secondary):not(.hidden) ~ .btn:not(.secondary){ }
+/* le document défile seul ; les boutons restent fixes en bas de l'écran */
+.rp-scroll{ flex:1 1 auto; min-height:0; width:100%; overflow-y:auto; padding:10px 12px 8px; display:flex; flex-direction:column; align-items:center; scrollbar-width:none; }
+.rp-scroll::-webkit-scrollbar{ display:none; }
+.rp-scroll > .rp-doc{ flex:none; margin:auto 0; }
+.rp-btns{ flex:none; width:100%; display:flex; flex-direction:column; align-items:center; gap:7px; padding:14px 12px 12px; background:linear-gradient(transparent,#060a08 38%); }
+.rp-btns > .btn{ flex:none; width:100%; max-width:340px; margin:0; font-size:10px; letter-spacing:1px; padding:10px 10px; }
+.rp-btns > .btn.secondary{ padding:8px 10px; min-width:0; font-size:8px; }
 
 /* écran de fin du tutoriel : même calepin que le rapport d'intervention */
 #tutoEnd .te-big{ color:var(--agp-ink); text-shadow:none; }

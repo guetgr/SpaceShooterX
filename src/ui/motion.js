@@ -121,7 +121,7 @@ const Motion = {
       tl.call(()=>{ nb._pulse = gsap.to(nb, { scale:1.06, duration:.6, yoyo:true, repeat:-1, ease:'sine.inOut' }); });
     }
     const btns = all('.btn:not(.hidden)');
-    tl.from(btns, { y:26, opacity:0, duration:.4, stagger:.1, ease:'back.out(1.8)', clearProps:'transform,opacity' }, t1 + .9);
+    tl.from(btns, { y:26, opacity:0, duration:.35, stagger:.08, ease:'back.out(1.8)', clearProps:'transform,opacity' }, .1);      // les boutons sont fixes en bas : ils arrivent tout de suite, sans attendre la fin du rapport
     tl.call(()=>{ const main = btns.find(b=> !b.classList.contains('secondary')); if (main) this.breath(main); });
   },
 
