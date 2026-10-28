@@ -2,6 +2,34 @@
 
 Lancer `python3 tools/serve.py 8080`, puis ouvrir `http://localhost:8080/editor.html`.
 
+## Guide rapide (de haut en bas)
+
+1. **Ouvrir** : `python3 tools/serve.py 8080` (Windows : `py tools/serve.py 8080`), puis `http://localhost:8080/editor.html`. Choisir une mission à gauche.
+2. **Timeline** : vagues, pools, événements programmés (section « Lire la timeline »).
+3. **ETAPES DU NIVEAU** : tous les réglages de la mission, une saisie par valeur, valeur orange = modifiée, ↺ = retour à l'origine (section « Étapes du niveau »).
+4. **FICHIER JSON COMPLET** : lecture / édition du document entier (section « Édition JSON »).
+5. **TESTER** (aperçu avec le document en mémoire) puis **EXPORTER** : valide les 16 documents, n'écrit que les fichiers dont le contenu change (UTF-8, indent 2, `\n`, saut de ligne final : un export sans modification ne produit aucun diff) et régénère `src/data/worlds/level-data.js`. `index.json` n'est jamais touché.
+
+**Règle : nouvelle clé de niveau = registre + validateur + éditeur.** Une clé de mission n'existe que si son registre (borné) la décrit, si `tools/level_files.py` la valide (et `tools/editor/validator.js`, mêmes messages) et si l'éditeur sait l'afficher (`tools/editor/steps-model.js`).
+
+### Clés du JSON d'une mission
+
+| Clé | Rôle | Bornes (source) | Branchement dans le jeu |
+|---|---|---|---|
+| `schemaVersion` | version du format (1 ou 2, voir « Version du format ») | `level_files.SCHEMA_VERSIONS` | non lue par le jeu |
+| `threat`, `hpMul`, `dmgMul`, `reward`, `goal` | difficulté, récompenses, objectif | `level_files.py` (menace 1 à 20, multiplicateurs > 0, objectif > 0) | `level.js`, `lvDef` |
+| `spawns`, `waves`, `events`, `spawnClock`, `timelineOnly` | pools, vagues garanties, événements programmés | `level_files.py` (`ENEMY`/`EVENT_DEFS` lus dans `bestiary.js`, `events.js`) | `level.js` |
+| `mobs.<type>` | multiplicateurs `hpMul`/`dmgMul`/`speedMul`/`scoreMul` | 0,1 à 10 ; types lus dans `src/data/enemy-stats.js` | `ENEMY_STATS` + `spawnOneEnemy` |
+| `bossTune.<id>.<chemin>` | nombres internes des boss et mobs spéciaux | `src/data/tunables.js` | `tunablesApply(lvDef)` |
+| `eventTune.<nature>`, `events[i].params` | paramètres d'événement (niveau entier / une occurrence) | `src/data/event-params.js` | `evParam(sc, kind, key)` |
+| `norma` (`start`, `boss`, `progress`, `banter`, `lowhp`, `win`, `lose`, `tickEvery`, `tuto`, `messages`), `events[i].norma` | transmissions N.O.R.M.A. de la mission | 1 à 20 textes de 1 à 140 caractères, 50 boîtes ; `level_files.py` | `src/data/level-norma.js`, `src/ui/norma.js` |
+| `bg`, `intro`, `zoom` | décor, décollage, caméra | `WORLD_BG_KINDS` (`bg-monde.js`) ; zoom 0,3 à 3, durée 5 à 600 s | `wbgBuild_<nom>`, `GameScene.create` |
+| `audio.level`, `audio.boss` | musiques de l'ordre / du boss final | clés de `MUSIC_LEVEL` / `MUSIC_BOSS` (`src/audio/music.js`) | `musicLevelKeys` / `musicBossKeys` |
+| `ambient`, `finalBoss`, `boss`, `bossName` | aléas activés, boss | `level_files.py` | `level.js`, `bosses/*.js` |
+| `tutorial.*` (tuto seulement) | réglages pédagogiques | `TUTO_SCHEMA` (`steps-model.js`) | `src/tuto/*` |
+
+Pour chaque clé facultative, un document qui ne l'utilise pas n'en porte aucune trace (rien n'est ajouté par défaut).
+
 ## Un fichier par mission
 
 Les **16 missions, tutoriel compris**, ont leur source dans `src/data/levels/<id>.json`. `index.json` fixe leur ordre. Le jeu en développement charge ces JSON au démarrage. Les fichiers des secteurs ne contiennent plus les paramètres des missions.
@@ -82,7 +110,8 @@ Les cas invalides communs au client et au serveur sont écrits une fois dans `to
 - `node tools/editor_validator_test.js` : 16 niveaux sans erreur, une règle d'erreur et d'avertissement par cas (`--warnings` les affiche).
 - `node tools/editor_steps_test.js` et `node tools/editor_steps_ui_test.js` : étapes de l'éditeur (modèle, rendu sur faux DOM, surcharges, `applyTuning`).
 - `python3 tools/enemy_stats_test.py` : stats des 27 types identiques à `tools/enemy_stats_snapshot.json` (`--write` pour le régénérer, seulement si un changement de valeurs est voulu) et surcharge `mobs`.
-- `python3 tools/level_files.py` : génération du cache depuis les JSON.
+- `python3 tools/level_files.py` : génération du cache depuis les JSON ; `--migrate` : documents en v2.
+- `node tools/norma_level_test.js`, `node tools/event_params_node_test.js`, `node tools/level_look_test.js` : N.O.R.M.A., paramètres d'événement, décor/musique (sans navigateur).
 - `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.
 
 Après une modification de `tools/serve.py`, redémarrer le serveur. Les sauvegardes de progression des joueurs sont isolées dans l’aperçu et le bot.
@@ -131,3 +160,43 @@ Réglés par le JSON de la mission, sans code par niveau. Sans ces clés (ou ave
 - **`audio`** (optionnel) : `{ "level": ["w1_l1_a", "w1_l1_b"], "boss": "w1b_pdg_a" }`. `level` : 1 ou 2 clés parmi celles de `MUSIC_LEVEL` (`src/audio/music.js`), remplace les morceaux de l'ordre ; `boss` : une clé parmi celles de `MUSIC_BOSS`, remplace le morceau du boss de fin d'ordre (`finalBoss`). Chaque champ est facultatif ; un autre boss ou un boss de passage garde sa musique. Les tables sont lues par le validateur dans `music.js` (`const MUSIC_LEVEL = {…};` et `const MUSIC_BOSS = {…};`). Code : `musicLevelKeys` / `musicBossKeys` (`music.js`), `lvAudio` posé par `scene-audio.js` ; sans `audio`, elles rendent l'entrée d'origine de la table.
 - **Éditeur** : le message `ready` du jeu apporte `decorCatalog` (`[{ kind, label }]`) et `musicCatalog` (`{ level: [clés], boss: [clés] }`) (`src/dev/editor-hook.js`).
 - Test : `node tools/level_look_test.js` ; cas refusés dans `tools/level_files_test.py`.
+
+## Version du format
+Chaque document porte `schemaVersion`. Le validateur accepte **1 et 2** et refuse toute autre valeur (le type compte : `true` ou `"2"` sont refusés) ; la version doit rester celle du document d'origine, l'éditeur ne la change pas. La v2 a la même forme que la v1 : elle autorise en plus les blocs facultatifs `mobs`, `bossTune`, `eventTune`, `norma`, `audio` et `events[i].params` / `events[i].norma`. Le jeu ne lit pas `schemaVersion`. Les 16 documents sont en v2. `python3 tools/level_files.py --migrate` réécrit en v2 ce qui serait encore en v1 (idempotent : un second passage ne change rien) et régénère le cache.
+
+## Recettes
+Les lecteurs Python (`tools/level_files.py`) parlent aux fichiers JS par des expressions régulières : respecter exactement les formats ci-dessous, sinon la validation s'arrête avec un message qui nomme le fichier et le format attendu.
+
+### Ajouter un mob
+1. `src/data/enemy-stats.js` : une entrée par ligne, **deux espaces puis `nom: {`** : `  monnom:        { hp:12, dmg:8, score:8, vy:55 },`.
+2. `src/data/bestiary.js` : une entrée `{ type:'monnom', label:'…', tex:'…', frame:0 }` (le type est lu par `type:'…'` ; les types commençant par `boss` et `meteor` sont exclus des pools).
+3. Le comportement et l'apparition restent dans `src/enemies/spawning.js` / `ai.js` (hors de l'éditeur). Ensuite le mob se place en `spawns` / `waves` et se règle par `mobs.monnom`.
+4. `python3 tools/enemy_stats_test.py --write` seulement si l'instantané doit changer (navigateur : à lancer par Guet), `node tools/editor_steps_test.js`.
+
+### Ajouter un événement
+1. `src/data/events.js` : une entrée dans `EVENT_DEFS`, **deux espaces puis `nom:`** en début de ligne (lues par `^  (\w+):`).
+2. `src/data/event-params.js` : un bloc `  nom: [` puis une ligne par paramètre, quatre espaces : `    { key:'tickMs', label:'Cadence', min:50, max:5000, step:10, unit:'ms', [int:true,] def:500 },` (le validateur lit `key`, `min`, `max` et ` int:true,`). Remplacer le littéral du code par `evParam(sc, 'nom', 'tickMs')`.
+3. Ajouter la formule d'origine dans `EXPECTED` de `tools/event_params_node_test.js` ; lancer `node tools/event_params_node_test.js`. Un texte N.O.R.M.A. se rattache par `events[i].norma` ou une boîte `eventStart`/`eventEnd` avec `ref`.
+
+### Ajouter un réglage de boss
+`src/data/tunables.js` : dans le bloc `  id: [` du boss, une ligne à **quatre espaces** : `    { path:'dmg.missile', [len:4,] [ordered:'desc',] label:'…', min:0, max:60, step:1, unit:'…', help:'…' },`. `path` pointe un nombre existant de la constante du module (`AR`, `MT`…), la valeur d'origine doit être dans les bornes ; `len` pour un tableau, `ordered` pour des paliers. Un nouveau boss : nouveau bloc `  id: [` et module branché sur `tunablesApply`. Test : `python3 tools/tunables_test.py` (navigateur).
+
+### Ajouter un décor
+`src/world/bg-monde.js` : écrire la méthode `wbgBuild_<nom>`, puis ajouter `'nom'` à la ligne `const WORLD_BG_KINDS = ['horizon', …];` (une seule ligne, apostrophes). `node tools/level_look_test.js` vérifie que la liste égale les méthodes. Le décor apparaît dans l'éditeur via `decorCatalog`.
+
+### Ajouter une musique
+`src/audio/music.js` : ajouter les clés dans `const MUSIC_LEVEL = { 'w1-l1':['w1_l1_a','w1_l1_b'], … };` (1 ou 2 clés par ordre) ou `const MUSIC_BOSS = { … };` (clé ou paire par boss), clés entre apostrophes, fin de table `};` ; ajouter la durée dans `MUSIC_LEN` et le fichier dans les assets (`gen_manifest.py`). Le validateur ne vérifie que les tables, pas l'existence du fichier audio.
+
+## À vérifier à la main
+Navigateur, `http://localhost:8080/editor.html` (rien de cela n'est couvert par les tests automatiques sans navigateur) :
+1. Ouvrir w1-tuto : la page s'affiche (timeline, ETAPES DU NIVEAU, JSON), aucune ligne rouge « affichage impossible ».
+2. Déplier ETAPE 2 · SATELLITE, changer « Points de vie » : le chiffre passe en orange, la description change, l'aperçu tuto suit en direct ; cliquer ↺ : retour à l'origine.
+3. RAPPORT du tuto : modifier un poids de finition → l'avertissement « Total des poids » apparaît ; remettre → il disparaît.
+4. w1-l2 : COMBAT DU BOSS → changer les PV de l'Araignée, TESTER : le boss a les nouveaux PV ; lancer le bot : pas d'erreur.
+5. w1-l2 : EVENEMENT · … → durée 20, un paramètre ; la ligne de la timeline et la description suivent.
+6. N.O.R.M.A. (w1-l1) : AJOUTER UNE TRANSMISSION, message rouge tant que le texte est vide ; écrire un texte, choisir « À une date » puis 5 s, TESTER : la boîte part vers 5 s.
+7. Saisir une valeur hors bornes (Menace 50) : message rouge, rien d'orange, EXPORTER n'est pas marqué modifié pour ça.
+8. Plier/déplier des étapes puis modifier un champ : les étapes restent dans le même état, le curseur reste dans le champ.
+9. Ajouter une vague d'un nouveau type dans la timeline : l'étape MOBS gagne ce type (reconstruction), étapes dépliées conservées.
+10. EXPORTER puis recharger : les valeurs sont dans `src/data/levels/*.json` (vérifier `git diff` : seuls les fichiers modifiés changent), puis annuler si c'était un essai.
+11. Aspect : lisibilité des descriptions dans les en-têtes, largeur des listes (musique, boîtes) sur un écran < 1000 px.

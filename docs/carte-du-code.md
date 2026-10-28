@@ -56,6 +56,7 @@ Textes : `data/agp-lore.js` (`AGP_LINES`). Moteur : `Norma` dans `ui/norma.js` +
 
 ### Éditeur de niveaux
 `editor.html` (racine, `http://localhost:8080/editor.html`) pilote deux iframes du jeu (`?dev&edit=play|bot&sandbox=1`) via `dev/editor-hook.js` (inactif sans `?edit`). Réglages : défauts `data/tuning-defaults.js`, application `data/tuning-apply.js` (`applyTuning`), export **généré** `data/tuning.js`. Bot : `tools/sim/bot.js`. Doc : `docs/editeur-niveaux.md`.
+Chaque mission est un JSON `src/data/levels/<id>.json` (16, `schemaVersion` 2) ; `data/worlds/level-data.js` en est le cache généré par `tools/level_files.py` (jamais édité ; `--migrate` pour la version). Registres bornés lus aussi par le validateur Python : `data/enemy-stats.js` (`mobs`), `data/tunables.js` (`bossTune`), `data/event-params.js` (`eventTune`, `events[i].params`), `data/level-norma.js` (`norma`). Éditeur : `tools/editor/steps-model.js`, `steps-ui.js`, `validator.js` ; serveur `tools/serve.py` (`/__editor/levels`, n'écrit que les fichiers modifiés). **Nouvelle clé de niveau = registre + validateur + éditeur.**
 
 ## 3. Où trouver quoi
 
@@ -127,6 +128,8 @@ Prérequis : Python 3 + `pip install playwright numpy`, Chrome, Node. Pas de lan
 | `python3 tools/perks_test.py` | atouts globaux vs atouts de mission |
 | `node tools/check_worlds.js` | format et déblocages des mondes |
 | `python3 tools/sim_balance.py grid\|campaign\|tune` | équilibrage par joueur automatique |
+| `node tools/editor_steps_test.js`, `editor_steps_ui_test.js`, `editor_validator_test.js`, `norma_level_test.js`, `event_params_node_test.js`, `level_look_test.js`, `python3 tools/level_files_test.py` | éditeur de niveaux sans navigateur (étapes, validateur, N.O.R.M.A., paramètres, décor/musique, export JSON) |
+| `python3 tools/enemy_stats_test.py`, `tunables_test.py`, `event_params_test.py` | stats de mobs, réglages de boss, effets d'événements (navigateur) |
 | `python3 tools/gen_codemap.py --check` | la carte du code est à jour |
 
 Autres : `python3 tools/build.py` (build + `node --check`), `python3 tools/gen_manifest.py` (après ajout/suppression d'asset).
