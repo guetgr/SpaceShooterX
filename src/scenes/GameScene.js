@@ -9,6 +9,7 @@ class GameScene extends Phaser.Scene{
     this.lvDef = (data && data.levelId && levelById(data.levelId)) || null;      // niveau d'un monde (sinon: partie infinie historique)
     tunablesApply(this.lvDef);      // réglages internes des boss et mobs spéciaux : remise à zéro puis surcharges du niveau (data/tunables.js)
     this.tuto = !!(data && data.tuto);
+    this.vortex = !!(data && data.vortex) && !this.lvDef;      // le vortex : partie sans fin sur la carte des secteurs (records de durée et de dégâts)
     this.cameras.main.setBackgroundColor(0x05040c);
     this.running = false;
     this.hasActiveRun = false;
@@ -23,7 +24,7 @@ class GameScene extends Phaser.Scene{
 
     // apply permanent meta-progression bonuses earned across runs
     this.meta = getMeta();
-    this.alertLevel = this.lvDef ? this.lvDef.threat : effectiveAlert(this.meta);      // en niveau, la menace est fixée par le niveau et non plus par l'arbre
+    this.alertLevel = this.lvDef ? this.lvDef.threat : (this.vortex ? 1 : effectiveAlert(this.meta));      // en niveau, la menace est fixée par le niveau et non plus par l'arbre
     this.weaponTier = weaponTierFor(this.alertLevel);
     this.bestiary = getBestiary();
     this.achv = getAchv();
@@ -116,7 +117,7 @@ class GameScene extends Phaser.Scene{
 
     // moments forts: mob doré, événements, stats de fin de partie, ralenti, dernier souffle
     this.goldCd = 30000; this.eventCd = 55000; this.curEvent = null; this.curSmall = null; this._wells = []; this._corr = null; this._ecl = null; this._ice = null; this._empOn = false; this._empUntil = 0; this._plasma = null; this.smallCd = 25000; this._wave1 = false; this.baseAlert = this.alertLevel; this.alertTimer = 0; this.alertRises = 0; this._double1 = false; this._frenzyUntil = 0; this._magnetUntil = 0; this.cameras.main.setRotation(0); this.bosses = []; this._relicQueue = []; this._relicNext = [];
-    this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runComposants = 0; this._compVacuum = false; this.runHits = 0;
+    this.runDamage = 0; this.runKills = 0; this.runMaxChain = 0; this.runGold = 0; this.runComposants = 0; this._compVacuum = false; this.runHits = 0;
     clearTimeout(this.deathTimer);
     this.slowmo = null; this.lastStandUsed = false; this.tweens.timeScale = 1; this.time.timeScale = 1; this.anims.globalTimeScale = 1; if (this.physics && this.physics.world) this.physics.world.timeScale = 1;      // un redémarrage en plein arrêt sur image ne doit pas rester figé
     this.combo = { n:0, t:0, pts:0 }; this.comboRank = 0; this.runBestCombo = 0; this.runBestRank = 0; this._styleDirty = false; this._styleT = 0;

@@ -30,7 +30,7 @@ mixin(GameScene, {
       sfx.resume(); sfx.uiStart();
       this.resumeRun();
     };
-    document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: this.lvDef ? this.lvDef.id : undefined }); };
+    document.getElementById('btnRetry').onclick = ()=>{ sfx.uiStart(); this.scene.restart({ autoStart:true, levelId: this.lvDef ? this.lvDef.id : undefined, vortex: this.vortex }); };
     document.getElementById('hiScoreStart').textContent = getHighScore();
     document.getElementById('fragStart').textContent = this.meta.composants;
 

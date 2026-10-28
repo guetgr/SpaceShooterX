@@ -4,6 +4,7 @@
 // Modes de la page CARTE (this.mapMode) : 'world' (un monde et ses niveaux en orbite) · 'galaxy' (vue d'ensemble) · 'moving' (transition).
 const GAL_STEP = 165, GAL_BASE_Y = 500, GAL_R = 50, GAL_SCALE = 0.78;
 const GAL_TAP_SLOP = 14;      // px logiques : en dessous, c'est un toucher et non un glissement
+const VORTEX_POS = { x:320, y:490 };      // à droite de la Terre, sous Mars (repère de la carte, défile avec elle)
 const GAL_FONT = "'SSX Label',monospace", GAL_FONT2 = "'SSX Text',monospace";
 
 mixin(HomeScene, {
@@ -30,6 +31,18 @@ mixin(HomeScene, {
       c.add([glow, img, ring, num, sub, star]); this.galaxy.add(c);
       return { w, i, c, glow, img, ring, num, sub, star, pos };
     });
+    // le vortex : ordre spécial sans fin (records de durée et de dégâts) ; un toucher ouvre sa fiche
+    { const c = this.add.container(VORTEX_POS.x, VORTEX_POS.y), glow = this.add.image(0, 0, 'shockRing').setBlendMode(Phaser.BlendModes.ADD).setTint(0x9a6bff).setScale(0.55).setAlpha(0.55);
+      const sw = this.add.graphics(), arms = 3, n = 24;
+      for (let a = 0; a < arms; a++) for (let i = 0; i < n; i++){
+        const t = i/n, r = 3 + t*30, ang = a*Math.PI*2/arms + t*3.4, s = 3.4 - t*2;
+        sw.fillStyle(i < 6 ? 0xffffff : (i < 14 ? 0xc9a8ff : 0x7d4dff), 1 - t*0.55); sw.fillRect(Math.round(Math.cos(ang)*r - s/2), Math.round(Math.sin(ang)*r - s/2), Math.ceil(s), Math.ceil(s));
+      }
+      const lab = this.add.text(0, 40, 'LE VORTEX', { fontFamily:GAL_FONT, fontSize:'8px', color:'#d9c9ff' }).setOrigin(0.5, 0).setResolution(2);
+      c.add([glow, sw, lab]); this.galaxy.add(c); this.galVortex = { c, glow, sw };
+      document.getElementById('btnVortexGo').onclick = ()=> this.launchVortex();
+      document.getElementById('btnVortexClose').onclick = ()=>{ sfx.uiBack(); this.closeVortexCard(); };
+    }
     // défilement vertical au doigt, avec inertie ; un toucher bref sur un monde l'ouvre
     this.input.on('pointerdown', p=>{
       if (this.mapMode !== 'galaxy' || this.page !== 0 || document.querySelector('.overlay:not(.hidden)')) return;
@@ -50,6 +63,7 @@ mixin(HomeScene, {
       const d = this.galDrag; this.galDrag = null; if (!d) return;
       if (!d.scroll){                                                                      // toucher (même long) sans glissement : ouvre le monde touché
         this.galVel = 0;
+        if (Math.hypot(p.x - VORTEX_POS.x, p.y - (VORTEX_POS.y + this.galY)) < 44){ this.openVortexCard(); return; }
         const hit = this.galWorlds.findIndex(g=>{ const dx = p.x - g.pos.x, dy = p.y - (g.pos.y + this.galY); return Math.hypot(dx, dy) < GAL_R + 14 || (Math.abs(dx) < 80 && dy > GAL_R && dy < GAL_R + 44); });      // planète ou son libellé
         if (hit >= 0) this.tapGalaxy(hit);
       } else if (performance.now() - d.lt > 90) this.galVel = 0;                           // le doigt s'est arrêté avant de lâcher
@@ -103,6 +117,7 @@ mixin(HomeScene, {
       }
     }
     if (!this.galaxy.visible) return;
+    if (this.galVortex){ this.galVortex.sw.rotation += dt*1.1; this.galVortex.glow.setScale(0.55 + 0.05*Math.sin(time/380)); }
     this.galaxy.setPosition(-this.pageX*GAME_W, this.galY);
     const k = Math.max(0, 1 - Math.abs(this.pageX)*1.6);
     this.galaxy.setAlpha(this.galA*k);
@@ -149,6 +164,29 @@ mixin(HomeScene, {
     } });
   },
 
+  // fiche du vortex : records locaux et bouton d'entrée
+  openVortexCard(){
+    const r = getVortexRecords();
+    document.getElementById('vxTime').textContent = r.runs ? vortexTimeText(r.time) : '--';
+    document.getElementById('vxDmg').textContent = r.runs ? r.damage.toLocaleString('fr-FR') : '--';
+    document.getElementById('vortexCard').classList.remove('hidden'); sfx.uiOpen();
+  },
+  closeVortexCard(){ document.getElementById('vortexCard').classList.add('hidden'); },
+
+  // entrée dans le vortex : partie sans fin (le retour ramène sur la carte des secteurs)
+  launchVortex(){
+    if (this._launching) return;
+    this._launching = true; this._fromVortex = true; sfx.resume(); sfx.uiStart(); this.closeVortexCard();
+    const go = ()=>{
+      const gs = this.scene.get('game');
+      this.scene.setVisible(true, 'game'); gs.input.enabled = true;
+      gs.meta = getMeta();
+      gs.scene.restart({ autoStart:true, vortex:true });
+    };
+    if (Motion.ok()) Motion.cover(go, .45);
+    else { this.cameras.main.fadeOut(380, 5, 4, 12); this.cameras.main.once('camerafadeoutcomplete', go); }
+  },
+
   // vue d'ensemble affichée d'emblée (sans animation), centrée sur le monde où l'on en est
   showGalaxyNow(){
     this.mapMode = 'galaxy'; this.homeMusic(true);
@@ -164,7 +202,7 @@ mixin(HomeScene, {
   // zoom vers un monde (depuis la route) : il grossit jusqu'à sa place, ses niveaux se mettent en orbite
   enterWorldView(i){
     if (this.mapMode !== 'galaxy') return;
-    this.mapMode = 'moving'; sfx.uiStart();
+    this.mapMode = 'moving'; sfx.uiStart(); this.closeVortexCard();
     this.tweens.killTweensOf(this.vanBase); this.vanBase.a = 0;                  // la camionnette disparaît d'emblée (pas de glissement visible d'un monde à l'autre)
     this.homeWorld = i; this.homeCurrent = i; this.homeMusic(false);                          // le menu du monde choisi
     const w = WORLDS[i], p = getWorldProgress(), pos = this.galaxyPos(i), g = this.galWorlds[i];

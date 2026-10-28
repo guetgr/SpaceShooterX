@@ -92,11 +92,13 @@ mixin(HomeScene, {
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');
     this.cameras.main.resetFX(); this.cameras.main.fadeIn(350, 5, 4, 12); Motion.uncover();
-    const p = getWorldProgress(), last = p.last && levelById(p.last);
+    const p = getWorldProgress(), last = p.last && levelById(p.last), fromVortex = !!this._fromVortex; this._fromVortex = false;
     const nxt = last ? (nextLevelOf(p.last) || last) : firstOpenLevel(p);                  // on se place sur le niveau qui suit le dernier joué
-    this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
-    this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
-    const played = !atStart && this._launched && levelById(this._launched);               // retour d'un niveau : on retrouve le niveau qu'on avait lancé
+    if (!fromVortex || !levelById(this.homeSel)){                                         // retour du vortex : on garde le secteur et l'ordre visés avant d'y entrer
+      this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
+      this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
+    }
+    const played = !atStart && !fromVortex && this._launched && levelById(this._launched);               // retour d'un niveau : on retrouve le niveau qu'on avait lancé
     if (played){
       this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === played.world));
       this.homeSel = played.id;                                                           // toujours le niveau lancé, jamais « le dernier débloqué »
@@ -105,7 +107,7 @@ mixin(HomeScene, {
     this.resetMapView(); this.homeMusic(false);
     this.page = 99; this.goHomePage(0, true);                                              // toujours sur la carte à l'arrivée
     this.refreshHome();
-    if (atStart) this.showGalaxyNow();                                                      // au démarrage du jeu : on arrive sur la carte des secteurs (pas au retour d'un niveau)
+    if (atStart || fromVortex) this.showGalaxyNow();                                                      // au démarrage du jeu : on arrive sur la carte des secteurs (pas au retour d'un niveau)
     // nouveau monde débloqué depuis la dernière visite : voyage animé sur la carte stellaire (jamais en mode DEV, où tout est ouvert)
     if (!DEV_SEE_ALL){
       const k = WORLDS.findIndex((w, i)=> i > 0 && isWorldUnlocked(w.id, p) && !wasWorldSeen('w:' + w.id));
