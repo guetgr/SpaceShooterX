@@ -114,7 +114,8 @@ const MUSIC_SLOTS = { menu:['menu_a','menu_b','menu_c','menu_d'], tier1:['niv_1'
 const MUSIC_MENU_WORLD = { 1:['menu_terre_a', 'menu_terre_b', 'menu_terre_c', 'menu_terre_d'], 2:['menu_mars_a', 'menu_mars_b', 'menu_mars_c', 'menu_mars_d'] };
 MUSIC_SLOTS.dezoom = ['dezoom_a', 'dezoom_b', 'dezoom_c', 'dezoom_d', 'dezoom_e', 'dezoom_f', 'dezoom_g'];
 
-const MUSIC_LEVEL = { 'w1-l1':['w1_l1_a','w1_l1_b'], 'w1-l2':['w1_l2_a','w1_l2_b'], 'w1-l3':['w1_l3_a','w1_l3_b'], 'w1-l4':['w1_l4_a','w1_l4_b'] };
+const MUSIC_LEVEL = { 'w1-l1':['w1_l1_a','w1_l1_b'], 'w1-l2':['w1_l2_a','w1_l2_b'], 'w1-l3':['w1_l3_a','w1_l3_b'], 'w1-l4':['w1_l4_a','w1_l4_b'],
+                      'w2-l1':['w2_l1_a','w2_l1_b'], 'w2-l2':['w2_l2_a','w2_l2_b'], 'w2-l3':['w2_l3_a','w2_l3_b'], 'w2-l4':['w2_l4_a','w2_l4_b'], 'w2-l5':['w2_l5_a','w2_l5_b'] };
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
 const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['w1b_antenne_a'], tuto2:['w1b_antenne_b'],

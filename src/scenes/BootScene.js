@@ -101,6 +101,7 @@ class BootScene extends Phaser.Scene{
       { key:'kamiIdle', src:KAMI_IDLE_B64, fw:82, fh:104, n:9 },
       { key:'kamiCharge', src:KAMI_CHARGE_B64, fw:65, fh:102, n:9 },
       { key:'kamiBoom', src:KAMI_BOOM_B64, fw:106, fh:119, n:4 },
+      ...mobV2Textures(),                                  // mobs refaits du monde 2 (data/mob-v2.js)
       { key:'vortexIdle', src:VORTEX_IDLE_B64, fw:87, fh:96, n:7 },
       { key:'vortexArrive', src:VORTEX_ARRIVE_B64, fw:94, fh:113, n:7 },
       { key:'vortexDeath', src:VORTEX_DEATH_B64, fw:122, fh:166, n:4 },
@@ -264,6 +265,7 @@ class BootScene extends Phaser.Scene{
     this.anims.create({ key:'kamiFly', frames:this.anims.generateFrameNumbers('kamiIdle', {start:0,end:8}), frameRate:12, repeat:-1 });
     this.anims.create({ key:'kamiChargeAnim', frames:this.anims.generateFrameNumbers('kamiCharge', {start:0,end:8}), frameRate:16, repeat:-1 });
     this.anims.create({ key:'explodeKami', frames:this.anims.generateFrameNumbers('kamiBoom', {start:0,end:3}), frameRate:14, repeat:0 });
+    mobV2CreateAnims(this);                                  // vol, destruction, charge et éclair de tir des mobs refaits (data/mob-v2.js)
     this.anims.create({ key:'vortexSpin', frames:this.anims.generateFrameNumbers('vortexIdle', {start:0,end:6}), frameRate:10, repeat:-1 });
     this.anims.create({ key:'vortexArriveAnim', frames:this.anims.generateFrameNumbers('vortexArrive', {start:0,end:6}), frameRate:10, repeat:0 });
     this.anims.create({ key:'explodeVortex', frames:this.anims.generateFrameNumbers('vortexDeath', {start:0,end:3}), frameRate:9, repeat:0 });

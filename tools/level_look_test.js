@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // Test sans navigateur : décors et musiques choisis par le JSON (WORLD_BG_KINDS, surcharge `audio`), avec des bouchons.
 const fs = require('fs'), vm = require('vm'), assert = require('assert'), path = require('path');
 const R = path.join(__dirname, '..', 'src');
@@ -8,7 +8,7 @@ const read = f => fs.readFileSync(path.join(R, f), 'utf8');
 const bgSrc = read('world/bg-monde.js');
 const ctx = {}; vm.createContext(ctx);
 vm.runInContext(bgSrc.slice(bgSrc.indexOf('const WORLD_BG_KINDS'), bgSrc.indexOf('\n', bgSrc.indexOf('const WORLD_BG_KINDS'))) + '\nthis.K = WORLD_BG_KINDS;', ctx);
-const methods = [...bgSrc.matchAll(/^  wbgBuild_(\w+)\(/gm)].map(m => m[1]);
+const methods = [...(bgSrc + read('world/bg-monde2.js')).matchAll(/^  wbgBuild_(\w+)\(/gm)].map(m => m[1]);
 assert.ok(methods.length >= 6, 'wbgBuild_* introuvables');
 assert.deepStrictEqual([...ctx.K].sort(), methods.sort(), 'WORLD_BG_KINDS doit égaler les méthodes wbgBuild_*');
 

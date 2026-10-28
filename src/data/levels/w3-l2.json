@@ -1,14 +1,14 @@
 {
   "id": "w3-l2",
-  "name": "CONFINEMENT",
+  "name": "ARCHIVES SCELLEES",
   "type": "kill",
-  "threat": 5,
+  "threat": 6,
   "goal": {
     "count": 60
   },
   "reward": {
-    "clear": 65,
-    "first": 130
+    "clear": 75,
+    "first": 150
   },
   "world": "w3",
   "schemaVersion": 2,

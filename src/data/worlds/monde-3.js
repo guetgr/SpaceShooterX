@@ -1,7 +1,7 @@
 "use strict";
-// Monde 3 — BROUILLON : valeurs provisoires (étape 8 du plan : contenu et équilibrage).
+// Monde 3 — BROUILLON : valeurs provisoires (nom, thème et niveaux à valider). Boss : La Faucheuse.
 registerWorld({
-  id:'w3', order:3, name:'MARS, PLANETE POUBELLE', sub:'Gestion des déchets dangereux', boss:'ruche', draft:true,
-  theme:{ photo:'planetSrcW3', glow:0xb070ff, rim:0xc9a0ff, seed:41, freq:1.4, bands:0.55, palette:[0x1a0f3a, 0x3a2270, 0x5f3aa8, 0x8a5fd0, 0x3fb8b0, 0xb8f0e0] },
+  id:'w3', order:3, name:'LE CIMETIERE DES CONTRATS', sub:'Résiliation définitive', boss:'faucheuse', draft:true,
+  theme:{ photo:'planetSrcW3', glow:0xa890ff, rim:0xd0c8ff, seed:57, freq:1.3, bands:0.55, palette:[0x120a24, 0x2a1a4a, 0x4a3a7a, 0x7a6aa8, 0xb8b0d8, 0xf0f0ff] },
   levels:Object.values(LEVEL_FILES).filter(l=> l.world === 'w3').map(l=> JSON.parse(JSON.stringify(l))),
 });

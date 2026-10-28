@@ -636,6 +636,11 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `mkCanvas` | fonction | `src/gfx/procedural.js` |  |
 | `MOB_ART` | const | `src/gfx/mob-art.js` |  |
 | `MOB_ART2` | const | `src/gfx/mob-art.js` |  |
+| `MOB_V2` | const | `src/data/mob-v2.js` |  |
+| `mobCharge` | méthode | `src/enemies/mob-fx.js` | `GameScene` |
+| `mobFx` | méthode | `src/enemies/mob-fx.js` | `GameScene` |
+| `mobV2CreateAnims` | fonction | `src/data/mob-v2.js` |  |
+| `mobV2Textures` | fonction | `src/data/mob-v2.js` |  |
 | `MOTHER_CHARGE_B64` | const | `src/data/image-assets.js` |  |
 | `MOTHER_DEATH_B64` | const | `src/data/image-assets.js` |  |
 | `MOTHER_IDLE_B64` | const | `src/data/image-assets.js` |  |
@@ -1215,13 +1220,45 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `VORTEX_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `warpPulse` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `wasWorldSeen` | fonction | `src/data/world-progress.js` |  |
+| `WBG2_CLUSTERS` | const | `src/world/bg-monde2.js` |  |
+| `wbg2Lamp` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2LampAt` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintBeam` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintBelt` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintChain` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintCone` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintCrane` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintCrate` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintCrystal` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintCube` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintGear` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintJaw` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintLamp` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintLattice` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintMars` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintPlate` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintSaw` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintScan` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintScrap` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintSign` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2PaintWall` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2Poly` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2Steam` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2SteamEmit` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2SteamUpdate` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbg2WallEdge` | fonction | `src/world/bg-monde2.js` |  |
 | `wbgAtmosphere` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_benne` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbgBuild_broyeur` | méthode | `src/world/bg-monde2.js` | `GameScene` |
+| `wbgBuild_compactage` | méthode | `src/world/bg-monde2.js` | `GameScene` |
 | `wbgBuild_cristaux` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgBuild_debris` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgBuild_direction` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgBuild_horizon` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgBuild_patrouille` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_quai` | méthode | `src/world/bg-monde2.js` | `GameScene` |
 | `wbgBuild_station` | méthode | `src/world/bg-monde.js` | `GameScene` |
+| `wbgBuild_tri` | méthode | `src/world/bg-monde2.js` | `GameScene` |
 | `wbgEarthTexture` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgGlowAt` | méthode | `src/world/bg-monde.js` | `GameScene` |
 | `wbgGradient` | méthode | `src/world/bg-monde.js` | `GameScene` |
@@ -1243,4 +1280,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1236 symboles.
+1273 symboles.

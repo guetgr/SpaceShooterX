@@ -228,11 +228,11 @@ with sync_playwright() as pw:
     check(p.evaluate("!!(window.__pl && window.__pl.eaten > 0)"), "le Pilleur avale des cristaux et remplit son réservoir")
     check(p.evaluate("!!(window.__pl && window.__pl.bm)"), 'le Pilleur a son faisceau laser')
 
-    print('secteur 2 : nom du boss (bible)')
+    print('secteur 2 : le Dreadnought est le boss du 6e ordre')
     check(p.evaluate("AGP_LORE.employee") == 'EMPLOYE N° 0042', 'employé n° 0042 (bible)')
-    start('w2-l5')
+    start('w2-l6')
     p.wait_for_function("window.__ssxScene.bossActive", timeout=10000); p.wait_for_timeout(300)
-    check('LE BROYEUR' in p.evaluate("document.getElementById('bossLabel').textContent"), 'jauge du boss : LE BROYEUR (%s)' % p.evaluate("document.getElementById('bossLabel').textContent"))
+    check('DREADNOUGHT' in p.evaluate("document.getElementById('bossLabel').textContent"), 'jauge du boss : DREADNOUGHT (%s)' % p.evaluate("document.getElementById('bossLabel').textContent"))
 
     print('partie infinie historique')
     p.evaluate("(()=>{ %s.scene.restart({ autoStart:true }); })()" % SC)

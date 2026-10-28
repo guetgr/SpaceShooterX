@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // Test sans navigateur : validateur du niveau (tools/editor/validator.js) avec les VRAIS registres (src/data/*).
 //   node tools/editor_validator_test.js
 // 1. les 16 niveaux : aucune erreur (avertissements permis, comptés)  2. documents invalides communs avec le serveur (tools/fixtures/invalid_levels.json)
@@ -34,7 +34,7 @@ const cat = { eventCatalog, decorCatalog, musicCatalog, tunablesCatalog, mobCata
 const clone = o => JSON.parse(JSON.stringify(o));
 const docs = {};
 fs.readdirSync(path.join(SRC, 'data/levels')).filter(f=> /^w\d-.*\.json$/.test(f)).forEach(f=> { const d = JSON.parse(fs.readFileSync(path.join(SRC, 'data/levels', f), 'utf8')); docs[d.id] = d; });
-assert.strictEqual(Object.keys(docs).length, 16);
+assert.strictEqual(Object.keys(docs).length, 42);
 
 // 1. les niveaux réels
 let nWarn = 0;

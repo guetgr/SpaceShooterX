@@ -1,4 +1,4 @@
-"""Validation et export des missions JSON dans un dossier temporaire."""
+﻿"""Validation et export des missions JSON dans un dossier temporaire."""
 import copy
 import functools
 import http.server
@@ -13,7 +13,7 @@ import level_files
 import serve
 
 original = level_files.read_levels()
-assert len(original) == 16 and 'w1-tuto' in original
+assert len(original) == 42 and 'w1-tuto' in original
 for doc in original.values(): level_files.validate_level(doc,doc)
 # documents invalides communs avec tools/editor_validator_test.js (tools/fixtures/invalid_levels.json) : même refus, même message
 fixtures = json.loads((Path(__file__).parent/'fixtures/invalid_levels.json').read_text(encoding='utf-8'))['cases']
@@ -177,7 +177,7 @@ with tempfile.TemporaryDirectory() as folder:
     for name,doc in level_files.read_levels(root).items(): assert level_files.dump_level(doc).encode('utf-8')==(root/'src/data/levels'/(name+'.json')).read_bytes(),name
     for f in (level_files.ROOT/'src/data/levels').glob('*.json'): assert b'\r' not in f.read_bytes(),f
     docs=level_files.read_levels(root)
-    assert len(docs)==16 and all(d['schemaVersion']==2 for d in docs.values())
+    assert len(docs)==42 and all(d['schemaVersion']==2 for d in docs.values())
     import time; time.sleep(0.05)
     a=snap(); assert post(docs)['ok']; assert snap()==a,'export inchangé : aucun fichier réécrit'
     one=copy.deepcopy(docs); one['w1-l1']['threat']=one['w1-l1']['threat']+1; assert post(one)['ok']
@@ -189,7 +189,7 @@ with tempfile.TemporaryDirectory() as folder:
     # migration v1 -> v2 : idempotente, refuse les autres versions
     for f in (root/'src/data/levels').glob('w*.json'):
         d=json.loads(f.read_text(encoding='utf-8')); d['schemaVersion']=1; f.write_bytes(level_files.dump_level(d).encode('utf-8'))
-    first=level_files.migrate(root); assert len(first)==16,first
+    first=level_files.migrate(root); assert len(first)==42,first
     snap1=snap(); assert level_files.migrate(root)==[] and snap()==snap1,'migrer deux fois = migrer une fois'
     assert all(json.loads(f.read_text(encoding='utf-8'))['schemaVersion']==2 for f in (root/'src/data/levels').glob('w*.json'))
     d1=copy.deepcopy(docs['w1-l1']); d1['schemaVersion']=1; level_files.validate_level(d1,d1)
