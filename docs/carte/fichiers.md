@@ -224,7 +224,7 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 
 **`tuning-apply.js`** — Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place. L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les v
 
-- Définit : `TUNE_LEVEL_FIELDS`, `TUTO_TUNE`, `LEVEL_BASE`, `tuneMerge`, `applyTuning`
+- Définit : `TUNE_WHOLE`, `TUNE_LEVEL_FIELDS`, `TUTO_TUNE`, `LEVEL_BASE`, `tuneMerge`, `applyTuning`
 
 **`completion.js`** — FINITION d'un niveau (en %) : plusieurs objectifs pondérés (somme = 100). On garde le MEILLEUR de chaque objectif sur toutes les parties, donc chaque partie (même perdue) peut faire monter le %. Des paliers (25/50/75/100 %) rappor
 

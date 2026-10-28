@@ -1120,6 +1120,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `tunablesCapture` | fonction | `src/data/tunables.js` |  |
 | `tunableSet` | fonction | `src/data/tunables.js` |  |
 | `TUNE_LEVEL_FIELDS` | const | `src/data/tuning-apply.js` |  |
+| `TUNE_WHOLE` | const | `src/data/tuning-apply.js` |  |
 | `tuneMerge` | fonction | `src/data/tuning-apply.js` |  |
 | `TUNING_OVERRIDES` | const | `src/data/tuning.js` |  |
 | `TURRET_BULLET_B64` | const | `src/data/image-assets.js` |  |
@@ -1242,4 +1243,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1235 symboles.
+1236 symboles.

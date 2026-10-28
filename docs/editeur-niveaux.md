@@ -18,8 +18,8 @@ Les comportements communs (IA, attaques des boss, effets des événements, musiq
 - **Pools** : bandes indiquant quels mobs sont éligibles au tirage aléatoire, satellites compris. Leur poids représente une fréquence relative, pas une quantité garantie.
 - **Événements** : heure minimale de déclenchement ; un emplacement occupé ou un boss peut les retarder. La durée peut être forcée ou laissée au défaut de l’événement.
 - **Objectif et boss** : marqueur horaire pour la survie ; condition explicite pour la collecte ou les éliminations.
-- **Tutoriel** : étapes conditionnelles, premier satellite lent, cadence progressive, débris à la destruction, alerte, Antenne-Mère et phases de ses attaques.
-- **Ambiance** : introduction, caméra, aléas, transmissions et musique.
+
+Les étapes conditionnelles (tutoriel, objectif, boss, aléas, N.O.R.M.A.) ne sont plus des lignes de la timeline : elles sont dans le panneau **ETAPES DU NIVEAU** (ci-dessous).
 
 Les déclenchements dépendant du joueur n’ont volontairement pas de fausse heure précise. Le **journal de la partie** affiche les apparitions et transitions réellement observées pendant TESTER (500 entrées récentes, réinitialisées à chaque lancement). Ce journal n’est pas un enregistrement exhaustif de chaque projectile ou son.
 
@@ -28,13 +28,23 @@ Les déclenchements dépendant du joueur n’ont volontairement pas de fausse he
 1. Choisir une mission à gauche, y compris le tutoriel.
 2. Choisir une miniature dans le bestiaire, régler arrivée/quantité/intervalle, cliquer **AJOUTER** ou cliquer dans sa piste.
 3. Glisser le bloc pour déplacer la vague. Les champs permettent un réglage précis, une duplication ou une suppression.
-4. Modifier les pools et les événements dans les réglages sous la timeline. **Remplacer les apparitions aléatoires** coupe le pool de mobs ; dans le tutoriel, cette option coupe les satellites pédagogiques automatiques. Les événements et renforts des boss restent indépendants.
+4. Modifier les pools (activation, poids, tier), ajouter ou supprimer un événement programmé sous la timeline ; tous les autres réglages sont dans les étapes. **Remplacer les apparitions aléatoires** coupe le pool de mobs ; dans le tutoriel, cette option coupe les satellites pédagogiques automatiques. Les événements et renforts des boss restent indépendants.
 5. **TESTER** redémarre la mission avec le document en mémoire. Le bot reçoit les mêmes modifications.
 6. **EXPORTER** valide et enregistre les 16 documents JSON. Aucun export ne se fait implicitement pendant un test.
 
 Une vague SATELLITE dans le tutoriel utilise le vrai satellite pédagogique (`tutoSpawnSat`) : ses PV, ses débris et sa destruction comptent pour l’objectif du tutoriel. Les autres mobs ajoutés sont des ennemis standards ; ils ne remplacent pas le compteur de satellites.
 
 Les secondes des vagues et événements sont mesurées après l’introduction. Les anciens pools des secteurs 2 et 3 conservent leur horloge historique `difficulty` (temps de partie + 12 × (menace − 1)), indiquée dans l’éditeur. Changer `spawnClock` en `mission` permet de travailler uniquement en temps de mission.
+
+## Étapes du niveau
+
+Sous la timeline, le panneau **ETAPES DU NIVEAU** décrit chaque mission étape par étape et porte **tous** ses réglages (une seule saisie par valeur). Chaque étape montre une description recalculée à chaque modification ; la déplier affiche ses champs. Une valeur orange est modifiée ; cliquer sur ↺ revient à l'origine (le document JSON d'origine). Une valeur invalide est refusée avec un message en rouge sous le champ et n'est jamais écrite.
+
+- Missions : `INTRO / CAMERA` (introduction, zoom, décor, musique `audio`) · `OBJECTIF` (but, menace, multiplicateurs) · `MOBS` (`mobs.<type>` pour chaque type des pools et vagues) · `EVENEMENT · <nom>` (une par événement programmé : `events[i].at`, `duration`, `params.*`, `norma.start/end`) · `EVENEMENTS ALEATOIRES` (`ambient`, `eventTune.<nature>`) · `COMBAT DU BOSS` (`bossTune.<id>`) · `N.O.R.M.A.` (réserves, `tickEvery`, boîtes) · `RAPPORT` (`reward`).
+- Tutoriel : `INTRO / CAMERA`, `ETAPE 1 · BOUGER`, `ETAPE 2 · SATELLITE`, `DESTRUCTION SATELLITE`, `ALERTE / ANTENNE-MERE`, `BOSS · PHASE 1/2/3` (réglages `tutorial.*`, visibles en direct dans l'aperçu), événements, aléas, `N.O.R.M.A.` (consignes `norma.tuto.*` seulement : le tutoriel ne lit ni les réserves, ni les boîtes, ni `audio`, ni `eventTune`), `RAPPORT` (finition, paliers, récompenses ; avertissement si les poids ne font pas 100).
+- **Boîtes N.O.R.M.A.** : **AJOUTER UNE TRANSMISSION** crée une boîte `m1`, `m2`… ; choisir *Quand* (début de mission, à une date, début/fin d'un événement, arrivée du boss, victoire, défaite), la date (à une date) ou l'événement (début/fin), puis le texte. Rien n'est enregistré tant qu'une boîte est incomplète (texte vide, identifiant en double).
+- **Chemins → JSON** : chaque champ a un chemin dans le document (`['bossTune','ar','dmg.missile']` = `"bossTune": { "ar": { "dmg.missile": … } }`, clé pointée non découpée). Un champ facultatif remis à sa valeur d'origine disparaît du JSON, avec les objets devenus vides. En mémoire, la clé de premier niveau modifiée est recopiée en entier dans les surcharges de l'éditeur ; `mobs`, `bossTune`, `eventTune`, `norma` et `audio` sont remplacés en entier (une sous-clé effacée disparaît vraiment), et le tutoriel garde ses réglages `tutorial.*` dans la surcharge `tuto`. TESTER et le bot reçoivent ces surcharges (`applyTuning`, `src/data/tuning-apply.js`) ; EXPORTER écrit le document complet. Détail du trajet en tête de `tools/editor/steps-ui.js`.
+- Code : modèle sans DOM `tools/editor/steps-model.js` (`EditorSteps.buildSteps`, `applyFieldValue`, `TUTO_SCHEMA`), rendu `tools/editor/steps-ui.js` (`renderSteps`). Tests sans navigateur : `node tools/editor_steps_test.js`, `node tools/editor_steps_ui_test.js` (faux DOM).
 
 ## Édition JSON
 
@@ -59,6 +69,7 @@ Champs permis : `hpMul` (PV et bouclier de départ), `dmgMul` (dégâts de conta
 - `node tools/check_worlds.js` : structure et progression des secteurs.
 - `node tools/timeline_test.js` : horaires, quantité, réinitialisation et saturation des vagues.
 - `python3 tools/level_files_test.py` : validation et export JSON dans un dossier temporaire.
+- `node tools/editor_steps_test.js` et `node tools/editor_steps_ui_test.js` : étapes de l'éditeur (modèle, rendu sur faux DOM, surcharges, `applyTuning`).
 - `python3 tools/enemy_stats_test.py` : stats des 27 types identiques à `tools/enemy_stats_snapshot.json` (`--write` pour le régénérer, seulement si un changement de valeurs est voulu) et surcharge `mobs`.
 - `python3 tools/level_files.py` : génération du cache depuis les JSON.
 - `python3 tools/build.py --inline-phaser` : build autonome incluant les niveaux.

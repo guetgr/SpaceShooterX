@@ -43,8 +43,10 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
 - `tools/editor/level-document.js` — (script ponctuel, sans description)
 - `tools/editor/steps-model.js` — (script ponctuel, sans description)
+- `tools/editor/steps-ui.js` — (script ponctuel, sans description)
 - `tools/editor/timeline.js` — (script ponctuel, sans description)
 - `tools/editor_steps_test.js` — (script ponctuel, sans description)
+- `tools/editor_steps_ui_test.js` — (script ponctuel, sans description)
 - `tools/enemy_stats_test.py` — Équivalence des stats des mobs (registre src/data/enemy-stats.js) + surcharge par niveau.
 - `tools/event_params_node_test.js` — (script ponctuel, sans description)
 - `tools/event_params_test.py` — Paramètres des événements (EVENT_DEFS) : équivalence avec le comportement d'origine.
