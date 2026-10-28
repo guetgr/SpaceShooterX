@@ -126,7 +126,7 @@ with sync_playwright() as pw:
     ck(p.evaluate("wasWorldSeen('w:w2')") and p.evaluate("document.getElementById('homeToast').textContent").startswith('NOUVEAU SECTEUR'),'nouveau monde : animation de déblocage jouée une fois')
     pos=p.evaluate("(()=>{const h=window.__ssxScene.scene.get('home'); return h.galWorlds.map(g=>[g.pos.x,g.pos.y+h.galY]) })()")
     p.mouse.click(pos[1][0],pos[1][1]); p.wait_for_timeout(2200)
-    ck(mode()=='world' and p.evaluate("document.getElementById('mwName').textContent")=='LA CASSE LUNAIRE','le monde 2 est maintenant ouvert')
+    ck(mode()=='world' and p.evaluate("document.getElementById('mwName').textContent")=='MARS, PLANETE POUBELLE','le monde 2 est maintenant ouvert')
     p.evaluate("(()=>{ const h=window.__ssxScene.scene.get('home'); h.scene.sleep(); h.scene.wake(); })()"); p.wait_for_timeout(800)
     ck(mode()=='world' and not p.evaluate("wasWorldSeen('w:w2')")==False,'à nouveau sur l\'accueil : pas de rejeu de l\'animation')
     # Baies d'équipement : emplacements ouverts selon les boss, une seule ARME et une seule RAMPE, ligne de chargement de la fiche d'ordre

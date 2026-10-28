@@ -1,14 +1,14 @@
 {
   "id": "w3-l3",
-  "name": "FUITE DE CRISTAUX",
+  "name": "FOSSE COMMUNE",
   "type": "collect",
-  "threat": 6,
+  "threat": 7,
   "goal": {
     "gems": 40
   },
   "reward": {
-    "clear": 70,
-    "first": 140
+    "clear": 80,
+    "first": 160
   },
   "events": [
     {

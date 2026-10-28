@@ -1,15 +1,15 @@
 {
   "id": "w3-l1",
-  "name": "DESERT ROUGE",
+  "name": "REGISTRE DES DEPARTS",
   "type": "survive",
-  "threat": 5,
+  "threat": 6,
   "goal": {
     "seconds": 90
   },
   "intro": "earth",
   "reward": {
-    "clear": 60,
-    "first": 120
+    "clear": 70,
+    "first": 140
   },
   "events": [
     {

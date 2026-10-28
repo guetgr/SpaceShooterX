@@ -1,14 +1,14 @@
 {
   "id": "w3-l4",
-  "name": "CONVOI SECURISE",
+  "name": "AUDIT DE FIN DE VIE",
   "type": "survive",
-  "threat": 6,
+  "threat": 7,
   "goal": {
     "seconds": 100
   },
   "reward": {
-    "clear": 75,
-    "first": 150
+    "clear": 85,
+    "first": 170
   },
   "events": [
     {

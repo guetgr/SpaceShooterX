@@ -1,0 +1,71 @@
+{
+  "id": "w2-l6",
+  "name": "DREADNOUGHT",
+  "type": "boss",
+  "threat": 6,
+  "goal": {},
+  "intro": null,
+  "reward": {
+    "clear": 110,
+    "first": 260
+  },
+  "events": [],
+  "world": "w2",
+  "schemaVersion": 2,
+  "tuto": false,
+  "waves": [],
+  "spawnClock": "difficulty",
+  "spawns": [
+    {
+      "type": "grunt",
+      "from": 0,
+      "w": 38
+    },
+    {
+      "type": "diver",
+      "from": 0,
+      "w": 16
+    },
+    {
+      "type": "turret",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "tank",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "mine",
+      "from": 0,
+      "w": 10
+    },
+    {
+      "type": "bomber",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "kamikaze",
+      "from": 0,
+      "w": 14
+    }
+  ],
+  "bg": "broyeur",
+  "boss": "dread",
+  "finalBoss": null,
+  "bossName": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
+  "zoom": {
+    "start": 1.35,
+    "end": 0.965,
+    "seconds": 67.5
+  },
+  "ambient": {
+    "golden": true,
+    "smallEvents": true
+  }
+}

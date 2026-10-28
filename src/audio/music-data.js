@@ -38,6 +38,17 @@ const MUSIC_FILES = {
   w1_l3_b: asset('audio/music/w1_l3_b.mp3'),
   w1_l4_a: asset('audio/music/w1_l4_a.mp3'),
   w1_l4_b: asset('audio/music/w1_l4_b.mp3'),
+  // monde 2 (Mars, planète poubelle) : deux morceaux par ordre (alternés)
+  w2_l1_a: asset('audio/music/w2_l1_a.mp3'),
+  w2_l2_a: asset('audio/music/w2_l2_a.mp3'),
+  w2_l3_a: asset('audio/music/w2_l3_a.mp3'),
+  w2_l4_a: asset('audio/music/w2_l4_a.mp3'),
+  w2_l5_a: asset('audio/music/w2_l5_a.mp3'),
+  w2_l1_b: asset('audio/music/w2_l1_b.mp3'),
+  w2_l2_b: asset('audio/music/w2_l2_b.mp3'),
+  w2_l3_b: asset('audio/music/w2_l3_b.mp3'),
+  w2_l4_b: asset('audio/music/w2_l4_b.mp3'),
+  w2_l5_b: asset('audio/music/w2_l5_b.mp3'),
   w1b_antenne_a: asset('audio/music/w1b_antenne_a.mp3'),
   w1b_antenne_b: asset('audio/music/w1b_antenne_b.mp3'),
   w1b_meteo_a: asset('audio/music/w1b_meteo_a.mp3'),
@@ -69,4 +80,4 @@ const MUSIC_FILES = {
 };
 
 // durée (s) des boucles du monde 1 : nombre entier de mesures de 2 s (les autres morceaux : 48 s, ou 56 s pour les boss historiques)
-const MUSIC_LEN = { menu_terre_a:24, menu_terre_b:40, menu_terre_c:32, menu_terre_d:40, menu_mars_a:32, menu_mars_b:40, menu_mars_c:32, menu_mars_d:32, dezoom_a:32, dezoom_b:24, dezoom_c:32, dezoom_d:40, dezoom_e:32, dezoom_f:24, dezoom_g:40, w1_tuto_a:40, w1_tuto_b:32, w1_l1_a:40, w1_l1_b:40, w1_l2_a:24, w1_l2_b:24, w1_l3_a:40, w1_l3_b:32, w1_l4_a:40, w1_l4_b:40, w1b_antenne_a:32, w1b_antenne_b:32, w1b_meteo_a:32, w1b_meteo_b:24, w1b_araignee_a:24, w1b_araignee_b:40, w1b_reacteur_a:24, w1b_reacteur_b:40, w1b_anneau_a:32, w1b_anneau_b:40, w1b_pdg_a:40, w1b_pdg_b:32 };
+const MUSIC_LEN = { w2_l1_a:40, w2_l2_a:32, w2_l3_a:40, w2_l4_a:24, w2_l5_a:40, w2_l1_b:40, w2_l2_b:40, w2_l3_b:24, w2_l4_b:32, w2_l5_b:40, menu_terre_a:24, menu_terre_b:40, menu_terre_c:32, menu_terre_d:40, menu_mars_a:32, menu_mars_b:40, menu_mars_c:32, menu_mars_d:32, dezoom_a:32, dezoom_b:24, dezoom_c:32, dezoom_d:40, dezoom_e:32, dezoom_f:24, dezoom_g:40, w1_tuto_a:40, w1_tuto_b:32, w1_l1_a:40, w1_l1_b:40, w1_l2_a:24, w1_l2_b:24, w1_l3_a:40, w1_l3_b:32, w1_l4_a:40, w1_l4_b:40, w1b_antenne_a:32, w1b_antenne_b:32, w1b_meteo_a:32, w1b_meteo_b:24, w1b_araignee_a:24, w1b_araignee_b:40, w1b_reacteur_a:24, w1b_reacteur_b:40, w1b_anneau_a:32, w1b_anneau_b:40, w1b_pdg_a:40, w1b_pdg_b:32 };

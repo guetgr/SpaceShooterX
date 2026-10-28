@@ -125,8 +125,10 @@ mixin(GameScene, {
       this.tryDodgePlayerBullets(e, delta);
       if (this.inFiringPosition(e)){
         e.fireCd -= delta;
+        this.mobCharge(e, 300);                              // lueur de charge à l'anneau, juste avant le tir
         if (e.fireCd <= 0){
           e.fireCd = this.rollFireCd(1600,2400,60);
+          e._chg = false; this.mobFx(e, 'flash');
           this.enemyShootHeavy(e);
           // "tir secondaire"/"3e tir": des tirs légers en plus du tir lourd
           if (this.weaponTier > 1) this.enemyShootSpread(e, this.weaponTier-1);
@@ -137,14 +139,17 @@ mixin(GameScene, {
       this.tryDodgePlayerBullets(e, delta);
       if (this.inFiringPosition(e)){
         e.fireCd -= delta;
+        this.mobCharge(e, 300);                              // lueur de charge au bout du canon, juste avant la rafale
         if (e.fireCd <= 0){
           e.fireCd = this.rollFireCd(1300,1900,40);
+          e._chg = false;
           e.burstLeft = [3,5,7][this.weaponTier-1];
         }
         if (e.burstLeft > 0){
           e.burstTimer = (e.burstTimer||0) - delta;
           if (e.burstTimer <= 0){
             e.burstTimer = 140;
+            this.mobFx(e, 'flash');
             this.enemyShoot(e);
             e.burstLeft -= 1;
           }
@@ -155,11 +160,13 @@ mixin(GameScene, {
       e.x = e.baseX + Math.sin(e.wobble/300)*40;
       this.tryDodgePlayerBullets(e, delta);
       e.fireCd -= delta;
+      this.mobCharge(e, 300);                                // lueur de charge aux réacteurs, juste avant le largage
       if (e.fireCd <= 0){
         e.fireCd = this.rollFireCd(1800,2400,40);
+        e._chg = false;
         // "tir secondaire"/"3e tir": largue plusieurs bombes d'affilée
         for (let i=0;i<this.weaponTier;i++){
-          this.time.delayedCall(i*140, ()=>{ if (e.active) this.dropBomb(e); });
+          this.time.delayedCall(i*140, ()=>{ if (e.active) this.dropBomb(e, i); });
         }
       }
     } else if (e.enemyType === 'sat'){
@@ -450,10 +457,12 @@ mixin(GameScene, {
     this.spawnHitParticles(x, y, 4);
   },
 
-  dropBomb(e){
+  dropBomb(e, i){
     sfx.bombDrop();
     if (this._bLoad > BULLET_CAP) return;
-    const bomb = this.enemyBullets.create(e.x, e.y+16, 'bomb');
+    // les bombes sortent des RÉACTEURS (à l'arrière du bomber, en haut de l'écran) : trois sorties, une bombe par sortie à tour de rôle
+    this.mobFx(e, 'flash');
+    const bomb = this.enemyBullets.create(e.x + [-55.5, -1.7, 51.7][(i || 0) % 3] * e.scaleX, e.y - 4, 'bomb');
     bomb.setDepth(4);
     bomb.damage = 10;
     bomb.body.velocity.y = 90;

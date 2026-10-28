@@ -1,13 +1,13 @@
 {
   "id": "w3-l5",
-  "name": "LE DIRECTEUR",
+  "name": "LA FAUCHEUSE",
   "type": "boss",
-  "threat": 7,
-  "boss": "ruche",
-  "bossName": "LE DIRECTEUR DE TRAITEMENT",
+  "threat": 8,
+  "boss": "faucheuse",
+  "bossName": null,
   "reward": {
-    "clear": 120,
-    "first": 300
+    "clear": 140,
+    "first": 330
   },
   "world": "w3",
   "schemaVersion": 2,

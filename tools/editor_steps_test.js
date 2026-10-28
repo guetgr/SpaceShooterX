@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // Test sans navigateur : modèle des étapes de l'éditeur (tools/editor/steps-model.js), catalogues construits depuis les VRAIS registres (src/data/*).
 //   node tools/editor_steps_test.js
 const fs = require('fs'), vm = require('vm'), assert = require('assert'), path = require('path');
@@ -30,7 +30,7 @@ const tunablesCatalog = {};
 Object.keys(c4.TUNABLES).forEach(id=> { tunablesCatalog[id] = c4.TUNABLES[id].map(r=> ({ path:r.path, label:r.label, min:r.min, max:r.max, step:r.step, unit:r.unit, help:r.help, len:r.len, def:r.len ? new Array(r.len).fill(r.min) : r.min })); });
 
 const files = fs.readdirSync(path.join(SRC, 'data/levels')).filter(f=> /^w\d-.*\.json$/.test(f));
-assert.strictEqual(files.length, 16, '16 niveaux attendus');
+assert.strictEqual(files.length, 42, '42 niveaux attendus');
 const docs = {}; files.forEach(f=> { const d = JSON.parse(fs.readFileSync(path.join(SRC, 'data/levels', f), 'utf8')); docs[d.id] = d; });
 const cats = doc=> ({ eventCatalog, decorCatalog, musicCatalog, tunablesCatalog, mobCatalog, base:doc });
 const clone = o => JSON.parse(JSON.stringify(o));

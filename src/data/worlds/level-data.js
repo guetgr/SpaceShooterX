@@ -503,106 +503,16 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "spawns": [
       {
         "type": "grunt",
-        "from": -1,
+        "from": 0,
         "w": 38
       },
       {
         "type": "diver",
-        "from": 8,
+        "from": 0,
         "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
-      },
-      {
-        "type": "turret",
-        "from": 20,
-        "w": 12
-      },
-      {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
-        "w": 12
-      },
-      {
-        "type": "mine",
-        "from": 50,
-        "w": 10
-      },
-      {
-        "type": "tank",
-        "from": 55,
-        "w": 12
-      },
-      {
-        "type": "bomber",
-        "from": 65,
-        "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
-      },
-      {
-        "type": "elite",
-        "from": 130,
-        "w": 8
-      },
-      {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
-      },
-      {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
-      },
-      {
-        "type": "charo",
-        "from": 100,
-        "w": 11
-      },
-      {
-        "type": "kamikaze",
-        "from": 22,
-        "w": 14
-      },
-      {
-        "type": "spider",
-        "from": 30,
-        "w": 11
       }
     ],
-    "bg": null,
+    "bg": "quai",
     "boss": null,
     "finalBoss": null,
     "bossName": null,
@@ -631,12 +541,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "clear": 45,
       "first": 90
     },
-    "events": [
-      {
-        "kind": "kamikaze",
-        "at": 20
-      }
-    ],
+    "events": [],
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
@@ -645,106 +550,21 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "spawns": [
       {
         "type": "grunt",
-        "from": -1,
+        "from": 0,
         "w": 38
       },
       {
         "type": "diver",
-        "from": 8,
+        "from": 0,
         "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
       },
       {
         "type": "turret",
-        "from": 20,
+        "from": 0,
         "w": 12
-      },
-      {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
-        "w": 12
-      },
-      {
-        "type": "mine",
-        "from": 50,
-        "w": 10
-      },
-      {
-        "type": "tank",
-        "from": 55,
-        "w": 12
-      },
-      {
-        "type": "bomber",
-        "from": 65,
-        "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
-      },
-      {
-        "type": "elite",
-        "from": 130,
-        "w": 8
-      },
-      {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
-      },
-      {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
-      },
-      {
-        "type": "charo",
-        "from": 100,
-        "w": 11
-      },
-      {
-        "type": "kamikaze",
-        "from": 22,
-        "w": 14
-      },
-      {
-        "type": "spider",
-        "from": 30,
-        "w": 11
       }
     ],
-    "bg": null,
+    "bg": "tri",
     "intro": null,
     "boss": null,
     "finalBoss": null,
@@ -788,106 +608,31 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "spawns": [
       {
         "type": "grunt",
-        "from": -1,
+        "from": 0,
         "w": 38
       },
       {
         "type": "diver",
-        "from": 8,
+        "from": 0,
         "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
       },
       {
         "type": "turret",
-        "from": 20,
+        "from": 0,
         "w": 12
       },
       {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
+        "type": "tank",
+        "from": 0,
         "w": 12
       },
       {
         "type": "mine",
-        "from": 50,
+        "from": 0,
         "w": 10
-      },
-      {
-        "type": "tank",
-        "from": 55,
-        "w": 12
-      },
-      {
-        "type": "bomber",
-        "from": 65,
-        "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
-      },
-      {
-        "type": "elite",
-        "from": 130,
-        "w": 8
-      },
-      {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
-      },
-      {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
-      },
-      {
-        "type": "charo",
-        "from": 100,
-        "w": 11
-      },
-      {
-        "type": "kamikaze",
-        "from": 22,
-        "w": 14
-      },
-      {
-        "type": "spider",
-        "from": 30,
-        "w": 11
       }
     ],
-    "bg": null,
+    "bg": "compactage",
     "intro": null,
     "boss": null,
     "finalBoss": null,
@@ -935,106 +680,36 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "spawns": [
       {
         "type": "grunt",
-        "from": -1,
+        "from": 0,
         "w": 38
       },
       {
         "type": "diver",
-        "from": 8,
+        "from": 0,
         "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
       },
       {
         "type": "turret",
-        "from": 20,
+        "from": 0,
         "w": 12
       },
       {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
+        "type": "tank",
+        "from": 0,
         "w": 12
       },
       {
         "type": "mine",
-        "from": 50,
+        "from": 0,
         "w": 10
-      },
-      {
-        "type": "tank",
-        "from": 55,
-        "w": 12
       },
       {
         "type": "bomber",
-        "from": 65,
+        "from": 0,
         "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
-      },
-      {
-        "type": "elite",
-        "from": 130,
-        "w": 8
-      },
-      {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
-      },
-      {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
-      },
-      {
-        "type": "charo",
-        "from": 100,
-        "w": 11
-      },
-      {
-        "type": "kamikaze",
-        "from": 22,
-        "w": 14
-      },
-      {
-        "type": "spider",
-        "from": 30,
-        "w": 11
       }
     ],
-    "bg": null,
+    "bg": "benne",
     "intro": null,
     "boss": null,
     "finalBoss": null,
@@ -1054,125 +729,67 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w2-l5": {
     "id": "w2-l5",
-    "name": "LE BROYEUR",
-    "type": "boss",
+    "name": "ATELIER DE BROYAGE",
+    "type": "kill",
     "threat": 5,
-    "boss": "faucheuse",
-    "bossName": "LE BROYEUR",
+    "boss": null,
+    "bossName": null,
     "reward": {
-      "clear": 100,
-      "first": 250
+      "clear": 60,
+      "first": 120
     },
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "goal": {},
+    "goal": {
+      "count": 60
+    },
     "waves": [],
-    "events": [],
+    "events": [
+      {
+        "kind": "mines",
+        "at": 15
+      }
+    ],
     "spawnClock": "difficulty",
     "spawns": [
       {
         "type": "grunt",
-        "from": -1,
+        "from": 0,
         "w": 38
       },
       {
         "type": "diver",
-        "from": 8,
+        "from": 0,
         "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
       },
       {
         "type": "turret",
-        "from": 20,
+        "from": 0,
         "w": 12
       },
       {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
+        "type": "tank",
+        "from": 0,
         "w": 12
       },
       {
         "type": "mine",
-        "from": 50,
+        "from": 0,
         "w": 10
-      },
-      {
-        "type": "tank",
-        "from": 55,
-        "w": 12
       },
       {
         "type": "bomber",
-        "from": 65,
+        "from": 0,
         "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
-      },
-      {
-        "type": "elite",
-        "from": 130,
-        "w": 8
-      },
-      {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
-      },
-      {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
-      },
-      {
-        "type": "charo",
-        "from": 100,
-        "w": 11
       },
       {
         "type": "kamikaze",
-        "from": 22,
+        "from": 0,
         "w": 14
-      },
-      {
-        "type": "spider",
-        "from": 30,
-        "w": 11
       }
     ],
-    "bg": null,
+    "bg": "broyeur",
     "intro": null,
     "finalBoss": null,
     "hpMul": 1,
@@ -1188,18 +805,89 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "smallEvents": true
     }
   },
+  "w2-l6": {
+    "id": "w2-l6",
+    "name": "DREADNOUGHT",
+    "type": "boss",
+    "threat": 6,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 110,
+      "first": 260
+    },
+    "events": [],
+    "world": "w2",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": 0,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 0,
+        "w": 16
+      },
+      {
+        "type": "turret",
+        "from": 0,
+        "w": 12
+      },
+      {
+        "type": "tank",
+        "from": 0,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 0,
+        "w": 10
+      },
+      {
+        "type": "bomber",
+        "from": 0,
+        "w": 12
+      },
+      {
+        "type": "kamikaze",
+        "from": 0,
+        "w": 14
+      }
+    ],
+    "bg": "broyeur",
+    "boss": "dread",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
   "w3-l1": {
     "id": "w3-l1",
-    "name": "DESERT ROUGE",
+    "name": "REGISTRE DES DEPARTS",
     "type": "survive",
-    "threat": 5,
+    "threat": 6,
     "goal": {
       "seconds": 90
     },
     "intro": "earth",
     "reward": {
-      "clear": 60,
-      "first": 120
+      "clear": 70,
+      "first": 140
     },
     "events": [
       {
@@ -1333,15 +1021,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w3-l2": {
     "id": "w3-l2",
-    "name": "CONFINEMENT",
+    "name": "ARCHIVES SCELLEES",
     "type": "kill",
-    "threat": 5,
+    "threat": 6,
     "goal": {
       "count": 60
     },
     "reward": {
-      "clear": 65,
-      "first": 130
+      "clear": 75,
+      "first": 150
     },
     "world": "w3",
     "schemaVersion": 2,
@@ -1471,15 +1159,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w3-l3": {
     "id": "w3-l3",
-    "name": "FUITE DE CRISTAUX",
+    "name": "FOSSE COMMUNE",
     "type": "collect",
-    "threat": 6,
+    "threat": 7,
     "goal": {
       "gems": 40
     },
     "reward": {
-      "clear": 70,
-      "first": 140
+      "clear": 80,
+      "first": 160
     },
     "events": [
       {
@@ -1614,15 +1302,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w3-l4": {
     "id": "w3-l4",
-    "name": "CONVOI SECURISE",
+    "name": "AUDIT DE FIN DE VIE",
     "type": "survive",
-    "threat": 6,
+    "threat": 7,
     "goal": {
       "seconds": 100
     },
     "reward": {
-      "clear": 75,
-      "first": 150
+      "clear": 85,
+      "first": 170
     },
     "events": [
       {
@@ -1761,14 +1449,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w3-l5": {
     "id": "w3-l5",
-    "name": "LE DIRECTEUR",
+    "name": "LA FAUCHEUSE",
     "type": "boss",
-    "threat": 7,
-    "boss": "ruche",
-    "bossName": "LE DIRECTEUR DE TRAITEMENT",
+    "threat": 8,
+    "boss": "faucheuse",
+    "bossName": null,
     "reward": {
-      "clear": 120,
-      "first": 300
+      "clear": 140,
+      "first": 330
     },
     "world": "w3",
     "schemaVersion": 2,
@@ -1889,6 +1577,3541 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       "start": 1.27,
       "end": 0.75,
       "seconds": 70
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w4-l1": {
+    "id": "w4-l1",
+    "name": "CENTRE DE TRI AERIEN",
+    "type": "survive",
+    "threat": 8,
+    "goal": {
+      "seconds": 90
+    },
+    "intro": "earth",
+    "reward": {
+      "clear": 80,
+      "first": 160
+    },
+    "events": [
+      {
+        "kind": "swarm",
+        "at": 20
+      }
+    ],
+    "world": "w4",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w4-l2": {
+    "id": "w4-l2",
+    "name": "ALVEOLES",
+    "type": "kill",
+    "threat": 9,
+    "goal": {
+      "count": 70
+    },
+    "intro": null,
+    "reward": {
+      "clear": 85,
+      "first": 170
+    },
+    "events": [],
+    "world": "w4",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w4-l3": {
+    "id": "w4-l3",
+    "name": "MIEL INDUSTRIEL",
+    "type": "collect",
+    "threat": 9,
+    "goal": {
+      "gems": 45
+    },
+    "intro": null,
+    "reward": {
+      "clear": 90,
+      "first": 180
+    },
+    "events": [
+      {
+        "kind": "goldrush",
+        "at": 15
+      }
+    ],
+    "world": "w4",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w4-l4": {
+    "id": "w4-l4",
+    "name": "TOURNEE DE NUIT",
+    "type": "survive",
+    "threat": 10,
+    "goal": {
+      "seconds": 105
+    },
+    "intro": null,
+    "reward": {
+      "clear": 95,
+      "first": 190
+    },
+    "events": [
+      {
+        "kind": "elite",
+        "at": 20
+      },
+      {
+        "kind": "kamikaze",
+        "at": 55
+      }
+    ],
+    "world": "w4",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w4-l5": {
+    "id": "w4-l5",
+    "name": "LA REINE",
+    "type": "boss",
+    "threat": 11,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 150,
+      "first": 360
+    },
+    "events": [],
+    "world": "w4",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": "ruche",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w5-l1": {
+    "id": "w5-l1",
+    "name": "SALLE D'EXPOSITION",
+    "type": "survive",
+    "threat": 11,
+    "goal": {
+      "seconds": 95
+    },
+    "intro": "earth",
+    "reward": {
+      "clear": 90,
+      "first": 180
+    },
+    "events": [
+      {
+        "kind": "ice",
+        "at": 20
+      }
+    ],
+    "world": "w5",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w5-l2": {
+    "id": "w5-l2",
+    "name": "REFLEXIONS",
+    "type": "kill",
+    "threat": 12,
+    "goal": {
+      "count": 75
+    },
+    "intro": null,
+    "reward": {
+      "clear": 95,
+      "first": 190
+    },
+    "events": [],
+    "world": "w5",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w5-l3": {
+    "id": "w5-l3",
+    "name": "EXTRACTION DE CRISTAUX",
+    "type": "collect",
+    "threat": 12,
+    "goal": {
+      "gems": 50
+    },
+    "intro": null,
+    "reward": {
+      "clear": 100,
+      "first": 200
+    },
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 10
+      }
+    ],
+    "world": "w5",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w5-l4": {
+    "id": "w5-l4",
+    "name": "PARCOURS DE VISITE",
+    "type": "survive",
+    "threat": 13,
+    "goal": {
+      "seconds": 105
+    },
+    "intro": null,
+    "reward": {
+      "clear": 105,
+      "first": 210
+    },
+    "events": [
+      {
+        "kind": "emp",
+        "at": 30
+      },
+      {
+        "kind": "elite",
+        "at": 60
+      }
+    ],
+    "world": "w5",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w5-l5": {
+    "id": "w5-l5",
+    "name": "LE PRISME",
+    "type": "boss",
+    "threat": 14,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 160,
+      "first": 390
+    },
+    "events": [],
+    "world": "w5",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": "prisme",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w6-l1": {
+    "id": "w6-l1",
+    "name": "POINT DE REJET",
+    "type": "survive",
+    "threat": 14,
+    "goal": {
+      "seconds": 95
+    },
+    "intro": "earth",
+    "reward": {
+      "clear": 100,
+      "first": 200
+    },
+    "events": [
+      {
+        "kind": "nebula",
+        "at": 20
+      }
+    ],
+    "world": "w6",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w6-l2": {
+    "id": "w6-l2",
+    "name": "LA FOSSE",
+    "type": "kill",
+    "threat": 14,
+    "goal": {
+      "count": 80
+    },
+    "intro": null,
+    "reward": {
+      "clear": 105,
+      "first": 210
+    },
+    "events": [],
+    "world": "w6",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w6-l3": {
+    "id": "w6-l3",
+    "name": "PERLES TOXIQUES",
+    "type": "collect",
+    "threat": 15,
+    "goal": {
+      "gems": 50
+    },
+    "intro": null,
+    "reward": {
+      "clear": 110,
+      "first": 220
+    },
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 10
+      }
+    ],
+    "world": "w6",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w6-l4": {
+    "id": "w6-l4",
+    "name": "MAREE NOIRE",
+    "type": "survive",
+    "threat": 16,
+    "goal": {
+      "seconds": 110
+    },
+    "intro": null,
+    "reward": {
+      "clear": 115,
+      "first": 230
+    },
+    "events": [
+      {
+        "kind": "spiders",
+        "at": 25
+      },
+      {
+        "kind": "elite",
+        "at": 60
+      }
+    ],
+    "world": "w6",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w6-l5": {
+    "id": "w6-l5",
+    "name": "LE KRAKEN",
+    "type": "boss",
+    "threat": 17,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 170,
+      "first": 420
+    },
+    "events": [],
+    "world": "w6",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": "kraken",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w7-l1": {
+    "id": "w7-l1",
+    "name": "CREPUSCULE",
+    "type": "survive",
+    "threat": 17,
+    "goal": {
+      "seconds": 100
+    },
+    "intro": "earth",
+    "reward": {
+      "clear": 110,
+      "first": 220
+    },
+    "events": [
+      {
+        "kind": "eclipse",
+        "at": 25
+      }
+    ],
+    "world": "w7",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w7-l2": {
+    "id": "w7-l2",
+    "name": "COURONNE SOLAIRE",
+    "type": "kill",
+    "threat": 17,
+    "goal": {
+      "count": 85
+    },
+    "intro": null,
+    "reward": {
+      "clear": 115,
+      "first": 230
+    },
+    "events": [],
+    "world": "w7",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w7-l3": {
+    "id": "w7-l3",
+    "name": "POUSSIERE D'OR",
+    "type": "collect",
+    "threat": 18,
+    "goal": {
+      "gems": 55
+    },
+    "intro": null,
+    "reward": {
+      "clear": 120,
+      "first": 240
+    },
+    "events": [
+      {
+        "kind": "goldrush",
+        "at": 15
+      }
+    ],
+    "world": "w7",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w7-l4": {
+    "id": "w7-l4",
+    "name": "TOTALITE",
+    "type": "survive",
+    "threat": 18,
+    "goal": {
+      "seconds": 110
+    },
+    "intro": null,
+    "reward": {
+      "clear": 125,
+      "first": 250
+    },
+    "events": [
+      {
+        "kind": "eclipse",
+        "at": 30
+      },
+      {
+        "kind": "minibh",
+        "at": 70
+      }
+    ],
+    "world": "w7",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w7-l5": {
+    "id": "w7-l5",
+    "name": "L'ECLIPSE",
+    "type": "boss",
+    "threat": 19,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 180,
+      "first": 450
+    },
+    "events": [],
+    "world": "w7",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": "eclipse",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w8-l1": {
+    "id": "w8-l1",
+    "name": "SALLE D'ATTENTE",
+    "type": "survive",
+    "threat": 19,
+    "goal": {
+      "seconds": 100
+    },
+    "intro": "earth",
+    "reward": {
+      "clear": 120,
+      "first": 240
+    },
+    "events": [
+      {
+        "kind": "statik",
+        "at": 25
+      }
+    ],
+    "world": "w8",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w8-l2": {
+    "id": "w8-l2",
+    "name": "FORMULAIRE 27B",
+    "type": "kill",
+    "threat": 19,
+    "goal": {
+      "count": 90
+    },
+    "intro": null,
+    "reward": {
+      "clear": 125,
+      "first": 250
+    },
+    "events": [],
+    "world": "w8",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w8-l3": {
+    "id": "w8-l3",
+    "name": "PIECES JUSTIFICATIVES",
+    "type": "collect",
+    "threat": 20,
+    "goal": {
+      "gems": 60
+    },
+    "intro": null,
+    "reward": {
+      "clear": 130,
+      "first": 260
+    },
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 10
+      }
+    ],
+    "world": "w8",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w8-l4": {
+    "id": "w8-l4",
+    "name": "RECOURS GRACIEUX",
+    "type": "survive",
+    "threat": 20,
+    "goal": {
+      "seconds": 115
+    },
+    "intro": null,
+    "reward": {
+      "clear": 135,
+      "first": 270
+    },
+    "events": [
+      {
+        "kind": "plasma",
+        "at": 30
+      },
+      {
+        "kind": "elite",
+        "at": 70
+      }
+    ],
+    "world": "w8",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": null,
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
+    },
+    "ambient": {
+      "golden": true,
+      "smallEvents": true
+    }
+  },
+  "w8-l5": {
+    "id": "w8-l5",
+    "name": "L'HYDRE",
+    "type": "boss",
+    "threat": 20,
+    "goal": {},
+    "intro": null,
+    "reward": {
+      "clear": 200,
+      "first": 500
+    },
+    "events": [],
+    "world": "w8",
+    "schemaVersion": 2,
+    "tuto": false,
+    "waves": [],
+    "spawnClock": "difficulty",
+    "spawns": [
+      {
+        "type": "grunt",
+        "from": -1,
+        "w": 38
+      },
+      {
+        "type": "diver",
+        "from": 8,
+        "w": 16
+      },
+      {
+        "type": "shooter",
+        "from": 12,
+        "w": 22
+      },
+      {
+        "type": "turret",
+        "from": 20,
+        "w": 12
+      },
+      {
+        "type": "drone",
+        "from": 28,
+        "w": 16
+      },
+      {
+        "type": "splitter",
+        "from": 35,
+        "w": 14
+      },
+      {
+        "type": "shieldedGrunt",
+        "from": 45,
+        "w": 12
+      },
+      {
+        "type": "mine",
+        "from": 50,
+        "w": 10
+      },
+      {
+        "type": "tank",
+        "from": 55,
+        "w": 12
+      },
+      {
+        "type": "bomber",
+        "from": 65,
+        "w": 12
+      },
+      {
+        "type": "sniper",
+        "from": 75,
+        "w": 10
+      },
+      {
+        "type": "swarmer",
+        "from": 80,
+        "w": 18
+      },
+      {
+        "type": "healer",
+        "from": 95,
+        "w": 9
+      },
+      {
+        "type": "ghost",
+        "from": 110,
+        "w": 12
+      },
+      {
+        "type": "elite",
+        "from": 130,
+        "w": 8
+      },
+      {
+        "type": "mothership",
+        "from": 140,
+        "w": 8
+      },
+      {
+        "type": "vortex",
+        "from": 150,
+        "w": 7
+      },
+      {
+        "type": "charo",
+        "from": 100,
+        "w": 11
+      },
+      {
+        "type": "kamikaze",
+        "from": 22,
+        "w": 14
+      },
+      {
+        "type": "spider",
+        "from": 30,
+        "w": 11
+      }
+    ],
+    "bg": null,
+    "boss": "hydre",
+    "finalBoss": null,
+    "bossName": null,
+    "hpMul": 1,
+    "dmgMul": 1,
+    "timelineOnly": 0,
+    "zoom": {
+      "start": 1.35,
+      "end": 0.965,
+      "seconds": 67.5
     },
     "ambient": {
       "golden": true,

@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 // Test sans navigateur du panneau « étapes » (tools/editor/steps-ui.js) sur un faux DOM minimal, + editorLevelDocument (level-document.js)
 // + applyTuning (src/data/tuning-apply.js) pour les clés mobs / bossTune / eventTune / norma / audio.
 //   node tools/editor_steps_ui_test.js
@@ -63,7 +63,7 @@ Object.keys(c4.TUNABLES).forEach(id=> { tunablesCatalog[id] = c4.TUNABLES[id].ma
 
 const files = fs.readdirSync(path.join(SRC, 'data/levels')).filter(f=> /^w\d-.*\.json$/.test(f));
 const documents = {}; files.forEach(f=> { const d = JSON.parse(fs.readFileSync(path.join(SRC, 'data/levels', f), 'utf8')); documents[d.id] = d; });
-assert.strictEqual(Object.keys(documents).length, 16);
+assert.strictEqual(Object.keys(documents).length, 42);
 
 /* ---------- contexte de l'éditeur ---------- */
 const ctx = { document, console, JSON, Math, Object, Array, String, Number, Error, isFinite };

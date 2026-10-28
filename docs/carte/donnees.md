@@ -52,4 +52,24 @@ Où est défini chaque élément de contenu (carte d'amélioration, relique, com
 
 `w3`
 
-136 ids au total.
+## `src/data/worlds/monde-4.js` (1)
+
+`w4`
+
+## `src/data/worlds/monde-5.js` (1)
+
+`w5`
+
+## `src/data/worlds/monde-6.js` (1)
+
+`w6`
+
+## `src/data/worlds/monde-7.js` (1)
+
+`w7`
+
+## `src/data/worlds/monde-8.js` (1)
+
+`w8`
+
+141 ids au total.

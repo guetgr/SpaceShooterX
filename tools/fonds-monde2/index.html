@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Monde 2 — La Casse Lunaire : les fonds</title>
+<style>
+:root{--bg:#0b0709;--card:#16100f;--line:#3a2420;--ink:#efe3da;--dim:#b49a8c;--hot:#ffb347}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,sans-serif;margin:0;padding:16px;max-width:1180px;margin:auto}
+h1{font-size:22px;margin:6px 0}h2{margin:0;color:var(--hot);font-size:18px}
+.sub{color:var(--dim);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin:18px 0}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
+figure{margin:0;flex:0 1 260px}figure img{width:100%;border-radius:6px;display:block;background:#000;image-rendering:auto}
+figcaption{color:var(--dim);font-size:12px;margin-top:4px}
+p{color:#d5c3b8;margin:6px 0;line-height:1.45}
+textarea{width:100%;min-height:54px;background:#0b0709;color:var(--ink);border:1px solid #3a2a26;border-radius:6px;padding:6px;box-sizing:border-box}
+button{background:var(--hot);border:0;border-radius:6px;padding:7px 12px;font-weight:700;cursor:pointer;margin:6px 6px 0 0}
+a{color:var(--hot)}
+.flip{animation:fl 1.6s steps(1) infinite}
+</style></head><body>
+<h1>Monde 2 — MARS : les 5 fonds</h1>
+<p class="sub">Un fond par ordre de mission, dessiné en code comme ceux du monde 1 (version détaillée : grues, panneaux, décharge sur Mars, galets et scanners sur rail, presses à tableau de bord, poutres, chaînes, scies, vapeur). Tous les voyants ont maintenant un support.. Chaque carte montre le décor seul puis la vue en jeu (avec l'interface et la camionnette). Pour les voir bouger : <a href="http://localhost:8080/?dev">le jeu en direct (?dev)</a>, ordres 1 à 5 du secteur 2.</p>
+<div class="card"><h2>ORDRE 1 — QUAI DE DECHARGEMENT</h2><p>Un portique à voyants ambre et rouges défile à gauche. Des bennes AGP et de la ferraille dérivent à trois profondeurs. Mars occupe le bas (elle apparaît après le décollage) : sol rouge, failles, cratères, avec la décharge posée dessus et un liseré d'atmosphère. La Terre est minuscule au loin.</p><div class="row"><figure><img src="w2-l1_fond0.jpg" alt=""><figcaption>décor seul (instant 1)</figcaption></figure><figure><img src="w2-l1_fond1.jpg" alt=""><figcaption>décor seul (quelques secondes plus tard)</figcaption></figure><figure><img src="w2-l1_jeu.jpg" alt=""><figcaption>en jeu</figcaption></figure></div><textarea placeholder="tes remarques…"></textarea></div>
+<div class="card"><h2>ORDRE 2 — CHAINE DE TRI</h2><p>Six tapis roulants en mouvement, avec des caisses qui voyagent et des voyants vert/rouge. Deux bras articulés de tri balaient depuis les bords, et des piliers d'usine défilent derrière.</p><div class="row"><figure><img src="w2-l2_fond0.jpg" alt=""><figcaption>décor seul (instant 1)</figcaption></figure><figure><img src="w2-l2_fond1.jpg" alt=""><figcaption>décor seul (quelques secondes plus tard)</figcaption></figure><figure><img src="w2-l2_jeu.jpg" alt=""><figcaption>en jeu</figcaption></figure></div><textarea placeholder="tes remarques…"></textarea></div>
+<div class="card"><h2>ORDRE 3 — ZONE DE COMPACTAGE</h2><p>Deux presses à bandes de chantier se referment sur les côtés, avec des étincelles au contact. Des cubes de ferraille écrasée tombent et des voyants rouges clignotent en haut.</p><div class="row"><figure><img src="w2-l3_fond0.jpg" alt=""><figcaption>décor seul (instant 1)</figcaption></figure><figure><img src="w2-l3_fond1.jpg" alt=""><figcaption>décor seul (quelques secondes plus tard)</figcaption></figure><figure><img src="w2-l3_jeu.jpg" alt=""><figcaption>en jeu</figcaption></figure></div><textarea placeholder="tes remarques…"></textarea></div>
+<div class="card"><h2>ORDRE 4 — BENNE A CRISTAUX</h2><p>Une mine à ciel ouvert : parois en strates avec lampes de chantier, lueur de forge en bas, et des cristaux orange et rouges qui scintillent en tombant.</p><div class="row"><figure><img src="w2-l4_fond0.jpg" alt=""><figcaption>décor seul (instant 1)</figcaption></figure><figure><img src="w2-l4_fond1.jpg" alt=""><figcaption>décor seul (quelques secondes plus tard)</figcaption></figure><figure><img src="w2-l4_jeu.jpg" alt=""><figcaption>en jeu</figcaption></figure></div><textarea placeholder="tes remarques…"></textarea></div>
+<div class="card"><h2>ORDRE 5 — LE BROYEUR</h2><p>Des engrenages géants qui tournent en sens inverse, des mâchoires à dents en haut et en bas qui s'ouvrent et se ferment, une forge rouge qui pulse et des étincelles qui montent.</p><div class="row"><figure><img src="w2-l5_fond0.jpg" alt=""><figcaption>décor seul (instant 1)</figcaption></figure><figure><img src="w2-l5_fond1.jpg" alt=""><figcaption>décor seul (quelques secondes plus tard)</figcaption></figure><figure><img src="w2-l5_jeu.jpg" alt=""><figcaption>en jeu</figcaption></figure></div><textarea placeholder="tes remarques…"></textarea></div>
+
+<button onclick="cp()">Copier mes remarques</button><pre id="out" style="white-space:pre-wrap;color:#b49a8c"></pre>
+<script>
+function cp(){var t=[].map.call(document.querySelectorAll('.card'),function(c){return c.querySelector('h2').textContent+' : '+c.querySelector('textarea').value}).join('\n');document.getElementById('out').textContent=t;try{navigator.clipboard.writeText(t)}catch(e){}}
+</script></body></html>
