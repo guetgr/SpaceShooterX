@@ -64,11 +64,22 @@ Les valeurs de base des mobs (PV, dégâts de contact, vitesse verticale de dép
 
 Champs permis : `hpMul` (PV et bouclier de départ), `dmgMul` (dégâts de contact), `speedMul` (vitesse verticale de départ), `scoreMul` (score). Chaque multiplicateur est un nombre de 0,1 à 10 ; un champ absent vaut 1, et une mission sans `mobs` se comporte exactement comme avant. Un type de mob inconnu ou une valeur hors bornes est refusé par la validation. Le multiplicateur s'ajoute à l'échelle de difficulté, il ne la remplace pas. Les minuteurs, positions d'arrêt et cadences de tir ne sont pas concernés.
 
+## Validation
+
+Un bandeau en haut du niveau liste les **erreurs** (rouge) et les **avertissements** (ambre), recalculés à chaque modification (`tools/editor/validator.js`, `validateLevel(doc, catalogs)`). Une erreur = le serveur refuserait le fichier (`tools/level_files.py`, mêmes messages) : **EXPORTER est refusé** tant qu'un niveau en a (le toast cite les niveaux). Un avertissement ne bloque jamais ; « Info : » = simple remarque. Le validateur juge la cohérence, pas la difficulté.
+
+Erreurs : identité/difficulté (menace 1 à 20, multiplicateurs > 0, objectif positif) ; mobs inconnus ou hors 0,1–10 ; `bossTune` (boss/réglage inconnu, bornes, longueur, **ordre** des paliers : `ordered:'desc'|'asc'` dans `src/data/tunables.js`, posé sur `thresh` / `states` / `mob.states`) ; paramètres d'événement (inconnus, hors bornes, entiers, **mini ≤ maxi** pour chaque paire `xxxMin`/`xxxMax` donnée ensemble, dans `events[i].params` et `eventTune`) ; **`duration` avec `params.dur/durMin/durMax`** (ambigu) ; événements, pools, vagues invalides ; boîtes N.O.R.M.A. (clés inconnues, id en double, `hold`, texte, `ref`) ; décor, musique, boss inconnus ; zoom ; **objectif impossible** (`kill`/`collect` sans réserve ni vague ; les réserves comptent pour rien si `timelineOnly` vaut 1).
+
+Avertissements : événement dont `min` dépasse la menace du niveau (en ordre, l'alerte vaut la menace et ne monte pas ; un événement programmé démarre quand même) ; deux événements du même emplacement (grands / petits) à moins de 5 s, ou le second programmé avant la fin du premier (`duration` connue) ; événement ou boîte `time` après la fin d'un objectif `survive` ; boss sans texte N.O.R.M.A. de début de boss ; `hpMul`/`dmgMul` ≥ 5 ou ≤ 0,2 (niveau ou mob) et PV effectifs d'un mob > 10 fois la base ; `eventTune` d'un petit événement ni programmé ni tirable au hasard ; `audio.boss` sans `finalBoss` (ignoré).
+
+Les cas invalides communs au client et au serveur sont écrits une fois dans `tools/fixtures/invalid_levels.json` (`set` = clés de premier niveau remplacées, `expect` = extrait du message) ; ils servent à `node tools/editor_validator_test.js` et `python3 tools/level_files_test.py`. `bras.cooldown` n'est pas ordonné (valeurs d'origine croissantes 0, 1500, 1900, 2100 selon le tier, sans règle de jeu).
+
 ## Vérifications
 
 - `node tools/check_worlds.js` : structure et progression des secteurs.
 - `node tools/timeline_test.js` : horaires, quantité, réinitialisation et saturation des vagues.
 - `python3 tools/level_files_test.py` : validation et export JSON dans un dossier temporaire.
+- `node tools/editor_validator_test.js` : 16 niveaux sans erreur, une règle d'erreur et d'avertissement par cas (`--warnings` les affiche).
 - `node tools/editor_steps_test.js` et `node tools/editor_steps_ui_test.js` : étapes de l'éditeur (modèle, rendu sur faux DOM, surcharges, `applyTuning`).
 - `python3 tools/enemy_stats_test.py` : stats des 27 types identiques à `tools/enemy_stats_snapshot.json` (`--write` pour le régénérer, seulement si un changement de valeurs est voulu) et surcharge `mobs`.
 - `python3 tools/level_files.py` : génération du cache depuis les JSON.

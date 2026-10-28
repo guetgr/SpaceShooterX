@@ -19,11 +19,10 @@ En portée globale, la dernière définition écrase les autres (ou plante pour 
 - Ids demandés au DOM mais inexistants : aucun
 - `asset(...)` hors manifeste : aucun
 
-## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (4)
+## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (3)
 
 Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.html, tools) n'est appelé nulle part. Sauf appel par nom construit dynamiquement ou depuis la console.
 
-- `NORMA_POOLS` (const) — `src/data/level-norma.js`
 - `setShipPart` (fonction) — `src/data/ship-skins.js`
 - `HOME_ORBIT` (const) — `src/home/background.js`
 - `HOME_STAT_LINES` (const) — `src/home/ui.js`
@@ -45,8 +44,10 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/editor/steps-model.js` — (script ponctuel, sans description)
 - `tools/editor/steps-ui.js` — (script ponctuel, sans description)
 - `tools/editor/timeline.js` — (script ponctuel, sans description)
+- `tools/editor/validator.js` — (script ponctuel, sans description)
 - `tools/editor_steps_test.js` — (script ponctuel, sans description)
 - `tools/editor_steps_ui_test.js` — (script ponctuel, sans description)
+- `tools/editor_validator_test.js` — (script ponctuel, sans description)
 - `tools/enemy_stats_test.py` — Équivalence des stats des mobs (registre src/data/enemy-stats.js) + surcharge par niveau.
 - `tools/event_params_node_test.js` — (script ponctuel, sans description)
 - `tools/event_params_test.py` — Paramètres des événements (EVENT_DEFS) : équivalence avec le comportement d'origine.
