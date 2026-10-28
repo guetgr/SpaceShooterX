@@ -1,0 +1,13192 @@
+{
+ "10:bigbh": {
+  "dur": [
+   39386,
+   40984
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": true,
+     "core": 46,
+     "life": 1000000000,
+     "r": 560,
+     "str": 1500,
+     "x": 200,
+     "y": 287.6
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 1
+ },
+ "10:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "strikeAt",
+    236,
+    347,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    404,
+    346,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    300,
+    201,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    -8,
+    386,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    181,
+    559,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    -26,
+    261,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    -5,
+    158,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    136,
+    532,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    114,
+    554,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    440,
+    476,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    262,
+    635,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    134,
+    486,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    152,
+    541,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    194,
+    477,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    63,
+    441,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    -40,
+    131,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    131,
+    139,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    39,
+    362,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    279,
+    149,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    431,
+    391,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    290,
+    253,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    -40,
+    520,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    139,
+    196,
+    85,
+    18
+   ],
+   [
+    "strikeAt",
+    418,
+    640,
+    85,
+    18
+   ]
+  ],
+  "tickMs": 440,
+  "wells": 0
+ },
+ "10:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBonusBoss"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:corridor": {
+  "corr": {
+   "acc": 0,
+   "amp": 88.4,
+   "clock": 0,
+   "mid": 200,
+   "on": true,
+   "ph": 5.399645,
+   "speed": 170,
+   "top": -80,
+   "w": 241.2
+  },
+  "dur": [
+   44386,
+   45984
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "endCorridor"
+   ]
+  ],
+  "tickMs": 200,
+  "wells": 0
+ },
+ "10:crystal": {
+  "dur": [
+   27040,
+   28238
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnGemAt",
+    387,
+    -50,
+    3,
+    "gemM",
+    126
+   ],
+   [
+    "spawnGemAt",
+    206,
+    -50,
+    3,
+    "gemM",
+    94
+   ],
+   [
+    "spawnGemAt",
+    240,
+    -50,
+    6,
+    "gemM",
+    106
+   ],
+   [
+    "spawnGemAt",
+    -26,
+    -50,
+    3,
+    "gemL",
+    98
+   ],
+   [
+    "spawnGemAt",
+    136,
+    -50,
+    3,
+    "gemM",
+    103
+   ],
+   [
+    "spawnGemAt",
+    386,
+    -50,
+    3,
+    "gemM",
+    115
+   ],
+   [
+    "spawnGemAt",
+    456,
+    -50,
+    3,
+    "gemM",
+    102
+   ],
+   [
+    "spawnGemAt",
+    61,
+    -50,
+    3,
+    "gemM",
+    119
+   ],
+   [
+    "spawnGemAt",
+    63,
+    -50,
+    3,
+    "gemL",
+    96
+   ],
+   [
+    "spawnGemAt",
+    272,
+    -50,
+    3,
+    "gemL",
+    97
+   ],
+   [
+    "spawnGemAt",
+    219,
+    -50,
+    3,
+    "gemL",
+    128
+   ],
+   [
+    "spawnGemAt",
+    244,
+    -50,
+    3,
+    "gemM",
+    104
+   ],
+   [
+    "spawnGemAt",
+    -57,
+    -50,
+    3,
+    "gemM",
+    100
+   ],
+   [
+    "spawnGemAt",
+    418,
+    -50,
+    3,
+    "gemM",
+    111
+   ],
+   [
+    "spawnGemAt",
+    152,
+    -50,
+    3,
+    "gemM",
+    110
+   ],
+   [
+    "spawnGemAt",
+    249,
+    -50,
+    3,
+    "gemM",
+    120
+   ],
+   [
+    "spawnGemAt",
+    160,
+    -50,
+    3,
+    "gemM",
+    124
+   ],
+   [
+    "spawnGemAt",
+    305,
+    -50,
+    3,
+    "gemM",
+    123
+   ],
+   [
+    "spawnGemAt",
+    99,
+    -50,
+    3,
+    "gemM",
+    128
+   ],
+   [
+    "spawnGemAt",
+    139,
+    -50,
+    3,
+    "gemM",
+    90
+   ],
+   [
+    "spawnGemAt",
+    154,
+    -50,
+    3,
+    "gemM",
+    113
+   ],
+   [
+    "spawnGemAt",
+    182,
+    -50,
+    6,
+    "gemM",
+    100
+   ],
+   [
+    "spawnGemAt",
+    86,
+    -50,
+    3,
+    "gemM",
+    113
+   ],
+   [
+    "spawnGemAt",
+    130,
+    -50,
+    3,
+    "gemM",
+    92
+   ]
+  ],
+  "tickMs": 360,
+  "wells": 0
+ },
+ "10:eclipse": {
+  "dur": [
+   22163,
+   23041
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startEclipse"
+   ],
+   [
+    "endEclipse"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 25,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 75,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 125,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 175,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 225,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 275,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 325,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 375,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    25
+   ],
+   [
+    "delay",
+    300
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    75
+   ],
+   [
+    "delay",
+    600
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    125
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    175
+   ],
+   [
+    "delay",
+    1200
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    225
+   ],
+   [
+    "delay",
+    1500
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    275
+   ],
+   [
+    "delay",
+    1800
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    325
+   ],
+   [
+    "delay",
+    2100
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    375
+   ],
+   [
+    "delay",
+    1200
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ],
+   [
+    "delay",
+    1500
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ],
+   [
+    "delay",
+    1800
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "emp": 5.5,
+  "fakes": [],
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:flip": {
+  "dur": [
+   38773,
+   41969
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "flipVortex",
+    true
+   ],
+   [
+    "delay",
+    3500
+   ],
+   [
+    "flipVortex",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:frenzy": {
+  "dur": [
+   44080,
+   46477
+  ],
+  "fakes": [],
+  "frenzy": 1000,
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    500
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    1500
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    2000
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    2500
+   ],
+   [
+    "spawnGolden",
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "endIce"
+   ]
+  ],
+  "tickMs": 80,
+  "wells": 0
+ },
+ "10:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 230,
+    "kT": 3300,
+    "x": 230,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 435
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 351
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 10,
+    "kT": 3300,
+    "x": 10,
+    "y": 102
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 113
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 10,
+    "kT": 3300,
+    "x": 10,
+    "y": 231
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 142,
+    "kT": 3300,
+    "x": 142,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 66,
+    "kT": 3300,
+    "x": 66,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 10,
+    "kT": 3300,
+    "x": 10,
+    "y": 404
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 200
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 417,
+    "kT": 3300,
+    "x": 417,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 320
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 144,
+    "kT": 3300,
+    "x": 144,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 190
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 113,
+    "kT": 3300,
+    "x": 113,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 10,
+    "kT": 3300,
+    "x": 10,
+    "y": 366
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    230
+   ],
+   [
+    "delay",
+    180
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    360
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    540
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    10
+   ],
+   [
+    "delay",
+    720
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    10
+   ],
+   [
+    "delay",
+    1080
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    142
+   ],
+   [
+    "delay",
+    1260
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    66
+   ],
+   [
+    "delay",
+    1440
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    10
+   ],
+   [
+    "delay",
+    1620
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    1800
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    417
+   ],
+   [
+    "delay",
+    1980
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    2160
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    144
+   ],
+   [
+    "delay",
+    2340
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    2520
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    113
+   ],
+   [
+    "delay",
+    2700
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    10
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:meteors": {
+  "dur": [
+   42040,
+   43238
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    404,
+    -70,
+    2,
+    -11.062647,
+    230.734951,
+    2
+   ],
+   [
+    "spawnMeteor",
+    80,
+    -110,
+    2,
+    -1.846663,
+    245.993069,
+    2
+   ],
+   [
+    "spawnMeteor",
+    5,
+    -150,
+    2,
+    65.036342,
+    226.861795,
+    2
+   ],
+   [
+    "spawnMeteor",
+    -26,
+    -190,
+    2,
+    16.173896,
+    222.412691,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    42,
+    -70,
+    2,
+    18.272663,
+    197.15504,
+    2
+   ],
+   [
+    "spawnMeteor",
+    305,
+    -110,
+    2,
+    21.851714,
+    255.065683,
+    2
+   ],
+   [
+    "spawnMeteor",
+    457,
+    -150,
+    2,
+    29.947532,
+    257.262794,
+    2
+   ],
+   [
+    "spawnMeteor",
+    456,
+    -190,
+    2,
+    -37.853118,
+    236.996079,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    101,
+    -70,
+    2,
+    22.229675,
+    249.009722,
+    2
+   ],
+   [
+    "spawnMeteor",
+    194,
+    -110,
+    2,
+    39.662776,
+    210.29233,
+    2
+   ],
+   [
+    "spawnMeteor",
+    288,
+    -150,
+    2,
+    -33.113048,
+    206.360185,
+    2
+   ],
+   [
+    "spawnMeteor",
+    272,
+    -190,
+    2,
+    69.23314,
+    189.765045,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    39,
+    -70,
+    2,
+    18.827223,
+    202.12505,
+    2
+   ],
+   [
+    "spawnMeteor",
+    34,
+    -110,
+    2,
+    -6.288129,
+    241.918291,
+    2
+   ],
+   [
+    "spawnMeteor",
+    429,
+    -150,
+    2,
+    -72.423332,
+    225.663158,
+    2
+   ],
+   [
+    "spawnMeteor",
+    -57,
+    -190,
+    2,
+    -26.189284,
+    216.421167,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    75,
+    -70,
+    2,
+    -45.933746,
+    216.173752,
+    2
+   ],
+   [
+    "spawnMeteor",
+    149,
+    -110,
+    2,
+    -78.111896,
+    258.454119,
+    2
+   ],
+   [
+    "spawnMeteor",
+    297,
+    -150,
+    2,
+    -3.796068,
+    222.967688,
+    2
+   ],
+   [
+    "spawnMeteor",
+    249,
+    -190,
+    2,
+    33.383735,
+    226.553584,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    324,
+    -70,
+    2,
+    26.62897,
+    252.600273,
+    2
+   ],
+   [
+    "spawnMeteor",
+    49,
+    -110,
+    2,
+    13.274959,
+    244.640094,
+    2
+   ],
+   [
+    "spawnMeteor",
+    342,
+    -150,
+    2,
+    -60.151348,
+    238.532629,
+    2
+   ],
+   [
+    "spawnMeteor",
+    99,
+    -190,
+    2,
+    3.712447,
+    254.972975,
+    2
+   ]
+  ],
+  "style": 2,
+  "tickMs": 538,
+  "wells": 0
+ },
+ "10:mines": {
+  "dur": [
+   29386,
+   30984
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "deployMine",
+    366,
+    134
+   ],
+   [
+    "deployMine",
+    205,
+    199
+   ],
+   [
+    "deployMine",
+    205,
+    159
+   ],
+   [
+    "deployMine",
+    94,
+    40
+   ],
+   [
+    "deployMine",
+    235,
+    45
+   ],
+   [
+    "deployMine",
+    152,
+    101
+   ],
+   [
+    "deployMine",
+    0,
+    93
+   ],
+   [
+    "deployMine",
+    18,
+    59
+   ],
+   [
+    "deployMine",
+    144,
+    184
+   ],
+   [
+    "deployMine",
+    293,
+    87
+   ],
+   [
+    "deployMine",
+    364,
+    219
+   ],
+   [
+    "deployMine",
+    304,
+    144
+   ],
+   [
+    "deployMine",
+    426,
+    94
+   ],
+   [
+    "deployMine",
+    312,
+    82
+   ],
+   [
+    "deployMine",
+    77,
+    80
+   ],
+   [
+    "deployMine",
+    195,
+    166
+   ],
+   [
+    "deployMine",
+    78,
+    154
+   ],
+   [
+    "deployMine",
+    -30,
+    50
+   ],
+   [
+    "deployMine",
+    264,
+    93
+   ],
+   [
+    "deployMine",
+    46,
+    58
+   ],
+   [
+    "deployMine",
+    217,
+    151
+   ],
+   [
+    "deployMine",
+    53,
+    209
+   ],
+   [
+    "deployMine",
+    239,
+    208
+   ],
+   [
+    "deployMine",
+    279,
+    91
+   ]
+  ],
+  "tickMs": 1000,
+  "wells": 0
+ },
+ "10:minibh": {
+  "dur": [
+   39386,
+   40984
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 227,
+     "y": 264
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 204,
+     "y": 329
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 80,
+     "y": 438
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 169,
+     "y": 409
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": 3200,
+  "wells": 4
+ },
+ "10:nebula": {
+  "dur": [
+   49080,
+   51477
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startNebula"
+   ],
+   [
+    "endNebula",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "plasma0": {
+   "age": 0,
+   "ang": 0,
+   "shotCd": 600,
+   "vx": -66.666667,
+   "vy": 20.8
+  },
+  "plasma1": {
+   "age": 1.32,
+   "ang": 0.74,
+   "shotCd": 355,
+   "vx": -66.666667,
+   "vy": 20.8
+  },
+  "rec": [
+   [
+    "killPlasma"
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    0.37,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    0.788879,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    1.207758,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    1.626637,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    2.045516,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    2.464395,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    2.883274,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    3.302153,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    3.721032,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    4.139911,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    4.55879,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    4.977669,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    5.396548,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    5.815427,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    6.234306,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    0.74,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    1.158879,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    1.577758,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    1.996637,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    2.415516,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    2.834395,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    3.253274,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    3.672153,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    4.091032,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    4.509911,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    4.92879,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    5.347669,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    5.766548,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    6.185427,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    6.604306,
+    170,
+    {
+     "damage": 10,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "damagePlayer",
+    22
+   ],
+   [
+    "killPlasma"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "fakes": [
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2596,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -26.2,
+    "x": 37.508,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2517,
+    "stopY": 1000000,
+    "wallX": 74.285714,
+    "wallY": -26.2,
+    "x": 100.365143,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 3050,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -26.2,
+    "x": 163.222286,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2515,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -26.2,
+    "x": 226.079429,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2769,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -26.2,
+    "x": 288.936571,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2177,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -26.2,
+    "x": 414.650857,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1941,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -84.2,
+    "x": 37.508,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2608,
+    "stopY": 1000000,
+    "wallX": 74.285714,
+    "wallY": -84.2,
+    "x": 100.365143,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1976,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -84.2,
+    "x": 163.222286,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2355,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -84.2,
+    "x": 226.079429,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2371,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -84.2,
+    "x": 288.936571,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1891,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -84.2,
+    "x": 414.650857,
+    "y": -84.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2315,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -142.2,
+    "x": 37.508,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1948,
+    "stopY": 1000000,
+    "wallX": 74.285714,
+    "wallY": -142.2,
+    "x": 100.365143,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2076,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -142.2,
+    "x": 163.222286,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2329,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -142.2,
+    "x": 226.079429,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2947,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -142.2,
+    "x": 288.936571,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2782,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -142.2,
+    "x": 414.650857,
+    "y": -142.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2268,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -200.2,
+    "x": 37.508,
+    "y": -200.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2999,
+    "stopY": 1000000,
+    "wallX": 74.285714,
+    "wallY": -200.2,
+    "x": 100.365143,
+    "y": -200.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 3191,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -200.2,
+    "x": 163.222286,
+    "y": -200.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2817,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -200.2,
+    "x": 226.079429,
+    "y": -200.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2668,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -200.2,
+    "x": 288.936571,
+    "y": -200.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 3188,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -200.2,
+    "x": 414.650857,
+    "y": -200.2
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    74.285714
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    74.285714
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    74.285714
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    74.285714
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "10:spiders": {
+  "dur": [
+   39080,
+   41477
+  ],
+  "fakes": [
+   {
+    "_t": "spider",
+    "active": true,
+    "x": -109,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": -37.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 14,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 51.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 110,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 159.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 236.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 305.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 323,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": -7,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 39,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 97.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 131,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 179.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 221.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 269,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 332.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 378.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 402.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 23,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 70,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 136,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 191,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 238,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 289,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 344,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 378.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 416.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 468.5,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -20,
+    "stopY": 40,
+    "x": -20,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 145,
+    "x": 426,
+    "y": 145
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 355,
+    "x": -26,
+    "y": 355
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 52,
+    "stopY": 40,
+    "x": 52,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 162,
+    "x": 426,
+    "y": 162
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 311,
+    "x": -26,
+    "y": 311
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 484,
+    "x": -26,
+    "y": 484
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 276,
+    "stopY": 40,
+    "x": 276,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 233,
+    "x": 426,
+    "y": 233
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -17,
+    "stopY": 550,
+    "x": -17,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 424,
+    "x": -26,
+    "y": 424
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 148,
+    "stopY": 40,
+    "x": 148,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 192,
+    "x": 426,
+    "y": 192
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 305,
+    "x": -26,
+    "y": 305
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 160,
+    "stopY": 40,
+    "x": 160,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 375,
+    "x": 426,
+    "y": 375
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 108,
+    "stopY": 550,
+    "x": 108,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 290,
+    "x": -26,
+    "y": 290
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 242,
+    "stopY": 40,
+    "x": 242,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 230,
+    "x": 426,
+    "y": 230
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 333,
+    "stopY": 550,
+    "x": 333,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 72,
+    "stopY": 40,
+    "x": 72,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 356,
+    "stopY": 550,
+    "x": 356,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 381,
+    "x": -26,
+    "y": 381
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 412,
+    "x": 426,
+    "y": 412
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 191,
+    "stopY": 40,
+    "x": 191,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 336,
+    "stopY": 550,
+    "x": 336,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 211,
+    "x": -26,
+    "y": 211
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 327,
+    "x": 426,
+    "y": 327
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 319,
+    "x": -26,
+    "y": 319
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 336,
+    "stopY": 40,
+    "x": 336,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 86,
+    "x": 426,
+    "y": 86
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 207,
+    "x": -26,
+    "y": 207
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 360,
+    "stopY": 40,
+    "x": 360,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 332,
+    "x": 426,
+    "y": 332
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 201,
+    "x": -26,
+    "y": 201
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 254,
+    "x": 426,
+    "y": 254
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 235,
+    "stopY": 40,
+    "x": 235,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 237,
+    "x": -26,
+    "y": 237
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 239,
+    "x": 426,
+    "y": 239
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 4,
+    "stopY": 40,
+    "x": 4,
+    "y": 40
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -109
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -37.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    14
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    51.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    110
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    159.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    236.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    305.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    323
+   ],
+   [
+    "delay",
+    450
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -7
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    39
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    97.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    131
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    179.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    221.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    269
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    332.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    378.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    402.5
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    23
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    70
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    136
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    191
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    238
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    289
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    344
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    378.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    416.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    468.5
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -20
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    52
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    276
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -17
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    148
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    160
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    108
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    242
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    333
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    72
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    356
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    191
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    336
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    336
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    360
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    235
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    4
+   ]
+  ],
+  "tickMs": 650,
+  "wells": 0
+ },
+ "10:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    91,
+    100,
+    34
+   ],
+   [
+    "explodeFx",
+    205,
+    455,
+    34
+   ],
+   [
+    "explodeFx",
+    206,
+    576,
+    34
+   ],
+   [
+    "explodeFx",
+    236,
+    115,
+    34
+   ],
+   [
+    "explodeFx",
+    258,
+    571,
+    34
+   ],
+   [
+    "damagePlayer",
+    19
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    145,
+    373,
+    34
+   ],
+   [
+    "explodeFx",
+    158,
+    217,
+    34
+   ],
+   [
+    "explodeFx",
+    261,
+    632,
+    34
+   ],
+   [
+    "explodeFx",
+    345,
+    49,
+    34
+   ],
+   [
+    "explodeFx",
+    371,
+    391,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    43,
+    340,
+    34
+   ],
+   [
+    "explodeFx",
+    206,
+    603,
+    34
+   ],
+   [
+    "explodeFx",
+    214,
+    57,
+    34
+   ],
+   [
+    "explodeFx",
+    263,
+    96,
+    34
+   ],
+   [
+    "explodeFx",
+    299,
+    199,
+    34
+   ],
+   [
+    "damagePlayer",
+    19
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    19,
+    194,
+    34
+   ],
+   [
+    "explodeFx",
+    27,
+    117,
+    34
+   ],
+   [
+    "explodeFx",
+    132,
+    625,
+    34
+   ],
+   [
+    "explodeFx",
+    251,
+    395,
+    34
+   ],
+   [
+    "explodeFx",
+    291,
+    478,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    13,
+    620,
+    34
+   ],
+   [
+    "explodeFx",
+    210,
+    136,
+    34
+   ],
+   [
+    "explodeFx",
+    264,
+    622,
+    34
+   ],
+   [
+    "explodeFx",
+    346,
+    624,
+    34
+   ],
+   [
+    "explodeFx",
+    433,
+    255,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    -32,
+    564,
+    34
+   ],
+   [
+    "explodeFx",
+    -15,
+    586,
+    34
+   ],
+   [
+    "explodeFx",
+    75,
+    47,
+    34
+   ],
+   [
+    "explodeFx",
+    215,
+    264,
+    34
+   ],
+   [
+    "explodeFx",
+    239,
+    609,
+    34
+   ],
+   [
+    "damagePlayer",
+    19
+   ]
+  ],
+  "tickMs": 1700,
+  "wells": 0
+ },
+ "10:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 90.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 103.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 116.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 129.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 142.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 155.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 168.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 181.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 194.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 207.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 220.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 233.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 246.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 259.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 272.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 285.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 298.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 311.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 324.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 337.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 350.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 363.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 376.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 389.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 402.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 415.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 428.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 441.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 454.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -26.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -13.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -0.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 12.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 25.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 38.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 51.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 64.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 77.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 90.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 103.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 116.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 129.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 142.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 155.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 168.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 181.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 194.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 207.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 220.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 233.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 246.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 259.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 272.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 285.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 298.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 311.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 324.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 337.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 350.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 363.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 376.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 389.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 402.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 415.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 428.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 441.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 454.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -48.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -35.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -22.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -9.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 3.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 16.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 29.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 42.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 55.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 68.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 81.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 94.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 107.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 120.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 133.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 146.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 159.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 172.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 185.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 198.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 211.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 224.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 237.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 250.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 263.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 276.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 289.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 302.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 315.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 328.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 341.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 354.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 367.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 380.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 393.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 406.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 419.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 432.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 445.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 458.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 103.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 116.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 129.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 142.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 155.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 168.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 181.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 194.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 207.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 220.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 233.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 246.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 259.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 272.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 285.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 298.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 311.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 324.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 337.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 350.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 363.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 376.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 389.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 402.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 415.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 428.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 441.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 454.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -49.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -36.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -23.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -10.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 2.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 15.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 28.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 41.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 54.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 67.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 80.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 93.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 106.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 119.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 132.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 145.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 158.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 171.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 184.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 197.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 210.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 223.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 236.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 249.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 262.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 275.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 288.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 301.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 314.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 327.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 340.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 353.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 366.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 379.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 392.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 405.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 418.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 431.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 444.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 457.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 23.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 36.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 49.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 62.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 75.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 88.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 101.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 114.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 127.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 140.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 153.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 166.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 179.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 192.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 205.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 218.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 231.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 244.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 257.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 270.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 283.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 296.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 309.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 322.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 335.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 348.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 361.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 374.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 387.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 400.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 413.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 426.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 439.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 452.5,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    90.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    103.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    116.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    129.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    142.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    155.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    168.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    181.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    194.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    207.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    220.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    233.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    246.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    259.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    272.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    285.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    298.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    311.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    324.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    337.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    350.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    363.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    376.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    389.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    402.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    415.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    428.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    441.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    454.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -26.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -13.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -0.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    12.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    25.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    38.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    51.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    64.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    77.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    90.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    103.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    116.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    129.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    142.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    155.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    168.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    181.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    194.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    207.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    220.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    233.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    246.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    259.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    272.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    285.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    298.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    311.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    324.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    337.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    350.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    363.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    376.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    389.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    402.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    415.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    428.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    441.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    454.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -48.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -35.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -22.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -9.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    3.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    16.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    29.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    42.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    55.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    68.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    81.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    94.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    107.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    120.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    133.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    146.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    159.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    172.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    185.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    198.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    211.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    224.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    237.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    250.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    263.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    276.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    289.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    302.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    315.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    328.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    341.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    354.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    367.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    380.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    393.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    406.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    419.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    432.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    445.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    458.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    103.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    116.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    129.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    142.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    155.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    168.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    181.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    194.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    207.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    220.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    233.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    246.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    259.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    272.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    285.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    298.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    311.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    324.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    337.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    350.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    363.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    376.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    389.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    402.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    415.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    428.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    441.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    454.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -49.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -36.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -23.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -10.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    2.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    15.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    28.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    41.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    54.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    67.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    80.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    93.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    106.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    119.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    132.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    145.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    158.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    171.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    184.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    197.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    210.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    223.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    236.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    249.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    262.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    275.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    288.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    301.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    314.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    327.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    340.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    353.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    366.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    379.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    392.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    405.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    418.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    431.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    444.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    457.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    23.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    36.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    49.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    62.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    75.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    88.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    101.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    114.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    127.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    140.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    153.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    166.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    179.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    192.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    205.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    218.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    231.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    244.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    257.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    270.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    283.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    296.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    309.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    322.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    335.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    348.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    361.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    374.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    387.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    400.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    413.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    426.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    439.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    452.5
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ]
+  ],
+  "tickMs": 300,
+  "wells": 0
+ },
+ "1:bigbh": {
+  "dur": [
+   36103,
+   42785
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": true,
+     "core": 46,
+     "life": 1000000000,
+     "r": 560,
+     "str": 1500,
+     "x": 200,
+     "y": 287.6
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 1
+ },
+ "1:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "strikeAt",
+    158,
+    510,
+    58,
+    9
+   ],
+   [
+    "strikeAt",
+    85,
+    564,
+    58,
+    9
+   ],
+   [
+    "strikeAt",
+    342,
+    511,
+    58,
+    9
+   ],
+   [
+    "strikeAt",
+    155,
+    636,
+    58,
+    9
+   ],
+   [
+    "strikeAt",
+    204,
+    627,
+    58,
+    9
+   ],
+   [
+    "strikeAt",
+    212,
+    545,
+    58,
+    9
+   ]
+  ],
+  "tickMs": 602,
+  "wells": 0
+ },
+ "1:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBonusBoss"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:corridor": {
+  "corr": {
+   "acc": 0,
+   "amp": 88.4,
+   "clock": 0,
+   "mid": 200,
+   "on": true,
+   "ph": 0.11266,
+   "speed": 170,
+   "top": -80,
+   "w": 286.2
+  },
+  "dur": [
+   41103,
+   47785
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "endCorridor"
+   ]
+  ],
+  "tickMs": 200,
+  "wells": 0
+ },
+ "1:crystal": {
+  "dur": [
+   24577,
+   29589
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnGemAt",
+    -51,
+    -50,
+    3,
+    "gemL",
+    124
+   ],
+   [
+    "spawnGemAt",
+    85,
+    -50,
+    3,
+    "gemM",
+    121
+   ],
+   [
+    "spawnGemAt",
+    349,
+    -50,
+    3,
+    "gemM",
+    125
+   ],
+   [
+    "spawnGemAt",
+    -43,
+    -50,
+    3,
+    "gemM",
+    104
+   ],
+   [
+    "spawnGemAt",
+    235,
+    -50,
+    3,
+    "gemM",
+    91
+   ],
+   [
+    "spawnGemAt",
+    177,
+    -50,
+    3,
+    "gemM",
+    99
+   ]
+  ],
+  "tickMs": 360,
+  "wells": 0
+ },
+ "1:eclipse": {
+  "dur": [
+   20357,
+   24032
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startEclipse"
+   ],
+   [
+    "endEclipse"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 66.666667,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 333.333333,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    66.666667
+   ],
+   [
+    "delay",
+    300
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    200
+   ],
+   [
+    "delay",
+    600
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    333.333333
+   ],
+   [
+    "delay",
+    1200
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "emp": 5.5,
+  "fakes": [],
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:flip": {
+  "dur": [
+   32206,
+   45569
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "flipVortex",
+    true
+   ],
+   [
+    "delay",
+    3500
+   ],
+   [
+    "flipVortex",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:frenzy": {
+  "dur": [
+   39155,
+   49177
+  ],
+  "fakes": [],
+  "frenzy": 1000,
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    1040
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    2080
+   ],
+   [
+    "spawnGolden",
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "endIce"
+   ]
+  ],
+  "tickMs": 80,
+  "wells": 0
+ },
+ "1:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 11.428571,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 74.285714,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 137.142857,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 262.857143,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 325.714286,
+    "y": 0
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "x": 388.571429,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    11.428571
+   ],
+   [
+    "delay",
+    252
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    74.285714
+   ],
+   [
+    "delay",
+    504
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    137.142857
+   ],
+   [
+    "delay",
+    756
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    200
+   ],
+   [
+    "delay",
+    1008
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    262.857143
+   ],
+   [
+    "delay",
+    1260
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    325.714286
+   ],
+   [
+    "delay",
+    1512
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    388.571429
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:meteors": {
+  "dur": [
+   39577,
+   44589
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    378,
+    -70,
+    2,
+    32.223391,
+    196.373759,
+    0
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    351,
+    -70,
+    2,
+    39.935319,
+    256.914714,
+    0
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    237,
+    -70,
+    2,
+    -47.840866,
+    248.435608,
+    0
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    -43,
+    -70,
+    2,
+    44.902606,
+    255.077941,
+    0
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    124,
+    -70,
+    2,
+    -3.780441,
+    254.971975,
+    0
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    64,
+    -70,
+    2,
+    -10.270119,
+    215.755706,
+    0
+   ]
+  ],
+  "style": 0,
+  "tickMs": 700,
+  "wells": 0
+ },
+ "1:mines": {
+  "dur": [
+   26103,
+   32785
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "deployMine",
+    -22,
+    73
+   ],
+   [
+    "deployMine",
+    25,
+    189
+   ],
+   [
+    "deployMine",
+    98,
+    195
+   ],
+   [
+    "deployMine",
+    334,
+    175
+   ],
+   [
+    "deployMine",
+    331,
+    134
+   ],
+   [
+    "deployMine",
+    85,
+    191
+   ]
+  ],
+  "tickMs": 1000,
+  "wells": 0
+ },
+ "1:minibh": {
+  "dur": [
+   36103,
+   42785
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 130,
+     "y": 360
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 112,
+     "y": 395
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": 3200,
+  "wells": 2
+ },
+ "1:nebula": {
+  "dur": [
+   44155,
+   54177
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startNebula"
+   ],
+   [
+    "endNebula",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "plasma0": {
+   "age": 0,
+   "ang": 0,
+   "shotCd": 600,
+   "vx": 66.666667,
+   "vy": 20.8
+  },
+  "plasma1": {
+   "age": 1.32,
+   "ang": 0.74,
+   "shotCd": 355,
+   "vx": 66.666667,
+   "vy": 20.8
+  },
+  "rec": [
+   [
+    "killPlasma"
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    0.37,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    0.998319,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    1.626637,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    2.254956,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    2.883274,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    3.511593,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    4.139911,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    4.76823,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    5.396548,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -108.2,
+    144.6416,
+    6.024867,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    0.74,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    1.368319,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    1.996637,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    2.624956,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    3.253274,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    3.881593,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    4.509911,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    5.13823,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    5.766548,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    -73,
+    155.624,
+    6.394867,
+    134,
+    {
+     "damage": 5,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "damagePlayer",
+    13
+   ],
+   [
+    "killPlasma"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "fakes": [
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2174,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -50.2,
+    "x": 62.908571,
+    "y": -50.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1969,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -50.2,
+    "x": 188.622857,
+    "y": -50.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2978,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -50.2,
+    "x": 251.48,
+    "y": -50.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2191,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -50.2,
+    "x": 314.337143,
+    "y": -50.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 3022,
+    "stopY": 1000000,
+    "wallX": 325.714286,
+    "wallY": -50.2,
+    "x": 377.194286,
+    "y": -50.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2907,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -50.2,
+    "x": 440.051429,
+    "y": -50.2
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    325.714286
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "1:spiders": {
+  "dur": [
+   34155,
+   44177
+  ],
+  "fakes": [
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 54,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 90,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 134,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 188,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 222,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 92,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 147,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 253,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 298,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 178,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 212,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 266,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 314,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 372,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 183,
+    "x": 426,
+    "y": 183
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 0,
+    "stopY": 40,
+    "x": 0,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 359,
+    "x": -26,
+    "y": 359
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 321,
+    "x": 426,
+    "y": 321
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 98,
+    "stopY": 40,
+    "x": 98,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 376,
+    "x": -26,
+    "y": 376
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 366,
+    "stopY": 550,
+    "x": 366,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 87,
+    "x": 426,
+    "y": 87
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 272,
+    "stopY": 40,
+    "x": 272,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 379,
+    "stopY": 40,
+    "x": 379,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 349,
+    "x": 426,
+    "y": 349
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 89,
+    "x": -26,
+    "y": 89
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 141,
+    "x": -26,
+    "y": 141
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 80,
+    "stopY": 550,
+    "x": 80,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 218,
+    "x": 426,
+    "y": 218
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    54
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    90
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    134
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    188
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    222
+   ],
+   [
+    "delay",
+    450
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    92
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    147
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    253
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    298
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    178
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    212
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    266
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    314
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    372
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    98
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    366
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    272
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    379
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    80
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ]
+  ],
+  "tickMs": 650,
+  "wells": 0
+ },
+ "1:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    22,
+    545,
+    34
+   ],
+   [
+    "explodeFx",
+    96,
+    564,
+    34
+   ],
+   [
+    "explodeFx",
+    122,
+    523,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    -25,
+    53,
+    34
+   ],
+   [
+    "explodeFx",
+    265,
+    580,
+    34
+   ],
+   [
+    "explodeFx",
+    313,
+    209,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    116,
+    240,
+    34
+   ],
+   [
+    "explodeFx",
+    175,
+    531,
+    34
+   ],
+   [
+    "explodeFx",
+    418,
+    458,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    73,
+    579,
+    34
+   ],
+   [
+    "explodeFx",
+    186,
+    371,
+    34
+   ],
+   [
+    "explodeFx",
+    213,
+    587,
+    34
+   ],
+   [
+    "damagePlayer",
+    10
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    63,
+    99,
+    34
+   ],
+   [
+    "explodeFx",
+    225,
+    340,
+    34
+   ],
+   [
+    "explodeFx",
+    266,
+    512,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    -26,
+    144,
+    34
+   ],
+   [
+    "explodeFx",
+    154,
+    562,
+    34
+   ],
+   [
+    "explodeFx",
+    196,
+    248,
+    34
+   ]
+  ],
+  "tickMs": 2420,
+  "wells": 0
+ },
+ "1:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -45,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -19,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 7,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 33,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 59,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 85,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 111,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 137,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 163,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -49,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -23,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 3,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 29,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 55,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 81,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 107,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 133,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 159,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 185,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 211,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 237,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 263,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -56,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -30,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 22,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 48,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 74,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 100,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 126,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 152,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 178,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 204,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 181,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 207,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 233,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 259,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 285,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 311,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 337,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 363,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 389,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 415,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 441,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -44,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -18,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 34,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 86,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 112,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 138,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 164,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 190,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 216,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 242,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 268,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 193,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 219,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 245,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 271,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 297,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 323,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 349,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 375,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 401,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 427,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 453,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -45
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -19
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    7
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    33
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    59
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    85
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    111
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    137
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    163
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -49
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -23
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    3
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    29
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    55
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    81
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    107
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    133
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    159
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    185
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    211
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    237
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    263
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -56
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -30
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    22
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    48
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    74
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    100
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    126
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    152
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    178
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    204
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    181
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    207
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    233
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    259
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    285
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    311
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    337
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    363
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    389
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    415
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    441
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -44
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -18
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    34
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    86
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    112
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    138
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    164
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    190
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    216
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    242
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    268
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    193
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    219
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    245
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    271
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    297
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    323
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    349
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    375
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    401
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    427
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    453
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ]
+  ],
+  "tickMs": 408,
+  "wells": 0
+ },
+ "5:bigbh": {
+  "dur": [
+   32031,
+   37138
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": true,
+     "core": 46,
+     "life": 1000000000,
+     "r": 560,
+     "str": 1500,
+     "x": 200,
+     "y": 287.6
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 1
+ },
+ "5:bombard": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "strikeAt",
+    337,
+    92,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    148,
+    108,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    212,
+    648,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    353,
+    567,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    214,
+    660,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    440,
+    78,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    415,
+    100,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    -40,
+    631,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    239,
+    477,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    253,
+    195,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    202,
+    627,
+    70,
+    13
+   ],
+   [
+    "strikeAt",
+    221,
+    250,
+    70,
+    13
+   ]
+  ],
+  "tickMs": 530,
+  "wells": 0
+ },
+ "5:bossbonus": {
+  "dur": [
+   1500,
+   1500
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBonusBoss"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:corridor": {
+  "corr": {
+   "acc": 0,
+   "amp": 88.4,
+   "clock": 0,
+   "mid": 200,
+   "on": true,
+   "ph": 5.256304,
+   "speed": 170,
+   "top": -80,
+   "w": 266.2
+  },
+  "dur": [
+   37031,
+   42138
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "endCorridor"
+   ]
+  ],
+  "tickMs": 200,
+  "wells": 0
+ },
+ "5:crystal": {
+  "dur": [
+   21523,
+   25353
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnGemAt",
+    376,
+    -50,
+    3,
+    "gemL",
+    106
+   ],
+   [
+    "spawnGemAt",
+    -1,
+    -50,
+    6,
+    "gemM",
+    128
+   ],
+   [
+    "spawnGemAt",
+    353,
+    -50,
+    3,
+    "gemM",
+    113
+   ],
+   [
+    "spawnGemAt",
+    460,
+    -50,
+    3,
+    "gemL",
+    124
+   ],
+   [
+    "spawnGemAt",
+    415,
+    -50,
+    6,
+    "gemL",
+    130
+   ],
+   [
+    "spawnGemAt",
+    255,
+    -50,
+    3,
+    "gemM",
+    114
+   ],
+   [
+    "spawnGemAt",
+    74,
+    -50,
+    3,
+    "gemM",
+    123
+   ],
+   [
+    "spawnGemAt",
+    221,
+    -50,
+    3,
+    "gemL",
+    119
+   ],
+   [
+    "spawnGemAt",
+    31,
+    -50,
+    6,
+    "gemM",
+    112
+   ],
+   [
+    "spawnGemAt",
+    282,
+    -50,
+    3,
+    "gemL",
+    110
+   ],
+   [
+    "spawnGemAt",
+    159,
+    -50,
+    3,
+    "gemM",
+    93
+   ],
+   [
+    "spawnGemAt",
+    392,
+    -50,
+    6,
+    "gemM",
+    97
+   ]
+  ],
+  "tickMs": 360,
+  "wells": 0
+ },
+ "5:eclipse": {
+  "dur": [
+   18117,
+   20926
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startEclipse"
+   ],
+   [
+    "endEclipse"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:elite": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 40,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 120,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 280,
+    "y": 0
+   },
+   {
+    "_t": "elite",
+    "active": true,
+    "x": 360,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   },
+   {
+    "_t": "healer",
+    "active": true,
+    "x": 0,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    40
+   ],
+   [
+    "delay",
+    300
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    120
+   ],
+   [
+    "delay",
+    600
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    200
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    280
+   ],
+   [
+    "delay",
+    1200
+   ],
+   [
+    "spawnOneEnemy",
+    "elite",
+    360
+   ],
+   [
+    "delay",
+    1200
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ],
+   [
+    "delay",
+    1500
+   ],
+   [
+    "spawnOneEnemy",
+    "healer",
+    null
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:emp": {
+  "dur": [
+   7500,
+   7500
+  ],
+  "emp": 5.5,
+  "fakes": [],
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:flip": {
+  "dur": [
+   24063,
+   34276
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "flipVortex",
+    true
+   ],
+   [
+    "delay",
+    3500
+   ],
+   [
+    "flipVortex",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:frenzy": {
+  "dur": [
+   33047,
+   40707
+  ],
+  "fakes": [],
+  "frenzy": 1000,
+  "rec": [],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:goldrush": {
+  "dur": [
+   5000,
+   5000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    800
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    1600
+   ],
+   [
+    "spawnGolden",
+    true
+   ],
+   [
+    "delay",
+    2400
+   ],
+   [
+    "spawnGolden",
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:ice": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "tickIce"
+   ],
+   [
+    "endIce"
+   ]
+  ],
+  "tickMs": 80,
+  "wells": 0
+ },
+ "5:kamikaze": {
+  "dur": [
+   4000,
+   4000
+  ],
+  "fakes": [
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 316,
+    "kT": 3300,
+    "x": 316,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 156,
+    "kT": 3300,
+    "x": 156,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 9,
+    "kT": 3300,
+    "x": 9,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 451
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 367,
+    "kT": 3300,
+    "x": 367,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 302
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 404,
+    "kT": 3300,
+    "x": 404,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 347,
+    "kT": 3300,
+    "x": 347,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 24,
+    "kT": 3300,
+    "x": 24,
+    "y": 540
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 414,
+    "kT": 3300,
+    "x": 414,
+    "y": 10
+   },
+   {
+    "_t": "kamikaze",
+    "active": true,
+    "baseX": 390,
+    "kT": 3300,
+    "x": 390,
+    "y": 302
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    316
+   ],
+   [
+    "delay",
+    220
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    156
+   ],
+   [
+    "delay",
+    440
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    9
+   ],
+   [
+    "delay",
+    660
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    880
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    367
+   ],
+   [
+    "delay",
+    1100
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ],
+   [
+    "delay",
+    1320
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    404
+   ],
+   [
+    "delay",
+    1540
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    347
+   ],
+   [
+    "delay",
+    1760
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    24
+   ],
+   [
+    "delay",
+    1980
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    414
+   ],
+   [
+    "delay",
+    2200
+   ],
+   [
+    "spawnOneEnemy",
+    "kamikaze",
+    390
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:meteors": {
+  "dur": [
+   36523,
+   40353
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    148,
+    -70,
+    2,
+    -35.967373,
+    193.688792,
+    2
+   ],
+   [
+    "spawnMeteor",
+    234,
+    -110,
+    2,
+    51.992151,
+    187.940991,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    397,
+    -70,
+    2,
+    -75.117474,
+    242.638342,
+    2
+   ],
+   [
+    "spawnMeteor",
+    460,
+    -110,
+    2,
+    -2.781067,
+    235.983613,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    373,
+    -70,
+    2,
+    -62.007986,
+    184.878365,
+    2
+   ],
+   [
+    "spawnMeteor",
+    -59,
+    -110,
+    2,
+    -56.521044,
+    189.761354,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    239,
+    -70,
+    2,
+    -79.470599,
+    225.400585,
+    2
+   ],
+   [
+    "spawnMeteor",
+    74,
+    -110,
+    2,
+    -37.729205,
+    234.99044,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    360,
+    -70,
+    2,
+    11.617389,
+    230.707686,
+    2
+   ],
+   [
+    "spawnMeteor",
+    11,
+    -110,
+    2,
+    -6.116859,
+    217.914167,
+    2
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnBgMeteor"
+   ],
+   [
+    "spawnMeteor",
+    -50,
+    -70,
+    2,
+    -32.645973,
+    201.370903,
+    2
+   ],
+   [
+    "spawnMeteor",
+    282,
+    -110,
+    2,
+    -34.665071,
+    231.418091,
+    2
+   ]
+  ],
+  "style": 2,
+  "tickMs": 628,
+  "wells": 0
+ },
+ "5:mines": {
+  "dur": [
+   22031,
+   27138
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "deployMine",
+    355,
+    173
+   ],
+   [
+    "deployMine",
+    10,
+    100
+   ],
+   [
+    "deployMine",
+    22,
+    33
+   ],
+   [
+    "deployMine",
+    230,
+    206
+   ],
+   [
+    "deployMine",
+    336,
+    196
+   ],
+   [
+    "deployMine",
+    208,
+    135
+   ],
+   [
+    "deployMine",
+    430,
+    213
+   ],
+   [
+    "deployMine",
+    -1,
+    187
+   ],
+   [
+    "deployMine",
+    391,
+    40
+   ],
+   [
+    "deployMine",
+    -29,
+    217
+   ],
+   [
+    "deployMine",
+    249,
+    135
+   ],
+   [
+    "deployMine",
+    305,
+    140
+   ]
+  ],
+  "tickMs": 1000,
+  "wells": 0
+ },
+ "5:minibh": {
+  "dur": [
+   32031,
+   37138
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 305,
+     "y": 111
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 84,
+     "y": 351
+    }
+   ],
+   [
+    "addWell",
+    {
+     "big": false,
+     "core": 20,
+     "life": 12000,
+     "r": 210,
+     "str": 1000,
+     "x": 329,
+     "y": 475
+    }
+   ],
+   [
+    "clearWells"
+   ]
+  ],
+  "tickMs": 3200,
+  "wells": 3
+ },
+ "5:nebula": {
+  "dur": [
+   38047,
+   45707
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "startNebula"
+   ],
+   [
+    "endNebula",
+    false
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:plasma": {
+  "dur": [
+   11000,
+   11000
+  ],
+  "fakes": [],
+  "plasma0": {
+   "age": 0,
+   "ang": 0,
+   "shotCd": 600,
+   "vx": -66.666667,
+   "vy": 20.8
+  },
+  "plasma1": {
+   "age": 1.32,
+   "ang": 0.74,
+   "shotCd": 355,
+   "vx": -66.666667,
+   "vy": 20.8
+  },
+  "rec": [
+   [
+    "killPlasma"
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    0.37,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    0.893599,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    1.417198,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    1.940796,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    2.464395,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    2.987994,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    3.511593,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    4.035191,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    4.55879,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    5.082389,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    5.605988,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    508.2,
+    144.6416,
+    6.129587,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    0.74,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    1.263599,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    1.787198,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    2.310796,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    2.834395,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    3.357994,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    3.881593,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    4.405191,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    4.92879,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    5.452389,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    5.975988,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "bossShot",
+    473,
+    155.624,
+    6.499587,
+    150,
+    {
+     "damage": 7,
+     "scale": 0.2,
+     "tex": "bossBullet2",
+     "tint": 16736511
+    }
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "damagePlayer",
+    17
+   ],
+   [
+    "killPlasma"
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:shieldwall": {
+  "dur": [
+   3000,
+   3000
+  ],
+  "fakes": [
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2867,
+    "stopY": 1000000,
+    "wallX": 11.428571,
+    "wallY": -26.2,
+    "x": 57.902,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1923,
+    "stopY": 1000000,
+    "wallX": 74.285714,
+    "wallY": -26.2,
+    "x": 120.759143,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2360,
+    "stopY": 1000000,
+    "wallX": 137.142857,
+    "wallY": -26.2,
+    "x": 183.616286,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1960,
+    "stopY": 1000000,
+    "wallX": 200,
+    "wallY": -26.2,
+    "x": 246.473429,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 1893,
+    "stopY": 1000000,
+    "wallX": 262.857143,
+    "wallY": -26.2,
+    "x": 309.330571,
+    "y": -26.2
+   },
+   {
+    "_t": "tank",
+    "active": true,
+    "fireCd": 2591,
+    "stopY": 1000000,
+    "wallX": 388.571429,
+    "wallY": -26.2,
+    "x": 435.044857,
+    "y": -26.2
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "tank",
+    11.428571
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    74.285714
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    137.142857
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    262.857143
+   ],
+   [
+    "spawnOneEnemy",
+    "tank",
+    388.571429
+   ],
+   [
+    "addEvent",
+    33,
+    true
+   ]
+  ],
+  "tickMs": null,
+  "wells": 0
+ },
+ "5:spiders": {
+  "dur": [
+   28047,
+   35707
+  ],
+  "fakes": [
+   {
+    "_t": "spider",
+    "active": true,
+    "x": -28,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 30,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 93,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 134,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 175,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 216,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 281,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 35,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 94,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 146,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 200,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 249,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 312,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 368,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 143,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 158,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 211,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 266,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 306,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 378,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "x": 416,
+    "y": 0
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 94,
+    "stopY": 40,
+    "x": 94,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 264,
+    "x": -26,
+    "y": 264
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 427,
+    "x": 426,
+    "y": 427
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 218,
+    "stopY": 40,
+    "x": 218,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 155,
+    "x": 426,
+    "y": 155
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -12,
+    "stopY": 550,
+    "x": -12,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 294,
+    "stopY": 40,
+    "x": 294,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 314,
+    "x": -26,
+    "y": 314
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 363,
+    "x": 426,
+    "y": 363
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 261,
+    "x": -26,
+    "y": 261
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 326,
+    "stopY": 550,
+    "x": 326,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 168,
+    "stopY": 40,
+    "x": 168,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 116,
+    "x": 426,
+    "y": 116
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 454,
+    "x": -26,
+    "y": 454
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 331,
+    "x": 426,
+    "y": 331
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 335,
+    "x": -26,
+    "y": 335
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 251,
+    "stopY": 40,
+    "x": 251,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 373,
+    "x": 426,
+    "y": 373
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 320,
+    "stopY": 550,
+    "x": 320,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 202,
+    "stopY": 40,
+    "x": 202,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 300,
+    "x": -26,
+    "y": 300
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 271,
+    "x": 426,
+    "y": 271
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 305,
+    "stopY": 550,
+    "x": 305,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 212,
+    "x": 426,
+    "y": 212
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": -26,
+    "stopY": 215,
+    "x": -26,
+    "y": 215
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 20,
+    "stopY": 550,
+    "x": 20,
+    "y": 550
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 183,
+    "stopY": 40,
+    "x": 183,
+    "y": 40
+   },
+   {
+    "_t": "spider",
+    "active": true,
+    "baseX": 426,
+    "stopY": 196,
+    "x": 426,
+    "y": 196
+   }
+  ],
+  "rec": [
+   [
+    "delay",
+    0
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -28
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    30
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    93
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    134
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    175
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    216
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    281
+   ],
+   [
+    "delay",
+    450
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    35
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    94
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    146
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    200
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    249
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    312
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    368
+   ],
+   [
+    "delay",
+    900
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    143
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    158
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    211
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    266
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    306
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    378
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    416
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    94
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    218
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -12
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    294
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    326
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    168
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    251
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    320
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    202
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    305
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    -26
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    20
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    183
+   ],
+   [
+    "spawnOneEnemy",
+    "spider",
+    426
+   ]
+  ],
+  "tickMs": 650,
+  "wells": 0
+ },
+ "5:statik": {
+  "dur": [
+   12000,
+   12000
+  ],
+  "fakes": [],
+  "rec": [
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    6,
+    280,
+    34
+   ],
+   [
+    "explodeFx",
+    18,
+    80,
+    34
+   ],
+   [
+    "explodeFx",
+    231,
+    598,
+    34
+   ],
+   [
+    "explodeFx",
+    254,
+    602,
+    34
+   ],
+   [
+    "damagePlayer",
+    14
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    -16,
+    475,
+    34
+   ],
+   [
+    "explodeFx",
+    205,
+    307,
+    34
+   ],
+   [
+    "explodeFx",
+    213,
+    561,
+    34
+   ],
+   [
+    "explodeFx",
+    312,
+    170,
+    34
+   ],
+   [
+    "damagePlayer",
+    14
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    144,
+    373,
+    34
+   ],
+   [
+    "explodeFx",
+    145,
+    542,
+    34
+   ],
+   [
+    "explodeFx",
+    367,
+    312,
+    34
+   ],
+   [
+    "explodeFx",
+    406,
+    223,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    107,
+    400,
+    34
+   ],
+   [
+    "explodeFx",
+    173,
+    513,
+    34
+   ],
+   [
+    "explodeFx",
+    386,
+    176,
+    34
+   ],
+   [
+    "explodeFx",
+    403,
+    214,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    26,
+    329,
+    34
+   ],
+   [
+    "explodeFx",
+    268,
+    586,
+    34
+   ],
+   [
+    "explodeFx",
+    287,
+    416,
+    34
+   ],
+   [
+    "explodeFx",
+    349,
+    399,
+    34
+   ],
+   [
+    "delay",
+    1000
+   ],
+   [
+    "explodeFx",
+    20,
+    438,
+    34
+   ],
+   [
+    "explodeFx",
+    191,
+    359,
+    34
+   ],
+   [
+    "explodeFx",
+    204,
+    614,
+    34
+   ],
+   [
+    "explodeFx",
+    416,
+    362,
+    34
+   ],
+   [
+    "damagePlayer",
+    14
+   ]
+  ],
+  "tickMs": 2100,
+  "wells": 0
+ },
+ "5:swarm": {
+  "dur": [
+   14000,
+   14000
+  ],
+  "fakes": [
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 85.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 106.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 127,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 147.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 168.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 189.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 210.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 231,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 251.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 272.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 293.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 314.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 335,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 355.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 376.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 397.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 418.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 439,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 459.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 55.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 76.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 97,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 117.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 138.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 159.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 180.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 201,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 221.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 242.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 263.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 284.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 305,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 325.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 346.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 367.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 388.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 409,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 429.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 450.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 460,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -48.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -27.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -6.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 14.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 35,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 55.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 76.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 97.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 118.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 139,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 159.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 180.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 201.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 222.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 243,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 263.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 284.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -48,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -27.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -6.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 14.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 35.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 56,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 76.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 97.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 118.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 139.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 160,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 180.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 201.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 222.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 243.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 264,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 284.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 305.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 326.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 347.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 368,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 388.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 409.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -59,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -38.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -17.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 3.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 24.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 45,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 65.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 86.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 107.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 128.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 149,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 169.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 190.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 211.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 232.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 253,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 273.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 294.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -60,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -57.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -36.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": -15.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 5.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 26,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 46.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 67.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 88.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 109.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 130,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 150.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 171.6,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 192.4,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 213.2,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 234,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 254.8,
+    "y": 0
+   },
+   {
+    "_t": "swarmer",
+    "active": true,
+    "x": 275.6,
+    "y": 0
+   }
+  ],
+  "rec": [
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    85.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    106.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    127
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    147.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    168.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    189.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    210.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    231
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    251.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    272.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    293.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    314.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    335
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    355.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    376.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    397.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    418.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    439
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    459.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    55.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    76.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    97
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    117.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    138.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    159.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    180.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    201
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    221.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    242.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    263.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    284.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    305
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    325.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    346.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    367.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    388.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    409
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    429.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    450.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    460
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -48.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -27.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -6.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    14.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    35
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    55.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    76.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    97.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    118.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    139
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    159.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    180.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    201.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    222.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    243
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    263.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    284.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -48
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -27.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -6.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    14.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    35.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    56
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    76.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    97.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    118.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    139.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    160
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    180.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    201.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    222.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    243.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    264
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    284.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    305.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    326.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    347.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    368
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    388.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    409.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -59
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -38.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -17.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    3.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    24.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    45
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    65.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    86.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    107.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    128.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    149
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    169.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    190.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    211.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    232.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    253
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    273.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    294.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -60
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -57.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -36.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    -15.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    5.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    26
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    46.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    67.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    88.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    109.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    130
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    150.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    171.6
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    192.4
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    213.2
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    234
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    254.8
+   ],
+   [
+    "spawnOneEnemy",
+    "swarmer",
+    275.6
+   ]
+  ],
+  "tickMs": 360,
+  "wells": 0
+ }
+}
