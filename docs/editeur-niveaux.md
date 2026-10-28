@@ -81,3 +81,22 @@ Registre : `src/data/event-params.js` (`EVENT_PARAMS[kind]` = `{ key, label, min
 - `tools/level_files.py` refuse événement ou clé inconnus, valeur hors bornes ou non entière quand `int:true`. L'éditeur reçoit le schéma dans `eventCatalog[i].params` (valeur par défaut à l'alerte 1, `defByAlert` si elle varie).
 - Ajouter un paramètre : une ligne dans `event-params.js`, remplacer le littéral par `evParam(sc, 'kind', 'key')` (lire la valeur au démarrage si elle sert à du code différé), ajouter la formule d'origine dans `EXPECTED` de `tools/event_params_node_test.js`.
 - Tests sans navigateur : `node tools/event_params_node_test.js` (durées/cadences et défauts == code d'origine, usage, priorité). `tools/event_params_test.py` (navigateur, instantané des effets observés) existe mais n'est plus lancé systématiquement.
+
+## Réactions de N.O.R.M.A.
+Bloc `norma` optionnel dans le JSON d'une mission (code : `src/data/level-norma.js`, `src/ui/norma.js`). Rien n'est codé par niveau. N.O.R.M.A. ne réagit que là où un texte existe ; sans bloc `norma`, rien ne change (réserves de `agp-lore.js`).
+
+```json
+"norma": {
+  "start": ["…"], "boss": ["…"], "progress": ["25 %", "50 %", "75 %"], "banter": ["…"], "lowhp": ["…"], "win": ["…"], "lose": ["…"],
+  "tickEvery": [40, 55],
+  "tuto": { "move": "…", "shoot": "…" },
+  "messages": [{ "id": "m1", "when": "time", "at": 12, "text": "…", "hold": false }]
+}
+```
+- **Réserves** (`start`, `boss`, `progress`, `banter`, `lowhp`, `win`, `lose`) : 1 à 20 textes ; remplacent celles d'origine pour cette mission. `progress` : une ligne par palier (25, 50, 75 %). `tickEvery` : intervalle en secondes `[min, max]` (5 à 300, défaut 40 à 55) entre avancement et vannes.
+- **`tuto`** : uniquement dans `w1-tuto`, clés `move, shoot, boss, aim, ring, p2, p3, win, lose` ; une clé absente garde le texte de `AGP_LINES.tuto`. Les boîtes `messages` ne sont pas jouées dans le tutoriel.
+- **`messages`** : boîtes ajoutées à la main (50 au plus). `id` unique ; `when` : `levelStart` (2,2 s après le décollage), `time` (`at` = secondes de mission après l'intro, 0 à 3600), `eventStart` / `eventEnd` (`ref` = nature de l'événement, ex. `meteors`), `bossStart` (arrivée du boss de fin), `win` / `lose` (remplace le commentaire du rapport de fin ; pas en cas d'abandon). `hold: true` garde la ligne affichée jusqu'à la suivante. Chaque boîte part une seule fois par partie ; pour un événement qui revient, une boîte par occurrence. Les boîtes horaires passent devant les vannes mais attendent la fin de la précédente. Pas de phase de boss pour l'instant.
+- **Par événement programmé** : `events[i].norma = { "start": "…", "end": "…" }`, propre à cette occurrence (prioritaire sur les boîtes `eventStart` / `eventEnd` de même nature).
+- **Limites** : chaque texte 1 à 140 caractères, sans `<` ni `>`, non vide. Jamais pendant l'intro, les cartes d'amélioration, la pause ou l'écran de fin (garde de `normaTick`) ; une transmission à la fois.
+- **Ton** : froide, polie, sarcastique, jamais bloquante ; courte, lisible d'un coup d'œil en plein combat (voir `docs/brief-univers-agp.md`).
+- Test sans navigateur : `node tools/norma_level_test.js`.

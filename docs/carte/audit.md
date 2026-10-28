@@ -19,10 +19,11 @@ En portée globale, la dernière définition écrase les autres (ou plante pour 
 - Ids demandés au DOM mais inexistants : aucun
 - `asset(...)` hors manifeste : aucun
 
-## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (3)
+## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (4)
 
 Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.html, tools) n'est appelé nulle part. Sauf appel par nom construit dynamiquement ou depuis la console.
 
+- `NORMA_POOLS` (const) — `src/data/level-norma.js`
 - `setShipPart` (fonction) — `src/data/ship-skins.js`
 - `HOME_ORBIT` (const) — `src/home/background.js`
 - `HOME_STAT_LINES` (const) — `src/home/ui.js`
@@ -54,6 +55,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/level_files.py` — Niveaux JSON : lecture, validation et cache JS pour scripts classiques/builds.
 - `tools/level_files_test.py` — Validation et export des missions JSON dans un dossier temporaire.
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
+- `tools/norma_level_test.js` — (script ponctuel, sans description)
 - `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
 - `tools/rd_test.js` — Vérifie le catalogue des technologies et les règles de R&D (plans, prototypes, rangs, spécialisations), sans navigateur : node tools/rd_test.js

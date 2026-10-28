@@ -712,11 +712,23 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `NO_SHIELD_TYPES` | const | `src/core/constants.js` |  |
 | `noise` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `Norma` | const | `src/ui/norma.js` |  |
+| `NORMA_POOLS` | const | `src/data/level-norma.js` |  |
+| `NORMA_TICK_DEFAULT` | const | `src/data/level-norma.js` |  |
+| `NORMA_WHEN` | const | `src/data/level-norma.js` |  |
+| `normaAnchor` | méthode | `src/ui/norma.js` | `GameScene` |
 | `normaBoss` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaEndText` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaLines` | fonction | `src/data/level-norma.js` |  |
 | `normalizeMeta` | fonction | `src/data/meta.js` |  |
 | `normaLow` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaPlan` | fonction | `src/data/level-norma.js` |  |
+| `normaPlanDue` | fonction | `src/data/level-norma.js` |  |
+| `normaPlanTake` | fonction | `src/data/level-norma.js` |  |
 | `normaStart` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaText` | fonction | `src/data/level-norma.js` |  |
 | `normaTick` | méthode | `src/ui/norma.js` | `GameScene` |
+| `normaTickEvery` | fonction | `src/data/level-norma.js` |  |
+| `normaTutoLine` | fonction | `src/data/level-norma.js` |  |
 | `note` | méthode | `src/audio/music.js` | `MusicLoop` |
 | `notice` | méthode | `src/systems/achievements.js` | `GameScene` |
 | `odPower` | méthode | `src/systems/overdrive.js` | `GameScene` |
@@ -1227,4 +1239,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1220 symboles.
+1232 symboles.
