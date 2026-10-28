@@ -14,7 +14,7 @@ mixin(GameScene, {
   },
 
   // ---------------- COULOIR D'ASTEROIDES ----------------
-  corrParams(){ const vx = this.visibleXRange(0), W = vx.max - vx.min; return { vx, mid:(vx.min+vx.max)/2, amp:W*0.17, w:Math.max(190, W*0.56 - 5*this.alertLevel) }; },
+  corrParams(){ const vx = this.visibleXRange(0), W = vx.max - vx.min; return { vx, mid:(vx.min+vx.max)/2, amp:W*0.17, w:Math.max(evParam(this,'corridor','minWidth'), W*0.56 - evParam(this,'corridor','shrink')*this.alertLevel) }; },
 
   corrCenter(t){ const c = this._corr; return c.mid + c.amp*(0.7*Math.sin(t*0.55 + c.ph) + 0.3*Math.sin(t*1.15 + c.ph*2)); },
 
@@ -26,7 +26,7 @@ mixin(GameScene, {
 
   startCorridor(){
     const p = this.corrParams(), vy = this.visibleYRange(0);
-    this._corr = { on:true, rocks:[], ph:Math.random()*6.28, speed:170, top:vy.min - 40, mid:p.mid, amp:p.amp, w:p.w, clock:this.elapsed, acc:0 };
+    this._corr = { on:true, rocks:[], ph:Math.random()*6.28, speed:evParam(this,'corridor','speed'), dmg:evParam(this,'corridor','wallDmg'), top:vy.min - 40, mid:p.mid, amp:p.amp, w:p.w, clock:this.elapsed, acc:0 };
   },
 
   tickCorridor(){
@@ -77,21 +77,22 @@ mixin(GameScene, {
     this.ensureFxTex();
     const vy = this.visibleYRange(0), vx = this.visibleXRange(40);
     const tx = Phaser.Math.Clamp(this.player.x + Phaser.Math.Between(-60, 60), vx.min, vx.max), ty = Phaser.Math.Clamp(this.player.y - 170, vy.min + 120, vy.max - 200);
+    const blackout = evParam(this, 'emp', 'blackout');
     const g = this.add.image(tx, vy.min - 20, 'bomb').setDepth(6).setTint(0x7fe6ff).setScale(1.6);
     const warn = this.add.image(tx, ty, 'shockRing').setDepth(5).setBlendMode(Phaser.BlendModes.ADD).setTint(0x7fe6ff).setAlpha(0.8).setScale(0.9);
     this.tweens.add({ targets:warn, scaleX:0.2, scaleY:0.2, duration:1300 });
     this.tweens.add({ targets:g, y:ty, angle:360, duration:1300, ease:'Quad.easeIn', onComplete:()=>{
-      g.destroy(); warn.destroy(); this.empBlast(tx, ty);
+      g.destroy(); warn.destroy(); this.empBlast(tx, ty, blackout);
     } });
     sfx.strikeWarn({ pan:this.panOf(tx) });
   },
 
-  empBlast(x, y){
+  empBlast(x, y, blackout){
     if (!this.running) return;
     sfx.strikeBoom({ pan:this.panOf(x) }); this.cameras.main.flash(260, 120, 230, 255, false); this.cameras.main.shake(260, 0.01);
     const ring = this.add.image(x, y, 'shockRing').setDepth(9).setBlendMode(Phaser.BlendModes.ADD).setTint(0x7fe6ff).setAlpha(0.9).setScale(0.1);
     this.tweens.add({ targets:ring, scaleX:6, scaleY:6, alpha:0, duration:900, ease:'Quad.easeOut', onComplete:()=> ring.destroy() });
-    this._empOn = true; this._empUntil = this.elapsed + 5.5; this._empShield = Math.max(this._empShield || 0, this.shield);
+    this._empOn = true; this._empUntil = this.elapsed + (blackout !== undefined ? blackout : evParam(this, 'emp', 'blackout')); this._empShield = Math.max(this._empShield || 0, this.shield);
     this.shield = 0; if (this.odActive > 0){ this.odActive = 0; if (this.odShield > 0){ this.odShield = 0; this.spawnShieldBreak(true); } }
     if (!this._empVeil){ this._empVeil = this.add.image(0, 0, 'eclPx').setOrigin(0, 0).setTint(0x4fd0ff).setBlendMode(Phaser.BlendModes.ADD).setDepth(13).setAlpha(0.14); }
     this.notice('SYSTEMES COUPES', 'Tirs, boucliers et overdrive hors service');
@@ -99,7 +100,7 @@ mixin(GameScene, {
 
   // ---------------- FOUDRE STATIQUE ----------------
   staticStrike(){
-    const vx = this.visibleXRange(0), vy = this.visibleYRange(0), n = 3 + Math.floor(this.alertLevel/4), pts = [];
+    const vx = this.visibleXRange(0), vy = this.visibleYRange(0), n = evParam(this, 'statik', 'strikes'), pts = [];
     pts.push({ x:Phaser.Math.Clamp(this.player.x + Phaser.Math.Between(-80, 80), vx.min+25, vx.max-25), y:Phaser.Math.Clamp(this.player.y + Phaser.Math.Between(-120, 40), vy.min+60, vy.max-40) });
     for (let i=1;i<n;i++) pts.push({ x:Phaser.Math.Between(vx.min+25, vx.max-25), y:Phaser.Math.Between(vy.min+80, vy.max-100) });
     pts.sort((a,b)=> a.x - b.x);
@@ -113,7 +114,7 @@ mixin(GameScene, {
       marks.forEach(m=> m.forEach(o=> o.destroy()));
       if (!this.running) return;
       const gfx = this.add.graphics().setDepth(8).setBlendMode(Phaser.BlendModes.ADD);
-      const R = 46, dmg = 9 + this.alertLevel; let hit = false;
+      const R = evParam(this, 'statik', 'radius'), dmg = evParam(this, 'statik', 'damage'); let hit = false;
       for (let i=0;i<pts.length;i++){
         const a = pts[i], b = pts[i+1];
         this.explodeFx(a.x, a.y, 34);
@@ -143,7 +144,7 @@ mixin(GameScene, {
     this.ensureFxTex(); this._iceVx = 0;
     const veil = this.add.image(0, 0, 'eclPx').setOrigin(0, 0).setTint(0x66ccff).setBlendMode(Phaser.BlendModes.ADD).setDepth(13).setAlpha(0);
     this.tweens.add({ targets:veil, alpha:0.12, duration:900 });
-    this._ice = { veil };
+    this._ice = { veil, slide:evParam(this, 'ice', 'slide') };
     this.player.setTint(0xbfeaff);
   },
 
@@ -167,15 +168,16 @@ mixin(GameScene, {
 
   // ---------------- MUR DE BOUCLIERS (tanks façon Space Invaders) ----------------
   spawnShieldWall(){
-    const vx = this.visibleXRange(30), vy = this.visibleYRange(0), cols = 7, rows = Math.max(1, Math.min(6, 1 + Math.floor((this.alertLevel - 4)/2)));      // plus l'alerte monte, plus il y a de lignes (alerte 4-5: 1, 6-7: 2, 8-9: 3...)
+    const vx = this.visibleXRange(30), vy = this.visibleYRange(0), cols = evParam(this, 'shieldwall', 'cols'), rows = evParam(this, 'shieldwall', 'rows');      // plus l'alerte monte, plus il y a de lignes (alerte 4-5: 1, 6-7: 2, 8-9: 3...)
+    const fire0 = evParam(this, 'shieldwall', 'fireMin'), fire1 = evParam(this, 'shieldwall', 'fireMax');
     const cell = (vx.max - vx.min - 20) / cols, gap = Phaser.Math.Between(1, cols - 2), tanks = [];
     for (let r=0;r<rows;r++) for (let c=0;c<cols;c++){
       if (c === gap) continue;
       const x = vx.min + 10 + cell*(c + 0.5), e = this.spawnOneEnemy('tank', x);
       if (!e) continue;
-      e.stopY = 1e6; e.body.setVelocity(0, 0); e.wallX = x; e.wallY = vy.min - 30 - r*58; e.y = e.wallY; e.fireCd = Phaser.Math.Between(1800, 3200); tanks.push(e);
+      e.stopY = 1e6; e.body.setVelocity(0, 0); e.wallX = x; e.wallY = vy.min - 30 - r*58; e.y = e.wallY; e.fireCd = Phaser.Math.Between(fire0, fire1); tanks.push(e);
     }
-    let ofs = 0, dir = 1; const sp = 36 + 3*this.alertLevel, lim = cell*0.9;
+    let ofs = 0, dir = 1; const sp = evParam(this, 'shieldwall', 'speed'), lim = cell*0.9;
     const loop = this.time.addEvent({ delay:33, loop:true, callback:()=>{
       const alive = tanks.filter(e=> e && e.active); if (!alive.length){ loop.remove(); return; }
       let drop = 0; ofs += dir*sp*0.033; if (Math.abs(ofs) > lim){ dir = -dir; ofs = Phaser.Math.Clamp(ofs, -lim, lim); drop = 24; }
@@ -186,19 +188,19 @@ mixin(GameScene, {
   // ---------------- BOULE DE PLASMA ----------------
   spawnPlasma(){
     this.ensureFxTex(); this.killPlasma();
-    const vx = this.visibleXRange(0), vy = this.visibleYRange(0), fromLeft = Math.random() < 0.5, H = vy.max - vy.min;
+    const vx = this.visibleXRange(0), vy = this.visibleYRange(0), fromLeft = Math.random() < 0.5, H = vy.max - vy.min, cross = evParam(this, 'plasma', 'crossSec');
     const img = this.add.image(fromLeft ? vx.min - 90 : vx.max + 90, vy.min + H*0.22, 'plasmaBall').setDepth(7).setBlendMode(Phaser.BlendModes.ADD).setScale(1.5);
     const core = this.add.image(img.x, img.y, 'plasmaBall').setDepth(7.1).setBlendMode(Phaser.BlendModes.ADD).setScale(0.7);
-    const p = { img, core, vx:(fromLeft ? 1 : -1) * ((vx.max - vx.min + 180) / 10.5), vy:(H*0.28)/10.5, shotCd:600, ang:0, age:0 };
+    const p = { img, core, vx:(fromLeft ? 1 : -1) * ((vx.max - vx.min + 180) / cross), vy:(H*0.28)/cross, shotCd:600, ang:0, age:0 };
     p.timer = this.time.addEvent({ delay:33, loop:true, callback:()=>{
       const dt = 0.033; p.age += dt; img.x += p.vx*dt; img.y += p.vy*dt; core.setPosition(img.x, img.y);
       const pulse = 1.5 + 0.08*Math.sin(p.age*9); img.setScale(pulse); core.setScale(0.7 + 0.06*Math.sin(p.age*13));
       p.shotCd -= 33;
       if (p.shotCd <= 0){
-        p.shotCd = 520; p.ang += 0.37; const n = 10 + Math.floor(this.alertLevel/2);
-        for (let i=0;i<n;i++){ const bl = this.bossShot(img.x, img.y, p.ang + i*Math.PI*2/n, 130 + this.alertLevel*4, { tex:'bossBullet2', tint:0xff60ff, scale:0.2, damage:5 + Math.floor(this.alertLevel/2) }); if (bl) bl._plasma = true; }
+        p.shotCd = evParam(this, 'plasma', 'shotMs'); p.ang += 0.37; const n = evParam(this, 'plasma', 'perShot');
+        for (let i=0;i<n;i++){ const bl = this.bossShot(img.x, img.y, p.ang + i*Math.PI*2/n, evParam(this, 'plasma', 'bulletSpeed'), { tex:'bossBullet2', tint:0xff60ff, scale:0.2, damage:evParam(this, 'plasma', 'bulletDmg') }); if (bl) bl._plasma = true; }
       }
-      if (this.player.active && Math.hypot(img.x - this.player.x, img.y - this.player.y) < 54) this.damagePlayer(12 + this.alertLevel);
+      if (this.player.active && Math.hypot(img.x - this.player.x, img.y - this.player.y) < 54) this.damagePlayer(evParam(this, 'plasma', 'contactDmg'));
       // la boule broie aussi les ennemis sur son passage (35% de leurs PV max par seconde, 1,2% pour les boss)
       this.enemies.children.iterate(e=>{
         if (!e || !e.active || Math.hypot(img.x - e.x, img.y - e.y) > 74) return;
@@ -242,7 +244,7 @@ mixin(GameScene, {
         const px0 = this.player.x; this.player.x = this.corrClampX(px0, this.player.y);
         c.hurtCd = (c.hurtCd || 0) - delta;
         if (Math.abs(px0 - this.player.x) > 1.5 && c.hurtCd <= 0){                    // collé contre la paroi: elle blesse (les compétences de blindage réduisent)
-          c.hurtCd = 450; this.damagePlayer(3 * COLLISION_DMG_MUL * (this.stats.collisionMul || 1));
+          c.hurtCd = 450; this.damagePlayer(c.dmg * COLLISION_DMG_MUL * (this.stats.collisionMul || 1));
           this.spawnHitParticles(this.player.x + (px0 > this.player.x ? 14 : -14), this.player.y, 3); sfx.hit && sfx.hit();
         }
         // paroi: position du bord par rapport à (x,y), côté, et pente (la paroi est courbe, donc le rebond dépend de son inclinaison)
@@ -328,7 +330,7 @@ mixin(GameScene, {
       if (this._ice.veil) this._ice.veil.setPosition(vx.min - 50, vy.min - 50).setDisplaySize(vx.max - vx.min + 100, vy.max - vy.min + 100);
       this.enemies.children.iterate(o=>{
         if (!o || !o.active || o.enemyType === 'boss' || o.isBossPart) return;
-        o._ivx = ((o._ivx || 0) + Phaser.Math.FloatBetween(-1, 1)*220*dt*this.coordResist(o)) * (1 - 0.6*dt);
+        o._ivx = ((o._ivx || 0) + Phaser.Math.FloatBetween(-1, 1)*this._ice.slide*dt*this.coordResist(o)) * (1 - 0.6*dt);
         const nx = Phaser.Math.Clamp(o.x + o._ivx*dt, vx.min + 10, vx.max - 10), d = nx - o.x; o.x = nx; if (o.baseX !== undefined) o.baseX += d;
       });
     }

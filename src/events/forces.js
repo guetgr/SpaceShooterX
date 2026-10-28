@@ -72,7 +72,7 @@ mixin(GameScene, {
           move(this.player, w.x, w.y, force(d)*1.5 * Math.max(0.7, this.stats.moveResponsiveness/11));   // le vaisseau lutte: plus il est réactif, plus il résiste (donc on tire plus fort pour que ça se sente)
           this.player.x = Phaser.Math.Clamp(this.player.x, vx.min+10, vx.max-10); this.player.y = Phaser.Math.Clamp(this.player.y, vy.min+30, vy.max-10);
           w.dmgCd -= delta;
-          if (d < w.core + 14 && w.dmgCd <= 0){ w.dmgCd = 450; this.damagePlayer((w.big ? 10 : 6) + this.alertLevel); }
+          if (d < w.core + 14 && w.dmgCd <= 0){ w.dmgCd = 450; this.damagePlayer(w.dmg + this.alertLevel); }
         }
       }
     });

@@ -10,7 +10,7 @@ mixin(GameScene, {
   },
 
   // multiplicateur d'XP du moment: celui du rang du combo en cours (1 s'il n'y a pas de combo)
-  xpMul(){ return ((this.combo && this.combo.n > 0) ? STYLE_XP[this.comboRank] : 1) * ((this._frenzyUntil||0) > this.elapsed ? 2 : 1) * ((this.neb && this.neb.phase === 'stay') ? 1.5 : 1); },
+  xpMul(){ return ((this.combo && this.combo.n > 0) ? STYLE_XP[this.comboRank] : 1) * ((this._frenzyUntil||0) > this.elapsed ? this._frenzyXp : 1) * ((this.neb && this.neb.phase === 'stay') ? 1.5 : 1); },
 
   // chaque kill prolonge le combo, ajoute des points (multipliés par le rang) et relance la fenêtre
   comboKill(base){

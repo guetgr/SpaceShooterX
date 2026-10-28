@@ -5,7 +5,7 @@ mixin(GameScene, {
     const base = 1300;
     const a = this.alertLevel;
     const min = Math.max(120, 320 * (1 - 0.05*(a-1)));
-    const val = (base - this.elapsed*4 - this.difficultyTier*30) * Math.max(0.3, 1 - 0.06*(a-1)) * ((this._frenzyUntil||0) > this.elapsed ? 0.55 : 1);   // FRENESIE: apparitions bien plus rapprochées
+    const val = (base - this.elapsed*4 - this.difficultyTier*30) * Math.max(0.3, 1 - 0.06*(a-1)) * ((this._frenzyUntil||0) > this.elapsed ? this._frenzySpawn : 1);   // FRENESIE: apparitions bien plus rapprochées
     return Phaser.Math.Clamp(val, min * ((this._frenzyUntil||0) > this.elapsed ? 0.6 : 1), base);
   },
 
