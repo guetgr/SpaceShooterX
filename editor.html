@@ -87,58 +87,13 @@ table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align
 <iframe id="botFrame" title="Bot"></iframe>
 <div class="toast" id="toast"></div>
 
+<script src="tools/editor/steps-model.js"></script>
 <script src="tools/editor/level-document.js"></script>
 <script src="tools/editor/timeline.js"></script>
+<script src="tools/editor/steps-ui.js"></script>
 <script>
 "use strict";
-/* ---------- schéma des réglages du tuto : [clé, libellé, min, max, pas, unité, aide] ---------- */
-const TUTO_SCHEMA = [
-  { g:'Étapes pédagogiques', k:'steps', open:true, f:[
-    ['moveNeed', 'Étape 1 · distance à parcourir', 100, 1500, 10, 'px', 'Distance que le joueur doit parcourir pour valider « déplace-toi »'],
-    ['satTarget', 'Étape 2 · satellites à détruire', 4, 40, 1, '', 'Fin de l\'étape « tirer ». Sert aussi d\'objectif de finition (satellites détruits)'],
-    ['bossWait', 'Délai avant le boss', 1, 10, 0.1, 's', 'Entre l\'alerte et l\'arrivée du boss'],
-    ['maxMove', 'Durée max · étape 1', 5, 90, 1, 's', 'Au-delà, on passe à la suite même sans avoir réussi'],
-    ['maxShoot', 'Durée max · étape 2', 10, 180, 1, 's', ''],
-  ]},
-  { g:'Satellites', k:'sats', open:true, f:[
-    ['hp', 'Points de vie', 5, 200, 1, '', 'Un tir de base fait ~14 dégâts'],
-    ['speedMin', 'Vitesse de chute min', 20, 250, 5, 'px/s', ''], ['speedMax', 'Vitesse de chute max', 20, 300, 5, 'px/s', ''],
-    ['slowSpeed', 'Vitesse du 1er satellite (étape 2)', 10, 150, 5, 'px/s', 'Lent exprès pour apprendre à viser'],
-    ['drift', 'Dérive latérale', 0, 100, 1, 'px/s', ''], ['score', 'Score par satellite', 0, 200, 1, '', ''],
-    ['contactDmg', 'Dégâts au contact', 0, 50, 1, '', 'Quand un satellite percute le vaisseau'],
-    ['spawnCdStart', 'Intervalle d\'apparition · début', 300, 4000, 50, 'ms', 'Étape 4 : l\'intervalle passe de « début » à « fin »'], ['spawnCdEnd', 'Intervalle d\'apparition · fin', 200, 4000, 50, 'ms', ''],
-    ['rampTime', 'Durée de la montée en cadence', 5, 120, 1, 's', ''],
-    ['capBase', 'Satellites simultanés · départ', 1, 12, 1, '', ''], ['capExtra', 'Satellites simultanés · en plus', 0, 12, 1, '', 'Ajoutés progressivement'], ['capEvery', 'Un de plus toutes les', 3, 60, 1, 's', ''],
-  ]},
-  { g:'Débris', k:'debris', f:[
-    ['min', 'Nombre min', 0, 20, 1, '', ''], ['max', 'Nombre max', 0, 30, 1, '', ''], ['dmg', 'Dégâts', 0, 40, 1, '', ''],
-    ['speedMin', 'Vitesse min', 20, 400, 5, 'px/s', ''], ['speedMax', 'Vitesse max', 20, 500, 5, 'px/s', ''],
-  ]},
-  { g:'Boss · général', k:'boss', f:[
-    ['hp', 'Points de vie', 100, 4000, 10, '', 'Le plus gros levier de durée du combat'],
-    ['p2', 'Phase 2 sous', 0.1, 0.95, 0.01, '× PV', 'Fraction de PV restants qui déclenche la phase 2'], ['p3', 'Phase 3 sous', 0.05, 0.9, 0.01, '× PV', ''],
-    ['contactDmg', 'Dégâts au contact', 0, 60, 1, '', ''], ['killScore', 'Score à la mort', 0, 2000, 10, '', ''],
-  ]},
-  { g:'Boss · tirs visés', k:'boss', f:[
-    ['aimCd', 'Cadence (phases 1-2)', 400, 4000, 50, 'ms', ''], ['aimCd3', 'Cadence (phase 3)', 300, 4000, 50, 'ms', ''], ['aimDmg', 'Dégâts', 0, 40, 1, '', ''], ['aimSpeed', 'Vitesse', 60, 500, 5, 'px/s', ''],
-  ]},
-  { g:'Boss · anneau', k:'boss', f:[
-    ['ringCd', 'Cadence', 1500, 9000, 50, 'ms', ''], ['ringCount', 'Nombre de balles', 6, 40, 1, '', ''], ['ringGap', 'Largeur de la brèche', 1, 8, 1, 'balles', 'Plus c\'est grand, plus c\'est facile de passer'],
-    ['ringDmg', 'Dégâts', 0, 40, 1, '', ''], ['ringSpeed', 'Vitesse', 40, 400, 5, 'px/s', ''],
-  ]},
-  { g:'Boss · pluie (phase 2+) et spirale (phase 3)', k:'boss', f:[
-    ['rainCd', 'Pluie · cadence', 600, 6000, 50, 'ms', ''], ['rainDmg', 'Pluie · dégâts', 0, 40, 1, '', ''], ['rainSpeed', 'Pluie · vitesse', 60, 500, 5, 'px/s', ''],
-    ['spiralCd', 'Spirale · cadence', 60, 1000, 10, 'ms', 'Plus petit = plus dense'], ['spiralDmg', 'Spirale · dégâts', 0, 40, 1, '', ''], ['spiralSpeed', 'Spirale · vitesse', 40, 400, 5, 'px/s', ''],
-  ]},
-  { g:'Finition (%)', k:'comp', open:true, f:[
-    ['sats', 'Poids · satellites détruits', 0, 100, 1, '', 'Les poids sont ramenés à un total de 100'], ['boss', 'Poids · boss endommagé', 0, 100, 1, '', ''],
-    ['win', 'Poids · boss vaincu', 0, 100, 1, '', ''], ['clean', 'Poids · sans te faire toucher', 0, 100, 1, '', ''],
-    ['hitPenalty', 'Perte par coup reçu', 0, 1, 0.05, '', '0,25 = 4 coups font perdre tout l\'objectif « sans te faire toucher »'],
-  ]},
-  { g:'Récompenses des paliers de finition', k:'rewards', f:[
-    ['m25', 'Palier 25 %', 0, 200, 1, '◆', ''], ['m50', 'Palier 50 %', 0, 200, 1, '◆', ''], ['m75', 'Palier 75 %', 0, 200, 1, '◆', ''], ['m100', 'Palier 100 %', 0, 500, 1, '◆', ''],
-  ]},
-];
+/* réglages du tuto : EditorSteps.TUTO_SCHEMA (tools/editor/steps-model.js), affichés par les étapes (tools/editor/steps-ui.js) */
 const TARGET_BUDGET = { 'w1-l1':0, 'w1-l2':55, 'w1-l3':95, 'w1-l4':130, 'w1-l5':190, 'w2-l1':270, 'w2-l2':350, 'w2-l3':420, 'w2-l4':500, 'w2-l5':650, 'w3-l1':750, 'w3-l2':850, 'w3-l3':950, 'w3-l4':1070, 'w3-l5':1290 };
 const TARGET_WIN = { tuto:0.9, boss:0.55, normal:0.8 }, TOL = 0.12;
 const $ = id=> document.getElementById(id);
@@ -153,13 +108,6 @@ function post(which, msg){ const w = frames[which].contentWindow; if (w) w.postM
 const lvl = id=> S.levels.find(l=> l.id === id);
 
 /* ---------- état : surcharges ---------- */
-function getPath(o, path){ return path.reduce((a, k)=> (a == null ? undefined : a[k]), o); }
-function setOv(root, path, val, def){        // enregistre une surcharge, ou l'efface si elle revient à la valeur d'origine
-  let o = root; for (let i = 0; i < path.length - 1; i++){ o = o[path[i]] = o[path[i]] || {}; }
-  const k = path[path.length - 1];
-  if (val === def) delete o[k]; else o[k] = val;
-  (function prune(obj, p){ for (let i = 0; i < p.length - 1; i++){ const c = obj[p[i]]; if (!c) return; prune(c, p.slice(i + 1)); if (!Object.keys(c).length) delete obj[p[i]]; return; } })(root, path);
-}
 function pruneAll(o){ if (Array.isArray(o)) return; Object.keys(o).forEach(k=>{ if (o[k] && typeof o[k] === 'object'){ pruneAll(o[k]); if (!Array.isArray(o[k]) && !Object.keys(o[k]).length) delete o[k]; } }); }
 const dirty = ()=> JSON.stringify(S.ov) !== S.saved;
 function levelModified(id){ return !!(S.ov.levels[id] && Object.keys(S.ov.levels[id]).length) || (id === 'w1-tuto' && Object.keys(S.ov.tuto).length > 0); }
@@ -167,7 +115,7 @@ function refreshChrome(){
   $('btnSave').classList.toggle('dirty', dirty()); $('btnSave').textContent = dirty() ? '💾 EXPORTER *' : '💾 EXPORTER';
   document.querySelectorAll('.lv').forEach(e=> e.classList.toggle('mod', levelModified(e.dataset.id)));
 }
-function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); if(S.refreshTimeline)S.refreshTimeline(); }
+function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); if(S.refreshTimeline)S.refreshTimeline(); if(S.refreshSteps)S.refreshSteps(); }
 
 /* ---------- liste des niveaux ---------- */
 function renderList(){
@@ -183,19 +131,6 @@ function renderList(){
 }
 
 /* ---------- formulaire ---------- */
-function field(label, hint, min, max, step, unit, cur, def, onSet){
-  const d = document.createElement('div'), id = 'f' + Math.random().toString(36).slice(2, 8);
-  d.className = 'f';
-  d.innerHTML = '<label for="' + id + '">' + label + (hint ? '<small>' + hint + '</small>' : '') + '</label><input type="number" id="' + id + '" min="' + min + '" max="' + max + '" step="' + step + '"><input type="range" min="' + min + '" max="' + max + '" step="' + step + '"><span class="meta"></span>';
-  const num = d.querySelector('input[type=number]'), rng = d.querySelector('input[type=range]'), meta = d.querySelector('.meta');
-  let val = cur;
-  const show = ()=>{ num.value = val; rng.value = val; d.classList.toggle('mod', val !== def); meta.textContent = val !== def ? '↺ ' + def + (unit ? ' ' + unit : '') : (unit || ''); meta.title = val !== def ? 'Remettre la valeur d\'origine' : ''; };
-  const commit = v=>{ if (!isFinite(v)) return; val = +(+v).toFixed(4); onSet(val); show(); };
-  num.oninput = ()=>{ if (num.value !== '') { val = +num.value; onSet(val); d.classList.toggle('mod', val !== def); rng.value = val; meta.textContent = val !== def ? '↺ ' + def + (unit ? ' ' + unit : '') : (unit || ''); } };
-  rng.oninput = ()=> commit(+rng.value);
-  meta.onclick = ()=>{ if (val !== def) commit(def); };
-  show(); return d;
-}
 function section(title, open){ const d = document.createElement('details'); d.open = !!open; d.innerHTML = '<summary>' + title + '</summary><div class="body"></div>'; return d; }
 
 function renderForm(){
@@ -203,35 +138,10 @@ function renderForm(){
   const h = document.createElement('div'); h.innerHTML = '<h2></h2><p class="sub"></p>'; h.querySelector('h2').textContent = l.worldName + ' · ' + (l.tuto ? 'TUTORIEL' : 'NIV.' + l.num + ' — ' + l.name);
   h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 3 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
   F.appendChild(h);
+  S.refreshSteps = null;
   renderTimeline(F, l);
+  renderSteps(F, l);                 // étapes : tous les réglages du niveau (tools/editor/steps-ui.js)
   renderLevelDocument(F, l);
-  const base = S.base[l.id] || {}, ovL = ()=> (S.ov.levels[l.id] = S.ov.levels[l.id] || {});
-  // --- niveau (tous)
-  const sec = section('Niveau', true), body = sec.querySelector('.body');
-  const lf = (path, label, hint, min, max, step, unit, defv)=>{
-    const cur = getPath(S.ov.levels[l.id] || {}, path); const baseV = getPath(base, path); const def = baseV === undefined ? defv : baseV;
-    body.appendChild(field(label, hint, min, max, step, unit, cur === undefined ? def : cur, def, v=>{ setOv(S.ov.levels, [l.id].concat(path), v, def); changed(); }));
-  };
-  if (!l.tuto) lf(['threat'], 'Menace', 'Niveau d\'alerte du niveau : puissance des ennemis et des armes', 1, 20, 1, '', 1);
-  if (l.type === 'survive') lf(['goal', 'seconds'], 'Objectif · durée', '', 10, 300, 1, 's', 60);
-  if (l.type === 'kill') lf(['goal', 'count'], 'Objectif · ennemis à éliminer', '', 5, 300, 1, '', 40);
-  if (l.type === 'collect') lf(['goal', 'gems'], 'Objectif · cristaux à récolter', '', 5, 200, 1, '', 25);
-  if (!l.tuto){ lf(['hpMul'], 'PV des ennemis ×', 'Réglage fin de la difficulté, en plus de la menace', 0.2, 5, 0.05, '×', 1); lf(['dmgMul'], 'Dégâts des ennemis ×', '', 0.2, 5, 0.05, '×', 1); }
-  lf(['reward', 'clear'], 'Récompense de victoire', '', 0, 500, 1, '◆', 10); lf(['reward', 'first'], 'Bonus de 1re victoire', '', 0, 1000, 1, '◆', 0);
-  F.appendChild(sec);
-  // --- tuto
-  if (l.tuto){
-    TUTO_SCHEMA.forEach(g=>{
-      const s = section(g.g, g.open), b = s.querySelector('.body');
-      g.f.forEach(([key, label, min, max, step, unit, hint])=>{
-        const def = S.defaults[g.k][key], cur = getPath(S.ov.tuto, [g.k, key]);
-        b.appendChild(field(label, hint, min, max, step, unit, cur === undefined ? def : cur, def, v=>{ setOv(S.ov.tuto, [g.k, key], v, def); changed(); if (g.k === 'comp') updateSum(); }));
-      });
-      if (g.k === 'comp'){ const w = document.createElement('div'); w.className = 'warn'; w.id = 'sumWarn'; b.appendChild(w); }
-      F.appendChild(s);
-    });
-    updateSum();
-  }
   $('budgetWrap').style.display = l.tuto ? 'none' : ''; if (!l.tuto) $('budget').value = TARGET_BUDGET[l.id] || 0;      // puissance du joueur pour le bot
 }
 function updateSum(){
@@ -296,7 +206,7 @@ window.addEventListener('message', ev=>{
     while(log.children.length>500)log.lastChild.remove();
   }
   if (m.type === 'ready' && m.mode === 'play'){
-    S.documents = m.documents; S.eventCatalog = m.eventCatalog || []; S.bestiary = m.bestiary || []; S.levels = m.levels; S.base = m.base; S.defaults = m.defaults; S.ov = clone(m.overrides || { tuto:{}, levels:{} }); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; S.saved = JSON.stringify(S.ov); S.ready = true;
+    S.documents = m.documents; S.eventCatalog = m.eventCatalog || []; S.bestiary = m.bestiary || []; S.decorCatalog = m.decorCatalog || []; S.musicCatalog = m.musicCatalog || { level:[], boss:[] }; S.tunablesCatalog = m.tunablesCatalog || {}; S.mobCatalog = m.mobCatalog || []; S.levels = m.levels; S.base = m.base; S.defaults = m.defaults; S.ov = clone(m.overrides || { tuto:{}, levels:{} }); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; S.saved = JSON.stringify(S.ov); S.ready = true;
     if (!lvl(S.sel)) S.sel = S.levels[0].id;
     $('ph').textContent = 'Choisis un niveau puis ▶ TESTER'; $('btnPlay').disabled = false; $('btnSave').disabled = false; $('btnReset').disabled = false;
     renderList(); renderForm();

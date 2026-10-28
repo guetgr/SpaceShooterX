@@ -1,10 +1,14 @@
 "use strict";
 // Un document complet par mission ; les champs visuels et le JSON partagent le même état.
+// Clés « entières » (EditorSteps.WHOLE_KEYS : mobs, bossTune, eventTune, norma, audio) : facultatives dans le JSON, la surcharge REMPLACE l'objet
+// (une sous-clé effacée disparaît vraiment) et null = clé supprimée du document. Autres clés : seules celles du document, objets fusionnés au premier niveau.
 function editorLevelDocument(id){
   const doc = clone(S.documents[id]);
   const overrides = S.ov.levels[id] || {};
+  const whole = (typeof EditorSteps !== 'undefined' && EditorSteps.WHOLE_KEYS) || [];
   for (const [key,value] of Object.entries(overrides)){
-    if (!(key in doc)) continue;
+    if (whole.indexOf(key) >= 0){ if (value === null) delete doc[key]; else doc[key] = clone(value); continue; }
+    if (!Object.prototype.hasOwnProperty.call(doc, key)) continue;
     doc[key] = value && typeof value === 'object' && !Array.isArray(value) ? Object.assign({},doc[key],clone(value)) : clone(value);
   }
   if (doc.tuto){
@@ -56,21 +60,15 @@ function renderScenarioControls(body, level, redraw){
     if(sp.tier)control(row,'Tier',sp.tier,1,4,v=>{doc.spawns[index].tier=v;save('spawns',doc.spawns);});
     remove(row,()=>{doc.spawns.splice(index,1);save('spawns',doc.spawns);renderForm();});box.appendChild(row);
   });
-  heading('EVENEMENTS PROGRAMMES');
+  heading('EVENEMENTS PROGRAMMES');   // horaire, durée, paramètres et textes : étape EVENEMENT (tools/editor/steps-ui.js) ; ici ajout et suppression seulement
   doc.events.forEach((event,index)=>{
     const row=document.createElement('div');row.className='tl-row';const name=document.createElement('strong');name.textContent=(S.eventCatalog.find(e=>e.id===event.kind)||{name:event.kind}).name;row.appendChild(name);
-    control(row,'Déclenchement (s)',event.at,0,3600,v=>{doc.events[index].at=v;save('events',doc.events);});
-    control(row,'Durée forcée (s, 0 = défaut)',event.duration||0,0,600,v=>{if(v)doc.events[index].duration=v;else delete doc.events[index].duration;save('events',doc.events);});
+    row.appendChild(document.createTextNode('Horaire, durée, paramètres et textes N.O.R.M.A. : étape EVENEMENT ci-dessous.'));
     remove(row,()=>{doc.events.splice(index,1);save('events',doc.events);renderForm();});box.appendChild(row);
   });
   const row=document.createElement('div');row.className='opts';const select=document.createElement('select');
   S.eventCatalog.forEach(e=>{const option=document.createElement('option');option.value=e.id;option.textContent=e.name;select.appendChild(option);});row.appendChild(select);
   const add=document.createElement('button');add.className='btn';add.textContent='AJOUTER UN EVENEMENT A 10 S';add.onclick=()=>{doc.events.push({kind:select.value,at:10});save('events',doc.events);renderForm();};row.appendChild(add);box.appendChild(row);
-  heading('EVENEMENTS ALEATOIRES');
-  for(const [key,label] of [['golden','Trésorin aléatoire'],['smallEvents','Petits événements aléatoires']]){
-    const labelEl=document.createElement('label');const input=document.createElement('input');input.type='checkbox';input.checked=doc.ambient[key];
-    input.onchange=()=>{doc.ambient[key]=input.checked;save('ambient',doc.ambient);};labelEl.append(input,document.createTextNode(label));box.appendChild(labelEl);
-  }
 }
 
 function timelineScenarioTracks(tracks, level, duration, px){
@@ -88,22 +86,4 @@ function timelineScenarioTracks(tracks, level, duration, px){
   doc.events.forEach(e=>lane('EVENEMENT',[{at:e.at,duration:e.duration,text:(S.eventCatalog.find(x=>x.id===e.kind)||{name:e.kind}).name,detail:e.at+' s minimum ; attente du slot libre et de la fin du boss. Durée : '+(e.duration?e.duration+' s':'défaut de l’événement')} ]));
   if(!level.tuto && doc.type==='survive')lane('OBJECTIF',[{at:doc.goal.seconds,text:doc.finalBoss?'Objectif atteint → '+doc.finalBoss:'Fin de mission',detail:'Le boss attend la fin d’un grand événement en cours.'}]);
   if(!level.tuto && doc.type==='boss')lane('BOSS',[{at:1.5,text:doc.finalBoss||doc.boss}]);
-  const condition=(name,text)=>{const row=document.createElement('div');row.className='tl-condition';const strong=document.createElement('strong');strong.textContent=name;const span=document.createElement('span');span.textContent=text;row.append(strong,span);tracks.appendChild(row);};
-  condition('INTRO / CAMERA', (doc.intro==='earth'?'Décollage planète':'Décollage court')+' · fond '+(doc.bg||'planète aléatoire')+' · zoom '+doc.zoom.start.toFixed(2)+' → '+doc.zoom.end.toFixed(2)+' en '+doc.zoom.seconds+' s'+(level.tuto?' (temps de partie).':' (selon progression).'));
-  if(level.tuto){
-    const t=doc.tutorial;
-    condition('ETAPE 1 · BOUGER','N.O.R.M.A. « bouger » → '+t.steps.moveNeed+' px parcourus OU '+t.steps.maxMove+' s maximum.');
-    condition('ETAPE 2 · SATELLITE',doc.timelineOnly?'Vagues manuelles actives ; apparitions pédagogiques automatiques désactivées.':'Après BOUGER : premier satellite lent ('+t.sats.hp+' PV, '+t.sats.slowSpeed+' px/s), puis cadence '+t.sats.spawnCdStart+' → '+t.sats.spawnCdEnd+' ms, plafond '+t.sats.capBase+' + '+t.sats.capExtra+'.');
-    condition('DESTRUCTION SATELLITE','Chaque satellite détruit produit '+t.debris.min+'–'+t.debris.max+' débris, '+t.debris.dmg+' dégâts. Objectif : '+t.steps.satTarget+' satellites OU '+t.steps.maxShoot+' s maximum.');
-    condition('ALERTE / ANTENNE-MERE','Après TIRER : N.O.R.M.A. + alarme, attente '+t.steps.bossWait+' s, puis boss à '+t.boss.hp+' PV.');
-    condition('BOSS · PHASE 1','Tirs visés chaque '+t.boss.aimCd+' ms ; anneau chaque '+t.boss.ringCd+' ms. N.O.R.M.A. explique les premières attaques.');
-    condition('BOSS · PHASE 2','Sous '+Math.round(t.boss.p2*100)+' % PV : pluie chaque '+t.boss.rainCd+' ms + tirs et anneaux.');
-    condition('BOSS · PHASE 3','Sous '+Math.round(t.boss.p3*100)+' % PV : spirale chaque '+t.boss.spiralCd+' ms, tir visé '+t.boss.aimCd3+' ms.');
-    condition('RAPPORT','Boss détruit → fin du tutoriel, finition et récompenses de paliers. Paramètres détaillés ci-dessous et dans le JSON.');
-  }else{
-    if(doc.type==='kill'||doc.type==='collect')condition('OBJECTIF CONDITIONNEL',JSON.stringify(doc.goal)+' → '+(doc.finalBoss?'boss '+doc.finalBoss:'victoire')+' ; date variable selon le joueur.');
-    if(doc.finalBoss||doc.boss)condition('COMBAT DU BOSS','Phases, attaques et renforts pilotés par le module '+(doc.finalBoss||doc.boss)+'. Les transitions réellement jouées figurent dans le journal.');
-    condition('ALEATOIRE', 'Trésorin : '+(doc.ambient.golden?'actif après 25 s, réarmement 45–80 s':'désactivé')+' ; petits événements : '+(doc.ambient.smallEvents?'actifs, selon menace, premier délai 20–35 s puis 30–60 s':'désactivés')+'.');
-    condition('N.O.R.M.A. / MUSIQUE','Transmissions et musique du secteur, réactions au combat et au boss ; horaires dépendants de la partie.');
-  }
 }
