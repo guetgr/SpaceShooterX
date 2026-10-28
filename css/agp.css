@@ -367,3 +367,8 @@
 .trace path.next{ stroke:var(--agp-yellow); stroke-dasharray:5 5; stroke-width:2.5; animation:traceFlow .9s linear infinite; filter:drop-shadow(0 0 4px rgba(255,194,26,.8)); }
 @keyframes traceFlow{ to{ stroke-dashoffset:-10; } }
 @media (prefers-reduced-motion: reduce){ .node-ico, .trace path.next{ animation:none !important; } }
+
+/* écran de fin du tuto : même mise en page que le rapport d'intervention (document qui défile, boutons fixes en bas) */
+#tutoEnd{ justify-content:flex-start; padding:0; overflow:hidden; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
+.rp-row{ display:flex; gap:8px; width:100%; max-width:340px; }
+.overlay .rp-row > .btn, .overlay .rp-row > .btn.secondary{ flex:1; min-width:0; margin:0; padding:8px 6px; font-size:8px; letter-spacing:.5px; }
