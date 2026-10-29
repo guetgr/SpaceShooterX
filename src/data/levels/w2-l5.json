@@ -1,229 +1,76 @@
 {
   "id": "w2-l5",
-  "name": "TRAITEMENT EN COURS",
+  "name": "ATELIER DE BROYAGE",
   "type": "mission",
   "threat": 5,
-  "bg": "broyeur",
-  "intro": null,
-  "spawns": [],
-  "finalBoss": null,
+  "boss": "dread",
+  "bossName": null,
   "reward": {
-    "clear": 80,
-    "first": 150
+    "clear": 60,
+    "first": 120
   },
   "world": "w2",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [
-    {
-      "type": "grunt",
-      "at": 2,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 200,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "charo",
-      "at": 8,
-      "count": 3,
-      "spacing": 0.7,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "spider",
-      "at": 16,
-      "count": 2,
-      "spacing": 0.9,
-      "formation": "line",
-      "spread": 160,
-      "x": 40,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "sniper",
-      "at": 24,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "charo",
-      "at": 32,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "star",
-      "spread": 170,
-      "x": 60,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "spider",
-      "at": 40,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 150,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "grunt",
-      "at": 48,
-      "count": 6,
-      "spacing": 0.4,
-      "formation": "column",
-      "spread": 100,
-      "x": 30,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "sniper",
-      "at": 56,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 220,
-      "x": 50,
-      "y": 0,
-      "alert": 3
-    },
-    {
-      "type": "charo",
-      "at": 64,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 190,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "spider",
-      "at": 72,
-      "count": 2,
-      "spacing": 1.0,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    }
-  ],
+  "waves": [],
   "events": [
     {
-      "kind": "crystal",
-      "at": 25,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 2,
-        "bigChance": 0.25,
-        "fallMin": 90,
-        "fallMax": 120
-      }
-    },
-    {
-      "kind": "crystal",
-      "at": 65,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 3,
-        "bigChance": 0.35,
-        "fallMin": 90,
-        "fallMax": 120
-      }
+      "kind": "mines",
+      "at": 15
     }
   ],
-  "spawnClock": "mission",
-  "boss": "dread",
-  "bossName": null,
-  "hpMul": 1.5,
-  "dmgMul": 1.3,
-  "timelineOnly": 1,
+  "spawnClock": "difficulty",
+  "spawns": [
+    {
+      "type": "grunt",
+      "from": 0,
+      "w": 38
+    },
+    {
+      "type": "diver",
+      "from": 0,
+      "w": 16
+    },
+    {
+      "type": "turret",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "tank",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "mine",
+      "from": 0,
+      "w": 10
+    },
+    {
+      "type": "bomber",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "kamikaze",
+      "from": 0,
+      "w": 14
+    }
+  ],
+  "bg": "broyeur",
+  "intro": null,
+  "finalBoss": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
   "zoom": {
-    "start": 1.2,
-    "end": 0.8,
-    "seconds": 110
+    "start": 1.27,
+    "end": 0.785,
+    "seconds": 70
   },
   "ambient": {
-    "golden": false,
-    "smallEvents": false
+    "golden": true,
+    "smallEvents": true
   },
-  "norma": {
-    "start": [
-      "Le centre refuse notre accès. Il commande également toutes les machines encore actives."
-    ],
-    "boss": [
-      "Le Directeur de Traitement tente d'intégrer notre camionnette à la chaîne."
-    ],
-    "progress": [
-      "Le système central cherche à interrompre notre transmission.",
-      "Extraction des registres de recyclage réels en cours...",
-      "Dernières unités de défense du centre."
-    ],
-    "banter": [
-      "Rappel : résister à une tentative d'intégration industrielle est autorisé.",
-      "Le volume de données à extraire est considérable."
-    ],
-    "lowhp": [
-      "Alerte : système d'urgence engagé. La structure ne supportera plus beaucoup d'impacts."
-    ],
-    "win": [
-      "Dans nos bilans, ces mêmes cargaisons sont déclarées recyclées."
-    ],
-    "lose": [
-      "Traitement échoué. Le Directeur a maintenu l'intégration."
-    ],
-    "tickEvery": [
-      120,
-      150
-    ],
-    "messages": [
-      {
-        "id": "w2-l5-boss-enter",
-        "when": "time",
-        "at": 15,
-        "text": "Le centre refuse notre accès. Il commande également toutes les machines encore actives."
-      },
-      {
-        "id": "w2-l5-repair-warning",
-        "when": "time",
-        "at": 45,
-        "text": "Les unités de maintenance prolongent le combat. Éliminez-les."
-      },
-      {
-        "id": "w2-l5-boss",
-        "when": "bossStart",
-        "text": "Le Directeur de Traitement tente d'intégrer notre camionnette à la chaîne."
-      },
-      {
-        "id": "w2-l5-reveal-1",
-        "when": "win",
-        "text": "Ici, 'traité' signifie déplacé vers une autre zone."
-      },
-      {
-        "id": "w2-l5-report",
-        "when": "win",
-        "text": "Dans nos bilans, ces mêmes cargaisons sont déclarées recyclées."
-      }
-    ]
-  }
+  "bossAt": 90
 }

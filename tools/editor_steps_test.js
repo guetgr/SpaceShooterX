@@ -138,7 +138,7 @@ for (const id of Object.keys(docs)){
   assert.ok(s.fields.find(f=> f.path.join('.') === 'audio.boss').options.length > 1); }
 
 // (c) applyFieldValue : aller-retour, retour au défaut, conteneurs vides, validation
-{ const doc = clone(docs['w1-l2']); delete doc.norma; doc.events=[{kind:'meteors',at:30}]; doc.spawns=[{type:'sat',from:0,w:8},{type:'satgun',from:10,w:6},{type:'bras',from:20,w:4,tier:1}]; doc.waves=[];
+{ const doc = clone(docs['w1-l2']); delete doc.norma; delete doc.bossAt; doc.events=[{kind:'meteors',at:30}]; doc.spawns=[{type:'sat',from:0,w:8},{type:'satgun',from:10,w:6},{type:'bras',from:20,w:4,tier:1}]; doc.waves=[];
   const steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
   const before = JSON.stringify(doc);
   // champ obligatoire : écrit, jamais effacé

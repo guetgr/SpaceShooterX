@@ -1,206 +1,51 @@
 {
   "id": "w2-l1",
-  "name": "ZONE DE DECHARGEMENT",
+  "name": "QUAI DE DECHARGEMENT",
   "type": "mission",
-  "threat": 2,
-  "bg": "quai",
+  "threat": 3,
   "intro": "earth",
-  "spawns": [],
-  "finalBoss": null,
   "reward": {
     "clear": 40,
     "first": 80
   },
+  "events": [
+    {
+      "kind": "nebula",
+      "at": 25
+    }
+  ],
   "world": "w2",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [
+  "waves": [],
+  "spawnClock": "difficulty",
+  "spawns": [
     {
       "type": "grunt",
-      "at": 2,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 200,
-      "x": 50,
-      "y": 0,
-      "alert": 1
+      "from": 0,
+      "w": 38
     },
     {
-      "type": "charo",
-      "at": 8,
-      "count": 1,
-      "spacing": 0,
-      "formation": "line",
-      "spread": 180,
-      "x": 40,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "sniper",
-      "at": 14,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 170,
-      "x": 60,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "grunt",
-      "at": 20,
-      "count": 5,
-      "spacing": 0.4,
-      "formation": "star",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "charo",
-      "at": 28,
-      "count": 2,
-      "spacing": 0.9,
-      "formation": "line",
-      "spread": 150,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "sniper",
-      "at": 35,
-      "count": 3,
-      "spacing": 0.7,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "grunt",
-      "at": 42,
-      "count": 6,
-      "spacing": 0.4,
-      "formation": "column",
-      "spread": 110,
-      "x": 30,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "charo",
-      "at": 50,
-      "count": 2,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 160,
-      "x": 60,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "sniper",
-      "at": 58,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 180,
-      "x": 40,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "grunt",
-      "at": 65,
-      "count": 5,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 220,
-      "x": 50,
-      "y": 0,
-      "alert": 1
+      "type": "diver",
+      "from": 0,
+      "w": 16
     }
   ],
-  "events": [
-    {
-      "kind": "crystal",
-      "at": 30,
-      "duration": 4,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 1,
-        "bigChance": 0.1,
-        "fallMin": 90,
-        "fallMax": 120
-      }
-    }
-  ],
-  "spawnClock": "mission",
+  "bg": "quai",
   "boss": "dread",
+  "finalBoss": null,
   "bossName": null,
-  "hpMul": 1.2,
-  "dmgMul": 1.1,
-  "timelineOnly": 1,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
   "zoom": {
-    "start": 1.3,
-    "end": 0.92,
-    "seconds": 70
+    "start": 1.35,
+    "end": 0.965,
+    "seconds": 67.5
   },
   "ambient": {
-    "golden": false,
-    "smallEvents": false
+    "golden": true,
+    "smallEvents": true
   },
-  "norma": {
-    "start": [
-      "Zone annoncée dégagée. Les images indiquent le contraire."
-    ],
-    "boss": [
-      "Le Déchargeur bloque la plateforme principale. Évitez ses projections de débris."
-    ],
-    "progress": [
-      "Les empilements de carcasse entravent la progression.",
-      "Les robots de manutention nous classent comme débris gênant.",
-      "Plateforme de déchargement en vue."
-    ],
-    "banter": [
-      "La densité de métal usé au mètre carré dépasse le seuil réglementaire.",
-      "Ces machines travaillent sans relâche depuis plusieurs décennies."
-    ],
-    "lowhp": [
-      "Alerte impact. Les pinces de manutention ciblent votre blindage."
-    ],
-    "win": [
-      "Des livraisons sont encore programmées. Il n'y a plus de place depuis plusieurs années."
-    ],
-    "lose": [
-      "Echec du déblaiement. Le Déchargeur a maintenu l'encombrement."
-    ],
-    "tickEvery": [
-      120,
-      150
-    ],
-    "messages": [
-      {
-        "id": "w2-l1-attack",
-        "when": "time",
-        "at": 25,
-        "text": "Les machines protègent le déchargement. Nous sommes devenus un obstacle."
-      },
-      {
-        "id": "w2-l1-boss",
-        "when": "bossStart",
-        "text": "Le Déchargeur bloque la plateforme principale. Évitez ses projections de débris."
-      },
-      {
-        "id": "w2-l1-report",
-        "when": "win",
-        "text": "Des livraisons sont encore programmées. Il n'y a plus de place depuis plusieurs années."
-      }
-    ]
-  }
+  "bossAt": 75
 }

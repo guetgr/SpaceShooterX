@@ -1,246 +1,75 @@
 {
   "id": "w2-l4",
-  "name": "MAINTIEN EN ACTIVITE",
+  "name": "BENNE A CRISTAUX",
   "type": "mission",
   "threat": 4,
-  "bg": "benne",
-  "intro": null,
-  "spawns": [],
-  "finalBoss": null,
   "reward": {
-    "clear": 60,
-    "first": 120
+    "clear": 55,
+    "first": 110
   },
-  "world": "w2",
-  "schemaVersion": 2,
-  "tuto": false,
-  "waves": [
-    {
-      "type": "sniper",
-      "at": 2,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "splitter",
-      "at": 8,
-      "count": 1,
-      "spacing": 0,
-      "formation": "line",
-      "spread": 180,
-      "x": 40,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "swarmer",
-      "at": 10,
-      "count": 2,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 120,
-      "x": 40,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "charo",
-      "at": 18,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 160,
-      "x": 60,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "mine",
-      "at": 26,
-      "count": 2,
-      "spacing": 1.0,
-      "formation": "line",
-      "spread": 200,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "splitter",
-      "at": 34,
-      "count": 2,
-      "spacing": 0.9,
-      "formation": "line",
-      "spread": 170,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "swarmer",
-      "at": 36,
-      "count": 2,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 120,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "sniper",
-      "at": 44,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "mine",
-      "at": 52,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 180,
-      "x": 30,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "charo",
-      "at": 60,
-      "count": 3,
-      "spacing": 0.5,
-      "formation": "star",
-      "spread": 170,
-      "x": 70,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "splitter",
-      "at": 68,
-      "count": 2,
-      "spacing": 1.0,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 3
-    },
-    {
-      "type": "sniper",
-      "at": 76,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "column",
-      "spread": 100,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    }
-  ],
   "events": [
     {
       "kind": "crystal",
-      "at": 30,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 2,
-        "bigChance": 0.2,
-        "fallMin": 90,
-        "fallMax": 120
-      }
+      "at": 10
     },
     {
-      "kind": "crystal",
-      "at": 70,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 2,
-        "bigChance": 0.3,
-        "fallMin": 90,
-        "fallMax": 120
-      }
+      "kind": "meteors",
+      "at": 40
     }
   ],
-  "spawnClock": "mission",
+  "world": "w2",
+  "schemaVersion": 2,
+  "tuto": false,
+  "waves": [],
+  "spawnClock": "difficulty",
+  "spawns": [
+    {
+      "type": "grunt",
+      "from": 0,
+      "w": 38
+    },
+    {
+      "type": "diver",
+      "from": 0,
+      "w": 16
+    },
+    {
+      "type": "turret",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "tank",
+      "from": 0,
+      "w": 12
+    },
+    {
+      "type": "mine",
+      "from": 0,
+      "w": 10
+    },
+    {
+      "type": "bomber",
+      "from": 0,
+      "w": 12
+    }
+  ],
+  "bg": "benne",
+  "intro": null,
   "boss": "dread",
+  "finalBoss": null,
   "bossName": null,
-  "hpMul": 1.4,
-  "dmgMul": 1.25,
-  "timelineOnly": 1,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
   "zoom": {
-    "start": 1.22,
-    "end": 0.82,
-    "seconds": 90
+    "start": 1.29,
+    "end": 0.83,
+    "seconds": 70
   },
   "ambient": {
-    "golden": false,
-    "smallEvents": false
+    "golden": true,
+    "smallEvents": true
   },
-  "norma": {
-    "start": [
-      "Secteur de maintenance du centre de supervision. Défenses organisées."
-    ],
-    "boss": [
-      "Le Contremaître ordonne l'envoi de renforts ciblés."
-    ],
-    "progress": [
-      "Les communications avec le serveur central de l'AGP sont établies.",
-      "Fichiers d'alertes de saturation retrouvés.",
-      "Le centre de supervision est en vue."
-    ],
-    "banter": [
-      "L'état de maintenance de ce secteur contraste vivement avec les décharges extérieures.",
-      "Les balises posées limitent nos trajectoires d'urgence."
-    ],
-    "lowhp": [
-      "Alerte : blindage très affaibli par les mécas de sécurité."
-    ],
-    "win": [
-      "Les transferts ont continué après l'alerte. Je conserve une copie de ces échanges."
-    ],
-    "lose": [
-      "Accès bloqué. Le Contremaître a sécurisé le secteur."
-    ],
-    "tickEvery": [
-      120,
-      150
-    ],
-    "messages": [
-      {
-        "id": "w2-l4-maint-status",
-        "when": "time",
-        "at": 20,
-        "text": "Ce secteur bénéficie toujours de maintenance. Les équipements abandonnés sont ailleurs."
-      },
-      {
-        "id": "w2-l4-agp-ack",
-        "when": "time",
-        "at": 55,
-        "text": "L'usine a signalé sa saturation. L'AGP a accusé réception."
-      },
-      {
-        "id": "w2-l4-boss",
-        "when": "bossStart",
-        "text": "Le Contremaître ordonne l'envoi de renforts ciblés."
-      },
-      {
-        "id": "w2-l4-report",
-        "when": "win",
-        "text": "Les transferts ont continué après l'alerte. Je conserve une copie de ces échanges."
-      }
-    ]
-  }
+  "bossAt": 90
 }

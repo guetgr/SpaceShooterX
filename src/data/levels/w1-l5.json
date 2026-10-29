@@ -1,224 +1,135 @@
 {
   "id": "w1-l5",
-  "name": "LA DIRECTION VOUS REÇOIT",
+  "name": "LE PDG",
   "type": "boss",
-  "threat": 4,
+  "threat": 3,
   "bg": "direction",
-  "intro": null,
-  "spawns": [],
+  "boss": "dread",
   "finalBoss": "pdg",
+  "bossName": "LE PDG",
   "reward": {
-    "clear": 50,
-    "first": 100
+    "clear": 60,
+    "first": 150
   },
   "world": "w1",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [
+  "waves": [],
+  "events": [],
+  "spawnClock": "difficulty",
+  "spawns": [
     {
-      "type": "shieldedGrunt",
-      "at": 2,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 1
+      "type": "grunt",
+      "from": -1,
+      "w": 38
     },
     {
       "type": "diver",
-      "at": 8,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 200,
-      "x": 50,
-      "y": 0,
-      "alert": 1
+      "from": 8,
+      "w": 16
     },
     {
-      "type": "tank",
-      "at": 15,
-      "count": 2,
-      "spacing": 1.0,
-      "formation": "line",
-      "spread": 150,
-      "x": 50,
-      "y": 0,
-      "alert": 2
+      "type": "shooter",
+      "from": 12,
+      "w": 22
     },
     {
-      "type": "elite",
-      "at": 22,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 180,
-      "x": 40,
-      "y": 0,
-      "alert": 2
+      "type": "turret",
+      "from": 20,
+      "w": 12
+    },
+    {
+      "type": "drone",
+      "from": 28,
+      "w": 16
+    },
+    {
+      "type": "splitter",
+      "from": 35,
+      "w": 14
     },
     {
       "type": "shieldedGrunt",
-      "at": 30,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "star",
-      "spread": 170,
-      "x": 60,
-      "y": 0,
-      "alert": 2
+      "from": 45,
+      "w": 12
+    },
+    {
+      "type": "mine",
+      "from": 50,
+      "w": 10
+    },
+    {
+      "type": "tank",
+      "from": 55,
+      "w": 12
+    },
+    {
+      "type": "bomber",
+      "from": 65,
+      "w": 12
+    },
+    {
+      "type": "sniper",
+      "from": 75,
+      "w": 10
+    },
+    {
+      "type": "swarmer",
+      "from": 80,
+      "w": 18
+    },
+    {
+      "type": "healer",
+      "from": 95,
+      "w": 9
     },
     {
       "type": "ghost",
-      "at": 38,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "tank",
-      "at": 46,
-      "count": 3,
-      "spacing": 0.7,
-      "formation": "line",
-      "spread": 160,
-      "x": 50,
-      "y": 0,
-      "alert": 3
+      "from": 110,
+      "w": 12
     },
     {
       "type": "elite",
-      "at": 54,
-      "count": 2,
-      "spacing": 1.0,
-      "formation": "line",
-      "spread": 190,
-      "x": 50,
-      "y": 0,
-      "alert": 2
+      "from": 130,
+      "w": 8
     },
     {
-      "type": "diver",
-      "at": 62,
-      "count": 5,
-      "spacing": 0.4,
-      "formation": "column",
-      "spread": 100,
-      "x": 30,
-      "y": 0,
-      "alert": 1
+      "type": "mothership",
+      "from": 140,
+      "w": 8
     },
     {
-      "type": "shieldedGrunt",
-      "at": 70,
-      "count": 4,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 220,
-      "x": 50,
-      "y": 0,
-      "alert": 2
+      "type": "vortex",
+      "from": 150,
+      "w": 7
+    },
+    {
+      "type": "charo",
+      "from": 100,
+      "w": 11
+    },
+    {
+      "type": "kamikaze",
+      "from": 22,
+      "w": 14
+    },
+    {
+      "type": "spider",
+      "from": 30,
+      "w": 11
     }
   ],
-  "events": [
-    {
-      "kind": "crystal",
-      "at": 25,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 2,
-        "bigChance": 0.2,
-        "fallMin": 90,
-        "fallMax": 120
-      }
-    },
-    {
-      "kind": "crystal",
-      "at": 65,
-      "duration": 5,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 2,
-        "bigChance": 0.3,
-        "fallMin": 90,
-        "fallMax": 120
-      }
-    }
-  ],
-  "spawnClock": "mission",
-  "boss": "dread",
-  "bossName": null,
-  "hpMul": 1.3,
-  "dmgMul": 1.2,
-  "timelineOnly": 1,
+  "intro": null,
+  "hpMul": 1,
+  "dmgMul": 1,
+  "timelineOnly": 0,
   "zoom": {
     "start": 1.25,
-    "end": 0.85,
-    "seconds": 100
+    "end": 0.775,
+    "seconds": 70
   },
   "ambient": {
-    "golden": false,
-    "smallEvents": false
-  },
-  "norma": {
-    "start": [
-      "Approche finale des bureaux de la direction. Gardes et escorte de sécurité en position."
-    ],
-    "boss": [
-      "Le PDG engage sa tour armée personnelle."
-    ],
-    "progress": [
-      "L'escorte personnelle du PDG se déploie.",
-      "Ses griefs sont nombreux, mais votre bon d'intervention reste valable.",
-      "La structure de la tour armée présente des faiblesses."
-    ],
-    "banter": [
-      "Le dialogue commercial est désormais totalement rompu.",
-      "Rappel : la destruction de matériels de direction n'impacte pas votre prime."
-    ],
-    "lowhp": [
-      "Structure de coque faible. Évitez les salves lourdes du PDG."
-    ],
-    "win": [
-      "Zone nettoyée. Une réclamation client reste ouverte."
-    ],
-    "lose": [
-      "Entrevue annulée. La sécurité du PDG a protégé le complexe."
-    ],
-    "tickEvery": [
-      120,
-      150
-    ],
-    "messages": [
-      {
-        "id": "w1-l5-dialogue-1",
-        "when": "time",
-        "at": 40,
-        "text": "PDG : 'Vous avez détruit mes satellites, mes machines et mon réacteur !'"
-      },
-      {
-        "id": "w1-l5-dialogue-2",
-        "when": "time",
-        "at": 43,
-        "text": "N.O.R.M.A. : 'Il suit correctement votre progression.'"
-      },
-      {
-        "id": "w1-l5-boss",
-        "when": "bossStart",
-        "text": "La tour armée du PDG entre en combat. Attention aux salves coordonnées."
-      },
-      {
-        "id": "w1-l5-report",
-        "when": "win",
-        "text": "Zone nettoyée. Une réclamation client reste ouverte. Nouvelle affectation : Mars."
-      }
-    ]
+    "golden": true,
+    "smallEvents": true
   }
 }

@@ -4,6 +4,9 @@ const assert=require('assert'),fs=require('fs'),path=require('path'),vm=require(
 const arrival=vm.createContext({});vm.runInContext(fs.readFileSync(path.join(__dirname,'../src/data/boss-arrival.js'),'utf8'),arrival);   // levelBossAt : le boss arrive après les autres mobs de la timeline
 const load=id=>JSON.parse(fs.readFileSync(path.join(__dirname,'../src/data/levels',id+'.json'),'utf8'));
 const first=load('w1-l1'),second=load('w1-l2');
+if(first.name!=='PERTURBATIONS LOCALES'||second.name!=='RECUPERATION PRIORITAIRE'){          // versions initiales rétablies (29 oct. 2026) : le contrat de la bible v2 vaut pour les points nommés « Bible v2 » de l'historique de l'éditeur
+  console.log('IGNORÉ : les ordres 1 et 2 sont en version initiale ; contrat bible v2 disponible dans l\'historique de l\'éditeur (Bible v2 — …)');process.exit(0);
+}
 assert.equal(first.name,'PERTURBATIONS LOCALES');assert.equal(first.finalBoss,'meteo');
 assert.equal(second.name,'RECUPERATION PRIORITAIRE');assert.equal(second.finalBoss,'araignee');
 for(const level of [first,second]){

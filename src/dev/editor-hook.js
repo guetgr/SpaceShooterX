@@ -8,6 +8,7 @@
   const q = new URLSearchParams(location.search);
   if (!q.has('edit') || window.parent === window) return;
   const mode = q.get('edit') || 'play';
+  try { music.muted = true; sfx.muted = true; music.applyVol(); sfx.applyVol(); } catch(e){ /* ignore */ }          // pas de son dans les aperçus de l'éditeur : seule la musique du laboratoire (?lab&embed) joue
   const send = m=> window.parent.postMessage(Object.assign({ ssx:1 }, m), location.origin);
   const SKILLS = { casual:{ sens:0.8, noise:0.3, react:9 }, average:{ sens:1.0, noise:0.12, react:6 }, expert:{ sens:1.3, noise:0.05, react:3 } };
 

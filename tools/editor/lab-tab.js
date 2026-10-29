@@ -30,7 +30,7 @@
     // inspecteur du boss : étapes lisibles dans une colonne étroite
     '#inspector .st-step>summary{display:block}#inspector .st-step>summary strong{display:block;min-width:0;margin-bottom:4px}#inspector .st-desc{display:block;max-width:none;font-size:10px}#inspector .f{grid-template-columns:1fr 84px}#inspector .f input[type=number]{width:84px}',
     // laboratoire (20 %) et tableau des parties
-    '.dock-head{display:flex;justify-content:space-between;align-items:center;gap:6px}.dock-head b{font-size:12px}.lab-frame{flex:1;min-height:300px;width:100%;border:1px solid var(--line);border-radius:6px;background:#070a09}',
+    '#dockVersion{flex:1;min-width:0;font-size:11px;padding:5px}.dock-head{display:flex;justify-content:space-between;align-items:center;gap:6px}.dock-head b{font-size:12px}.lab-frame{flex:1;min-height:300px;width:100%;border:1px solid var(--line);border-radius:6px;background:#070a09}',
     '#labDock .dock-runs{flex:none;margin:0;max-height:230px;overflow:auto;border:1px solid var(--line);border-radius:6px;padding:6px 8px;background:#161d24}.dock-runs-head{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:4px;font-size:11px;flex-wrap:wrap}',
     '#labTabBody{overflow-x:auto}#labTabBody table{font-size:10px}#labTabBody td,#labTabBody th{padding:3px 4px;white-space:nowrap;max-width:110px;overflow:hidden;text-overflow:ellipsis}',
     // écran étroit : tout en colonne
@@ -40,7 +40,23 @@
 
   const wait = setInterval(()=> { if (S.ready){ clearInterval(wait); loaded = true; frame.src = 'index.html?lab&embed&level=' + encodeURIComponent(S.sel); } }, 300);
   // le niveau du labo suit la mission choisie ici (force = relire aussi l'historique, ex. après un enregistrement)
-  const select = force=> { if (!ready) return; if (!force && sent === S.sel) return; sent = S.sel; send({ type:'lab-select', levelId:S.sel }); if (window.LabRuns) LabRuns.refresh(); };
+  // version du niveau à tester : brouillon, publiée ou une version de l'historique ; le labo ne la montre pas, c'est ici qu'on la choisit
+  const vsel = $('dockVersion'), KINDS = { manual:'Point nommé', saved:'Enregistrement', initial:'Version initiale', 'before-save':'État précédent', 'before-restore':'Avant restauration' };
+  let versionLevel = '';
+  const sendVersion = ()=> send({ type:'lab-version', versionId:vsel.value });
+  vsel.onchange = sendVersion;
+  async function loadVersions(){
+    const level = S.sel, keep = level === versionLevel ? vsel.value : 'draft'; versionLevel = level;
+    let list = []; try { list = (await (await fetch('/__editor/versions?level=' + encodeURIComponent(level))).json()).versions || []; } catch(e){ /* historique indisponible */ }
+    if (level !== S.sel) return;
+    vsel.replaceChildren();
+    const add = (v, t)=> { const o = document.createElement('option'); o.value = v; o.textContent = t; vsel.appendChild(o); };
+    add('draft', 'Brouillon (non enregistré)'); add('', 'Publiée');
+    list.forEach(v=> add(v.id, v.title + ' — ' + (KINDS[v.kind] || 'Version') + ' · ' + new Date(v.createdAt).toLocaleString('fr-FR', { dateStyle:'short', timeStyle:'short' })));
+    vsel.value = [...vsel.options].some(o=> o.value === keep) ? keep : 'draft';
+    sendVersion();
+  }
+  const select = force=> { if (!ready) return; if (!force && sent === S.sel) return; sent = S.sel; send({ type:'lab-select', levelId:S.sel }); loadVersions(); if (window.LabRuns) LabRuns.refresh(); };
   const baseSetView = setView;
   setView = function(view){ baseSetView(view); select(false); };
   const resync = ()=> setTimeout(()=> select(true), 1500);

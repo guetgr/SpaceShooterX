@@ -224,14 +224,15 @@
     ui.show = async ()=>{ ui.runs = await loadRuns(); render(); root.classList.add('on'); };
     ui.hide = ()=> root.classList.remove('on');
     ui.visible = ()=> root.classList.contains('on');
+    ui.setVersion = id=> { st.versionId = id == null ? 'draft' : String(id); };
     ui.launchNow = async ()=> {          // « Tester le brouillon » de l'éditeur : niveau et brouillon courants, dernier équipement
-      st.versionId = 'draft';
       const idx = levels.findIndex(l=> l.id === st.levelId);
       await launch(levels[idx], equipCost(st.equip), budgetBefore(levels, idx, ui.runs));
     };
     ui.pick = async id=> { if (!levels.some(l=> l.id === id)) return; if (id !== st.levelId) return pickLevel(id); await loadVersions(true); render(); };          // même niveau : on relit seulement l'historique (nouvelle version enregistrée dans l'éditeur)
 
     async function loadVersions(keep){
+      if (EMBED){ st.versions = []; return; }          // intégré : l'éditeur choisit la version et la fait suivre (message lab-version)
       const was = st.versionId; st.versions = []; st.versionId = EMBED ? 'draft' : '';          // dans l'éditeur on teste par défaut le brouillon (boucle « je modifie, je teste »)
       try { st.versions = (await json(VERSIONS + '?level=' + encodeURIComponent(st.levelId))).versions; } catch(e){ /* historique indisponible */ }
       if (keep && (was === 'draft' || was === '' || st.versions.some(v=> v.id === was))) st.versionId = was;
@@ -310,7 +311,7 @@
       const parts = [
         EMBED ? null : h('div', { class:'lab-row top' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
         EMBED ? null : h('p', {}, 'Sauvegarde en mémoire : votre progression n’est jamais touchée.'),
-        sec('mission', 'MISSION', (lvl.tuto ? 'TUTO' : lvl.id.toUpperCase()) + ' · ' + mineRuns.length + ' partie(s)',
+        EMBED ? null : sec('mission', 'MISSION', (lvl.tuto ? 'TUTO' : lvl.id.toUpperCase()) + ' · ' + mineRuns.length + ' partie(s)',
           h('div', { class:'lab-row' }, h('label', {}, 'Ordre'), lvlSel),
           h('div', { class:'lab-row' }, h('label', {}, 'Version du niveau'), verSel),
           serverOk ? null : h('p', {}, 'Pas de serveur local : parties gardées dans ce navigateur.'),
@@ -374,6 +375,7 @@
       if (EMBED) window.addEventListener('message', ev=>{
         if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
         if (ev.data.type === 'lab-select' && ui && ui.pick) ui.pick(ev.data.levelId);
+        else if (ev.data.type === 'lab-version' && ui && ui.setVersion) ui.setVersion(ev.data.versionId);
         else if (ev.data.type === 'lab-launch' && ui && ui.launchNow) ui.launchNow();
         else if (ev.data.type === 'lab-draft' && draftWait){ const f = draftWait; draftWait = null; f(ev.data.document || null); }
       });

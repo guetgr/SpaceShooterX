@@ -70,7 +70,7 @@ const L1 = 'w1-l1';            // menace 1, boss final (meteo) arrivant à 60 s
   const FIX = { bossAt:60 };
   assert.ok(has(W(L1, Object.assign({ events:[{ kind:'crystal', at:61 }] }, FIX)), 'après l\'arrivée du boss'));
   assert.ok(!has(W(L1, Object.assign({ events:[{ kind:'crystal', at:59 }] }, FIX)), 'après l\'arrivée du boss'));
-  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:900 }] }), 'après l\'arrivée du boss'));
+  assert.ok(!has(W('w2-l6', { events:[{ kind:'crystal', at:900 }] }), 'après l\'arrivée du boss'));        // ordre « boss » : le boss arrive dès le départ, aucune date à dépasser
   assert.ok(has(W('w3-l2', { events:[{ kind:'crystal', at:900 }] }), 'après l\'arrivée du boss'));        // w3-l2 : boss fixé à 90 s (timeline vide)
   assert.ok(has(W(L1, Object.assign({ norma:{ messages:[{ id:'t', when:'time', at:100, text:'Trop tard' }] } }, FIX)), 'Boîte N.O.R.M.A. « t »'));
   assert.ok(!has(W(L1, Object.assign({ norma:{ messages:[{ id:'t', when:'time', at:30, text:'Ok' }] } }, FIX)), 'Boîte N.O.R.M.A. « t »'));

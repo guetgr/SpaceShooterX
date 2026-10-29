@@ -1,11 +1,22 @@
 {
   "id": "w1-l1",
-  "name": "PERTURBATIONS LOCALES",
+  "name": "DECOLLAGE",
   "type": "mission",
   "threat": 1,
   "bg": "debris",
   "intro": "earth",
-  "spawns": [],
+  "spawns": [
+    {
+      "type": "sat",
+      "from": 0,
+      "w": 10
+    },
+    {
+      "type": "satgun",
+      "from": 14,
+      "w": 5
+    }
+  ],
   "finalBoss": "meteo",
   "reward": {
     "clear": 20,
@@ -14,221 +25,22 @@
   "world": "w1",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [
-    {
-      "type": "sat",
-      "at": 2,
-      "count": 4,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "satgun",
-      "at": 7,
-      "count": 1,
-      "spacing": 0,
-      "formation": "line",
-      "spread": 180,
-      "x": 35,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "shooter",
-      "at": 12,
-      "count": 3,
-      "spacing": 0.6,
-      "formation": "line",
-      "spread": 200,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "drone",
-      "at": 18,
-      "count": 3,
-      "spacing": 0,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 3
-    },
-    {
-      "type": "satgun",
-      "at": 23,
-      "count": 2,
-      "spacing": 0.8,
-      "formation": "line",
-      "spread": 180,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "sat",
-      "at": 28,
-      "count": 4,
-      "spacing": 0.6,
-      "formation": "column",
-      "spread": 100,
-      "x": 25,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "turret",
-      "at": 34,
-      "count": 1,
-      "spacing": 0,
-      "formation": "line",
-      "spread": 180,
-      "x": 72,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "shooter",
-      "at": 35,
-      "count": 3,
-      "spacing": 0.7,
-      "formation": "column",
-      "spread": 90,
-      "x": 28,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "drone",
-      "at": 41,
-      "count": 5,
-      "spacing": 0,
-      "formation": "star",
-      "spread": 170,
-      "x": 60,
-      "y": 0,
-      "alert": 3
-    },
-    {
-      "type": "satgun",
-      "at": 47,
-      "count": 2,
-      "spacing": 0.7,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    },
-    {
-      "type": "shooter",
-      "at": 49,
-      "count": 3,
-      "spacing": 0.7,
-      "formation": "line",
-      "spread": 190,
-      "x": 50,
-      "y": 0,
-      "alert": 2
-    },
-    {
-      "type": "sat",
-      "at": 54,
-      "count": 3,
-      "spacing": 0.5,
-      "formation": "line",
-      "spread": 210,
-      "x": 50,
-      "y": 0,
-      "alert": 1
-    }
-  ],
-  "events": [
-    {
-      "kind": "crystal",
-      "at": 28,
-      "duration": 4,
-      "params": {
-        "tickMs": 1000,
-        "perTick": 1,
-        "bigChance": 0,
-        "fallMin": 90,
-        "fallMax": 120
-      }
-    }
-  ],
+  "waves": [],
+  "events": [],
   "spawnClock": "mission",
   "boss": null,
   "bossName": null,
   "hpMul": 1,
   "dmgMul": 1,
-  "timelineOnly": 1,
+  "timelineOnly": 0,
   "zoom": {
     "start": 1.33,
     "end": 0.955,
     "seconds": 54
   },
   "ambient": {
-    "golden": false,
-    "smallEvents": false
+    "golden": true,
+    "smallEvents": true
   },
-  "norma": {
-    "start": [
-      "Le signal de l'antenne a réveillé le réseau météo. Votre ordre de nettoyage reste valable."
-    ],
-    "boss": [
-      "La station météo vous classe comme une perturbation locale. Elle prépare le traitement."
-    ],
-    "progress": [
-      "Les patrouilles protègent les installations déclarées abandonnées.",
-      "Le réseau météo coordonne encore la défense du secteur.",
-      "Le poste de contrôle météo répond toujours. Il faudra le mettre hors service."
-    ],
-    "banter": [
-      "Le matériel est abandonné sur les formulaires. Sur place, il conserve ses habitudes.",
-      "Vous êtes autorisé à nettoyer. Eux ne semblent pas avoir reçu la copie."
-    ],
-    "lowhp": [
-      "Votre coque se dégrade. Évitez de fournir des déchets supplémentaires."
-    ],
-    "win": [
-      "Réseau météo neutralisé. Les machines de récupération restent actives dans le secteur voisin."
-    ],
-    "lose": [
-      "Intervention interrompue. Le réseau météo conserve votre classification : intrusion."
-    ],
-    "tickEvery": [
-      120,
-      150
-    ],
-    "messages": [
-      {
-        "id": "w1-l1-targeting",
-        "when": "time",
-        "at": 24,
-        "text": "Ils partagent leurs données de ciblage. Les déchets font preuve d'un bel esprit d'équipe."
-      },
-      {
-        "id": "w1-l1-owner",
-        "when": "time",
-        "at": 45,
-        "text": "Météo et patrouilles : même propriétaire. Les consignes de défense n'ont pas été annulées."
-      },
-      {
-        "id": "w1-l1-boss",
-        "when": "bossStart",
-        "text": "La station météo vous classe comme une perturbation locale. Elle prépare le traitement."
-      },
-      {
-        "id": "w1-l1-report",
-        "when": "win",
-        "text": "Réseau météo neutralisé. Les machines de récupération restent actives dans le secteur voisin."
-      }
-    ]
-  }
+  "bossAt": 60
 }
