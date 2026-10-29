@@ -89,7 +89,7 @@ for (const id of Object.keys(docs)){
 }
 
 // mobs : un sous-bloc par type du tirage
-{ const doc = docs['w2-l2'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
+{ const doc = docs['w3-l2'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
   assert.strictEqual(mobs.fields.length, types.length * 4);
   types.forEach(t=> { const g = mobs.fields.filter(f=> f.path[1] === t); assert.deepStrictEqual(g.map(f=> f.path[2]), ['hpMul', 'dmgMul', 'speedMul', 'scoreMul']); g.forEach(f=> assert.deepStrictEqual([f.min, f.max, f.def, f.optional], [0.1, 10, 1, true])); });
   assert.ok(M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).every(s=> s.id !== 'mobs')); }

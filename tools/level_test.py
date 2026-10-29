@@ -106,8 +106,8 @@ with sync_playwright() as pw:
     f2 = p.evaluate("getMeta().composants"); bk = bank()
     check(bk.get('prime') == 10 and f2 - f1 == bk.get('total'), 'rejeu : prime réduite à 10 (%s, +%s)' % (bk, f2 - f1))
 
-    print('kills (w2-l2)')
-    start('w2-l2', "levelById('w2-l2').goal.count = 5; levelById('w2-l2').finalBoss = null")       # le boss de fin est testé à part plus bas
+    print('kills (w3-l2)')
+    start('w3-l2', "levelById('w3-l2').goal.count = 5; levelById('w3-l2').finalBoss = null")       # le boss de fin est testé à part plus bas
     p.evaluate("(()=>{ %s.runKills = 5; })()" % SC); p.wait_for_timeout(3800)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par kills')
 

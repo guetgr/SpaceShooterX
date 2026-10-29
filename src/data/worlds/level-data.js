@@ -1125,244 +1125,674 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w1-l5": {
     "id": "w1-l5",
-    "name": "LE PDG",
+    "name": "LA DIRECTION VOUS REÇOIT",
     "type": "boss",
-    "threat": 3,
+    "threat": 4,
     "bg": "direction",
-    "boss": "dread",
+    "goal": {},
+    "intro": null,
+    "spawns": [],
     "finalBoss": "pdg",
-    "bossName": "LE PDG",
     "reward": {
-      "clear": 60,
-      "first": 150
+      "clear": 50,
+      "first": 100
     },
     "world": "w1",
     "schemaVersion": 2,
     "tuto": false,
-    "goal": {},
-    "waves": [],
-    "events": [],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
-        "type": "grunt",
-        "from": -1,
-        "w": 38
+        "type": "shieldedGrunt",
+        "at": 2,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
         "type": "diver",
-        "from": 8,
-        "w": 16
-      },
-      {
-        "type": "shooter",
-        "from": 12,
-        "w": 22
-      },
-      {
-        "type": "turret",
-        "from": 20,
-        "w": 12
-      },
-      {
-        "type": "drone",
-        "from": 28,
-        "w": 16
-      },
-      {
-        "type": "splitter",
-        "from": 35,
-        "w": 14
-      },
-      {
-        "type": "shieldedGrunt",
-        "from": 45,
-        "w": 12
-      },
-      {
-        "type": "mine",
-        "from": 50,
-        "w": 10
+        "at": 8,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
         "type": "tank",
-        "from": 55,
-        "w": 12
-      },
-      {
-        "type": "bomber",
-        "from": 65,
-        "w": 12
-      },
-      {
-        "type": "sniper",
-        "from": 75,
-        "w": 10
-      },
-      {
-        "type": "swarmer",
-        "from": 80,
-        "w": 18
-      },
-      {
-        "type": "healer",
-        "from": 95,
-        "w": 9
-      },
-      {
-        "type": "ghost",
-        "from": 110,
-        "w": 12
+        "at": 15,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 150,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
         "type": "elite",
-        "from": 130,
-        "w": 8
+        "at": 22,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 40,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "mothership",
-        "from": 140,
-        "w": 8
+        "type": "shieldedGrunt",
+        "at": 30,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "star",
+        "spread": 170,
+        "x": 60,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "vortex",
-        "from": 150,
-        "w": 7
+        "type": "ghost",
+        "at": 38,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 210,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "charo",
-        "from": 100,
-        "w": 11
+        "type": "tank",
+        "at": 46,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 160,
+        "x": 50,
+        "y": 0,
+        "alert": 3
       },
       {
-        "type": "kamikaze",
-        "from": 22,
-        "w": 14
+        "type": "elite",
+        "at": 54,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 190,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "spider",
-        "from": 30,
-        "w": 11
+        "type": "diver",
+        "at": 62,
+        "count": 5,
+        "spacing": 0.4,
+        "formation": "column",
+        "spread": 100,
+        "x": 30,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "shieldedGrunt",
+        "at": 70,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       }
     ],
-    "intro": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 25,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 65,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.3,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
+    "boss": "dread",
+    "bossName": null,
+    "hpMul": 1.3,
+    "dmgMul": 1.2,
+    "timelineOnly": 1,
     "zoom": {
       "start": 1.25,
-      "end": 0.775,
-      "seconds": 70
+      "end": 0.85,
+      "seconds": 100
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Approche finale des bureaux de la direction. Gardes et escorte de sécurité en position."
+      ],
+      "boss": [
+        "Le PDG engage sa tour armée personnelle."
+      ],
+      "progress": [
+        "L'escorte personnelle du PDG se déploie.",
+        "Ses griefs sont nombreux, mais votre bon d'intervention reste valable.",
+        "La structure de la tour armée présente des faiblesses."
+      ],
+      "banter": [
+        "Le dialogue commercial est désormais totalement rompu.",
+        "Rappel : la destruction de matériels de direction n'impacte pas votre prime."
+      ],
+      "lowhp": [
+        "Structure de coque faible. Évitez les salves lourdes du PDG."
+      ],
+      "win": [
+        "Zone nettoyée. Une réclamation client reste ouverte."
+      ],
+      "lose": [
+        "Entrevue annulée. La sécurité du PDG a protégé le complexe."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w1-l5-dialogue-1",
+          "when": "time",
+          "at": 40,
+          "text": "PDG : 'Vous avez détruit mes satellites, mes machines et mon réacteur !'"
+        },
+        {
+          "id": "w1-l5-dialogue-2",
+          "when": "time",
+          "at": 43,
+          "text": "N.O.R.M.A. : 'Il suit correctement votre progression.'"
+        },
+        {
+          "id": "w1-l5-boss",
+          "when": "bossStart",
+          "text": "La tour armée du PDG entre en combat. Attention aux salves coordonnées."
+        },
+        {
+          "id": "w1-l5-report",
+          "when": "win",
+          "text": "Zone nettoyée. Une réclamation client reste ouverte. Nouvelle affectation : Mars."
+        }
+      ]
     }
   },
   "w2-l1": {
     "id": "w2-l1",
-    "name": "QUAI DE DECHARGEMENT",
+    "name": "ZONE DE DECHARGEMENT",
     "type": "survive",
-    "threat": 3,
+    "threat": 2,
+    "bg": "quai",
     "goal": {
-      "seconds": 75
+      "seconds": 80
     },
     "intro": "earth",
+    "spawns": [],
+    "finalBoss": null,
     "reward": {
       "clear": 40,
       "first": 80
     },
-    "events": [
-      {
-        "kind": "nebula",
-        "at": 25
-      }
-    ],
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
         "type": "grunt",
-        "from": 0,
-        "w": 38
+        "at": 2,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "diver",
-        "from": 0,
-        "w": 16
+        "type": "charo",
+        "at": 8,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 40,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "sniper",
+        "at": 14,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 170,
+        "x": 60,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "grunt",
+        "at": 20,
+        "count": 5,
+        "spacing": 0.4,
+        "formation": "star",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "charo",
+        "at": 28,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 150,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "sniper",
+        "at": 35,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 210,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "grunt",
+        "at": 42,
+        "count": 6,
+        "spacing": 0.4,
+        "formation": "column",
+        "spread": 110,
+        "x": 30,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "charo",
+        "at": 50,
+        "count": 2,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 160,
+        "x": 60,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "sniper",
+        "at": 58,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 40,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "grunt",
+        "at": 65,
+        "count": 5,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       }
     ],
-    "bg": "quai",
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 30,
+        "duration": 4,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 1,
+          "bigChance": 0.1,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
     "boss": null,
-    "finalBoss": null,
     "bossName": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "hpMul": 1.2,
+    "dmgMul": 1.1,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.35,
-      "end": 0.965,
-      "seconds": 67.5
+      "start": 1.3,
+      "end": 0.92,
+      "seconds": 70
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Zone annoncée dégagée. Les images indiquent le contraire."
+      ],
+      "boss": [
+        "Le Déchargeur bloque la plateforme principale. Évitez ses projections de débris."
+      ],
+      "progress": [
+        "Les empilements de carcasse entravent la progression.",
+        "Les robots de manutention nous classent comme débris gênant.",
+        "Plateforme de déchargement en vue."
+      ],
+      "banter": [
+        "La densité de métal usé au mètre carré dépasse le seuil réglementaire.",
+        "Ces machines travaillent sans relâche depuis plusieurs décennies."
+      ],
+      "lowhp": [
+        "Alerte impact. Les pinces de manutention ciblent votre blindage."
+      ],
+      "win": [
+        "Des livraisons sont encore programmées. Il n'y a plus de place depuis plusieurs années."
+      ],
+      "lose": [
+        "Echec du déblaiement. Le Déchargeur a maintenu l'encombrement."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w2-l1-attack",
+          "when": "time",
+          "at": 25,
+          "text": "Les machines protègent le déchargement. Nous sommes devenus un obstacle."
+        },
+        {
+          "id": "w2-l1-boss",
+          "when": "bossStart",
+          "text": "Le Déchargeur bloque la plateforme principale. Évitez ses projections de débris."
+        },
+        {
+          "id": "w2-l1-report",
+          "when": "win",
+          "text": "Des livraisons sont encore programmées. Il n'y a plus de place depuis plusieurs années."
+        }
+      ]
     }
   },
   "w2-l2": {
     "id": "w2-l2",
-    "name": "CHAINE DE TRI",
-    "type": "kill",
+    "name": "MATIERE PREMIERE",
+    "type": "survive",
     "threat": 3,
+    "bg": "tri",
     "goal": {
-      "count": 50
+      "seconds": 90
     },
+    "intro": null,
+    "spawns": [],
+    "finalBoss": null,
     "reward": {
       "clear": 45,
       "first": 90
     },
-    "events": [],
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
         "type": "grunt",
-        "from": 0,
-        "w": 38
+        "at": 2,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 190,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "diver",
-        "from": 0,
-        "w": 16
+        "type": "mothership",
+        "at": 8,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "turret",
-        "from": 0,
-        "w": 12
+        "type": "charo",
+        "at": 15,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 160,
+        "x": 40,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "spider",
+        "at": 22,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 60,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "grunt",
+        "at": 28,
+        "count": 5,
+        "spacing": 0.4,
+        "formation": "star",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "mothership",
+        "at": 36,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 170,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "spider",
+        "at": 42,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 30,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "charo",
+        "at": 50,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "grunt",
+        "at": 58,
+        "count": 6,
+        "spacing": 0.4,
+        "formation": "column",
+        "spread": 100,
+        "x": 70,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "mothership",
+        "at": 66,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 160,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "spider",
+        "at": 72,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       }
     ],
-    "bg": "tri",
-    "intro": null,
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 32,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 1,
+          "bigChance": 0.15,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 68,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
     "boss": null,
-    "finalBoss": null,
     "bossName": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "hpMul": 1.3,
+    "dmgMul": 1.15,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.33,
-      "end": 0.9199999999999999,
-      "seconds": 70
+      "start": 1.28,
+      "end": 0.88,
+      "seconds": 80
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Accès aux chaînes de tri. Les capteurs de l'usine analysent notre structure."
+      ],
+      "boss": [
+        "Le Désosseur approche. Attention à ses outils de coupe lourds."
+      ],
+      "progress": [
+        "Les presses blindées restreignent l'espace de vol.",
+        "Le système de tri cherche des pièces de rechange sur votre véhicule.",
+        "La chaîne d'assemblage principale est proche."
+      ],
+      "banter": [
+        "Votre camionnette contient 40% d'alliages réutilisables selon leur barème.",
+        "Les mécanos de récupération réparent le matériel ennemi plus vite que vous ne le détruisez."
+      ],
+      "lowhp": [
+        "Structure endommagée. Risque de démontage spontané."
+      ],
+      "win": [
+        "Les pièces récupérées alimentent la maintenance de l'usine. Le reste repart en décharge."
+      ],
+      "lose": [
+        "Intervention échouée. Votre camionnette a été réaffectée comme pièce détachée."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w2-l2-recycle-id",
+          "when": "time",
+          "at": 20,
+          "text": "Votre véhicule vient d'être accepté au recyclage. Je demande une correction."
+        },
+        {
+          "id": "w2-l2-healer-warn",
+          "when": "time",
+          "at": 44,
+          "text": "Cette unité remet les autres en état. Commencez par elle."
+        },
+        {
+          "id": "w2-l2-boss",
+          "when": "bossStart",
+          "text": "Le Désosseur approche. Attention à ses outils de coupe lourds."
+        },
+        {
+          "id": "w2-l2-report",
+          "when": "win",
+          "text": "Les pièces récupérées alimentent la maintenance de l'usine. Le reste repart en décharge."
+        }
+      ]
     }
   },
   "w2-l3": {
@@ -1854,80 +2284,234 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w2-l5": {
     "id": "w2-l5",
-    "name": "ATELIER DE BROYAGE",
-    "type": "kill",
+    "name": "TRAITEMENT EN COURS",
+    "type": "survive",
     "threat": 5,
-    "boss": null,
-    "bossName": null,
+    "bg": "broyeur",
+    "goal": {
+      "seconds": 120
+    },
+    "intro": null,
+    "spawns": [],
+    "finalBoss": null,
     "reward": {
-      "clear": 60,
-      "first": 120
+      "clear": 80,
+      "first": 150
     },
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "goal": {
-      "count": 60
-    },
-    "waves": [],
-    "events": [
-      {
-        "kind": "mines",
-        "at": 15
-      }
-    ],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
         "type": "grunt",
-        "from": 0,
-        "w": 38
+        "at": 2,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "diver",
-        "from": 0,
-        "w": 16
+        "type": "charo",
+        "at": 8,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "turret",
-        "from": 0,
-        "w": 12
+        "type": "spider",
+        "at": 16,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 160,
+        "x": 40,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "tank",
-        "from": 0,
-        "w": 12
+        "type": "sniper",
+        "at": 24,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 210,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "mine",
-        "from": 0,
-        "w": 10
+        "type": "charo",
+        "at": 32,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "star",
+        "spread": 170,
+        "x": 60,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "bomber",
-        "from": 0,
-        "w": 12
+        "type": "spider",
+        "at": 40,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 150,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "kamikaze",
-        "from": 0,
-        "w": 14
+        "type": "grunt",
+        "at": 48,
+        "count": 6,
+        "spacing": 0.4,
+        "formation": "column",
+        "spread": 100,
+        "x": 30,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "sniper",
+        "at": 56,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "charo",
+        "at": 64,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 190,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "spider",
+        "at": 72,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       }
     ],
-    "bg": "broyeur",
-    "intro": null,
-    "finalBoss": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 25,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.25,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 65,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 3,
+          "bigChance": 0.35,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
+    "boss": null,
+    "bossName": null,
+    "hpMul": 1.5,
+    "dmgMul": 1.3,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.27,
-      "end": 0.785,
-      "seconds": 70
+      "start": 1.2,
+      "end": 0.8,
+      "seconds": 110
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Le centre refuse notre accès. Il commande également toutes les machines encore actives."
+      ],
+      "boss": [
+        "Le Directeur de Traitement tente d'intégrer notre camionnette à la chaîne."
+      ],
+      "progress": [
+        "Le système central cherche à interrompre notre transmission.",
+        "Extraction des registres de recyclage réels en cours...",
+        "Dernières unités de défense du centre."
+      ],
+      "banter": [
+        "Rappel : résister à une tentative d'intégration industrielle est autorisé.",
+        "Le volume de données à extraire est considérable."
+      ],
+      "lowhp": [
+        "Alerte : système d'urgence engagé. La structure ne supportera plus beaucoup d'impacts."
+      ],
+      "win": [
+        "Dans nos bilans, ces mêmes cargaisons sont déclarées recyclées."
+      ],
+      "lose": [
+        "Traitement échoué. Le Directeur a maintenu l'intégration."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w2-l5-boss-enter",
+          "when": "time",
+          "at": 15,
+          "text": "Le centre refuse notre accès. Il commande également toutes les machines encore actives."
+        },
+        {
+          "id": "w2-l5-repair-warning",
+          "when": "time",
+          "at": 45,
+          "text": "Les unités de maintenance prolongent le combat. Éliminez-les."
+        },
+        {
+          "id": "w2-l5-boss",
+          "when": "bossStart",
+          "text": "Le Directeur de Traitement tente d'intégrer notre camionnette à la chaîne."
+        },
+        {
+          "id": "w2-l5-reveal-1",
+          "when": "win",
+          "text": "Ici, 'traité' signifie déplacé vers une autre zone."
+        },
+        {
+          "id": "w2-l5-report",
+          "when": "win",
+          "text": "Dans nos bilans, ces mêmes cargaisons sont déclarées recyclées."
+        }
+      ]
     }
   },
   "w2-l6": {
