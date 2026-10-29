@@ -101,7 +101,7 @@
     if (!isObj(doc)){ err('Document de niveau invalide'); return { errors, warnings }; }
     // ----- erreurs (mêmes règles que level_files.py) -----
     if (!num(doc.threat, 1, 20) || !(doc.hpMul > 0) || !(doc.dmgMul > 0)) err('Difficulté invalide');
-    if (isObj(doc.goal) && Object.keys(doc.goal).some(k=> !(doc.goal[k] > 0))) err('Objectif positif requis');
+    if ('bossAt' in doc && !num(doc.bossAt, 1, 3600)) err('bossAt : date d\'arrivée du boss entre 1 et 3600 secondes requise (ou clé absente : le boss arrive après les autres mobs)');
     if ((doc.timelineOnly !== 0 && doc.timelineOnly !== 1) || ['mission', 'difficulty'].indexOf(doc.spawnClock) < 0) err('Mode de spawn invalide');
     if ('mobs' in doc){
       const known = ids(cat.mobCatalog);
@@ -162,14 +162,13 @@
       }
     }
     if (isObj(doc.ambient) && Object.keys(doc.ambient).some(k=> typeof doc.ambient[k] !== 'boolean')) err('Activation ambiante invalide');
-    // objectif impossible : kill / collect sans aucun ennemi pouvant apparaître (réserves ignorées quand timelineOnly = 1, src/enemies/spawning.js)
-    const nSp = Array.isArray(doc.spawns) ? doc.spawns.length : 0, nWv = Array.isArray(doc.waves) ? doc.waves.length : 0;
-    if ((doc.type === 'kill' || doc.type === 'collect') && (doc.timelineOnly === 1 ? 0 : nSp) + nWv === 0) err('Objectif impossible : aucun ennemi ne peut apparaître (ni réserve ni vague)');
+    // tout ordre se gagne en battant son boss
+    if (!doc.tuto && !doc.finalBoss && !doc.boss) err('Boss manquant : tout ordre se gagne en battant son boss (finalBoss ou boss)');
 
     // ----- avertissements (jamais bloquants) -----
     if (errors.length) return { errors, warnings };
     const events = doc.events, threat = doc.threat, evCat = id=> (cat.eventCatalog || []).find(e=> e.id === id);
-    const secs = doc.type === 'survive' && isObj(doc.goal) ? doc.goal.seconds : null;
+    const secs = doc.type === 'mission' && typeof doc.bossAt === 'number' ? doc.bossAt : null;          // seule une date fixée à la main peut précéder des événements (sinon le boss arrive après tout)
     // alerte : en mission, GameScene.alertLevel = lvDef.threat et ne monte jamais (loop.js : montée seulement sans lvDef) ; un événement programmé démarre sans test de `min` (level.js)
     events.forEach(e=>{
       const c = evCat(e.kind);
@@ -185,9 +184,9 @@
       if (b.at - a.at < 5) warn('Grands événements « ' + a.kind + ' » (' + a.at + ' s) et « ' + b.kind + ' » (' + b.at + ' s) à moins de 5 s : un seul grand événement à la fois, le second attendra la fin du premier');
       else if (typeof a.duration === 'number' && b.at < a.at + a.duration) warn('Grand événement « ' + b.kind + ' » (' + b.at + ' s) : « ' + a.kind + ' » dure jusqu\'à ' + (a.at + a.duration) + ' s, il attendra la fin');
     }
-    if (secs != null) events.forEach(e=> { if (e.at > secs) warn('Événement « ' + e.kind + ' » à ' + e.at + ' s : après la fin de l\'objectif (' + secs + ' s), il ne sera jamais joué'); });
+    if (secs != null) events.forEach(e=> { if (e.at > secs) warn('Événement « ' + e.kind + ' » à ' + e.at + ' s : après l\'arrivée du boss (' + secs + ' s), il ne sera jamais joué'); });
     const messages = (isObj(doc.norma) && Array.isArray(doc.norma.messages)) ? doc.norma.messages : [];
-    if (secs != null) messages.forEach(m=> { if (m.when === 'time' && m.at > secs) warn('Boîte N.O.R.M.A. « ' + m.id + ' » à ' + m.at + ' s : après la fin de l\'objectif (' + secs + ' s)'); });
+    if (secs != null) messages.forEach(m=> { if (m.when === 'time' && m.at > secs) warn('Boîte N.O.R.M.A. « ' + m.id + ' » à ' + m.at + ' s : après l\'arrivée du boss (' + secs + ' s)'); });
     if ((doc.boss || doc.finalBoss) && !doc.tuto && !messages.some(m=> m.when === 'bossStart') && !(isObj(doc.norma) && doc.norma.boss)) warn('Info : aucun texte N.O.R.M.A. propre au début du boss (réserve « boss » et boîte « bossStart » absentes : textes d\'origine)');
     if (doc.hpMul >= 5 || doc.hpMul <= 0.2 || doc.dmgMul >= 5 || doc.dmgMul <= 0.2) warn('Valeur extrême : hpMul ' + doc.hpMul + ' / dmgMul ' + doc.dmgMul + ' (au niveau)');
     if (isObj(doc.mobs)) Object.keys(doc.mobs).forEach(mob=> ['hpMul', 'dmgMul'].forEach(k=>{

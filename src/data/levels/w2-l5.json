@@ -1,12 +1,9 @@
 {
   "id": "w2-l5",
   "name": "TRAITEMENT EN COURS",
-  "type": "survive",
+  "type": "mission",
   "threat": 5,
   "bg": "broyeur",
-  "goal": {
-    "seconds": 120
-  },
   "intro": null,
   "spawns": [],
   "finalBoss": null,
@@ -156,7 +153,7 @@
     }
   ],
   "spawnClock": "mission",
-  "boss": null,
+  "boss": "dread",
   "bossName": null,
   "hpMul": 1.5,
   "dmgMul": 1.3,

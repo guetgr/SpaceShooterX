@@ -8,13 +8,14 @@ function renderTimeline(parent, level){
   const button=(text,fn,cls='btn')=>{const e=node('button',cls,text);e.type='button';e.onclick=fn;return e;};
   const format=t=>Math.floor(t/60).toString().padStart(2,'0')+':'+(t%60).toFixed(t%1?1:0).padStart(2,'0');
   const clampTime=t=>Math.max(0,Math.min(3600,Math.round(t/snap)*snap));
-  const selected=()=>selection?doc()[selection.kind][selection.index]:null;
+  const BOSS_NAMES={meteo:'La Météo',araignee:'Araignée de tri',reacteur:'Le Réacteur',anneau:'L’Anneau',pdg:'Le PDG dans sa tour'};
+  const selected=()=>selection&&selection.kind!=='boss'?doc()[selection.kind][selection.index]:null;
   const write=(kind,list)=>{(S.ov.levels[level.id]||={})[kind]=list;changed();};
   const patch=(key,value)=>{if(!selection)return;const list=doc()[selection.kind];list[selection.index][key]=value;write(selection.kind,list);};
   const choose=(kind,index)=>{selection={kind,index};if(kind==='waves')chosen=rows()[index].type;draw();inspect();};
   const add=(type,at)=>{if(rows().length>=1000){toast('Une mission accepte jusqu’à 1 000 vagues.',true);return;}const list=rows();list.push({type,at:clampTime(at),count:5,spacing:0,formation:'line',spread:180,x:50,y:20});selection={kind:'waves',index:list.length-1};chosen=type;write('waves',list);inspect();};
-  function duplicate(){if(!selection)return;const list=doc()[selection.kind];if(selection.kind==='spawns'){toast('Modifiez la réserve existante dans l’inspecteur.');return;}if(list.length>=1000)return;list.push({...list[selection.index],at:Math.min(3600,list[selection.index].at+5)});selection={kind:selection.kind,index:list.length-1};write(selection.kind,list);inspect();}
-  function remove(){if(!selection)return;const kind=selection.kind,list=doc()[kind];list.splice(selection.index,1);selection=null;write(kind,list);inspect();}
+  function duplicate(){if(!selection||selection.kind==='boss')return;const list=doc()[selection.kind];if(selection.kind==='spawns'){toast('Modifiez la réserve existante dans l’inspecteur.');return;}if(list.length>=1000)return;list.push({...list[selection.index],at:Math.min(3600,list[selection.index].at+5)});selection={kind:selection.kind,index:list.length-1};write(selection.kind,list);inspect();}
+  function remove(){if(!selection||selection.kind==='boss')return;const kind=selection.kind,list=doc()[kind];list.splice(selection.index,1);selection=null;write(kind,list);inspect();}
   parent.innerHTML='<div class="timeline-editor"><div class="timeline-heading"><div><h2>Timeline</h2><span class="timeline-summary"></span></div><div class="timeline-actions"></div></div><div class="timeline-toolbar"><div class="timeline-mode"></div><div class="timeline-zoom"></div></div><div class="tl-scroll" tabindex="0" aria-label="Timeline des vagues en secondes"><div class="tl-tracks"></div></div><div class="timeline-footer"><span class="timeline-hint">Glissez une créature ici · double-cliquez une piste pour ajouter</span><span class="timeline-time">00:00</span></div></div>';
   const scroll=parent.querySelector('.tl-scroll'),tracks=parent.querySelector('.tl-tracks');
   const actions=parent.querySelector('.timeline-actions');
@@ -27,11 +28,18 @@ function renderTimeline(parent, level){
   [[0.5,'0,5 s'],[1,'1 s'],[5,'5 s']].forEach(([v,t])=>{const o=node('option',null,t);o.value=v;snapSelect.appendChild(o);});snapSelect.onchange=()=>snap=+snapSelect.value;snapLabel.appendChild(snapSelect);zoom.appendChild(snapLabel);
   zoom.append(button('−',()=>scale(px/1.5),'btn small zoom-button'),node('span','zoom-value','100 %'),button('+',()=>scale(px*1.5),'btn small zoom-button'));
   function scale(value){const center=(scroll.scrollLeft+scroll.clientWidth/2-128)/px;px=Math.max(2,Math.min(32,value));draw();scroll.scrollLeft=Math.max(0,128+center*px-scroll.clientWidth/2);parent.querySelector('.zoom-value').textContent=Math.round(px/8*100)+' %';}
+  let fitted=false,rzFrame=0;
+  const ro=new ResizeObserver(()=>{cancelAnimationFrame(rzFrame);rzFrame=requestAnimationFrame(()=>{
+    if(disposed||drag||!scroll.clientWidth)return;
+    if(!fitted){fitted=true;px=Math.max(2,Math.min(32,(scroll.clientWidth-134)/duration()));const z=parent.querySelector('.zoom-value');if(z)z.textContent=Math.round(px/8*100)+' %';}
+    drawTracks();});});ro.observe(scroll);
   scroll.addEventListener('scroll',()=>{if(scrollFrame)return;scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;drawTracks();});},{passive:true});
-  function duration(){const d=doc();return Math.min(9600,Math.ceil(Math.max(60,d.goal.seconds||0,...d.waves.map(r=>r.at+(r.count-1)*r.spacing+5),...d.events.map(e=>e.at+(e.duration||15)))/10)*10);}
+  const bossAtNow=d=>typeof d.bossAt==='number'?d.bossAt:EditorSteps.autoBossAt(d);
+  function duration(){const d=doc();return Math.min(9600,Math.ceil(Math.max(60,bossAtNow(d)+25,...d.waves.map(r=>r.at+(r.count-1)*r.spacing+5),...d.events.map(e=>e.at+(e.duration||15)))/10)*10);}
   function selectTime(e,rail){cursor=clampTime((e.clientX-rail.getBoundingClientRect().left)/px);parent.querySelector('.timeline-time').textContent=format(cursor);const line=tracks.querySelector('.playhead');if(line)line.style.left=(128+cursor*px)+'px';}
+  let sink=null,viewW=0;
   function railFor(name,kind){
-    const lane=node('div','tl-lane'),title=node('strong',null,name),rail=node('div','tl-rail');lane.append(title,rail);tracks.appendChild(lane);rail.style.width=(duration()*px)+'px';rail.style.setProperty('--grid-step',10*px+'px');
+    const lane=node('div','tl-lane'),title=node('strong',null,name),rail=node('div','tl-rail');lane.append(title,rail);(sink||tracks).appendChild(lane);rail.style.width=Math.max(duration()*px,viewW-130)+'px';rail.style.setProperty('--grid-step',10*px+'px');
     if(kind==='waves'){
       rail.ondragover=e=>{if(!e.dataTransfer.types.includes('application/x-ssx-enemy'))return;e.preventDefault();e.dataTransfer.dropEffect='copy';rail.classList.add('drop-active');};
       rail.ondragleave=()=>rail.classList.remove('drop-active');rail.ondrop=e=>{e.preventDefault();rail.classList.remove('drop-active');const type=e.dataTransfer.getData('application/x-ssx-enemy');if(!catalog.some(x=>x.type===type))return;selectTime(e,rail);add(type,cursor);};
@@ -53,12 +61,27 @@ function renderTimeline(parent, level){
     block.onpointercancel=()=>{drag=null;draw();inspect();};
   }
   function drawTracks(){
-    if(disposed||drag)return;tracks.replaceChildren();
-    const d=doc(),end=duration(),width=128+end*px;tracks.style.width=width+'px';
+    if(disposed||drag)return;viewW=scroll.clientWidth||0;const frag=document.createDocumentFragment();sink=frag;          // tout est construit hors page puis échangé d'un coup : vider la zone puis mesurer faisait retomber le défilement à 0
+    const d=doc(),end=duration(),span=Math.max(end*px,viewW-130),width=128+span;tracks.style.width=width+'px';
     const ruler=node('div','tl-ruler'),rulerTitle=node('strong',null,'Mission / secondes');ruler.appendChild(rulerTitle);
-    const step=px<4?30:10,left=scroll.scrollLeft,right=left+scroll.clientWidth;
-    for(let t=0;t<=end;t+=step){const x=128+t*px;if(x<left-50||x>right+80)continue;const mark=node('span',null,format(t));mark.style.left=x+'px';ruler.appendChild(mark);}
-    ruler.onclick=e=>{if(e.target===rulerTitle)return;cursor=clampTime((e.clientX-ruler.getBoundingClientRect().left-128)/px);drawTracks();parent.querySelector('.timeline-time').textContent=format(cursor);};tracks.appendChild(ruler);
+    const step=px<4?30:10,left=scroll.scrollLeft,right=left+viewW;
+    for(let t=0;t*px<=span;t+=step){const x=128+t*px;if(x<left-50||x>right+80)continue;const mark=node('span',null,format(t));mark.style.left=x+'px';ruler.appendChild(mark);}
+    ruler.onclick=e=>{if(e.target===rulerTitle)return;cursor=clampTime((e.clientX-ruler.getBoundingClientRect().left-128)/px);drawTracks();parent.querySelector('.timeline-time').textContent=format(cursor);};sink.appendChild(ruler);
+    {   // piste BOSS, toujours visible : le but de tout ordre est de vaincre son boss. Le bloc est à sa date d'arrivée (après les autres mobs, ou fixée à la main : on le glisse) ; un clic ouvre le boss dans l'inspecteur
+      const rail=railFor('Boss','boss'),name=d.finalBoss?(BOSS_NAMES[d.finalBoss]||d.finalBoss):'Dreadnought (provisoire)';
+      const at=bossAtNow(d),manual=typeof d.bossAt==='number',canMove=d.type!=='boss';
+      const block=node('button','tl-block tl-system boss-block'+(selection&&selection.kind==='boss'?' selected':''),'BOSS · '+name+(manual?' · fixé':''));
+      block.type='button';block.style.cssText='left:'+at*px+'px;top:10px;width:240px;background:#4a2c34;border-color:#a8606f;border-left-color:#e08a9a;color:#f0cdd4;cursor:'+(canMove?'grab':'pointer');
+      block.title='Le boss arrive à '+format(at)+(manual?' (date fixée à la main)':' (après les autres mobs de la timeline)')+(canMove?' · glissez pour fixer la date':'');
+      block.onclick=()=>{if(block.dataset.moved){delete block.dataset.moved;return;}selection={kind:'boss'};draw();inspect();};
+      if(canMove)block.onpointerdown=e=>{
+        if(e.button!==0)return;e.preventDefault();block.setPointerCapture(e.pointerId);const start=e.clientX,scroll0=scroll.scrollLeft;let next=at;
+        block.onpointermove=ev=>{next=Math.max(1,clampTime(at+(ev.clientX-start+scroll.scrollLeft-scroll0)/px));block.style.transform='translateX('+((next-at)*px)+'px)';parent.querySelector('.timeline-time').textContent=format(next);};
+        block.onpointerup=()=>{block.onpointermove=null;block.onpointerup=null;if(next!==at){block.dataset.moved='1';(S.ov.levels[level.id]||={}).bossAt=next;changed();}};          // simple clic : pas de redessin, sinon le clic se perd (le bloc est remplacé)
+        block.onpointercancel=()=>{block.onpointermove=null;draw();};
+      };
+      rail.style.height='56px';rail.appendChild(block);
+    }
     const types=[...new Set([...d.waves.map(r=>r.type),chosen])].filter(Boolean);
     types.forEach(type=>{
       const rail=railFor(label(type),'waves'),ends=[];
@@ -73,10 +96,10 @@ function renderTimeline(parent, level){
     if(showContext){
       if(d.spawns.length){const rail=railFor('Réserve aléatoire','spawns');d.spawns.forEach((r,index)=>{const at=Math.max(0,r.from-(d.spawnClock==='difficulty'?12*(d.threat-1):0));const block=node('button','tl-block tl-system pool-block'+(d.timelineOnly?' muted':''),label(r.type)+' · poids '+r.w);block.style.cssText='left:'+at*px+'px;top:'+(8+index*32)+'px;width:'+Math.max(120,(end-at)*px)+'px';block.onclick=()=>choose('spawns',index);rail.appendChild(block);});rail.style.height=(d.spawns.length*32+16)+'px';}
       if(d.events.length){const rail=railFor('Événements','events');d.events.forEach((r,index)=>{const name=(S.eventCatalog.find(x=>x.id===r.kind)||{name:r.kind}).name;const block=node('button','tl-block tl-system event-block',name);block.dataset.event=index;block.style.cssText='left:'+r.at*px+'px;top:'+(8+index*36)+'px;width:'+Math.max(120,(r.duration||12)*px)+'px';block.onpointerdown=e=>moveBlock(e,block,'events',index);rail.appendChild(block);});rail.style.height=(d.events.length*36+16)+'px';}
-      if(d.type==='survive'){const rail=railFor('Objectif','goal');const mark=node('div','goal-marker',format(d.goal.seconds)+' · '+(d.finalBoss?'Boss final':'Fin de mission'));mark.style.left=d.goal.seconds*px+'px';rail.appendChild(mark);}
     }
-    const head=node('div','playhead');head.style.left=(128+cursor*px)+'px';tracks.appendChild(head);
-    if(!d.waves.length){const empty=node('div','timeline-empty','Déposez une créature dans sa piste pour créer une vague.');tracks.querySelector('.tl-rail')?.appendChild(empty);}
+    const head=node('div','playhead');head.style.left=(128+cursor*px)+'px';sink.appendChild(head);
+    if(!d.waves.length){const empty=node('div','timeline-empty','Déposez une créature dans sa piste pour créer une vague.');sink.querySelector('.tl-rail')?.appendChild(empty);}
+      sink=null;tracks.replaceChildren(frag);
   }
   function draw(){
     if(disposed)return;const d=doc();check.checked=d.timelineOnly===1;
@@ -92,7 +115,27 @@ function renderTimeline(parent, level){
       b.onclick=()=>{chosen=e.type;selection=null;holder.querySelectorAll('.selected').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');draw();inspect();};b.ondragstart=ev=>{chosen=e.type;ev.dataTransfer.setData('application/x-ssx-enemy',e.type);ev.dataTransfer.effectAllowed='copy';};holder.appendChild(b);
     });if(!holder.children.length)holder.appendChild(node('p','empty-search','Aucune créature trouvée.'));};root.querySelector('input').oninput=filter;filter();
   }
+  function inspectBoss(){
+    const holder=$('inspector');holder.replaceChildren();const d=doc();
+    const heading=node('div','inspector-heading');heading.append(node('span',null,'Inspecteur'),node('span','selection-badge','Boss de l’ordre'));holder.appendChild(heading);
+    const content=node('div','inspector-content');holder.appendChild(content);
+    const title=node('div','inspector-title');title.appendChild(node('h2',null,d.finalBoss?(BOSS_NAMES[d.finalBoss]||d.finalBoss):'Dreadnought (boss générique provisoire)'));content.appendChild(title);
+    const group=node('div','inspector-group');group.appendChild(node('h3',null,'Boss de l’ordre : le but est de le vaincre'));content.appendChild(group);
+    const wrap=node('label','property-field');wrap.appendChild(node('span',null,'Boss'));const sel=node('select');
+    [['','Dreadnought (provisoire)']].concat(Object.entries(BOSS_NAMES)).forEach(([v,t])=>{const o=node('option',null,t);o.value=v;sel.appendChild(o);});sel.value=d.finalBoss||'';
+    sel.onchange=()=>{const o=(S.ov.levels[level.id]||={});o.finalBoss=sel.value||null;if(!sel.value&&!d.boss)o.boss='dread';changed();draw();inspect();};wrap.appendChild(sel);
+    wrap.appendChild(node('small',null,'La victoire vient de la destruction du boss.'));group.appendChild(wrap);
+    if(d.type!=='boss'){
+      const manual=typeof d.bossAt==='number',at=bossAtNow(d),when=node('label','property-field');when.appendChild(node('span',null,'Arrivée du boss (s)'));
+      const input=node('input');input.type='number';input.min=1;input.max=3600;input.step=0.5;input.value=at;input.onchange=()=>{const v=+input.value;if(!(v>=1&&v<=3600)){input.value=at;return;}(S.ov.levels[level.id]||={}).bossAt=v;changed();draw();inspect();};when.appendChild(input);
+      when.appendChild(node('small',null,manual?'Date fixée à la main.':'Automatique : après la dernière vague et le dernier événement de la timeline ('+format(at)+').'));group.appendChild(when);
+      if(manual)group.appendChild(button('Revenir à l’automatique',()=>{(S.ov.levels[level.id]||={}).bossAt=null;changed();draw();inspect();},'btn small'));
+    }else group.appendChild(node('p','inspector-note','Ordre « boss » : le boss arrive dès le décollage.'));
+    if(window.renderStepOnly)window.renderStepOnly(content,level,'boss');
+    drawStage();
+  }
   function inspect(){
+    if(selection&&selection.kind==='boss'){inspectBoss();return;}
     const holder=$('inspector');holder.replaceChildren();const r=selected(),kind=selection&&selection.kind;
     const heading=node('div','inspector-heading');heading.append(node('span',null,'Inspecteur'),node('span','selection-badge',r?(kind==='waves'?'Vague sélectionnée':kind==='events'?'Événement':'Réserve'):'Nouvelle vague'));holder.appendChild(heading);
     const content=node('div','inspector-content');holder.appendChild(content);
@@ -145,7 +188,7 @@ function renderTimeline(parent, level){
     const finish=cancel=>{canvas.onpointermove=null;canvas.onpointerup=null;canvas.onpointercancel=null;stageDrag=null;drawStage();if(!cancel&&(value.x!==initial.x||value.y!==initial.y)){const list=rows();Object.assign(list[selection.index],value);write('waves',list);inspect();}};
     canvas.onpointerup=()=>finish(false);canvas.onpointercancel=()=>finish(true);
   };
-  S.refreshTimeline=()=>{if(selection&&!selected())selection=null;draw();};
-  S.timelineDestroy=()=>{disposed=true;document.removeEventListener('keydown',keydown);cancelAnimationFrame(scrollFrame);canvas.onpointerdown=null;canvas.onpointermove=null;canvas.onpointerup=null;canvas.onpointercancel=null;};
+  S.refreshTimeline=()=>{if(selection&&selection.kind!=='boss'&&!selected())selection=null;draw();};
+  S.timelineDestroy=()=>{disposed=true;ro.disconnect();cancelAnimationFrame(rzFrame);document.removeEventListener('keydown',keydown);cancelAnimationFrame(scrollFrame);canvas.onpointerdown=null;canvas.onpointermove=null;canvas.onpointerup=null;canvas.onpointercancel=null;};
   library();draw();inspect();
 }

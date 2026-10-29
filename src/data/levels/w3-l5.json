@@ -12,7 +12,6 @@
   "world": "w3",
   "schemaVersion": 2,
   "tuto": false,
-  "goal": {},
   "waves": [],
   "events": [],
   "spawnClock": "difficulty",

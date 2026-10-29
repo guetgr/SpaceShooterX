@@ -52,7 +52,7 @@
       if (HEAVY().indexOf(w.type) >= 0){ min += n*heavy; max += n*heavy; } else { min += n*COMP.dropChance*COMP.smallValue; max += n*COMP.smallValue; }
     });
     if (l.timelineOnly !== 1 && l.spawns && l.spawns.length){
-      const T = (l.goal && l.goal.seconds) || 120, a = l.threat || 1;
+      const T = levelBossAt(l), a = l.threat || 1;
       let n = 0; for (let t = 0; t < T; t++){ const iv = Math.min(1300, Math.max(Math.max(120, 320*(1 - 0.05*(a - 1))), (1300 - t*4 - Math.floor(t/20)*30)*Math.max(0.3, 1 - 0.06*(a - 1)))); n += 1000/iv; }
       const ws = l.spawns.reduce((s, e)=> s + (e.w || 1), 0) || 1;
       max += n*l.spawns.reduce((s, e)=> s + (e.w || 1)*(HEAVY().indexOf(e.type) >= 0 ? heavy : COMP.smallValue), 0)/ws;
@@ -153,50 +153,63 @@
     toastEl.textContent = t; toastEl.classList.add('show'); clearTimeout(toastEl._t); toastEl._t = setTimeout(()=> toastEl.classList.remove('show'), 2400);
   }
   const CSS = `
-  .lab-btn{position:fixed;left:8px;top:8px;z-index:9000;font:11px/1 monospace;letter-spacing:1px;color:#9fe3c3;background:#0a1512cc;border:1px solid #2f5a49;padding:7px 10px;cursor:pointer;display:none}
+  .lab-btn{position:fixed;left:8px;top:8px;z-index:9000;font:11px/1 monospace;letter-spacing:1px;color:#9fe3c3;background:#0a1512cc;border:1px solid #2f5a49;padding:10px 12px;cursor:pointer;display:none}
   .lab-btn.on{display:block}
-  .lab-root{position:fixed;inset:0;z-index:60000;background:#070a09f2;color:#d9e3dc;font:13px/1.5 monospace;overflow:auto;display:none}
+  .lab-root{position:fixed;inset:0;z-index:60000;background:#070a09;color:#d9e3dc;font:13px/1.45 monospace;overflow:auto;-webkit-overflow-scrolling:touch;display:none}
   .lab-root.on{display:block}
-  .lab-in{max-width:780px;margin:0 auto;padding:18px 16px 110px}
-  .lab-in h1{font-size:18px;letter-spacing:2px;margin:0 0 4px;color:#9fe3c3}
-  .lab-in h2{font-size:12px;letter-spacing:2px;color:#e0b95a;margin:22px 0 8px;border-bottom:1px solid #26332d;padding-bottom:4px}
+  .lab-in{max-width:860px;margin:0 auto;padding:8px 10px 110px}
+  .lab-in h1{font-size:15px;letter-spacing:2px;margin:0;color:#9fe3c3}
   .lab-in p,.lab-note{color:#8fa399;font-size:12px;margin:4px 0}
-  .lab-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:5px 0}
-  .lab-row>label{min-width:190px}
-  .lab-in select,.lab-in button{background:#101a16;color:#d9e3dc;border:1px solid #2f4a3e;padding:5px 8px;font:inherit;cursor:pointer}
-  .lab-in button.go{background:#9fe3c3;color:#0a1512;border-color:#9fe3c3;font-weight:700;padding:9px 18px}
-  .lab-bar{position:fixed;left:0;right:0;bottom:0;background:#0b1210;border-top:1px solid #2f4a3e;padding:10px 16px}
-  .lab-bar .in{max-width:780px;margin:0 auto;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-  .lab-gauge{height:8px;background:#18221d;margin-top:5px;position:relative;min-width:240px}
+  .lab-sec{border:1px solid #26332d;margin:8px 0;background:#0a100e}
+  .lab-sec>summary{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:46px;padding:0 12px;cursor:pointer;color:#e0b95a;font-size:12px;letter-spacing:1px;list-style:none}
+  .lab-sec>summary::-webkit-details-marker{display:none}
+  .lab-sec>summary span{flex:none}.lab-sec>summary i{flex:1;text-align:right;font-style:normal;color:#8fa399;font-size:11px;letter-spacing:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lab-sec>summary::after{content:'▾';color:#8fa399}.lab-sec[open]>summary::after{content:'▴'}
+  .lab-body{padding:0 10px 12px}
+  .lab-row{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+  .lab-row.top{flex-direction:row;align-items:center;justify-content:space-between}
+  .lab-in select,.lab-in button{background:#101a16;color:#d9e3dc;border:1px solid #2f4a3e;padding:6px 10px;font:inherit;cursor:pointer;min-height:44px}
+  .lab-in select{width:100%;font-size:14px}
+  .lab-in button.go{background:#9fe3c3;color:#0a1512;border-color:#9fe3c3;font-weight:700;padding:0 22px;min-height:48px;font-size:14px}
+  .lab-in input[type=checkbox]{width:22px;height:22px;vertical-align:middle}
+  .lab-scroll{overflow-x:auto}
+  .lab-tab{border-collapse:collapse;font-size:11px;margin:6px 0;min-width:100%}.lab-tab th,.lab-tab td{text-align:left;padding:4px 8px;border-bottom:1px solid #18221d;color:#9fb3a8;white-space:nowrap}
+  .lab-bar{position:fixed;left:0;right:0;bottom:0;background:#0b1210;border-top:1px solid #2f4a3e;padding:8px 10px max(8px,env(safe-area-inset-bottom))}
+  .lab-bar .in{max-width:860px;margin:0 auto;display:flex;gap:8px;align-items:center}
+  .lab-bar .cost{flex:1;min-width:0;font-size:11px}
+  .lab-gauge{height:8px;background:#18221d;margin-top:5px;position:relative}
   .lab-gauge i{position:absolute;inset:0 auto 0 0;background:#9fe3c3}
   .lab-gauge.mid i{background:#e0b95a}.lab-gauge.over i{background:#e0605a}
-  .lab-in details{border:1px solid #26332d;padding:6px 10px;margin:8px 0}
-  .lab-in summary{cursor:pointer;color:#bcd0c6}
-  .lab-tab{border-collapse:collapse;font-size:11px;margin:6px 0;width:100%}.lab-tab th,.lab-tab td{text-align:left;padding:3px 8px;border-bottom:1px solid #18221d;color:#9fb3a8}
   .lab-boss{margin-top:10px;color:#bcd0c6;letter-spacing:1px}
-  .lab-rdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:6px 0 14px}
+  .lab-rdgrid{display:grid;grid-template-columns:1fr;gap:8px;margin:6px 0 12px}
   .lab-rd{padding:8px 9px 9px;display:flex;flex-direction:column;gap:5px;border:1px solid #0006;box-shadow:2px 2px 0 #0007}
   .lab-rd.paper{background:linear-gradient(180deg,#e3d7b4,#cfc19a);color:#3a3022}
   .lab-rd.blue{background:linear-gradient(180deg,#0f2a3d,#0a1c2b);color:#9fd5e2}
   .lab-rd .rh{display:flex;align-items:center;gap:6px;border-bottom:1px solid currentColor;padding-bottom:4px}
-  .lab-rd .ic{display:grid;place-items:center;width:26px;height:26px;border:1px solid currentColor}
-  .lab-rd .rh b{flex:1;font-size:11px;letter-spacing:.5px;line-height:1.15}
-  .lab-rd .tg{font-size:8px;border:1px solid currentColor;padding:2px 4px}
-  .lab-rd .rdsc{font-size:11px;line-height:1.25;min-height:42px}
+  .lab-rd .ic{display:grid;place-items:center;width:28px;height:28px;border:1px solid currentColor;flex:none}
+  .lab-rd .rh b{flex:1;font-size:12px;letter-spacing:.5px;line-height:1.15}
+  .lab-rd .tg{font-size:9px;border:1px solid currentColor;padding:2px 4px}
+  .lab-rd .rdsc{font-size:11px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .lab-rd .stats{font-size:10px;display:flex;flex-direction:column;gap:2px}.lab-rd .stats div{display:flex;gap:6px;align-items:baseline}.lab-rd .stats span{flex:1;opacity:.8;font-size:9px;letter-spacing:.3px}.lab-rd .stats em{font-style:normal;opacity:.7}
   .lab-rd .rst{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.5px;flex-wrap:wrap}
-  .lab-rd .pips{display:flex;gap:2px;flex-wrap:wrap}.lab-rd .pips i{width:7px;height:7px;border:1px solid currentColor;border-radius:50%}
+  .lab-rd .pips{display:flex;gap:2px;flex-wrap:wrap}.lab-rd .pips i{width:8px;height:8px;border:1px solid currentColor;border-radius:50%}
   .lab-rd .pips i.f{background:#ffce27;border-color:#9c7110}
   .lab-rd .sp{color:#365d37;border:1px solid #487247;padding:1px 4px}
-  .lab-rd .stats{font-size:10px;display:flex;flex-direction:column;gap:2px;min-height:34px}.lab-rd .stats div{display:flex;gap:6px;align-items:baseline}.lab-rd .stats span{flex:1;opacity:.8;font-size:9px;letter-spacing:.3px}.lab-rd .stats em{font-style:normal;opacity:.7}
   .lab-rd .inv{font-size:10px;opacity:.85}
-  .lab-in .lab-rd button.buy{background:#ffce27;color:#2b2100;border:2px solid #9c7110;font-weight:700;font-size:11px;padding:6px 6px;text-align:center}
-  .lab-in .lab-rd button.buy small{display:block;font-weight:400;font-size:10px;margin-top:2px}
+  .lab-in .lab-rd button.buy{background:#ffce27;color:#2b2100;border:2px solid #9c7110;font-weight:700;font-size:12px;padding:6px;text-align:center;min-height:50px}
+  .lab-in .lab-rd button.buy small{display:block;font-weight:400;font-size:11px;margin-top:2px}
   .lab-in .lab-rd button.buy:disabled{background:#7f7762;color:#3f3a2e;border-color:#4d4436;cursor:default}
-  .lab-rd .rctl{display:flex;justify-content:space-between;align-items:center;font-size:10px}
-  .lab-in .lab-rd .rctl button{background:transparent;color:inherit;border:1px solid currentColor;font-size:10px;padding:2px 6px}
+  .lab-rd .rctl{display:flex;justify-content:space-between;align-items:center;font-size:11px}
+  .lab-in .lab-rd .rctl button{background:transparent;color:inherit;border:1px solid currentColor;font-size:11px;padding:0 12px;min-height:40px}
   .lab-in .lab-rd .rctl button:disabled{opacity:.35;cursor:default}
-  .lab-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1d3a2f;border:1px solid #4a8a6c;color:#d9f5e6;padding:9px 16px;z-index:70000;opacity:0;pointer-events:none;transition:opacity .15s;font:12px monospace}
+  .lab-rd .rctl label{display:flex;align-items:center;gap:6px;min-height:40px}
+  .lab-toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1d3a2f;border:1px solid #4a8a6c;color:#d9f5e6;padding:9px 16px;z-index:70000;opacity:0;pointer-events:none;transition:opacity .15s;font:12px monospace;max-width:92vw}
   .lab-toast.show{opacity:1}
+  @media(min-width:640px){
+    .lab-in{padding:14px 16px 110px}.lab-row:not(.top){flex-direction:row;align-items:center}.lab-row>label{min-width:170px}
+    .lab-in select{width:auto;min-width:260px;min-height:38px;font-size:13px}.lab-in button{min-height:38px}
+    .lab-rdgrid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+  }
   `;
 
   async function loadRuns(){ if (!serverOk) return lsRuns(); try { return (await json(RUNS)).runs; } catch(e){ return []; } }
@@ -204,19 +217,24 @@
   function buildUi(){
     document.head.append(h('style', {}, CSS));
     const levels = allLevels();
-    const start = q.get('level'), st = { levelId:levels.some(l=> l.id === start) ? start : levels[0].id, versionId:'', versions:[], equip:emptyEquip() };
+    const start = q.get('level'), st = { levelId:levels.some(l=> l.id === start) ? start : levels[0].id, versionId:'', versions:[], equip:emptyEquip(), open:{ mission:true } };
     ui = { runs:[] };
     const root = h('div', { class:'lab-root' }), inner = h('div', { class:'lab-in' });
     root.append(inner); document.body.append(root);
     ui.show = async ()=>{ ui.runs = await loadRuns(); render(); root.classList.add('on'); };
     ui.hide = ()=> root.classList.remove('on');
     ui.visible = ()=> root.classList.contains('on');
+    ui.launchNow = async ()=> {          // « Tester le brouillon » de l'éditeur : niveau et brouillon courants, dernier équipement
+      st.versionId = 'draft';
+      const idx = levels.findIndex(l=> l.id === st.levelId);
+      await launch(levels[idx], equipCost(st.equip), budgetBefore(levels, idx, ui.runs));
+    };
     ui.pick = async id=> { if (!levels.some(l=> l.id === id)) return; if (id !== st.levelId) return pickLevel(id); await loadVersions(true); render(); };          // même niveau : on relit seulement l'historique (nouvelle version enregistrée dans l'éditeur)
 
     async function loadVersions(keep){
-      const was = st.versionId; st.versions = []; st.versionId = '';
+      const was = st.versionId; st.versions = []; st.versionId = EMBED ? 'draft' : '';          // dans l'éditeur on teste par défaut le brouillon (boucle « je modifie, je teste »)
       try { st.versions = (await json(VERSIONS + '?level=' + encodeURIComponent(st.levelId))).versions; } catch(e){ /* historique indisponible */ }
-      if (keep && (was === 'draft' || st.versions.some(v=> v.id === was))) st.versionId = was;
+      if (keep && (was === 'draft' || was === '' || st.versions.some(v=> v.id === was))) st.versionId = was;
     }
     function lastEquip(){
       const mine = ui.runs.filter(r=> r.levelId === st.levelId && r.equip).sort((a, b)=> (a.at || 0) - (b.at || 0));
@@ -285,29 +303,31 @@
       const pcs = Object.keys(cost.pieces).map(k=> cost.pieces[k] + '× pièce ' + k).join(', ');
       const recent = mineRuns.slice(-5).reverse();
 
+      const sec = (id, title, info, ...kids)=> h('details', { class:'lab-sec', open:!!st.open[id], ontoggle:e=> { st.open[id] = e.target.open; } },
+        h('summary', {}, h('span', {}, title), h('i', {}, info || '')), h('div', { class:'lab-body' }, kids));
+      const atelierPaid = ATELIER_POSTS.reduce((a, p)=> a + ATELIER_COSTS.slice(0, eq.atelier[p.id] || 0).reduce((x, c)=> x + c, 0), 0);
+      const nTech = TECHS.filter(t=> techAvailable(t) && techOwned(eq, t.id)).length, nPost = ATELIER_POSTS.filter(p=> eq.atelier[p.id] > 0).length;
       const parts = [
-        h('div', { class:'lab-row' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('span', { style:'flex:1' }), EMBED ? null : h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
-        h('p', {}, 'Sauvegarde en mémoire : votre progression n’est jamais touchée. Chaque partie est enregistrée avec son équipement et affichée dans l’éditeur.'),
-        h('h2', {}, 'MISSION'),
-        h('div', { class:'lab-row' }, h('label', {}, 'Ordre'), lvlSel),
-        h('div', { class:'lab-row' }, h('label', {}, 'Version du niveau'), verSel),
-        h('p', {}, mineRuns.length + ' partie(s) enregistrée(s) pour cet ordre.' + (serverOk ? ' Tableau complet dans l’éditeur (Parties de test).' : ' Pas de serveur local : parties gardées dans ce navigateur, sans l’éditeur.')),
-        recent.length ? h('table', { class:'lab-tab' }, h('tr', {}, ['Issue', 'Durée', 'PV', 'Subis', 'Infligés', '◆', 'Coût / budget'].map(t=> h('th', {}, t))),
-          recent.map(r=> h('tr', {}, [r.outcome, Math.floor(r.elapsed/60) + ':' + String(r.elapsed%60).padStart(2, '0'), r.hp + '/' + r.maxHp, r.taken, r.dealt, r.composants, r.cost + ' / ' + r.budget].map(t=> h('td', {}, t))))) : null,
-        h('h2', {}, 'BUDGET DE COMPOSANTS'),
-        idx === 0
-          ? h('p', {}, 'Tuto : vous êtes censé jouer avec 0 ◆ d’amélioration. Tout reste équipable pour tester.')
-          : h('p', {}, 'Censé avoir été récolté avant cet ordre : ≈ ' + money(bud.mid) + ' (de ' + money(bud.min) + ' à ' + money(bud.max) + ').'),
-        idx === 0 ? null : h('details', {}, h('summary', {}, 'Détail par ordre précédent'), bud.rows.map(r=> h('div', { class:'lab-note' }, r.name + ' — ' + money(r.val) + ' (' + r.src + ')'))),
-        h('h2', {}, 'ATELIER'),
-        h('p', {}, 'Six postes de la camionnette : le bouton jaune achète le Mk suivant (le coût cumule Mk I à Mk n ; les Mk III à V demandent des pièces de secteur). Les valeurs montrent le poste avant → après.'),
-        atelier,
-        h('h2', {}, 'TECHNOLOGIES'),
-        h('p', {}, 'Comme dans la R&D : le bouton jaune achète l’étape suivante (prototype, puis rang 1, 2, 3…, puis spécialisation). Le coût de l’équipement cumule toutes les étapes franchies. ' + BAYS + ' baies, une seule arme et une seule rampe.'),
-        techUi,
+        EMBED ? null : h('div', { class:'lab-row top' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
+        EMBED ? null : h('p', {}, 'Sauvegarde en mémoire : votre progression n’est jamais touchée.'),
+        sec('mission', 'MISSION', (lvl.tuto ? 'TUTO' : lvl.id.toUpperCase()) + ' · ' + mineRuns.length + ' partie(s)',
+          h('div', { class:'lab-row' }, h('label', {}, 'Ordre'), lvlSel),
+          h('div', { class:'lab-row' }, h('label', {}, 'Version du niveau'), verSel),
+          serverOk ? null : h('p', {}, 'Pas de serveur local : parties gardées dans ce navigateur.'),
+          recent.length ? h('div', { class:'lab-scroll' }, h('table', { class:'lab-tab' }, h('tr', {}, ['Issue', 'Durée', 'PV', 'Subis', 'Infligés', '◆', 'Coût/budget'].map(t=> h('th', {}, t))),
+            recent.map(r=> h('tr', {}, [r.outcome, Math.floor(r.elapsed/60) + ':' + String(r.elapsed%60).padStart(2, '0'), r.hp + '/' + r.maxHp, r.taken, r.dealt, r.composants, r.cost + ' / ' + r.budget].map(t=> h('td', {}, t)))))) : null),
+        sec('budget', 'BUDGET', idx === 0 ? '0 ◆' : '≈ ' + money(bud.mid),
+          idx === 0
+            ? h('p', {}, 'Tuto : vous êtes censé jouer avec 0 ◆ d’amélioration. Tout reste équipable pour tester.')
+            : h('p', {}, 'Censé avoir été récolté avant cet ordre : ≈ ' + money(bud.mid) + ' (de ' + money(bud.min) + ' à ' + money(bud.max) + ').'),
+          idx === 0 ? null : bud.rows.map(r=> h('div', { class:'lab-note' }, r.name + ' — ' + money(r.val) + ' (' + r.src + ')'))),
+        sec('atelier', 'ATELIER', nPost + ' poste(s) · ' + money(atelierPaid),
+          h('p', {}, 'Le bouton jaune achète le Mk suivant ; le coût cumule Mk I à Mk n (Mk III à V : pièces de secteur).'), atelier),
+        sec('techs', 'TECHNOLOGIES', nTech + ' débloquée(s) · ' + money(cost.c - atelierPaid),
+          h('p', {}, 'Le bouton jaune achète l’étape suivante : prototype, rang 1, 2, 3…, spécialisation. ' + BAYS + ' baies, une arme et une rampe au plus.'), techUi),
         h('div', { class:'lab-bar' }, h('div', { class:'in' },
-          h('div', {}, h('div', {}, 'Coût de l’équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · dépassement ' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c)), pcs ? ' · ' + pcs : ''), gauge),
-          h('button', { class:'go', onclick:()=> launch(lvl, cost, bud) }, 'LANCER LA MISSION')))];
+          h('div', { class:'cost' }, h('div', {}, 'Équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · +' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c)), pcs ? ' · ' + pcs : ''), gauge),
+          h('button', { class:'go', onclick:()=> launch(lvl, cost, bud) }, 'LANCER')))];
       inner.replaceChildren(...parts.flat(Infinity).filter(Boolean));
     }
     function buildMetaWith(eq, load){ return buildMeta(Object.assign({}, eq, { load })); }
@@ -341,12 +361,20 @@
 
   // ---------------------------------------------------------------- démarrage
   function init(){
-    const ping = fetch('/__editor/ping').then(r=> r.ok ? r.json() : null).then(o=> !!(o && o.ok)).catch(()=> false);
+    const ping = fetch('src/boot.js', { method:'HEAD' }).then(r=> r.headers.get('X-SSX-Dev') === '1').catch(()=> false);          // serveur local (tools/serve.py) ?
     if (LAB){
       slotsOpen = ()=> BAYS;          // laboratoire : toutes les baies sont ouvertes
+      // « REFAIRE L'INTERVENTION » d'un test du brouillon : on relit d'abord le brouillon (l'éditeur a pu changer depuis la dernière partie)
+      if (EMBED) document.addEventListener('click', e=>{
+        const b = e.target.closest && e.target.closest('#btnRetry'), c = window.__labCtx;
+        if (!b || b._labGo || !c || !c.version || c.version.id !== 'draft') return;
+        e.stopImmediatePropagation(); e.preventDefault();
+        getDraft(c.levelId).then(doc=>{ if (doc){ applyTuning({ tuto:{}, levels:{ [c.levelId]:doc } }); c.version.hash = hash(JSON.stringify(doc)); } b._labGo = true; b.click(); b._labGo = false; });
+      }, true);
       if (EMBED) window.addEventListener('message', ev=>{
         if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
         if (ev.data.type === 'lab-select' && ui && ui.pick) ui.pick(ev.data.levelId);
+        else if (ev.data.type === 'lab-launch' && ui && ui.launchNow) ui.launchNow();
         else if (ev.data.type === 'lab-draft' && draftWait){ const f = draftWait; draftWait = null; f(ev.data.document || null); }
       });
       ping.then(ok=>{

@@ -3,8 +3,10 @@
 // Un monde = un fichier dans data/worlds/, qui s'enregistre avec registerWorld(). Ajouter un monde = ajouter un fichier + une ligne dans scripts.json.
 //
 // Monde : { id, order, name, sub, boss, theme:{ glow, rim, seed, freq, bands?, palette:[couleurs sombre→clair], photo?:texture de la planète (sinon générée en code), clouds?:texture de nuages qui défilent, orbiter?:texture d'un objet en orbite }, levels:[ niveau… ] }   (le DERNIER niveau est le boss du monde)
-// Niveau : { id, name, type, threat, goal, reward, spawns?, events?, boss?, zoom? }
-//   type    : 'tuto' (tutoriel scripté, game/tuto.js ; flag tuto:true, sans objectif ni lvDef) · 'survive' (goal:{seconds}) · 'kill' (goal:{count}) · 'collect' (goal:{gems}) · 'boss' (boss:'<id>') · 'endless' (ancien mode infini, DEV)
+// Niveau : { id, name, type, threat, reward, spawns?, events?, boss?, finalBoss?, bossAt?, zoom? }
+//   type    : 'tuto' (tutoriel scripté, game/tuto.js ; flag tuto:true, sans lvDef) · 'mission' (ordre ordinaire) · 'boss' (dernier ordre du secteur : le boss arrive dès le départ) · 'endless' (ancien mode infini, DEV)
+//           TOUT ordre se gagne en battant son boss (plus d'objectif de temps, d'éliminations ou de cristaux) : `finalBoss` ('meteo', 'araignee', 'reacteur', 'anneau', 'pdg') ou, à défaut, `boss` ('dread' = boss générique provisoire)
+//   bossAt  : date d'arrivée du boss (s), facultative ; sans elle il arrive après les autres mobs de la timeline (data/boss-arrival.js)
 //   threat  : niveau de menace 1..ALERT_CAP — c'est l'ancien « niveau d'alerte » (docs/niveaux-alerte.md), fixé par le niveau et non plus par l'arbre
 //   reward  : { clear } fragments ◆ ajoutés à une victoire · { first } bonus supplémentaire à la première victoire
 //   hpMul, dmgMul : réglage fin de la difficulté (× PV des ennemis et du boss, × dégâts des ennemis et du boss) en plus de `threat` ; 1 par défaut
@@ -15,7 +17,7 @@
 //   events  : [{ kind, at }] événements (clés de EVENT_DEFS) déclenchés à `at` secondes
 
 const WORLDS = [];
-const LEVEL_TYPES = ['survive', 'kill', 'collect', 'boss', 'endless', 'tuto'];
+const LEVEL_TYPES = ['mission', 'boss', 'endless', 'tuto'];
 let _levelIdx = null;
 
 function registerWorld(def){
@@ -60,11 +62,9 @@ function validateWorlds(){
       if (ids.has(l.id)) errs.push(lt + ' : id en double'); ids.add(l.id);
       if (LEVEL_TYPES.indexOf(l.type) < 0) errs.push(lt + ' : type inconnu « ' + l.type + ' »');
       if (!(l.threat >= 1 && l.threat <= cap)) errs.push(lt + ' : menace hors 1..' + cap);
-      const g = l.goal || {};
-      if (l.type === 'survive' && !(g.seconds > 0)) errs.push(lt + ' : goal.seconds manquant');
-      if (l.type === 'kill' && !(g.count > 0)) errs.push(lt + ' : goal.count manquant');
-      if (l.type === 'collect' && !(g.gems > 0)) errs.push(lt + ' : goal.gems manquant');
-      if (l.type === 'boss' && typeof BOSS_ORDER !== 'undefined' && BOSS_ORDER.indexOf(l.boss) < 0) errs.push(lt + ' : boss inconnu « ' + l.boss + ' »');
+      if ((l.type === 'mission' || l.type === 'boss') && !l.finalBoss && !l.boss) errs.push(lt + ' : aucun boss (finalBoss ou boss) : tout ordre se gagne en battant son boss');
+      if ((l.type === 'mission' || l.type === 'boss') && l.boss && typeof BOSS_ORDER !== 'undefined' && BOSS_ORDER.indexOf(l.boss) < 0) errs.push(lt + ' : boss inconnu « ' + l.boss + ' »');
+      if (l.bossAt !== undefined && !(l.bossAt > 0)) errs.push(lt + ' : bossAt doit être > 0');
       if (!l.reward || !(l.reward.clear >= 0)) errs.push(lt + ' : reward.clear manquant');
       ['hpMul', 'dmgMul'].forEach(k=>{ if (l[k] !== undefined && !(l[k] > 0)) errs.push(lt + ' : ' + k + ' doit être > 0'); });
       (l.events || []).forEach(ev=>{

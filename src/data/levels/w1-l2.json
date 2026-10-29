@@ -1,12 +1,9 @@
 {
   "id": "w1-l2",
   "name": "RECUPERATION PRIORITAIRE",
-  "type": "survive",
+  "type": "mission",
   "threat": 1,
   "bg": "station",
-  "goal": {
-    "seconds": 75
-  },
   "spawns": [],
   "finalBoss": "araignee",
   "reward": {

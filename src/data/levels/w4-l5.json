@@ -3,7 +3,6 @@
   "name": "LA REINE",
   "type": "boss",
   "threat": 11,
-  "goal": {},
   "intro": null,
   "reward": {
     "clear": 150,

@@ -204,7 +204,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `rpNorma` | `game/run.js`, `ui/motion.js` | — |
 | `newBest` | `game/run.js`, `ui/motion.js` | — |
 | `btnNext` | `game/run.js`, `ui/dom.js`, `ui/motion.js` | — |
-| `btnRetry` | `game/run.js`, `ui/dom.js`, `ui/motion.js` | — |
+| `btnRetry` | `dev/lab.js`, `game/run.js`, `ui/dom.js`, `ui/motion.js` | — |
 | `btnGoMenu` | `ui/dom.js`, `ui/motion.js` | — |
 
 ### ⚠ Ids demandés par le JS mais absents du HTML (et jamais créés dynamiquement)

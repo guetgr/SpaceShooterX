@@ -147,18 +147,26 @@
     // le tuto a sa propre musique (src/audio/scene-audio.js : audio n'est lu que hors tuto)
     return { id:'intro', title:'INTRO / CAMERA', text, fields:doc.tuto ? fields.filter(f=> f.path[0] !== 'audio') : fields };
   }
+  // date d'arrivée du boss SANS surcharge `bossAt` : même règle que src/data/boss-arrival.js (dernière vague + 5 s, fin du dernier événement ; 1,5 s pour un ordre « boss »)
+  function autoBossAt(doc){
+    if (doc.type === 'boss') return 1.5;
+    let t = 0;
+    (doc.waves || []).forEach(w=> { t = Math.max(t, w.at + ((w.count || 1) - 1)*(w.spacing || 0) + 5); });
+    (doc.events || []).forEach(e=> { t = Math.max(t, e.at + (e.duration == null ? 15 : e.duration)); });
+    return Math.max(t, 1.5);
+  }
+  const fmtSec = t=> Math.floor(t/60) + ':' + String(Math.round(t%60)).padStart(2, '0');
   function objectiveStep(doc, catalogs){
     const base = baseOf(catalogs, doc), f = [];
-    let text;
-    if (doc.type === 'survive'){ f.push(N(['goal', 'seconds'], 'Objectif · durée', 10, 300, 1, 's', '', base.goal.seconds)); text = 'Survivre ' + doc.goal.seconds + ' s'; }
-    else if (doc.type === 'kill'){ f.push(N(['goal', 'count'], 'Objectif · ennemis à éliminer', 5, 300, 1, '', '', base.goal.count, { int:true })); text = 'Éliminer ' + doc.goal.count + ' ennemis'; }
-    else if (doc.type === 'collect'){ f.push(N(['goal', 'gems'], 'Objectif · cristaux à récolter', 5, 200, 1, '', '', base.goal.gems, { int:true })); text = 'Récolter ' + doc.goal.gems + ' cristaux'; }
-    else text = 'Détruire le boss';
-    text += ' · menace ' + doc.threat + (doc.finalBoss ? ' → boss ' + doc.finalBoss + ' ; date variable selon le joueur.' : doc.boss ? ' · boss ' + doc.boss + '.' : '.');
+    const tid = hasOwn(BOSS_TUNE_ID, doc.finalBoss) ? BOSS_TUNE_ID[doc.finalBoss] : null, name = (tid && TUNE_LABEL[tid]) || (doc.boss ? 'boss ' + doc.boss : 'aucun boss');
+    const manual = typeof doc.bossAt === 'number', at = manual ? doc.bossAt : autoBossAt(doc);
+    let text = 'Vaincre le boss : ' + name + (doc.type === 'boss' ? ' · arrive dès le départ' : ' · arrive à ' + fmtSec(at) + (manual ? ' (fixé à la main)' : ' (après les autres mobs de la timeline)'));
+    text += ' · menace ' + doc.threat + '.';
+    if (doc.type !== 'boss') f.push(N(['bossAt'], 'Arrivée du boss', 1, 3600, 0.5, 's', 'Automatique : après la dernière vague et le dernier événement de la timeline. Une autre valeur fixe la date à la main (le bloc Boss de la timeline se glisse aussi).', autoBossAt(doc), { optional:true }));
     f.push(N(['threat'], 'Menace', 1, 20, 1, '', 'Niveau d\'alerte du niveau : puissance des ennemis et des armes', base.threat, { int:true }));
     f.push(N(['hpMul'], 'PV des ennemis ×', 0.2, 5, 0.05, '×', 'Réglage fin de la difficulté, en plus de la menace', base.hpMul));
     f.push(N(['dmgMul'], 'Dégâts des ennemis ×', 0.2, 5, 0.05, '×', '', base.dmgMul));
-    return { id:'objective', title:'OBJECTIF', text, fields:f };
+    return { id:'objective', title:'MISSION', text, fields:f };
   }
   function mobsStep(doc, catalogs){
     const cat = (catalogs && catalogs.mobCatalog) || [], types = mobTypes(doc, catalogs), f = [];
@@ -330,8 +338,8 @@
   }
 
   // clés de premier niveau facultatives dans le JSON, écrites en entier (la surcharge de l'éditeur remplace l'objet ; null = clé retirée)
-  const WHOLE_KEYS = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'];
+  const WHOLE_KEYS = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio', 'bossAt'];
 
-  const api = { WHOLE_KEYS, TUTO_SCHEMA, TUTO_STEP_KEYS, BOSS_TUNE_ID, MOB_TUNE_ID, buildSteps, applyFieldValue, fieldValue, getByPath, mobTypes, bossIds };
+  const api = { autoBossAt, WHOLE_KEYS, TUTO_SCHEMA, TUTO_STEP_KEYS, BOSS_TUNE_ID, MOB_TUNE_ID, buildSteps, applyFieldValue, fieldValue, getByPath, mobTypes, bossIds };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.EditorSteps = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

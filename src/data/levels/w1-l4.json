@@ -1,12 +1,9 @@
 {
   "id": "w1-l4",
   "name": "ACCES REFUSE",
-  "type": "survive",
+  "type": "mission",
   "threat": 3,
   "bg": "patrouille",
-  "goal": {
-    "seconds": 100
-  },
   "intro": null,
   "spawns": [],
   "finalBoss": "anneau",

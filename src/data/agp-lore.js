@@ -9,9 +9,7 @@ const AGP_LORE = {
   // libellé du type d'ordre (fiche de mission) et couleur d'étiquette
   types: {
     tuto:    { label:'FORMATION OBLIGATOIRE', cls:'t-tuto' },
-    survive: { label:'MAINTIEN EN POSTE',     cls:'t-std'  },
-    kill:    { label:'NEUTRALISATION',        cls:'t-std'  },
-    collect: { label:'RECUPERATION',          cls:'t-std'  },
+    mission: { label:'INTERVENTION',          cls:'t-std'  },
     boss:    { label:'INCIDENT MAJEUR',       cls:'t-boss' },
     endless: { label:'HEURES SUPPLEMENTAIRES', cls:'t-std' },
   },
@@ -25,9 +23,7 @@ const AGP_LORE = {
     'w1-l5':   { no:'0006', brief:"Incident majeur. Classé « hors compétence ». Vous êtes néanmoins la seule camionnette disponible." },
   },
   briefByType: {
-    survive: "Maintenez votre poste pendant la durée indiquée. Les pauses ne sont pas comptabilisées.",
-    kill:    "Neutralisez les éléments indésirables. Quota minimum exigé, quota maximum inexistant.",
-    collect: "Récupérez les composants en suspension. Le tri sera effectué par vos soins.",
+    mission: "Nettoyez la zone, puis neutralisez le responsable. Les rapports ultérieurs précisent que tout s'est très bien passé.",
     boss:    "Un incident majeur est en cours. Merci de le résoudre sans le mentionner.",
     tuto:    "Formation obligatoire. La réussite n'est pas obligatoire.",
   },
@@ -172,4 +168,4 @@ function agpDossier(l){
   return 'AGP-' + no + '-' + String.fromCharCode(64 + Math.max(1, Math.min(9, l.threat || 1)));
 }
 function agpBrief(l){ const f = AGP_LORE.files[l.id]; return (f && f.brief) || AGP_LORE.briefByType[l.type] || ''; }
-function agpType(l){ return AGP_LORE.types[l.type] || AGP_LORE.types.survive; }
+function agpType(l){ return AGP_LORE.types[l.type] || AGP_LORE.types.mission; }

@@ -241,13 +241,16 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BOSS_ART` | const | `src/gfx/boss-art.js` |  |
 | `BOSS_DEFS` | const | `src/data/bosses.js` |  |
 | `BOSS_DMG_CAP` | const | `src/data/bosses.js` |  |
+| `BOSS_EVENT_DURATION` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_HP_BY_ALERT` | const | `src/data/bosses.js` |  |
 | `BOSS_LIGHTS` | const | `src/data/boss-lights.js` |  |
+| `BOSS_MARGIN` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_ORDER` | const | `src/data/bosses.js` |  |
 | `BOSS_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BOSS_PHASE2_FROM` | const | `src/data/bosses.js` |  |
 | `BOSS_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `BOSS_RUN_ALERT_HP` | const | `src/data/balance.js` |  |
+| `BOSS_RUSH` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_SPRITES` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_DMG` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_HP` | const | `src/data/bosses.js` |  |
@@ -464,6 +467,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `FAU_TRANS_B64` | const | `src/data/image-assets.js` |  |
 | `FileMusic` | classe | `src/audio/music.js` |  |
 | `fillPauseSub` | méthode | `src/ui/dom.js` | `GameScene` |
+| `FINAL_BOSS_NAMES` | const | `src/data/boss-arrival.js` |  |
 | `findNearestEnemies` | méthode | `src/player/weapons.js` | `GameScene` |
 | `findNearestEnemy` | méthode | `src/player/weapons.js` | `GameScene` |
 | `finishBoot` | méthode | `src/scenes/BootScene.js` | `BootScene` |
@@ -602,6 +606,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LEVEL_FILES` | const | `src/data/worlds/level-data.js` |  |
 | `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
+| `levelBossAt` | fonction | `src/data/boss-arrival.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
 | `levelComp` | méthode | `src/game/level.js` | `GameScene` |
 | `levelCompletionDefs` | fonction | `src/data/completion.js` |  |
@@ -1297,4 +1302,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1290 symboles.
+1295 symboles.

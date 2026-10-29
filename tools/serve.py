@@ -180,6 +180,7 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
             self.editor_json({'ok':False, 'error':str(error)}, 400)
 
     def end_headers(self):
+        self.send_header('X-SSX-Dev', '1')          # signature du serveur local : src/dev/lab.js la lit sur un fichier existant (pas de requête en 404 dans la console des autres hébergements)
         self.send_header('Cache-Control', 'no-store')
         super().end_headers()
 

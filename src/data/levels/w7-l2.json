@@ -1,11 +1,8 @@
 {
   "id": "w7-l2",
   "name": "COURONNE SOLAIRE",
-  "type": "kill",
+  "type": "mission",
   "threat": 17,
-  "goal": {
-    "count": 85
-  },
   "intro": null,
   "reward": {
     "clear": 115,
@@ -120,7 +117,7 @@
     }
   ],
   "bg": null,
-  "boss": null,
+  "boss": "dread",
   "finalBoss": null,
   "bossName": null,
   "hpMul": 1,
@@ -134,5 +131,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

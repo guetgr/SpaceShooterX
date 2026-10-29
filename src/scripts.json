@@ -8,6 +8,7 @@
   "data/player-stats.js",
   "data/bestiary.js",
   "data/wave-patterns.js",
+  "data/boss-arrival.js",
   "data/achievements.js",
   "data/balance.js",
   "data/composants.js",

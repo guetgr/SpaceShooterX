@@ -1,7 +1,7 @@
 // Contrat des vagues : application, remise à zéro, temps, redémarrage et saturation.
 const fs = require('fs'), vm = require('vm'), assert = require('assert');
-const c = vm.createContext({ console, localStorage:{getItem:()=>null}, WORLDS:[{levels:[{id:'test',type:'survive',goal:{seconds:60}}]}], TUTO_DEFAULTS:{}, TUNING_OVERRIDES:{}, GameScene:function(){}, mixin:(cls,methods)=>Object.assign(cls.prototype,methods), EVENT_DEFS:{} });
-for (const file of ['src/data/bestiary.js','src/data/wave-patterns.js','src/data/tuning-apply.js','src/game/level.js']) vm.runInContext(fs.readFileSync(file,'utf8'), c);
+const c = vm.createContext({ console, localStorage:{getItem:()=>null}, WORLDS:[{levels:[{id:'test',type:'mission',boss:'dread'}]}], TUTO_DEFAULTS:{}, TUNING_OVERRIDES:{}, GameScene:function(){}, mixin:(cls,methods)=>Object.assign(cls.prototype,methods), EVENT_DEFS:{} });
+for (const file of ['src/data/bestiary.js','src/data/wave-patterns.js','src/data/boss-arrival.js','src/data/tuning-apply.js','src/game/level.js']) vm.runInContext(fs.readFileSync(file,'utf8'), c);
 vm.runInContext(`
   applyTuning({levels:{test:{waves:[{type:'sat',at:2,count:3,spacing:0.5}],timelineOnly:1}}});
   var definition = WORLDS[0].levels[0];

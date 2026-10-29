@@ -1,12 +1,9 @@
 {
   "id": "w2-l4",
   "name": "MAINTIEN EN ACTIVITE",
-  "type": "survive",
+  "type": "mission",
   "threat": 4,
   "bg": "benne",
-  "goal": {
-    "seconds": 100
-  },
   "intro": null,
   "spawns": [],
   "finalBoss": null,
@@ -178,7 +175,7 @@
     }
   ],
   "spawnClock": "mission",
-  "boss": null,
+  "boss": "dread",
   "bossName": null,
   "hpMul": 1.4,
   "dmgMul": 1.25,

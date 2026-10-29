@@ -28,9 +28,10 @@
   <section class="workspace">
     <div class="mission-heading"><div><p id="missionPath">Espace de conception</p><h1 id="missionTitle">Préparation du studio</h1></div><span id="missionMode" class="mode-pill">Composition</span></div>
     <nav class="workspace-tabs" aria-label="Vues de l’éditeur">
-      <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button><button data-view="lab">Laboratoire</button>
-      <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnLabRuns">Parties de test</button><button id="btnReset" disabled>Réinitialiser</button>
+      <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button>
+      <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnDock" aria-pressed="true">Masquer le labo</button><button id="btnLabRuns">Parties de test</button><button id="btnReset" disabled>Réinitialiser</button>
     </nav>
+    <div class="work-split" id="workSplit"><div class="work-main">
     <div id="validationSummary" class="validation-summary" hidden></div>
     <div id="compositionPanel">
       <div class="stage-panel" id="previewStage">
@@ -44,10 +45,16 @@
     </div>
     <div id="form" class="settings-panel" hidden></div>
     <div id="jsonPanel" class="settings-panel" hidden></div>
-    <div id="labPanel" hidden><iframe id="labFrame" class="lab-frame" title="Laboratoire de test"></iframe><h3 class="lab-tab-title">Parties de test de cette mission</h3><div id="labTabBody" class="lab-wrap"></div></div>
+    </div>
+    <aside id="labDock" aria-label="Laboratoire de test">
+      <div class="dock-head"><b>Laboratoire</b><button class="btn small save" id="dockTest" title="Lance la mission avec le brouillon actuel et le dernier équipement">▶ Tester le brouillon</button></div>
+      <iframe id="labFrame" class="lab-frame" title="Laboratoire de test"></iframe>
+    </aside>
+    </div>
   </section>
   <aside class="right">
     <div id="inspector"><div class="inspector-heading"><span>Inspecteur</span><span class="selection-badge">Aucune sélection</span></div><p class="empty-inspector">Sélectionnez une vague pour modifier sa formation et ses propriétés.</p></div>
+    <div class="dock-runs" id="runsPanel"><div class="dock-runs-head"><b>Parties de cette mission</b><span><button class="btn small" id="runsCsv">CSV mission</button> <button class="btn small" id="runsCsvAll">CSV tout</button></span></div><div id="labTabBody"></div></div>
     <details class="lab-panel"><summary>Laboratoire de test</summary><div class="body">
       <p class="sub">Tester l’équilibrage avec un joueur automatique.</p>
       <div class="opts"><label>Profil<select id="skill"><option value="casual">Débutant</option><option value="average" selected>Moyen</option><option value="expert">Expert</option></select></label><label>Parties<select id="seeds"><option>5</option><option selected>10</option><option>20</option><option>40</option></select></label><label id="budgetWrap">Budget R&D<input type="number" id="budget" min="0" step="10" value="0"></label></div>
@@ -67,7 +74,9 @@
   <p id="versionStatus" class="version-status" role="status" aria-live="polite"></p>
   <div class="version-columns"><nav id="versionList" aria-label="Versions de la mission"></nav><div id="versionDetail" class="version-detail"></div></div>
 </dialog>
+<script src="tools/editor/layout.js"></script>
 <script src="src/data/wave-patterns.js"></script>
+<script src="src/data/boss-arrival.js"></script>
 <script src="tools/editor/steps-model.js"></script>
 <script src="tools/editor/level-document.js"></script>
 <script src="tools/editor/validator.js"></script>

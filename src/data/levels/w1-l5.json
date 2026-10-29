@@ -4,7 +4,6 @@
   "type": "boss",
   "threat": 4,
   "bg": "direction",
-  "goal": {},
   "intro": null,
   "spawns": [],
   "finalBoss": "pdg",

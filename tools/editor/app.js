@@ -60,7 +60,7 @@ let currentView='composition', settingsRendered=false, jsonRendered=false;
 function setView(view){
   currentView=view;if(view!=='composition')stopPreview();
   if(S.ready&&view==='settings'&&!settingsRendered){$('form').replaceChildren();const vb=document.createElement('div');vb.id='valBanner';vb.className='val';$('form').appendChild(vb);renderSteps($('form'),lvl(S.sel));renderScenarioControls($('form'),lvl(S.sel),()=>{});settingsRendered=true;}
-  if(S.ready&&view==='json'&&!jsonRendered){$('jsonPanel').replaceChildren();renderLevelDocument($('jsonPanel'),lvl(S.sel));jsonRendered=true;} $('compositionPanel').hidden=view!=='composition';$('form').hidden=view!=='settings';$('jsonPanel').hidden=view!=='json';$('labPanel').hidden=view!=='lab';
+  if(S.ready&&view==='json'&&!jsonRendered){$('jsonPanel').replaceChildren();renderLevelDocument($('jsonPanel'),lvl(S.sel));jsonRendered=true;} $('compositionPanel').hidden=view!=='composition';$('form').hidden=view!=='settings';$('jsonPanel').hidden=view!=='json';
   document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
@@ -84,7 +84,7 @@ function renderForm(){
   const l=lvl(S.sel);if(!l)return;
   $('missionPath').textContent=l.worldName+' / '+(l.tuto?'Initiation':'Ordre '+String(l.num).padStart(2,'0'));
   $('missionTitle').textContent=l.name.charAt(0)+l.name.slice(1).toLowerCase();
-  const doc=editorLevelDocument(S.sel);$('missionTitle').textContent=doc.name.charAt(0)+doc.name.slice(1).toLowerCase();$('missionMode').textContent=l.tuto?'Tutoriel':({survive:'Survie',kill:'Élimination',collect:'Collecte',boss:'Incident majeur'}[l.type]||l.type);
+  const doc=editorLevelDocument(S.sel);$('missionTitle').textContent=doc.name.charAt(0)+doc.name.slice(1).toLowerCase();$('missionMode').textContent=l.tuto?'Tutoriel':({mission:'Mission · vaincre le boss',boss:'Incident majeur'}[l.type]||l.type);
   $('form').replaceChildren();$('timelinePanel').replaceChildren();$('jsonPanel').replaceChildren();
   const vb=document.createElement('div');vb.id='valBanner';vb.className='val';$('form').appendChild(vb);
   settingsRendered=false;jsonRendered=false;renderTimeline($('timelinePanel'),l);refreshBanner();setView(currentView);

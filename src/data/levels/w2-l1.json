@@ -1,12 +1,9 @@
 {
   "id": "w2-l1",
   "name": "ZONE DE DECHARGEMENT",
-  "type": "survive",
+  "type": "mission",
   "threat": 2,
   "bg": "quai",
-  "goal": {
-    "seconds": 80
-  },
   "intro": "earth",
   "spawns": [],
   "finalBoss": null,
@@ -144,7 +141,7 @@
     }
   ],
   "spawnClock": "mission",
-  "boss": null,
+  "boss": "dread",
   "bossName": null,
   "hpMul": 1.2,
   "dmgMul": 1.1,

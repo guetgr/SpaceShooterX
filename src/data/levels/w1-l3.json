@@ -1,12 +1,9 @@
 {
   "id": "w1-l3",
   "name": "MISE HORS TENSION",
-  "type": "survive",
+  "type": "mission",
   "threat": 2,
   "bg": "cristaux",
-  "goal": {
-    "seconds": 90
-  },
   "intro": null,
   "spawns": [],
   "finalBoss": "reacteur",

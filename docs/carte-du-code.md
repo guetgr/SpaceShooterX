@@ -124,7 +124,7 @@ Prérequis : Python 3 + `pip install playwright numpy`, Chrome, Node. Pas de lan
 |---|---|
 | `python3 tools/smoke_test.py` (`--dist` pour le fichier unique) | une partie se lance, aucune erreur JS (avant tout push) |
 | `python3 tools/home_test.py` | accueil, carte, arbre, hangar |
-| `python3 tools/level_test.py` | victoire/défaite par objectif, déblocages, sauvegarde |
+| `python3 tools/level_test.py` | victoire en battant le boss, défaite, déblocages, sauvegarde |
 | `python3 tools/perks_test.py` | atouts globaux vs atouts de mission |
 | `node tools/check_worlds.js` | format et déblocages des mondes |
 | `python3 tools/sim_balance.py grid\|campaign\|tune` | équilibrage par joueur automatique |

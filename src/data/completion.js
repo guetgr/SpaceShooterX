@@ -17,7 +17,7 @@ const completionReward = s=> TUTO_TUNE.rewards['m' + s] || 0;      // fragments 
 
 const _cl01 = v=> Math.max(0, Math.min(1, +v || 0));
 
-// objectifs d'un ordre de mission (hors tuto, déjà défini ci-dessus) : avancement de l'objectif, boss endommagé/vaincu s'il y en a un, et toujours
+// objectifs d'un ordre de mission (hors tuto, déjà défini ci-dessus) : approche du boss, boss endommagé et vaincu, et toujours
 // « sans te faire toucher » pour les 20 % restants (GameScene.levelComp calcule les valeurs 0..1 pendant la partie).
 function levelCompletionDefs(l){
   if (l.type === 'boss') return [
@@ -25,11 +25,8 @@ function levelCompletionDefs(l){
     { id:'win',   w:20, label:'Boss vaincu',          tip:'bats le boss' },
     { id:'clean', w:20, label:'Sans te faire toucher', tip:'termine l\'ordre sans te faire toucher' },
   ];
-  const goalLabel = l.type === 'survive' ? 'Temps tenu' : l.type === 'kill' ? 'Ennemis éliminés' : 'Cristaux récoltés';
-  const goalTip = l.type === 'survive' ? 'tiens plus longtemps' : l.type === 'kill' ? 'élimine plus d\'ennemis' : 'récolte plus de cristaux';
-  const rows = [{ id:'goal', w:40, label:goalLabel, tip:goalTip }];
-  if (l.finalBoss) rows.push({ id:'boss', w:20, label:'Boss endommagé', tip:'blesse davantage le boss' }, { id:'win', w:20, label:'Boss vaincu', tip:'bats le boss' });
-  else rows.push({ id:'win', w:40, label:'Ordre réussi', tip:'termine l\'ordre' });
+  const rows = [{ id:'goal', w:40, label:'Approche du boss', tip:'tiens jusqu\'à son arrivée' },
+    { id:'boss', w:20, label:'Boss endommagé', tip:'blesse davantage le boss' }, { id:'win', w:20, label:'Boss vaincu', tip:'bats le boss' }];
   rows.push({ id:'clean', w:20, label:'Sans te faire toucher', tip:'termine l\'ordre sans te faire toucher' });
   return rows;
 }

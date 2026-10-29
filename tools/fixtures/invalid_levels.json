@@ -507,32 +507,29 @@
    "expect": "Difficulté invalide"
   },
   {
-   "id": "objectif-nul",
+   "id": "bossat-nul",
    "level": "w1-l1",
    "set": {
-    "goal": {
-     "seconds": 0
-    }
+    "bossAt": 0
    },
-   "expect": "Objectif positif requis"
+   "expect": "bossAt"
   },
   {
-   "id": "objectif-impossible",
-   "level": "w3-l2",
+   "id": "boss-manquant",
+   "level": "w1-l1",
    "set": {
-    "spawns": [],
-    "waves": []
+    "finalBoss": null,
+    "boss": null
    },
-   "expect": "Objectif impossible"
+   "expect": "Boss manquant"
   },
   {
-   "id": "objectif-impossible-timelineonly",
-   "level": "w3-l2",
+   "id": "bossat-valide",
+   "level": "w1-l1",
    "set": {
-    "timelineOnly": 1,
-    "waves": []
+    "bossAt": 45
    },
-   "expect": "Objectif impossible"
+   "expect": null
   },
   {
    "id": "zoom-hors-bornes",

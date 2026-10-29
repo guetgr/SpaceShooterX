@@ -3,7 +3,6 @@
   "name": "DREADNOUGHT",
   "type": "boss",
   "threat": 6,
-  "goal": {},
   "intro": null,
   "reward": {
     "clear": 110,

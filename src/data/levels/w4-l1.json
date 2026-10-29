@@ -1,11 +1,8 @@
 {
   "id": "w4-l1",
   "name": "CENTRE DE TRI AERIEN",
-  "type": "survive",
+  "type": "mission",
   "threat": 8,
-  "goal": {
-    "seconds": 90
-  },
   "intro": "earth",
   "reward": {
     "clear": 80,
@@ -125,7 +122,7 @@
     }
   ],
   "bg": null,
-  "boss": null,
+  "boss": "dread",
   "finalBoss": null,
   "bossName": null,
   "hpMul": 1,
@@ -139,5 +136,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

@@ -1,9 +1,9 @@
 "use strict";
 // Applique les réglages (défauts + surcharges de tuning.js) : TUTO_TUNE = réglages vivants du tuto, les niveaux de WORLDS sont modifiés en place.
 // L'éditeur (editor.html) rappelle applyTuning() à chaque essai ; LEVEL_BASE garde les valeurs d'origine pour pouvoir revenir en arrière.
-// TUNE_WHOLE : clés facultatives du JSON (mobs, bossTune, eventTune, norma, audio) remplacées EN ENTIER par la surcharge (null = clé retirée), pour qu'une sous-clé effacée dans l'éditeur disparaisse vraiment.
-const TUNE_WHOLE = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'];
-const TUNE_LEVEL_FIELDS = ['threat', 'goal', 'hpMul', 'dmgMul', 'reward', 'waves', 'timelineOnly', 'spawns', 'events', 'spawnClock', 'ambient', 'zoom', 'name', 'bg', 'intro', 'boss', 'finalBoss', 'bossName', 'tutorial'].concat(TUNE_WHOLE);
+// TUNE_WHOLE : clés facultatives du JSON (mobs, bossTune, eventTune, norma, audio, bossAt) remplacées EN ENTIER par la surcharge (null = clé retirée), pour qu'une sous-clé effacée dans l'éditeur disparaisse vraiment.
+const TUNE_WHOLE = ['mobs', 'bossTune', 'eventTune', 'norma', 'audio', 'bossAt'];
+const TUNE_LEVEL_FIELDS = ['threat', 'hpMul', 'dmgMul', 'reward', 'waves', 'timelineOnly', 'spawns', 'events', 'spawnClock', 'ambient', 'zoom', 'name', 'bg', 'intro', 'boss', 'finalBoss', 'bossName', 'tutorial'].concat(TUNE_WHOLE);
 const TUTO_TUNE = {};
 const LEVEL_BASE = {};
 

@@ -1,12 +1,9 @@
 {
   "id": "w2-l3",
   "name": "STOCKAGE DEFINITIF",
-  "type": "survive",
+  "type": "mission",
   "threat": 3,
   "bg": "compactage",
-  "goal": {
-    "seconds": 95
-  },
   "intro": null,
   "spawns": [],
   "finalBoss": null,
@@ -167,7 +164,7 @@
     }
   ],
   "spawnClock": "mission",
-  "boss": null,
+  "boss": "dread",
   "bossName": null,
   "hpMul": 1.35,
   "dmgMul": 1.2,

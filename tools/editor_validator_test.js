@@ -52,7 +52,7 @@ fixtures.forEach(c=>{
 // 3. avertissements (un test par règle ; positifs et négatifs)
 const W = (id, set)=> validateLevel(Object.assign(clone(docs[id]), {norma:{},ambient:{golden:true,smallEvents:true}}, set), cat);
 const has = (r, s)=> r.warnings.some(w=> w.indexOf(s) >= 0);
-const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
+const L1 = 'w1-l1';            // menace 1, boss final (meteo) arrivant à 60 s
 { // alerte : crystal min 1 (ok), mines min 3 > menace 1
   assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10 }] }), 'prévu pour une alerte'));
   const r = W(L1, { events:[{ kind:'mines', at:10 }] }); assert.deepStrictEqual(r.errors, []); assert.ok(has(r, 'prévu pour une alerte 3'));
@@ -66,18 +66,19 @@ const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
   assert.ok(has(W(L1, { events:[{ kind:'crystal', at:10, duration:25 }, { kind:'meteors', at:30 }] }), 'attendra la fin'));
   assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:10, duration:25 }, { kind:'swarm', at:30 }] }), 'attendra la fin'));
 }
-{ // après la fin de l'objectif (survive 60 s) ; kill : pas de règle
-  assert.ok(has(W(L1, { events:[{ kind:'crystal', at:61 }] }), 'après la fin de l\'objectif'));
-  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:59 }] }), 'après la fin de l\'objectif'));
-  assert.ok(!has(W('w3-l2', { events:[{ kind:'crystal', at:900 }] }), 'après la fin de l\'objectif'));
-  assert.ok(has(W(L1, { norma:{ messages:[{ id:'t', when:'time', at:100, text:'Trop tard' }] } }), 'Boîte N.O.R.M.A. « t »'));
-  assert.ok(!has(W(L1, { norma:{ messages:[{ id:'t', when:'time', at:30, text:'Ok' }] } }), 'Boîte N.O.R.M.A. « t »'));
+{ // après l'arrivée du boss : seulement quand sa date est fixée à la main (bossAt) ; automatique = après tout, aucune règle
+  const FIX = { bossAt:60 };
+  assert.ok(has(W(L1, Object.assign({ events:[{ kind:'crystal', at:61 }] }, FIX)), 'après l\'arrivée du boss'));
+  assert.ok(!has(W(L1, Object.assign({ events:[{ kind:'crystal', at:59 }] }, FIX)), 'après l\'arrivée du boss'));
+  assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:900 }] }), 'après l\'arrivée du boss'));
+  assert.ok(has(W('w3-l2', { events:[{ kind:'crystal', at:900 }] }), 'après l\'arrivée du boss'));        // w3-l2 : boss fixé à 90 s (timeline vide)
+  assert.ok(has(W(L1, Object.assign({ norma:{ messages:[{ id:'t', when:'time', at:100, text:'Trop tard' }] } }, FIX)), 'Boîte N.O.R.M.A. « t »'));
+  assert.ok(!has(W(L1, Object.assign({ norma:{ messages:[{ id:'t', when:'time', at:30, text:'Ok' }] } }, FIX)), 'Boîte N.O.R.M.A. « t »'));
 }
 { // boss sans texte N.O.R.M.A. de début de boss
   assert.ok(has(W(L1, {}), 'début du boss'));
   assert.ok(!has(W(L1, { norma:{ messages:[{ id:'b', when:'bossStart', text:'Incident majeur' }] } }), 'début du boss'));
   assert.ok(!has(W(L1, { norma:{ boss:['Incident majeur'] } }), 'début du boss'));
-  assert.ok(!has(W('w2-l1', {}), 'début du boss'));
 }
 { // valeurs extrêmes et PV effectifs
   assert.ok(has(W(L1, { mobs:{ grunt:{ hpMul:5 } } }), 'Valeur extrême : mobs.grunt.hpMul'));
