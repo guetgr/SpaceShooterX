@@ -15,7 +15,7 @@ const EC = {
 mixin(GameScene, {
   ecInit(e){
     const sp = this.lvDef && this.lvDef.spawns && this.lvDef.spawns.find(s=> s.type === 'eclaireur');
-    e.tier = Phaser.Math.Clamp((sp && sp.tier) || 1, 1, 4);
+    e.tier = Phaser.Math.Clamp(e.waveTier || (sp && sp.tier) || 1, 1, 4);
     e._st = 0; e.state = 'patrol'; e.stT = 0; e.detT = 0; e.rot = 0; e.f = 0; e.acc = 0; e.lockOn = false; e.summoned = false; e.smokeCd = 600; e.reticleF = 0;
     e.cone = this.add.sprite(0, 0, 'ecFxCone').setDepth(3.9).setOrigin(0.5, 0).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0.75); e.cone.play('ecCone');
     e.coneHot = this.add.sprite(0, 0, 'ecFxConeHot').setDepth(3.9).setOrigin(0.5, 0).setBlendMode(Phaser.BlendModes.ADD).setVisible(false); e.coneHot.play('ecConeHot');
@@ -72,7 +72,7 @@ mixin(GameScene, {
       const a0 = Math.atan2(pl.y - y, pl.x - x);
       for (let j = 0; j < n; j++){
         if (this._bLoad > BULLET_CAP) break; const a = a0 + (j - (n - 1)/2)*(n === 5 ? 0.12 : 0.15), sc = 0.38*U*1.6, b = this.enemyBullets.create(x, y, 'anFxOrb', 0);
-        b.setDepth(4); b.damage = EC.dmg.orb; b._ec = true; b.setOrigin(0.5, 94/128).setScale(sc).setRotation(a - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
+        b.setDepth(4); b.damage = this.waveDamage(e, EC.dmg.orb); b._ec = true; b.setOrigin(0.5, 94/128).setScale(sc).setRotation(a - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
         const r = 5.25/sc; b.body.setCircle(r, 32 - r, 94 - r); b.play('anOrb'); this.physics.velocityFromRotation(a, 5.2*60*U*1.15, b.body.velocity);
       }
     }

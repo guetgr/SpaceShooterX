@@ -18,8 +18,8 @@ const AGP_LORE = {
   // dossiers des ordres (id de niveau) : numéro et note de service. Sans entrée : numéro dérivé de l'id, note par type.
   files: {
     'w1-tuto': { no:'0001', brief:"Nettoyage de satellites hors service en orbite basse. Aucun danger. Aucune prime. Merci de ne rien casser." },
-    'w1-l1':   { no:'0002', brief:"Décollage depuis le Dépôt Terre. Les déchets orbitaux s'accumulent. Votre ponctualité est surveillée." },
-    'w1-l2':   { no:'0003', brief:"Secteur saturé : débris et drones de défense orbitaux non répertoriés. L'AGP décline toute responsabilité." },
+    'w1-l1':   { no:'0002', brief:"Le réseau météo et ses patrouilles répondent au signal d'intrusion. Neutralisez les défenses et poursuivez le nettoyage." },
+    'w1-l2':   { no:'0003', brief:"Les machines récupèrent et réparent les débris malgré leur mise hors service déclarée. Neutralisez la chaîne de récupération." },
     'w1-l3':   { no:'0004', brief:"Des cristaux de déchets en suspension. Les récupérer rapporte à l'agence. Vous, un peu aussi." },
     'w1-l4':   { no:'0005', brief:"Patrouille de routine. Toute résistance est considérée comme un malentendu administratif." },
     'w1-l5':   { no:'0006', brief:"Incident majeur. Classé « hors compétence ». Vous êtes néanmoins la seule camionnette disponible." },

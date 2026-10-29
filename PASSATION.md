@@ -1,6 +1,45 @@
-﻿# PASSATION — Space Shooter X (état au 28 oct. 2026)
+# PASSATION — Space Shooter X (contexte narratif mis à jour le 29 oct. 2026)
 
-> Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers.md` (bible de l'univers, référence du lore), `docs/brief-univers-agp.md` (ton de l'interface), puis `docs/carte-du-code.md` (où est quoi).
+> Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers-v2.md` (référence narrative actuelle), `docs/brief-univers-agp.md` (interface ; la bible v2 prévaut en cas de contradiction), puis `docs/carte-du-code.md` (où est quoi).
+
+## Mise à jour narrative — 29 octobre 2026 (à lire avant reprise)
+
+**Référence narrative actuelle : [docs/bible-univers-v2.md](docs/bible-univers-v2.md).** Cette version prévaut sur `docs/bible-univers.md` et `docs/brief-univers-agp.md` pour toute contradiction de campagne, personnages ou révélations. Les anciennes versions sont conservées pour historique. La direction artistique reste décrite dans `docs/direction-artistique-agp.md`.
+
+### Contexte commun à tous les développeurs et agents
+
+- Le joueur est un employé de l'AGP, chargé de nettoyer la galaxie avec sa camionnette. Le nettoyage ordinaire n'est normalement pas hostile : les premiers tirs de satellites pendant le tuto constituent une anomalie explicite.
+- N.O.R.M.A. intervient dès le départ dans les menus et en mission : conseils de jeu, astuces, piques et progression de l'intrigue. Messages courts, lisibles, non bloquants. Les révélations passent une seule fois, les tentatives suivantes utilisent des variantes.
+- **Monde 1 : orbite basse terrestre**, un tuto et cinq niveaux (le dernier est le niveau boss). Une entreprise a déclaré ses installations abandonnées mais en protège encore le matériel. Le joueur termine sa tournée malgré cette résistance.
+- **Le PDG du monde 1 dirige une autre entreprise, pas l'AGP.** Son affaire est autonome : aucun lien secret, document-passerelle ou trafic partagé avec l'AGP. Sa défaite clôt le monde 1.
+- **Monde 2 : Mars directement**, cinq niveaux sans nouveau tuto. La Casse lunaire ne précède plus Mars. Les mondes suivants restent à définir : ne pas simplement décaler les anciens mondes ni reprendre leurs révélations comme validées.
+- Mars est une planète poubelle avec des mécas industriels lourds, câbles, outils et pièces récupérées. Inspiration visuelle Mechanicus, identité originale au jeu. Pas de religion des machines ni de ferveur industrielle. Humour modéré, surtout par N.O.R.M.A. ; environnement et ennemis pris au sérieux.
+
+### Monde 2 validé — trame de développement
+
+| Niveau | Mission / incident | Découverte |
+|---|---|---|
+| 1 — Zone de déchargement | Dégager les arrivées ; **Le Déchargeur**. | La zone saturée continue de recevoir des cargaisons. |
+| 2 — Matière première | Dégager le tri ; **Le Désosseur**. | Les machines utilisent les cargaisons pour leur propre maintenance ; le reste retourne en décharge. |
+| 3 — Stockage définitif | Neutraliser les déchets dangereux ; **Le Gardien de confinement**. | Des conteneurs intacts sont enregistrés comme détruits ou recyclés. |
+| 4 — Maintien en activité | Atteindre la supervision ; **Le Contremaître**. | L'AGP a reçu les alertes de saturation, mais a maintenu les transferts. |
+| 5 — Traitement en cours | Courte approche puis boss **Le Directeur de traitement**. | « Traité » signifie trié puis stocké ; les rapports AGP annoncent « recyclé ». |
+
+Mobs, rôles, attaques et interventions de N.O.R.M.A. sont détaillés dans la bible v2 § 4. La destination suivante, la réaction de l'AGP, les responsables et l'ampleur du système restent ouverts.
+
+### Conséquences pour le code — à traiter séparément
+
+Cette mise à jour est **documentaire** : elle ne signifie pas que la nouvelle campagne est implémentée. L'état technique du 28 octobre conservé ci-dessous est historique ; le dépôt peut avoir évolué depuis et doit être vérifié avant reprise.
+
+1. Comparer la bible v2 aux données des mondes, JSON de niveaux, textes `agp-lore.js` et transmissions `norma` ; relever les écarts avant de les corriger.
+2. Préparer la migration narrative Lune/Mars : intitulés, planètes et décors, ordres de mission, mobs, boss et dialogues. Ne pas changer silencieusement les IDs, sauvegardes, déblocages, plans R&D ou pièces de secteur.
+3. Les comportements de mobs et boss décrivent la cible de conception : réutiliser les mécaniques existantes quand elles conviennent ; proposer séparément toute modification de gameplay ou d'équilibrage.
+4. Ne pas confondre validation de concept et asset final : les concepts récents du drone relais et de l'Antenne-Mère sont validés visuellement, leurs animations ne sont pas finalisées. Les essais récents de découpage/visée du satellite de défense ont été refusés pour production. Ne pas remplacer les assets fonctionnels du dépôt par ces prototypes.
+5. Revue visuelle privée : https://space-shooter-x-sprites-20261028.guetguetr.chatgpt.site (concepts et étapes ; ne fait pas autorité sur l'état du code).
+
+**Ordre de reprise :** lire les règles de `CLAUDE.md`, cette mise à jour, la bible v2 et `docs/carte-du-code.md`, puis contrôler l'état réel des fichiers concernés. Ne considérer aucun nouveau mob, dialogue ou asset comme intégré sans vérification.
+
+---
 
 > **Refonte de la progression (branche `progression-agp`, fusionnée dans `main` le 28 oct. 2026)** : design `docs/superpowers/specs/2026-10-27-progression-design.md`, plan `docs/superpowers/plans/2026-10-27-progression-agp.md`. Étapes 1 (composants visibles), 2 (sauvegarde v3 + atelier, plan `docs/superpowers/plans/2026-10-27-atelier-v3.md`), 3 (R&D par technologie, baies d'équipement, assemblage en mission, plan `docs/superpowers/plans/2026-10-27-rd-emplacements.md`) et 6a (textes des secteurs 2 et 3) faites ; étapes 4 (plans et pièces de secteur lâchés en mission) et 5 (distinctions RH, livrées) à planifier une par une.
 
@@ -50,7 +89,7 @@ Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers
 - **À part, pas dans ce sprint** : outil de game design (bestiaire, niveaux d'alerte, test live + import) à spécifier séparément, probablement en extension de `editor.html`.
 
 **Prochaines étapes proposées**
-- **Refonte de la progression** : étapes 4 et 5 du design (plans et pièces de secteur lâchés en mission, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : vagues des secteurs 2 et 3 selon la bible, boss Broyeur et Directeur (images à générer), planètes à échanger (la Casse lunaire affiche aujourd'hui une géante rouge, Mars une planète violette).
+- **Refonte de la progression** : étapes 4 et 5 du design (plans et pièces de secteur lâchés en mission, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : feuille de route narrative à revoir selon la bible v2 : Mars devient le monde 2 et les mondes suivants restent à définir. Auditer données, décors, mobs et boss avant migration.
 - **Simulateur** : `sim_balance.py campaign` saute désormais le tutoriel (le bot ne sait pas le jouer depuis le boss Antenne-Mère).
 - Tester le HUD et la carte sur de **vrais téléphones** (lisibilité, rythme des animations, parallaxe).
 - **Icônes manquantes** à faire générer (brief ComfyUI à écrire) : niveaux des secteurs 2 et 3 (à ajouter dans `LEVEL_ICONS`), objets en orbite des secteurs 2 et 3 (`theme.orbiter`), puis les ~100 icônes de compétences, cartes, reliques et pactes (aujourd'hui des émojis réduits en pixel). Import : `tools/import_sprites_niveaux.py`, `tools/import_decors_carte.py`.

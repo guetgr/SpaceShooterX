@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test de mission — AGP Studio</title>
+<link rel="icon" href="../../icons/icon-192.png">
+<style>
+:root{color-scheme:dark;font:13px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e8edf0;background:#10171e}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{display:flex;flex-direction:column}header{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 14px;background:#1b222a;border-bottom:1px solid #34434e;flex-shrink:0}.mission{flex:1;min-width:140px}strong{font-size:12px;font-weight:550;display:block}#previewStatus{font-size:10px;color:#9baebc;margin-top:3px}nav{display:flex;gap:6px}button{border:1px solid #405363;background:#283641;color:#d9e7ed;padding:6px 10px;border-radius:5px;font:inherit;font-size:11px;cursor:pointer}button:hover{background:#365045}button:focus-visible{outline:2px solid #95d7bf;outline-offset:3px}button:disabled{opacity:.45;cursor:default}main{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden;padding:8px;container-type:size}.game-frame{position:relative;height:min(100cqh,175cqw);aspect-ratio:4/7;max-width:100%;background:#050a10;border:1px solid #34434e;border-radius:4px;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0}#previewWait{position:absolute;inset:0;display:grid;place-items:center;text-align:center;background:#101a23e8;color:#b3c9d7;padding:30px;font-size:13px;line-height:1.8}#previewWait[hidden]{display:none}body:fullscreen header{background:#131d25}@media(max-width:420px){header{padding:8px 10px;gap:6px}nav{gap:4px}button{font-size:10px;padding:5px 7px}}
+</style>
+</head>
+<body>
+<header><div class="mission"><strong id="previewMission">Test depuis AGP Studio</strong><div id="previewStatus" role="status">Chargement du jeu…</div></div><nav aria-label="Commandes du test"><button id="previewRestart" disabled>Relancer</button><button id="previewFullscreen">Plein écran</button><button id="previewClose">Fermer</button></nav></header>
+<main><div class="game-frame"><iframe id="previewGame" title="Test jouable de la mission"></iframe><div id="previewWait">Chargement du jeu…</div></div></main>
+<script src="play-window.js"></script>
+</body>
+</html>

@@ -36,8 +36,8 @@ function applyTuning(ov){
       }
       else if (k === 'waves'){
         const waves = o.waves === undefined ? (b.waves || []) : o.waves;
-        if (!Array.isArray(waves) || waves.length > 1000 || waves.some(w=> !w || !BESTIARY_LIST.some(e=> e.type === w.type && !e.bossId && e.type !== 'meteor') || !Number.isFinite(w.at) || w.at < 0 || w.at > 3600 || !Number.isInteger(w.count) || w.count < 1 || w.count > 100 || !Number.isFinite(w.spacing) || w.spacing < 0 || w.spacing > 60)) throw new Error('Vague invalide');
-        l.waves = waves.map(w=> ({ type:w.type, at:w.at, count:w.count, spacing:w.spacing }));
+        if (!Array.isArray(waves) || waves.length > 1000 || waves.some(w=> !WavePatterns.valid(w) || !BESTIARY_LIST.some(e=> e.type === w.type && !e.bossId && e.type !== 'meteor'))) throw new Error('Vague invalide');
+        l.waves = JSON.parse(JSON.stringify(waves));
       }
       else if (Array.isArray(b[k]) || Array.isArray(o[k])) l[k] = JSON.parse(JSON.stringify(o[k] === undefined ? b[k] : o[k]));
       else if (b[k] && typeof b[k] === 'object') l[k] = Object.assign({}, b[k], o[k]);

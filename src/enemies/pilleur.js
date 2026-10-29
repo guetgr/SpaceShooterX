@@ -16,7 +16,7 @@ const PIL = {
 mixin(GameScene, {
   pilInit(e){
     const sp = this.lvDef && this.lvDef.spawns && this.lvDef.spawns.find(s=> s.type === 'pilleur');
-    e.tier = Phaser.Math.Clamp((sp && sp.tier) || 1, 1, 4);
+    e.tier = Phaser.Math.Clamp(e.waveTier || (sp && sp.tier) || 1, 1, 4);
     e._st = 0; e.energy = 0; e.open = 0; e.nearT = 99999; e.beam = false; e.charge = 0; e.combo = 0; e.lastGulp = -1e9; e.summoned = false; e.smokeCd = 600; e.hitCd = 0;
     e.hatchG = this.add.graphics().setDepth(4.1); e.vortex = this.add.sprite(0, 0, 'plFxSuction').setDepth(4.2).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0); e.vortex.play('plSuction');
     e.tankGlow = this.add.sprite(0, 0, 'plFxGlow').setDepth(4.2).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0); e.tankGlow.play('plGlow');
@@ -78,7 +78,7 @@ mixin(GameScene, {
     this.pilDraw(e, k, hx, hy, tx, ty, mx, my);
     if (e.beam && e.charge > 14){
       const th = (0.55 + 0.45*Phaser.Math.Clamp(e.energy/2.2, 0, 1))*(e.charge < 20 ? (e.charge - 14)/6 : 1)*(e.energy < 0.5 ? 0.6 + 0.4*Math.sin(this.time.now*0.08) : 1);
-      if (pl && pl.active && Math.abs(pl.x - mx) < 8 + 10*th && pl.y > my && e.hitCd <= 0){ e.hitCd = 120; this.damagePlayer(PIL.dmg.beam); this.pilFx('plFxImpact', 'plImpact', pl.x, pl.y - 8, 0.7, 7); }
+      if (pl && pl.active && Math.abs(pl.x - mx) < 8 + 10*th && pl.y > my && e.hitCd <= 0){ e.hitCd = 120; this.damagePlayer(this.waveDamage(e,PIL.dmg.beam)); this.pilFx('plFxImpact', 'plImpact', pl.x, pl.y - 8, 0.7, 7); }
     }
     // dégâts visibles : fumée puis étincelles
     if (e._st >= 1){ e.smokeCd -= delta; if (e.smokeCd <= 0){ e.smokeCd = [0, 700, 420, 260][e._st]; const op = this.pilPix(e._st); const x = Phaser.Math.Between(150, 372), y = Phaser.Math.Between(60, 440); if (this.pilSolid(e, x, y)){ const [wx, wy] = this.pilP(e, x, y); this.acFx('acFxSmoke', 'acSmoke', wx, wy - 3, 0.25 + e._st*0.07, { normal:true, vy:-18, alpha:0.8 }); if (e._st >= 2) this.pilFx('plFxSpark', 'plSpark', wx, wy, 0.5, 8); } } }

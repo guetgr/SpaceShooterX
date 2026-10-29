@@ -8,3 +8,6 @@ __pycache__/
 .idea/
 Thumbs.db
 .DS_Store
+
+# Historique local des versions de missions
+.editor-history/

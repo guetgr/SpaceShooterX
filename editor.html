@@ -2,246 +2,77 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Éditeur de niveaux</title>
-<!-- Éditeur de niveaux de Space Shooter X (outil de conception, pas du jeu). Ouvre-le via le serveur local : http://localhost:8080/editor.html
-     Il pilote deux copies du jeu en iframe (?edit=play : aperçu jouable · ?edit=bot : joueur automatique) via src/dev/editor-hook.js, avec une sauvegarde en mémoire (?sandbox) :
-     tes parties de test n'abîment pas ta progression. EXPORTER écrit src/data/levels/*.json (serveur tools/serve.py). -->
-<style>
-/* Typographies : SSX Display = Jersey 15 (logo, titres, gros boutons) · SSX Label = Chakra Petch 600 (labels, boutons) · SSX Text = Chakra Petch 400 (descriptions, chiffres).
-   size-adjust cale leur taille sur l'ancien jeu (Press Start 2P / VT323), donc les tailles en px du reste du CSS restent valables. Hors ligne : tout est embarqué. */
-@font-face{ font-family:'SSX Display'; src:url('assets/fonts/Jersey15.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; size-adjust:185%; }
-@font-face{ font-family:'SSX Label'; src:url('assets/fonts/ChakraPetch-600.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; size-adjust:132%; }
-@font-face{ font-family:'SSX Text'; src:url('assets/fonts/ChakraPetch-400.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; size-adjust:78%; }
-:root{
-  --bg:#07060f; --panel:#0e0c1e; --panel2:#14122b; --line:#2c2750; --ink:#eaf6ff; --dim:#7f8bb8; --cyan:#4ff2ff; --amber:#ffce4a; --green:#7bff9a; --red:#ff4f6d;
-}
-*{ box-sizing:border-box; }
-html,body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:'SSX Text','SSX Text',monospace; font-size:18px; }
-button,input,select{ font:inherit; color:inherit; }
-body{ display:grid; grid-template-rows:auto 1fr; }
-header{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; padding:10px 14px; background:var(--panel); border-bottom:2px solid var(--line); }
-header h1{ margin:0; font:12px 'SSX Label',monospace; color:var(--cyan); letter-spacing:1px; margin-right:auto; }
-.btn{ background:var(--panel2); border:2px solid var(--line); padding:6px 12px; cursor:pointer; font-size:18px; }
-.btn:hover{ border-color:var(--cyan); } .btn:disabled{ opacity:.45; cursor:default; border-color:var(--line); }
-.btn.go{ background:var(--cyan); color:#04121a; border-color:var(--cyan); } .btn.save{ border-color:var(--amber); color:var(--amber); } .btn.save.dirty{ background:var(--amber); color:#1a1200; }
-.chip{ font-size:16px; color:var(--dim); } .chip.ok{ color:var(--green); } .chip.bad{ color:var(--red); }
-main{ display:grid; grid-template-columns:230px minmax(320px,1fr) 400px; min-height:0; }
-aside,section,.right{ min-height:0; overflow-y:auto; }
-aside{ background:var(--panel); border-right:2px solid var(--line); padding:8px; }
-aside h3{ font:9px 'SSX Label',monospace; color:var(--dim); margin:12px 4px 6px; } aside h3:first-child{ margin-top:2px; }
-.lv{ display:flex; align-items:center; gap:6px; padding:6px 8px; cursor:pointer; border:2px solid transparent; } .lv:hover{ background:var(--panel2); }
-.lv.sel{ border-color:var(--cyan); background:var(--panel2); } .lv .n{ color:var(--dim); width:20px; } .lv .t{ margin-left:auto; font-size:14px; color:var(--dim); } .lv i{ width:8px; height:8px; border-radius:50%; background:var(--amber); visibility:hidden; } .lv.mod i{ visibility:visible; }
-section{ padding:12px 16px 40px; }
-section h2{ margin:0 0 4px; font:13px 'SSX Label',monospace; color:var(--amber); } .sub{ color:var(--dim); margin:0 0 12px; }
-details{ background:var(--panel); border:2px solid var(--line); margin-bottom:10px; } summary{ cursor:pointer; padding:8px 12px; font:10px 'SSX Label',monospace; color:var(--cyan); list-style:none; } summary::before{ content:'▸ '; } details[open] summary::before{ content:'▾ '; }
-details .body{ padding:4px 12px 10px; }
-.f{ display:grid; grid-template-columns:1fr 92px; gap:2px 10px; align-items:center; padding:5px 0; border-top:1px solid #1d1a38; } .f:first-child{ border-top:none; }
-.f label{ line-height:1.05; } .f label small{ display:block; color:var(--dim); font-size:15px; }
-.f input[type=number]{ width:92px; background:#05040c; border:2px solid var(--line); padding:3px 6px; text-align:right; } .f input[type=number]:focus{ outline:none; border-color:var(--cyan); }
-.f input[type=range]{ grid-column:1 / 2; width:100%; accent-color:var(--cyan); } .f .meta{ grid-column:2; font-size:14px; color:var(--dim); text-align:right; }
-.f.mod input[type=number]{ border-color:var(--amber); color:var(--amber); } .f.mod .meta{ color:var(--amber); cursor:pointer; text-decoration:underline; }
-.warn{ color:var(--red); padding:4px 0; }
-.right{ background:var(--panel); border-left:2px solid var(--line); padding:10px; display:flex; flex-direction:column; gap:10px; }
-.frame{ position:relative; width:100%; max-width:360px; aspect-ratio:9/16; align-self:center; border:2px solid var(--line); background:#000; } .frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-.frame .ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:var(--dim); text-align:center; padding:20px; pointer-events:none; }
-#botFrame{ position:fixed; left:-2000px; top:0; width:420px; height:760px; border:0; }
-.card{ background:var(--panel2); border:2px solid var(--line); padding:10px 12px; } .card h4{ margin:0 0 6px; font:9px 'SSX Label',monospace; color:var(--dim); }
-.bar{ height:10px; background:#05040c; border:1px solid var(--line); position:relative; margin:4px 0 8px; } .bar i{ position:absolute; top:0; bottom:0; left:0; background:var(--cyan); } .bar u{ position:absolute; top:-3px; bottom:-3px; background:rgba(123,255,154,.28); border:1px solid var(--green); }
-.big{ font:22px 'SSX Label',monospace; } .kv{ display:flex; justify-content:space-between; } .kv b{ color:var(--amber); font-weight:normal; }
-.verdict{ margin-top:6px; padding:6px 8px; border-left:4px solid var(--dim); } .verdict.ok{ border-color:var(--green); color:var(--green); } .verdict.easy{ border-color:var(--cyan); color:var(--cyan); } .verdict.hard{ border-color:var(--red); color:var(--red); }
-.opts{ display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; } .opts select,.opts input{ background:#05040c; border:2px solid var(--line); padding:2px 6px; } .opts input{ width:80px; }
-table{ width:100%; border-collapse:collapse; font-size:16px; } td,th{ text-align:right; padding:1px 4px; border-top:1px solid #1d1a38; } td:first-child,th:first-child{ text-align:left; } th{ color:var(--dim); font-weight:normal; }
-.val{ margin:6px 0 10px; padding:6px 10px; border:2px solid var(--line); font-size:16px; } .val:empty{ display:none; } .val .e{ color:var(--red); } .val .w{ color:var(--amber); } .val .t{ color:var(--dim); }
-.toast{ position:fixed; bottom:14px; left:50%; transform:translateX(-50%); background:var(--panel2); border:2px solid var(--cyan); padding:8px 16px; opacity:0; transition:opacity .25s; pointer-events:none; z-index:9; } .toast.show{ opacity:1; } .toast.err{ border-color:var(--red); }
-@media (max-width:1000px){ main{ grid-template-columns:1fr; } aside{ border-right:0; border-bottom:2px solid var(--line); max-height:200px; } .right{ border-left:0; } }
-</style>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#171d24">
+<title>AGP Studio — Éditeur de missions</title>
 <link rel="stylesheet" href="tools/editor/timeline.css">
+<link rel="stylesheet" href="tools/editor/studio.css">
 </head>
 <body>
-<header>
-  <h1>ÉDITEUR DE NIVEAUX</h1>
-  <span class="chip" id="srv">serveur…</span>
-  <button class="btn go" id="btnPlay" disabled>▶ TESTER</button>
-  <button class="btn save" id="btnSave" disabled>💾 EXPORTER</button>
-  <button class="btn" id="btnReset" disabled>↺ TOUT REMETTRE</button>
+<header class="app-header">
+  <a class="brand" href="editor.html" aria-label="AGP Studio, éditeur de missions"><span class="brand-mark">a<span>g</span>p</span><span>Studio<small>Éditeur de missions</small></span></a>
+  <span class="header-divider"></span><span class="project-name">Space Shooter X <span class="local-label">Local</span></span>
+  <span id="draftStatus" class="save-status" role="status">Chargement du catalogue…</span>
+  <button class="btn icon-btn" id="btnUndo" title="Annuler (Ctrl / Cmd + Z)" aria-label="Annuler" disabled>↶</button>
+  <button class="btn icon-btn" id="btnRedo" title="Rétablir (Ctrl / Cmd + Maj + Z)" aria-label="Rétablir" disabled>↷</button>
+  <button class="btn" id="btnPlay" disabled>Tester la mission</button>
+  <button class="btn save" id="btnSave" disabled>Enregistrer</button>
 </header>
-<main>
-  <aside id="list"></aside>
-  <section id="form"><p class="sub">Chargement du jeu…</p></section>
-  <div class="right">
-    <div class="frame"><iframe id="playFrame" title="Aperçu du jeu"></iframe><div class="ph" id="ph">Chargement…</div></div>
-    <div class="card">
-      <h4>JOUEUR AUTOMATIQUE (BOT)</h4>
-      <div class="opts">
-        <select id="skill"><option value="casual">débutant</option><option value="average" selected>moyen</option><option value="expert">expert</option></select>
-        <select id="seeds"><option>5</option><option selected>10</option><option>20</option><option>40</option></select><span>parties</span>
-        <span id="budgetWrap">arbre ◆ <input type="number" id="budget" min="0" step="10" value="0" title="Fragments dépensés dans l'arbre de compétences avant la partie (puissance du joueur)"></span>
-        <button class="btn" id="btnBot" disabled>🤖 LANCER</button>
+<main class="app-layout">
+  <aside class="library-sidebar">
+    <details class="mission-picker" open><summary>Ordres de mission <span id="missionCount"></span></summary><nav id="list" aria-label="Missions"></nav></details>
+    <div id="library"><p class="loading-note">Chargement des créatures…</p></div>
+    <div class="sidebar-foot"><span id="srv">Connexion…</span><a href="index.html?dev" target="_blank" rel="noopener">Ouvrir le jeu</a></div>
+  </aside>
+  <section class="workspace">
+    <div class="mission-heading"><div><p id="missionPath">Espace de conception</p><h1 id="missionTitle">Préparation du studio</h1></div><span id="missionMode" class="mode-pill">Composition</span></div>
+    <nav class="workspace-tabs" aria-label="Vues de l’éditeur">
+      <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button>
+      <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnReset" disabled>Réinitialiser</button>
+    </nav>
+    <div id="validationSummary" class="validation-summary" hidden></div>
+    <div id="compositionPanel">
+      <div class="stage-panel" id="previewStage">
+        <div class="stage-toolbar"><span><i class="status-dot"></i> Aperçu de la formation</span><div class="preview-controls"><button class="btn small" id="btnExpand" disabled aria-expanded="false">Agrandir</button><button class="btn small" id="btnPopup" disabled>Fenêtre séparée</button><button class="btn small" id="btnStop" hidden>Revenir à la formation</button><span id="stageLabel">Placement initial</span></div></div>
+        <div class="stage-body">
+          <div class="stage-information"><span class="eyebrow">Plan de vol</span><h2 id="stageTitle">Une mission,<br>chaque arrivée maîtrisée.</h2><p id="stageHint">Glissez une créature sur la timeline pour composer votre première vague.</p><div id="stageStats" class="stage-stats"></div><p class="stage-note">La formation définit le placement initial. Chaque créature suit ensuite son comportement.</p></div>
+          <div class="stage-viewport" id="previewPane"><canvas id="formationCanvas" width="400" height="700" aria-label="Disposition de la vague sélectionnée"></canvas><div class="play-panel" id="playPanel" hidden><iframe id="playFrame" title="Aperçu jouable de la mission"></iframe><div id="ph" class="ph">Chargement du catalogue…</div></div><span class="stage-coordinate">400 × 700</span></div>
+        </div>
       </div>
-      <div class="bar" id="botBar" style="display:none"><i style="width:0"></i></div>
+      <div id="timelinePanel"></div>
     </div>
-    <div class="card" id="results" style="display:none"></div>
-    <div class="card"><h4>JOURNAL DE LA PARTIE</h4><p class="sub">Arrivées et événements réellement exécutés, y compris le tutoriel.</p><div id="timelineLog" style="max-height:250px;overflow:auto;font-size:14px"></div></div>
-  </div>
+    <div id="form" class="settings-panel" hidden></div>
+    <div id="jsonPanel" class="settings-panel" hidden></div>
+  </section>
+  <aside class="right">
+    <div id="inspector"><div class="inspector-heading"><span>Inspecteur</span><span class="selection-badge">Aucune sélection</span></div><p class="empty-inspector">Sélectionnez une vague pour modifier sa formation et ses propriétés.</p></div>
+    <details class="lab-panel"><summary>Laboratoire de test</summary><div class="body">
+      <p class="sub">Tester l’équilibrage avec un joueur automatique.</p>
+      <div class="opts"><label>Profil<select id="skill"><option value="casual">Débutant</option><option value="average" selected>Moyen</option><option value="expert">Expert</option></select></label><label>Parties<select id="seeds"><option>5</option><option selected>10</option><option>20</option><option>40</option></select></label><label id="budgetWrap">Budget R&D<input type="number" id="budget" min="0" step="10" value="0"></label></div>
+      <button class="btn full" id="btnBot" disabled>Lancer la simulation</button>
+      <div class="bar" id="botBar" style="display:none"><i style="width:0"></i></div><div id="results" style="display:none"></div>
+      <details class="trace-panel"><summary>Journal de la partie</summary><div id="timelineLog" role="log"></div></details>
+    </div></details>
+    <div class="keyboard-help"><kbd>Suppr</kbd> supprimer <span><kbd>⌘/Ctrl D</kbd> dupliquer</span></div>
+  </aside>
 </main>
-<iframe id="botFrame" title="Bot"></iframe>
-<div class="toast" id="toast"></div>
-
+<iframe id="botFrame" title="Simulation automatique"></iframe>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="versionDialog" class="version-dialog" aria-labelledby="versionTitle">
+  <div class="version-header"><div><h2 id="versionTitle">Historique des versions</h2><p id="versionMission"></p></div><button class="btn small" id="versionClose" autofocus>Fermer</button></div>
+  <div class="version-create"><div><label for="versionName">Créer un point de sauvegarde du brouillon</label><p>Une version automatique est conservée à chaque enregistrement modifié.</p></div><div class="version-create-fields"><input id="versionName" placeholder="Ex. Avant les renforts du boss" maxlength="80" required><button class="btn save" id="versionCreate" disabled>Créer une version</button></div></div>
+  <p id="versionStatus" class="version-status" role="status" aria-live="polite"></p>
+  <div class="version-columns"><nav id="versionList" aria-label="Versions de la mission"></nav><div id="versionDetail" class="version-detail"></div></div>
+</dialog>
+<script src="src/data/wave-patterns.js"></script>
 <script src="tools/editor/steps-model.js"></script>
 <script src="tools/editor/level-document.js"></script>
-<script src="tools/editor/timeline.js"></script>
 <script src="tools/editor/validator.js"></script>
 <script src="tools/editor/steps-ui.js"></script>
-<script>
-"use strict";
-/* réglages du tuto : EditorSteps.TUTO_SCHEMA (tools/editor/steps-model.js), affichés par les étapes (tools/editor/steps-ui.js) */
-const TARGET_BUDGET = { 'w1-l1':0, 'w1-l2':55, 'w1-l3':95, 'w1-l4':130, 'w1-l5':190, 'w2-l1':270, 'w2-l2':350, 'w2-l3':420, 'w2-l4':500, 'w2-l5':650, 'w3-l1':750, 'w3-l2':850, 'w3-l3':950, 'w3-l4':1070, 'w3-l5':1290 };
-const TARGET_WIN = { tuto:0.9, boss:0.55, normal:0.8 }, TOL = 0.12;
-const $ = id=> document.getElementById(id);
-const clone = o=> JSON.parse(JSON.stringify(o));
-const GAME = location.origin;
-
-const S = { levels:[], base:{}, defaults:null, ov:{ tuto:{}, levels:{} }, saved:'', sel:'w1-tuto', ready:false, botReady:false, botRes:null, serverOk:null };
-const frames = { play:$('playFrame'), bot:$('botFrame') };
-
-function toast(t, err){ const e = $('toast'); e.textContent = t; e.classList.toggle('err', !!err); e.classList.add('show'); clearTimeout(e._t); e._t = setTimeout(()=> e.classList.remove('show'), 2600); }
-function post(which, msg){ const w = frames[which].contentWindow; if (w) w.postMessage(Object.assign({ ssx:1 }, msg), GAME); }
-const lvl = id=> S.levels.find(l=> l.id === id);
-
-/* ---------- état : surcharges ---------- */
-function pruneAll(o){ if (Array.isArray(o)) return; Object.keys(o).forEach(k=>{ if (o[k] && typeof o[k] === 'object'){ pruneAll(o[k]); if (!Array.isArray(o[k]) && !Object.keys(o[k]).length) delete o[k]; } }); }
-const dirty = ()=> JSON.stringify(S.ov) !== S.saved;
-function levelModified(id){ return !!(S.ov.levels[id] && Object.keys(S.ov.levels[id]).length) || (id === 'w1-tuto' && Object.keys(S.ov.tuto).length > 0); }
-function refreshChrome(){
-  $('btnSave').classList.toggle('dirty', dirty()); $('btnSave').textContent = dirty() ? '💾 EXPORTER *' : '💾 EXPORTER';
-  document.querySelectorAll('.lv').forEach(e=> e.classList.toggle('mod', levelModified(e.dataset.id)));
-}
-/* validation (tools/editor/validator.js) : erreurs = ce que le serveur refuse (bloquent EXPORTER), avertissements = indicatifs. Jamais bloquant en cas de plantage du validateur. */
-function validateOf(id){
-  const cat = { eventCatalog:S.eventCatalog, tunablesCatalog:S.tunablesCatalog, mobCatalog:S.mobCatalog, bestiary:S.bestiary, decorCatalog:S.decorCatalog, musicCatalog:S.musicCatalog };
-  return EditorValidator.validateLevel(editorLevelDocument(id), cat);
-}
-function refreshBanner(){
-  const b = $('valBanner'); if (!b) return;
-  try {
-    const r = validateOf(S.sel); b.replaceChildren();
-    const add = (cls, text)=> { const d = document.createElement('div'); d.className = cls; d.textContent = text; b.appendChild(d); };
-    r.errors.forEach(e=> add('e', 'ERREUR · ' + e)); r.warnings.forEach(w=> add('w', 'AVERTISSEMENT · ' + w));
-    if (r.errors.length) add('t', 'EXPORTER est refusé tant qu\'il reste une erreur.');
-  } catch(e){ b.textContent = 'Validation indisponible : ' + e.message; }
-}
-function changed(){ pruneAll(S.ov); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; post('play', { type:'apply', overrides:S.ov }); refreshChrome(); refreshBanner(); if(S.refreshTimeline)S.refreshTimeline(); if(S.refreshSteps)S.refreshSteps(); }
-
-/* ---------- liste des niveaux ---------- */
-function renderList(){
-  const L = $('list'); L.innerHTML = ''; let w = null;
-  S.levels.forEach(l=>{
-    if (l.world !== w){ w = l.world; const h = document.createElement('h3'); h.textContent = l.worldName; L.appendChild(h); }
-    const e = document.createElement('div'); e.className = 'lv' + (l.id === S.sel ? ' sel' : ''); e.dataset.id = l.id;
-    e.innerHTML = '<i></i><span class="n"></span><span class="nm"></span><span class="t"></span>';
-    e.children[1].textContent = l.tuto ? '?' : l.num; e.children[2].textContent = l.name; e.children[3].textContent = l.type;
-    e.onclick = ()=>{ S.sel = l.id; S.botRes = null; renderList(); renderForm(); renderResults(); };
-    L.appendChild(e);
-  });
-  refreshChrome();
-}
-
-/* ---------- formulaire ---------- */
-function section(title, open){ const d = document.createElement('details'); d.open = !!open; d.innerHTML = '<summary>' + title + '</summary><div class="body"></div>'; return d; }
-
-function renderForm(){
-  const F = $('form'), l = lvl(S.sel); F.innerHTML = ''; if (!l) return;
-  const h = document.createElement('div'); h.innerHTML = '<h2></h2><p class="sub"></p>'; h.querySelector('h2').textContent = l.worldName + ' · ' + (l.tuto ? 'TUTORIEL' : 'NIV.' + l.num + ' — ' + l.name);
-  h.querySelector('.sub').textContent = l.tuto ? 'Niveau scripté en 3 étapes (src/game/tuto.js). Les réglages se voient en direct dans l\'aperçu.' : 'Type « ' + l.type + ' » — les réglages s\'appliquent au prochain TESTER.';
-  F.appendChild(h);
-  S.refreshSteps = null;
-  const vb = document.createElement('div'); vb.id = 'valBanner'; vb.className = 'val'; F.appendChild(vb); refreshBanner();
-  renderTimeline(F, l);
-  renderSteps(F, l);                 // étapes : tous les réglages du niveau (tools/editor/steps-ui.js)
-  renderLevelDocument(F, l);
-  $('budgetWrap').style.display = l.tuto ? 'none' : ''; if (!l.tuto) $('budget').value = TARGET_BUDGET[l.id] || 0;      // puissance du joueur pour le bot
-}
-function updateSum(){
-  const w = $('sumWarn'); if (!w) return; const C = Object.assign({}, S.defaults.comp, S.ov.tuto.comp || {});
-  const t = C.sats + C.boss + C.win + C.clean; w.textContent = t === 100 ? '' : 'Total des poids : ' + t + ' → ramené à 100 (' + (t <= 0 ? 'impossible : mets au moins un poids' : 'proportions conservées') + ')';
-}
-
-/* ---------- bot : résultats ---------- */
-const avg = a=> a.length ? a.reduce((x, y)=> x + y, 0) / a.length : 0, fx = (v, n)=> (Math.round(v * Math.pow(10, n || 0)) / Math.pow(10, n || 0)).toString().replace('.', ',');
-function renderResults(){
-  const R = $('results'), r = S.botRes; if (!r || r.levelId !== S.sel){ R.style.display = 'none'; return; }
-  const l = lvl(S.sel), res = r.results, n = res.length, wins = res.filter(x=> x.win).length, rate = wins / n;
-  const tgt = l.tuto ? TARGET_WIN.tuto : (l.type === 'boss' ? TARGET_WIN.boss : TARGET_WIN.normal);
-  const times = res.map(x=> x.time), hp = res.map(x=> x.minHp);
-  let html = '<h4>RÉSULTAT · ' + n + ' PARTIES · ' + r.skill + '</h4><div class="big">' + Math.round(rate * 100) + '% <span style="font-size:16px;color:var(--dim)">de victoires (' + wins + '/' + n + ')</span></div>' +
-    '<div class="bar"><i style="width:' + Math.round(rate * 100) + '%"></i><u style="left:' + Math.round((tgt - TOL) * 100) + '%;width:' + Math.round(2 * TOL * 100) + '%"></u></div>' +
-    '<div class="kv"><span>Durée moyenne</span><b>' + fx(avg(times), 0) + ' s (' + fx(Math.min(...times), 0) + '–' + fx(Math.max(...times), 0) + ')</b></div>' +
-    '<div class="kv"><span>PV mini atteint (moy.)</span><b>' + Math.round(avg(hp) * 100) + '%</b></div>';
-  if (l.tuto){
-    html += '<div class="kv"><span>Coups reçus (moy.)</span><b>' + fx(avg(res.map(x=> x.hits)), 1) + '</b></div><div class="kv"><span>Finition d\'une partie (moy.)</span><b>' + Math.round(avg(res.map(x=> x.pct))) + '%</b></div>';
-    const ids = ['move', 'shoot', 'boss'], names = { move:'1 · bouger', shoot:'2 · tirer', boss:'3 · boss' };
-    html += '<table style="margin-top:8px"><tr><th>Étape</th><th>début (s)</th><th>durée (s)</th></tr>' + ids.map((id, i)=>{
-      const at = res.map(x=>{ const s = (x.steps || []).find(y=> y.id === id); return s ? s.at : null; }).filter(v=> v !== null);
-      const nx = res.map(x=>{ const a = (x.steps || []).find(y=> y.id === id), b = (x.steps || []).find(y=> y.id === ids[i + 1]); return a && b ? b.at - a.at : (a && id === 'boss' ? x.time - a.at : null); }).filter(v=> v !== null);
-      return '<tr><td>' + names[id] + '</td><td>' + (at.length ? fx(avg(at), 0) : '—') + '</td><td>' + (nx.length ? fx(avg(nx), 0) : '—') + '</td></tr>'; }).join('') + '</table>';
-  } else html += '<div class="kv"><span>Ennemis tués (moy.)</span><b>' + fx(avg(res.map(x=> x.kills)), 0) + '</b></div><div class="kv"><span>Avancement si défaite</span><b>' + Math.round(avg(res.filter(x=> !x.win).map(x=> x.progress * 100)) || 0) + '%</b></div>';
-  let cls = 'ok', msg = 'JUSTE : taux de victoire proche de la cible (' + Math.round(tgt * 100) + '%)';
-  if (rate > tgt + TOL){ cls = 'easy'; msg = 'TROP FACILE pour ce profil (cible ' + Math.round(tgt * 100) + '%) → ' + (l.tuto ? 'baisse les PV du boss ou serre les cadences' : 'monte hpMul / dmgMul ou la menace'); }
-  else if (rate < tgt - TOL){ cls = 'hard'; msg = 'TROP DUR pour ce profil (cible ' + Math.round(tgt * 100) + '%) → ' + (l.tuto ? 'monte la brèche de l\'anneau, baisse les dégâts ou les cadences' : 'baisse hpMul / dmgMul ou la menace'); }
-  html += '<div class="verdict ' + cls + '">' + msg + '</div>';
-  if (res.some(x=> x.timeout)) html += '<div class="verdict hard">' + res.filter(x=> x.timeout).length + ' partie(s) sans fin (temps dépassé)</div>';
-  html += '<p style="color:var(--dim);font-size:15px;margin:8px 0 0">Le bot juge la difficulté relative, pas le plaisir : joue aussi toi-même (TESTER).</p>';
-  R.innerHTML = html; R.style.display = '';
-}
-
-/* ---------- actions ---------- */
-$('btnPlay').onclick = ()=>{ $('ph').style.display = 'none'; post('play', { type:'play', levelId:S.sel, overrides:S.ov }); };
-$('btnBot').onclick = ()=>{
-  const l = lvl(S.sel); $('btnBot').disabled = true; $('botBar').style.display = ''; $('botBar').firstChild.style.width = '0';
-  S.botCfg = { levelId:S.sel, skill:$('skill').value, seeds:+$('seeds').value };
-  post('bot', { type:'bot', levelId:S.sel, overrides:S.ov, seeds:S.botCfg.seeds, skill:S.botCfg.skill, budget: l.tuto ? 0 : +$('budget').value || 0 });
-};
-$('btnReset').onclick = ()=>{ if (!confirm('Remettre TOUS les réglages aux valeurs d\'origine ? (rien n\'est écrit tant que tu n\'exportes pas)')) return; S.ov = { tuto:{}, levels:{} }; changed(); renderForm(); };
-$('btnSave').onclick = async ()=>{
-  try {
-    const msg = EditorValidator.exportRefusal(S.levels.map(l=> ({ id:l.id, errors:validateOf(l.id).errors })));
-    if (msg){ toast(msg, true); return; }
-  } catch(e){ toast('Validation indisponible (' + e.message + ') : le serveur vérifiera à l\'export.', true); }
-  const levels = Object.fromEntries(S.levels.map(l=> [l.id, editorLevelDocument(l.id)]));
-  const snapshot = JSON.stringify(S.ov);
-  try {
-    const r = await fetch('/__editor/levels', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({levels})});
-    const j = await r.json(); if (!r.ok || !j.ok) throw new Error(j.error || 'export refusé');
-    S.saved = snapshot; refreshChrome(); toast(j.count + ' fichiers JSON enregistrés dans src/data/levels/');
-  } catch(e){ toast('Export JSON : ' + e.message + ' — vérifiez le serveur local.', true); }
-};
-$('skill').onchange = $('seeds').onchange = ()=>{};
-window.addEventListener('beforeunload', e=>{ if (dirty()){ e.preventDefault(); e.returnValue = ''; } });
-
-window.addEventListener('message', ev=>{
-  if (ev.origin !== GAME || !ev.data || ev.data.ssx !== 1) return;
-  const m = ev.data;
-  if (m.type === 'timeline-reset') $('timelineLog').replaceChildren();
-  if (m.type === 'timeline-trace'){
-    const log=$('timelineLog'); m.entries.forEach(e=>{const line=document.createElement('div');line.textContent=e.at+' s · '+e.label;log.prepend(line);});
-    while(log.children.length>500)log.lastChild.remove();
-  }
-  if (m.type === 'ready' && m.mode === 'play'){
-    S.documents = m.documents; S.eventCatalog = m.eventCatalog || []; S.bestiary = m.bestiary || []; S.decorCatalog = m.decorCatalog || []; S.musicCatalog = m.musicCatalog || { level:[], boss:[] }; S.tunablesCatalog = m.tunablesCatalog || {}; S.mobCatalog = m.mobCatalog || []; S.levels = m.levels; S.base = m.base; S.defaults = m.defaults; S.ov = clone(m.overrides || { tuto:{}, levels:{} }); S.ov.tuto = S.ov.tuto || {}; S.ov.levels = S.ov.levels || {}; S.saved = JSON.stringify(S.ov); S.ready = true;
-    if (!lvl(S.sel)) S.sel = S.levels[0].id;
-    $('ph').textContent = 'Choisis un niveau puis ▶ TESTER'; $('btnPlay').disabled = false; $('btnSave').disabled = false; $('btnReset').disabled = false;
-    renderList(); renderForm();
-  } else if (m.type === 'ready' && m.mode === 'bot'){ S.botReady = true; $('btnBot').disabled = false; }
-  else if (m.type === 'bot-progress'){ $('botBar').firstChild.style.width = Math.round(m.done / m.total * 100) + '%'; }
-  else if (m.type === 'bot-done'){ S.botRes = Object.assign({ levelId:m.levelId, results:m.results }, { skill:$('skill').selectedOptions[0].textContent }); $('btnBot').disabled = false; $('botBar').style.display = 'none'; renderResults(); }
-  else if (m.type === 'apply-error') toast('Réglages refusés par le jeu : ' + m.error, true);
-  else if (m.type === 'bot-error'){ $('btnBot').disabled = false; $('botBar').style.display = 'none'; toast('Bot : ' + m.error, true); }
-});
-$('list').addEventListener('input', ()=>{});
-fetch('/__editor/ping').then(r=> r.json()).then(j=>{ if (!j.ok) throw 0; $('srv').textContent = 'export : serveur local OK'; $('srv').className = 'chip ok'; }).catch(()=>{ $('srv').textContent = 'export : hors serveur (téléchargement)'; $('srv').className = 'chip bad'; });
-frames.play.src = 'index.html?dev&edit=play&sandbox=1';
-frames.bot.src = 'index.html?dev&edit=bot&sandbox=1';
-</script>
+<script src="tools/editor/timeline.js"></script>
+<script src="tools/editor/app.js"></script>
+<script src="tools/editor/preview.js"></script>
+<script src="tools/editor/versions.js"></script>
 </body>
 </html>

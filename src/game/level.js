@@ -8,7 +8,7 @@ mixin(GameScene, {
     this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; this._ecRet = null;
     const d = this.lvDef || (this.tuto ? levelById('w1-tuto') : null);
     this.lvWaves = [];
-    ((d && d.waves) || []).forEach(w=>{ for (let i=0;i<w.count;i++) this.lvWaves.push({ type:w.type, at:w.at + i*w.spacing }); });
+    ((d && d.waves) || []).forEach(w=>{ for (let i=0;i<w.count;i++) this.lvWaves.push({ ...w, at:w.at + i*w.spacing, unitIndex:i }); });
     this.lvWaves.sort((a,b)=> a.at-b.at);
     this.lvEvents = d ? (d.events || []).slice().sort((a, b)=> a.at - b.at) : [];
     if (d){ this.nextBossAt = 1e9; this._double1 = true; }       // ni boss périodique ni double boss : le boss du monde arrive à la fin de son niveau
@@ -19,10 +19,12 @@ mixin(GameScene, {
     if (!d || this.lvEnding || this.introActive || (this.tuto && this.tutoDone)) return;
     this.lvT += delta/1000;
     // Une entrée n'est consommée que si le spawn réussit (plafond physique existant).
-    while (this.lvWaves.length && this.lvWaves[0].at <= this.lvT){
-      if (this.tuto && this.lvWaves[0].type === 'sat') this.tutoSpawnSat(false);
-      else if (!this.spawnOneEnemy(this.lvWaves[0].type)) break;
-      this.lvWaves.shift();
+    // Une vague en attente d'alerte ne bloque pas les suivantes. En saturation, on réessaie à l'image suivante.
+    for (let i=0;i<this.lvWaves.length;){
+      const wave=this.lvWaves[i]; if (wave.at>this.lvT) break;
+      if (wave.minAlert && this.alertLevel<wave.minAlert){ i++; continue; }
+      if (!this.levelSpawnWave(wave)) break;
+      this.lvWaves.splice(i,1);
     }
     const ev = this.lvEvents[0];
     if (ev && this.lvT >= ev.at){
@@ -36,6 +38,45 @@ mixin(GameScene, {
     } else if (d.finalBoss){                                     // niveau de survie qui finit par un boss : il arrive quand le temps est écoulé, la victoire vient de sa destruction
       if (!this.ar && !this.mt && !this.rx && !this.an && this.levelProgress().frac >= 1 && !this.curEvent){ this.normaAnchor('bossStart'); if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else this.arStart(); }
     } else if (this.levelProgress().frac >= 1) this.levelWin();
+  },
+
+  // Placement initial uniquement : les créatures reprennent ensuite leur IA habituelle.
+  levelSpawnWave(wave){
+    const alert=this.alertLevel, weapon=this.weaponTier;
+    try {
+      if (wave.alert){ this.alertLevel=wave.alert; this.weaponTier=weaponTierFor(wave.alert); }
+      if (!wave.formation && !wave.alert && !wave.hpMul && !wave.dmgMul && !wave.speedMul && !wave.tier && !(this.tuto && wave.type==='sat')) return !!this.spawnOneEnemy(wave.type);
+      const placed=wave.formation && wave.formation!=='random';
+      const vx=placed?this.visibleXRange(45):null, vy=placed?this.visibleYRange(0):null;
+      const p=placed?WavePatterns.point(wave,wave.unitIndex):null;
+      const x=placed?Math.max(vx.min,Math.min(vx.max,vx.min+(vx.max-vx.min)*(wave.x===undefined?50:wave.x)/100+p.dx)):undefined;
+      let e;
+      // Le satellite pédagogique conserve son compteur et ses débris.
+      if (this.tuto && wave.type==='sat'){
+        this.tutoSpawnSat(false); const sat=this.tutoSats.at(-1);
+        if(!sat)return false;
+        if(placed){sat.sp.x=x;sat.sp.y=vy.min+(vy.max-vy.min)*(wave.y||0)/100+p.dy;sat.x0=x;}
+        sat.hp*=wave.hpMul||1;sat.max*=wave.hpMul||1;sat.vy*=wave.speedMul||1;sat.vx*=wave.speedMul||1;sat.waveDmgMul=wave.dmgMul||1;
+        return true;
+      } else e=this.spawnOneEnemy(wave.type,x,wave);
+      if (!e) return false;
+      if (placed){
+        e.x=x; e.y=vy.min+(vy.max-vy.min)*(wave.y||0)/100+p.dy;
+        if (e.body && e.body.reset){const vx=e.body.velocity.x,vy=e.body.velocity.y;e.body.reset(e.x,e.y);e.body.velocity.x=vx;e.body.velocity.y=vy;}
+        if (e.baseX!==undefined) e.baseX=x;
+        if (e.stopY!==undefined) e.stopY=Math.max(e.stopY,e.y);
+      }
+      if (wave.alert) e.waveAlert=wave.alert;
+      if (wave.tier) e.tier=wave.tier;
+      const hp=wave.hpMul||1;
+      if (e.hp!==undefined){ e.hp*=hp; e.maxHp*=hp; }
+      if (e.shieldHp!==undefined) e.shieldHp*=hp;
+      if (e.shieldMaxHp!==undefined) e.shieldMaxHp*=hp;
+      e.waveDmgMul=wave.dmgMul||1;
+      e.contactDamage*=e.waveDmgMul;
+      if (e.body && wave.speedMul){ e.body.velocity.x*=wave.speedMul; e.body.velocity.y*=wave.speedMul; }
+      return true;
+    } finally { this.alertLevel=alert; this.weaponTier=weapon; }
   },
 
   // DÉZOOM PROGRESSIF d'un niveau : on démarre serré sur le vaisseau, puis la caméra recule au fil du niveau (le plus lent des deux : objectif atteint ou temps écoulé).

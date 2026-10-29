@@ -128,7 +128,7 @@ mixin(GameScene, {
         this.tutoHitBox(this.playerBullets, sp, 44, 36, b=>{ this.juiceImpact(b, s); this.tutoHitSat(s, b.damage || 10, b.x, b.y); }, s);
         this.tutoHitBox(this.missiles, sp, 48, 40, b=>{ this.explodeFx(b.x, b.y, 40); this.tutoHitSat(s, (b.damage || 20), b.x, b.y); }, s);
       }
-      if (!s.dead && Math.abs(sp.x - px) < 34 && Math.abs(sp.y - py) < 30){ this.damagePlayer(TUTO_TUNE.sats.contactDmg); this.tutoKillSat(s, false); }
+      if (!s.dead && Math.abs(sp.x - px) < 34 && Math.abs(sp.y - py) < 30){ this.damagePlayer(TUTO_TUNE.sats.contactDmg*(s.waveDmgMul||1)); this.tutoKillSat(s, false); }
     });
     this.tutoSats = this.tutoSats.filter(s=> !s.dead);
     if (this.tutoBoss) this.tutoBossUpdate(delta, dt);

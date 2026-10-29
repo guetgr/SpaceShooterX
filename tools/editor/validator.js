@@ -128,7 +128,7 @@
         if (kind === 'spawns'){
           if (!only(['type', 'from', 'w', 'tier']) || !has(['type', 'from', 'w']) || (enemies && enemies.indexOf(row.type) < 0) || !num(row.from, -1, 3600) || !num(row.w, 0.01, 1000) || !num(row.tier === undefined ? 1 : row.tier, 1, 4)) err('Pool invalide');
         } else if (kind === 'waves'){
-          if (keys.length !== 4 || !has(['type', 'at', 'count', 'spacing']) || (enemies && enemies.indexOf(row.type) < 0) || !num(row.at, 0, 3600) || !Number.isInteger(row.count) || row.count < 1 || row.count > 100 || !num(row.spacing, 0, 60)) err('Vague invalide');
+          if (!WavePatterns.valid(row) || (enemies && enemies.indexOf(row.type) < 0)) err('Vague invalide');
         } else if (!only(['kind', 'at', 'duration', 'params', 'norma']) || !has(['kind', 'at']) || (evIds && evIds.indexOf(row.kind) < 0) || !num(row.at, 0, 3600) || ('duration' in row && !num(row.duration, 0.1, 600))) err('Événement invalide');
         else {
           if ('params' in row) checkParams(row.params, row.kind, 'events.params.' + row.kind, cat, err);
@@ -175,6 +175,7 @@
       const c = evCat(e.kind);
       if (c && typeof c.min === 'number' && c.min > threat) warn('Événement « ' + e.kind + ' » (à ' + e.at + ' s) : prévu pour une alerte ' + c.min + ' ou plus, la menace du niveau est ' + threat + ' ; il démarre quand même, avec les valeurs de l\'alerte ' + threat);
     });
+    doc.waves.forEach(w=>{if(w.minAlert>threat)warn('Vague « '+w.type+' » à '+w.at+' s : seuil d’alerte '+w.minAlert+' inaccessible dans cette mission à alerte '+threat);});
     // emplacements d'événements : src/game/level.js:28-30 (un événement programmé ne démarre que si son emplacement est libre : `!this[slot]`, slot = curSmall si EVENT_DEFS[kind].small, sinon curEvent)
     // et src/events/core.js:158 (startEvent pose l'événement dans le même emplacement). Deux GRANDS événements ne se chevauchent donc jamais : le second attend la fin du premier.
     // Deux petits événements, ou un petit et un grand, ne se gênent pas par ce mécanisme (petits : curSmall, grands : curEvent) ; on ne les signale pas. Seuls les grands (non `small`) sont jugés.

@@ -1,30 +1,13 @@
 {
   "id": "w1-l2",
-  "name": "CEINTURE DE DEBRIS",
+  "name": "RECUPERATION PRIORITAIRE",
   "type": "survive",
   "threat": 1,
   "bg": "station",
   "goal": {
     "seconds": 75
   },
-  "spawns": [
-    {
-      "type": "sat",
-      "from": 0,
-      "w": 8
-    },
-    {
-      "type": "satgun",
-      "from": 10,
-      "w": 6
-    },
-    {
-      "type": "bras",
-      "from": 20,
-      "w": 4,
-      "tier": 1
-    }
-  ],
+  "spawns": [],
   "finalBoss": "araignee",
   "reward": {
     "clear": 25,
@@ -32,28 +15,271 @@
   },
   "events": [
     {
-      "kind": "meteors",
-      "at": 30
+      "kind": "crystal",
+      "at": 31,
+      "duration": 4,
+      "params": {
+        "tickMs": 1000,
+        "perTick": 1,
+        "bigChance": 0,
+        "fallMin": 90,
+        "fallMax": 120
+      }
     }
   ],
   "world": "w1",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [],
+  "waves": [
+    {
+      "type": "sat",
+      "at": 2,
+      "count": 4,
+      "spacing": 0.5,
+      "formation": "line",
+      "spread": 200,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "bras",
+      "at": 7,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1,
+      "tier": 1
+    },
+    {
+      "type": "shooter",
+      "at": 13,
+      "count": 3,
+      "spacing": 0.6,
+      "formation": "line",
+      "spread": 200,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "tank",
+      "at": 18,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 65,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "bras",
+      "at": 22,
+      "count": 2,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 140,
+      "x": 50,
+      "y": 0,
+      "alert": 1,
+      "tier": 1
+    },
+    {
+      "type": "healer",
+      "at": 24,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "sat",
+      "at": 31,
+      "count": 4,
+      "spacing": 0.5,
+      "formation": "column",
+      "spread": 100,
+      "x": 27,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "tank",
+      "at": 37,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 60,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "bras",
+      "at": 41,
+      "count": 3,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 190,
+      "x": 50,
+      "y": 0,
+      "alert": 1,
+      "tier": 2
+    },
+    {
+      "type": "healer",
+      "at": 43,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "shooter",
+      "at": 48,
+      "count": 3,
+      "spacing": 0.7,
+      "formation": "line",
+      "spread": 220,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "bras",
+      "at": 55,
+      "count": 2,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 150,
+      "x": 50,
+      "y": 0,
+      "alert": 2,
+      "tier": 2
+    },
+    {
+      "type": "tank",
+      "at": 57,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 70,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "healer",
+      "at": 59,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "shooter",
+      "at": 63,
+      "count": 3,
+      "spacing": 0.6,
+      "formation": "column",
+      "spread": 100,
+      "x": 28,
+      "y": 0,
+      "alert": 2
+    },
+    {
+      "type": "sat",
+      "at": 66,
+      "count": 4,
+      "spacing": 0.5,
+      "formation": "line",
+      "spread": 220,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    }
+  ],
   "spawnClock": "mission",
   "intro": null,
   "boss": null,
   "bossName": null,
   "hpMul": 1,
   "dmgMul": 1,
-  "timelineOnly": 0,
+  "timelineOnly": 1,
   "zoom": {
     "start": 1.31,
     "end": 0.91,
     "seconds": 67.5
   },
   "ambient": {
-    "golden": true,
-    "smallEvents": true
+    "golden": false,
+    "smallEvents": false
+  },
+  "norma": {
+    "start": [
+      "Les machines récupèrent les débris avant nous. Leur mise hors service figure pourtant au dossier."
+    ],
+    "boss": [
+      "L'Araignée de tri refuse le démantèlement. Ses outils sont toujours sous tension."
+    ],
+    "progress": [
+      "Les robots de récupération sont encore alimentés.",
+      "Les unités de maintenance prolongent le travail des autres. Le vôtre aussi.",
+      "Le tri continue. Approchez du poste central."
+    ],
+    "banter": [
+      "La mise hors service était signée. L'exécution semble avoir été confiée à personne.",
+      "Le propriétaire récupère ses pièces. L'AGP récupérera votre rapport."
+    ],
+    "lowhp": [
+      "Ne restez pas devant les presses. La camionnette n'est pas une pièce à compacter."
+    ],
+    "win": [
+      "Le propriétaire a signé leur mise hors service. Nos ordres sont corrects. Son matériel est moins coopératif."
+    ],
+    "lose": [
+      "Intervention interrompue. Les machines ont repris le tri de votre secteur."
+    ],
+    "tickEvery": [
+      120,
+      150
+    ],
+    "messages": [
+      {
+        "id": "w1-l2-repair",
+        "when": "time",
+        "at": 25,
+        "text": "Ce robot répare les autres. Vous pouvez continuer ainsi longtemps, ou commencer par lui."
+      },
+      {
+        "id": "w1-l2-machines",
+        "when": "time",
+        "at": 47,
+        "text": "Les débris repartent vers la récupération. Aucun ordre d'arrêt n'a atteint les machines."
+      },
+      {
+        "id": "w1-l2-boss",
+        "when": "bossStart",
+        "text": "L'Araignée de tri refuse le démantèlement. Ses outils sont toujours sous tension."
+      },
+      {
+        "id": "w1-l2-report",
+        "when": "win",
+        "text": "Le propriétaire a signé leur mise hors service. Nos ordres sont corrects. Son matériel est moins coopératif."
+      }
+    ]
   }
 }

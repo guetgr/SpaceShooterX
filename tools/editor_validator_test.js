@@ -11,6 +11,7 @@ const M = require('./editor/steps-model.js');
 
 // ----- catalogues depuis les registres réels (même chargement que editor_steps_test.js) -----
 const ev = { Phaser:{ Math:{ Between:(a)=> a, FloatBetween:(a)=> a } }, Math, ENEMY_CAP:1e9 }; vm.createContext(ev);
+require('../src/data/wave-patterns.js');
 vm.runInContext(read('data/events.js') + '\n' + read('data/event-params.js') + '\nthis.EVENT_DEFS = EVENT_DEFS; this.EVENT_PARAMS = EVENT_PARAMS;', ev);
 const eventCatalog = Object.entries(ev.EVENT_DEFS).map(([id, e])=> ({ id, name:e.name, small:!!e.small, min:e.min, params:(ev.EVENT_PARAMS[id] || []).map(r=> ({ key:r.key, label:r.label, min:r.min, max:r.max, step:r.step, unit:r.unit, int:!!r.int, def:typeof r.def === 'function' ? r.def(1) : r.def, defByAlert:typeof r.def === 'function' })) }));
 const bgSrc = read('world/bg-monde.js'), c1 = {}; vm.createContext(c1);
@@ -49,7 +50,7 @@ fixtures.forEach(c=>{
 });
 
 // 3. avertissements (un test par règle ; positifs et négatifs)
-const W = (id, set)=> validateLevel(Object.assign(clone(docs[id]), set), cat);
+const W = (id, set)=> validateLevel(Object.assign(clone(docs[id]), {norma:{},ambient:{golden:true,smallEvents:true}}, set), cat);
 const has = (r, s)=> r.warnings.some(w=> w.indexOf(s) >= 0);
 const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
 { // alerte : crystal min 1 (ok), mines min 3 > menace 1

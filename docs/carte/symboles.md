@@ -608,6 +608,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `levelGoalText` | fonction | `src/home/ui.js` |  |
 | `levelInit` | méthode | `src/game/level.js` | `GameScene` |
 | `levelProgress` | méthode | `src/game/level.js` | `GameScene` |
+| `levelSpawnWave` | méthode | `src/game/level.js` | `GameScene` |
 | `levelUp` | méthode | `src/player/progression.js` | `GameScene` |
 | `levelUpdate` | méthode | `src/game/level.js` | `GameScene` |
 | `levelWin` | méthode | `src/game/level.js` | `GameScene` |
@@ -1190,6 +1191,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateDodge` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `updateDrone` | méthode | `src/player/weapons.js` | `GameScene` |
 | `updateEnemyAI` | méthode | `src/enemies/ai.js` | `GameScene` |
+| `updateEnemyBehavior` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `updateEnemyShields` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `updateEvent` | méthode | `src/events/core.js` | `GameScene` |
 | `updateEventPlan` | méthode | `src/events/core.js` | `GameScene` |
@@ -1234,6 +1236,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `vortexTimeText` | fonction | `src/data/vortex.js` |  |
 | `warpPulse` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `wasWorldSeen` | fonction | `src/data/world-progress.js` |  |
+| `waveDamage` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `WBG2_CLUSTERS` | const | `src/world/bg-monde2.js` |  |
 | `wbg2Lamp` | méthode | `src/world/bg-monde2.js` | `GameScene` |
 | `wbg2LampAt` | méthode | `src/world/bg-monde2.js` | `GameScene` |
@@ -1294,4 +1297,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1287 symboles.
+1290 symboles.

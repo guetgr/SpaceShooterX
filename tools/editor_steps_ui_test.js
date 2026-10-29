@@ -101,6 +101,14 @@ Object.keys(documents).forEach(id=>{
   want.forEach((s, i)=>{ assert.strictEqual(desc(steps(p)[i]), s.text, id + ' ' + s.id + ' : description'); assert.strictEqual(all(steps(p)[i], '.f').length, s.fields.length, id + ' ' + s.id + ' : champs'); nFields += s.fields.length; });
 });
 
+// Fixtures des interactions : tester les créations/retraits à partir de champs facultatifs absents,
+// indépendamment des dialogues et événements désormais présents dans les vrais niveaux (testés ci-dessus).
+for(const id of ['w1-l1','w1-l2']){
+  delete documents[id].norma;
+  documents[id].events=id==='w1-l2'?[{kind:'meteors',at:30}]:[];
+}
+S.documents=clone(documents);
+
 // (2) un nombre : clé de premier niveau stockée, description recalculée, retour au défaut = surcharge effacée ; invalide = refusé avec message
 {
   const id = 'w1-l2', p = render(id), st = stepOf(p, 'OBJECTIF'), r = rowOf(st, 'Menace'), num = all(r, 'input')[0];
@@ -268,6 +276,7 @@ Object.keys(documents).forEach(id=>{
 {
   const base = { id:'test', type:'survive', goal:{ seconds:60 }, norma:{ start:['A.'], tickEvery:[30, 40] }, events:[] };
   const c = vm.createContext({ console, WORLDS:[{ levels:[clone(base)] }], TUTO_DEFAULTS:{}, TUNING_OVERRIDES:{}, BESTIARY_LIST:[] });
+  vm.runInContext(read('data/wave-patterns.js'), c);
   vm.runInContext(read('data/tuning-apply.js') + '\nthis.F = TUNE_LEVEL_FIELDS;', c);
   ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'].forEach(k=> assert.ok(c.F.indexOf(k) >= 0, 'TUNE_LEVEL_FIELDS : ' + k));
   const l = ()=> c.WORLDS[0].levels[0];

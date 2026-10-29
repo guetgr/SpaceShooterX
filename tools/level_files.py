@@ -194,7 +194,12 @@ def validate_level(d, original, root=ROOT):
             if kind=='spawns':
                 if set(row)-{'type','from','w','tier'} or not {'type','from','w'} <= set(row) or row['type'] not in enemies or not number(row['from'],-1,3600) or not number(row['w'],0.01,1000) or not number(row.get('tier',1),1,4): raise ValueError('Pool invalide')
             elif kind=='waves':
-                if set(row)!={'type','at','count','spacing'} or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
+                bounds = {'spread':(24,300), 'x':(0,100), 'y':(0,80), 'alert':(1,20), 'minAlert':(1,20), 'tier':(1,4), 'hpMul':(0.1,10), 'dmgMul':(0.1,10), 'speedMul':(0.1,10)}
+                required = {'type','at','count','spacing'}
+                if set(row)-required-set(bounds)-{'formation'} or not required <= set(row) or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
+                if 'formation' in row and row['formation'] not in ['random','line','column','star']: raise ValueError('Vague invalide')
+                for key,(lo,hi) in bounds.items():
+                    if key in row and (not number(row[key],lo,hi) or (key in ['alert','minAlert','tier'] and type(row[key])!=int)): raise ValueError('Vague invalide')
             elif set(row)-{'kind','at','duration','params','norma'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
             else:
                 if 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)

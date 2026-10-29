@@ -136,11 +136,15 @@
     if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
     const m = ev.data;
     try {
+      if(m.type==='rebase'){for(const [id,doc] of Object.entries(m.documents||{})){if(LEVEL_BASE[id]){const base={};TUNE_LEVEL_FIELDS.forEach(k=>{if(doc[k]!==undefined)base[k]=JSON.parse(JSON.stringify(doc[k]));});LEVEL_BASE[id]=base;}}return;}
+      if(m.type==='resize-preview'){window.dispatchEvent(new Event('resize'));return;}
+      if(m.type==='pause-preview'){window.__game.loop.sleep();try{music.stop();if(sfx.ctx)sfx.ctx.suspend();}catch(e){}return;}
+      if(m.type==='play'){sfx.resume();window.__game.loop.wake();}
       if (m.type === 'apply') applyTuning(m.overrides);
       else if (m.type === 'play'){ applyTuning(m.overrides); launch(m.levelId); }
       else if (m.type === 'bot') runBot(m);
       else if (m.type === 'snapshot') send({ type:'snapshot', levels:snapshot() });
     } catch(e){ send({ type:'apply-error', error:String(e && e.message || e) }); }
   });
-  const wait = setInterval(()=>{ if (window.__ssxScene && window.__ssxScene.scene.isActive('home')){ clearInterval(wait); ready(); } }, 200);
+  const wait = setInterval(()=>{ if (window.__ssxScene && window.__ssxScene.scene.isActive('home')){ clearInterval(wait); ready(); if(mode==='play')window.__game.loop.sleep(); } }, 200);
 })();

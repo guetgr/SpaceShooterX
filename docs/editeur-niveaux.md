@@ -1,5 +1,7 @@
 # Éditeur des missions — timeline et JSON
 
+L’interface **AGP Studio** utilise désormais une bibliothèque, une timeline et un inspecteur. Voir le [guide du studio](editor-studio.md) pour le glisser-déposer, les formations, l’alerte par vague, les raccourcis et les sauvegardes de brouillon.
+
 Lancer `python3 tools/serve.py 8080`, puis ouvrir `http://localhost:8080/editor.html`.
 
 ## Guide rapide (de haut en bas)

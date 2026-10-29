@@ -138,7 +138,7 @@
   "zoom": {
     "start": 1.29,
     "end": 0.7949999999999999,
-    "seconds": 90.0
+    "seconds": 90
   },
   "ambient": {
     "golden": true,
