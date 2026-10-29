@@ -1,68 +1,238 @@
 {
   "id": "w2-l3",
-  "name": "ZONE DE COMPACTAGE",
+  "name": "STOCKAGE DEFINITIF",
   "type": "survive",
-  "threat": 4,
+  "threat": 3,
+  "bg": "compactage",
   "goal": {
-    "seconds": 80
+    "seconds": 95
   },
+  "intro": null,
+  "spawns": [],
+  "finalBoss": null,
   "reward": {
     "clear": 50,
     "first": 100
   },
-  "events": [
-    {
-      "kind": "mines",
-      "at": 20
-    }
-  ],
   "world": "w2",
   "schemaVersion": 2,
   "tuto": false,
-  "waves": [],
-  "spawnClock": "difficulty",
-  "spawns": [
+  "waves": [
     {
-      "type": "grunt",
-      "from": 0,
-      "w": 38
+      "type": "sniper",
+      "at": 2,
+      "count": 2,
+      "spacing": 0.8,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1
     },
     {
-      "type": "diver",
-      "from": 0,
-      "w": 16
+      "type": "mothership",
+      "at": 8,
+      "count": 2,
+      "spacing": 1.0,
+      "formation": "line",
+      "spread": 160,
+      "x": 40,
+      "y": 0,
+      "alert": 1
     },
     {
-      "type": "turret",
-      "from": 0,
-      "w": 12
+      "type": "kamikaze",
+      "at": 16,
+      "count": 2,
+      "spacing": 0.8,
+      "formation": "line",
+      "spread": 150,
+      "x": 60,
+      "y": 0,
+      "alert": 2
     },
     {
-      "type": "tank",
-      "from": 0,
-      "w": 12
+      "type": "spider",
+      "at": 24,
+      "count": 1,
+      "spacing": 0,
+      "formation": "line",
+      "spread": 180,
+      "x": 50,
+      "y": 0,
+      "alert": 1
     },
     {
-      "type": "mine",
-      "from": 0,
-      "w": 10
+      "type": "sniper",
+      "at": 32,
+      "count": 3,
+      "spacing": 0.7,
+      "formation": "line",
+      "spread": 200,
+      "x": 50,
+      "y": 0,
+      "alert": 2
+    },
+    {
+      "type": "kamikaze",
+      "at": 40,
+      "count": 3,
+      "spacing": 0.6,
+      "formation": "star",
+      "spread": 170,
+      "x": 50,
+      "y": 0,
+      "alert": 3
+    },
+    {
+      "type": "mothership",
+      "at": 48,
+      "count": 3,
+      "spacing": 0.8,
+      "formation": "line",
+      "spread": 190,
+      "x": 50,
+      "y": 0,
+      "alert": 1
+    },
+    {
+      "type": "spider",
+      "at": 56,
+      "count": 2,
+      "spacing": 0.9,
+      "formation": "line",
+      "spread": 160,
+      "x": 40,
+      "y": 0,
+      "alert": 2
+    },
+    {
+      "type": "sniper",
+      "at": 64,
+      "count": 3,
+      "spacing": 0.6,
+      "formation": "column",
+      "spread": 100,
+      "x": 30,
+      "y": 0,
+      "alert": 2
+    },
+    {
+      "type": "kamikaze",
+      "at": 72,
+      "count": 4,
+      "spacing": 0.5,
+      "formation": "line",
+      "spread": 220,
+      "x": 50,
+      "y": 0,
+      "alert": 3
+    },
+    {
+      "type": "mothership",
+      "at": 80,
+      "count": 2,
+      "spacing": 1.0,
+      "formation": "line",
+      "spread": 170,
+      "x": 50,
+      "y": 0,
+      "alert": 1
     }
   ],
-  "bg": "compactage",
-  "intro": null,
+  "events": [
+    {
+      "kind": "crystal",
+      "at": 35,
+      "duration": 5,
+      "params": {
+        "tickMs": 1000,
+        "perTick": 2,
+        "bigChance": 0.2,
+        "fallMin": 90,
+        "fallMax": 120
+      }
+    },
+    {
+      "kind": "crystal",
+      "at": 75,
+      "duration": 5,
+      "params": {
+        "tickMs": 1000,
+        "perTick": 2,
+        "bigChance": 0.25,
+        "fallMin": 90,
+        "fallMax": 120
+      }
+    }
+  ],
+  "spawnClock": "mission",
   "boss": null,
-  "finalBoss": null,
   "bossName": null,
-  "hpMul": 1,
-  "dmgMul": 1,
-  "timelineOnly": 0,
+  "hpMul": 1.35,
+  "dmgMul": 1.2,
+  "timelineOnly": 1,
   "zoom": {
-    "start": 1.31,
-    "end": 0.875,
-    "seconds": 72
+    "start": 1.25,
+    "end": 0.85,
+    "seconds": 85
   },
   "ambient": {
-    "golden": true,
-    "smallEvents": true
+    "golden": false,
+    "smallEvents": false
+  },
+  "norma": {
+    "start": [
+      "Zone de confinement. Présence de conteneurs sous marquage AGP direct."
+    ],
+    "boss": [
+      "Le Gardien de Confinement déploie ses barrières temporaires."
+    ],
+    "progress": [
+      "Analyse des registres de cargaison en cours...",
+      "Anomalie de données majeure détectée dans les archives AGP.",
+      "Accès aux hangars de stockage scellés."
+    ],
+    "banter": [
+      "Maintenir une distance de sécurité avec les citernes instables.",
+      "Les conteneurs scellés ne devraient techniquement pas être ici."
+    ],
+    "lowhp": [
+      "Niveau de radiation et d'impact élevé. Bouclier affaibli."
+    ],
+    "win": [
+      "Les déchets sont toujours ici. Les certificats, eux, sont validés."
+    ],
+    "lose": [
+      "Confinement maintenu. Les conteneurs restent non déclarés."
+    ],
+    "tickEvery": [
+      120,
+      150
+    ],
+    "messages": [
+      {
+        "id": "w2-l3-archive-1",
+        "when": "time",
+        "at": 25,
+        "text": "Ce numéro de cargaison figure dans nos archives. Traitement terminé, il y a neuf ans."
+      },
+      {
+        "id": "w2-l3-archive-2",
+        "when": "time",
+        "at": 50,
+        "text": "Deuxième correspondance. Ce n'est pas une erreur isolée."
+      },
+      {
+        "id": "w2-l3-boss",
+        "when": "bossStart",
+        "text": "Le Gardien de Confinement déploie ses barrières temporaires."
+      },
+      {
+        "id": "w2-l3-report",
+        "when": "win",
+        "text": "Les déchets sont toujours ici. Les certificats, eux, sont validés."
+      }
+    ]
   }
 }

@@ -140,8 +140,8 @@ with sync_playwright() as pw:
     check(p.evaluate("!!%s._ecRet && %s._ecRet.visible" % (SC, SC)), 'le viseur est affiché sur le joueur')
     print('  erreurs JS jusqu ici :', errs[:3])
 
-    print('cristaux (w2-l4)')
-    start('w2-l4', "levelById('w2-l4').goal.gems = 4; levelById('w2-l4').finalBoss = null")       # le boss de fin est testé à part plus bas
+    print('cristaux (w3-l3)')
+    start('w3-l3', "levelById('w3-l3').goal.gems = 4; levelById('w3-l3').finalBoss = null")       # le boss de fin est testé à part plus bas
     p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(3800)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par cristaux')
 

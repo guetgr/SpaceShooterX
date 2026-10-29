@@ -1367,147 +1367,489 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w2-l3": {
     "id": "w2-l3",
-    "name": "ZONE DE COMPACTAGE",
+    "name": "STOCKAGE DEFINITIF",
     "type": "survive",
-    "threat": 4,
+    "threat": 3,
+    "bg": "compactage",
     "goal": {
-      "seconds": 80
+      "seconds": 95
     },
+    "intro": null,
+    "spawns": [],
+    "finalBoss": null,
     "reward": {
       "clear": 50,
       "first": 100
     },
-    "events": [
-      {
-        "kind": "mines",
-        "at": 20
-      }
-    ],
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
-        "type": "grunt",
-        "from": 0,
-        "w": 38
+        "type": "sniper",
+        "at": 2,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "diver",
-        "from": 0,
-        "w": 16
+        "type": "mothership",
+        "at": 8,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 160,
+        "x": 40,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "turret",
-        "from": 0,
-        "w": 12
+        "type": "kamikaze",
+        "at": 16,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 150,
+        "x": 60,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "tank",
-        "from": 0,
-        "w": 12
+        "type": "spider",
+        "at": 24,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "mine",
-        "from": 0,
-        "w": 10
+        "type": "sniper",
+        "at": 32,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "kamikaze",
+        "at": 40,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "star",
+        "spread": 170,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "mothership",
+        "at": 48,
+        "count": 3,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 190,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "spider",
+        "at": 56,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 160,
+        "x": 40,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "sniper",
+        "at": 64,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "column",
+        "spread": 100,
+        "x": 30,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "kamikaze",
+        "at": 72,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "mothership",
+        "at": 80,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 170,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       }
     ],
-    "bg": "compactage",
-    "intro": null,
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 35,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 75,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.25,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
     "boss": null,
-    "finalBoss": null,
     "bossName": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "hpMul": 1.35,
+    "dmgMul": 1.2,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.31,
-      "end": 0.875,
-      "seconds": 72
+      "start": 1.25,
+      "end": 0.85,
+      "seconds": 85
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Zone de confinement. Présence de conteneurs sous marquage AGP direct."
+      ],
+      "boss": [
+        "Le Gardien de Confinement déploie ses barrières temporaires."
+      ],
+      "progress": [
+        "Analyse des registres de cargaison en cours...",
+        "Anomalie de données majeure détectée dans les archives AGP.",
+        "Accès aux hangars de stockage scellés."
+      ],
+      "banter": [
+        "Maintenir une distance de sécurité avec les citernes instables.",
+        "Les conteneurs scellés ne devraient techniquement pas être ici."
+      ],
+      "lowhp": [
+        "Niveau de radiation et d'impact élevé. Bouclier affaibli."
+      ],
+      "win": [
+        "Les déchets sont toujours ici. Les certificats, eux, sont validés."
+      ],
+      "lose": [
+        "Confinement maintenu. Les conteneurs restent non déclarés."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w2-l3-archive-1",
+          "when": "time",
+          "at": 25,
+          "text": "Ce numéro de cargaison figure dans nos archives. Traitement terminé, il y a neuf ans."
+        },
+        {
+          "id": "w2-l3-archive-2",
+          "when": "time",
+          "at": 50,
+          "text": "Deuxième correspondance. Ce n'est pas une erreur isolée."
+        },
+        {
+          "id": "w2-l3-boss",
+          "when": "bossStart",
+          "text": "Le Gardien de Confinement déploie ses barrières temporaires."
+        },
+        {
+          "id": "w2-l3-report",
+          "when": "win",
+          "text": "Les déchets sont toujours ici. Les certificats, eux, sont validés."
+        }
+      ]
     }
   },
   "w2-l4": {
     "id": "w2-l4",
-    "name": "BENNE A CRISTAUX",
-    "type": "collect",
+    "name": "MAINTIEN EN ACTIVITE",
+    "type": "survive",
     "threat": 4,
+    "bg": "benne",
     "goal": {
-      "gems": 35
+      "seconds": 100
     },
+    "intro": null,
+    "spawns": [],
+    "finalBoss": null,
     "reward": {
-      "clear": 55,
-      "first": 110
+      "clear": 60,
+      "first": 120
     },
-    "events": [
-      {
-        "kind": "crystal",
-        "at": 10
-      },
-      {
-        "kind": "meteors",
-        "at": 40
-      }
-    ],
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
-    "spawnClock": "difficulty",
-    "spawns": [
+    "waves": [
       {
-        "type": "grunt",
-        "from": 0,
-        "w": 38
+        "type": "sniper",
+        "at": 2,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "diver",
-        "from": 0,
-        "w": 16
+        "type": "splitter",
+        "at": 8,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 40,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "turret",
-        "from": 0,
-        "w": 12
+        "type": "swarmer",
+        "at": 10,
+        "count": 2,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 120,
+        "x": 40,
+        "y": 0,
+        "alert": 1
       },
       {
-        "type": "tank",
-        "from": 0,
-        "w": 12
+        "type": "charo",
+        "at": 18,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 160,
+        "x": 60,
+        "y": 0,
+        "alert": 1
       },
       {
         "type": "mine",
-        "from": 0,
-        "w": 10
+        "at": 26,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       },
       {
-        "type": "bomber",
-        "from": 0,
-        "w": 12
+        "type": "splitter",
+        "at": 34,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 170,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "swarmer",
+        "at": 36,
+        "count": 2,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 120,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "sniper",
+        "at": 44,
+        "count": 3,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 210,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "mine",
+        "at": 52,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 30,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "charo",
+        "at": 60,
+        "count": 3,
+        "spacing": 0.5,
+        "formation": "star",
+        "spread": 170,
+        "x": 70,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "splitter",
+        "at": 68,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "sniper",
+        "at": 76,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "column",
+        "spread": 100,
+        "x": 50,
+        "y": 0,
+        "alert": 2
       }
     ],
-    "bg": "benne",
-    "intro": null,
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 30,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 70,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.3,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
+    "spawnClock": "mission",
     "boss": null,
-    "finalBoss": null,
     "bossName": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "hpMul": 1.4,
+    "dmgMul": 1.25,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.29,
-      "end": 0.83,
-      "seconds": 70
+      "start": 1.22,
+      "end": 0.82,
+      "seconds": 90
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Secteur de maintenance du centre de supervision. Défenses organisées."
+      ],
+      "boss": [
+        "Le Contremaître ordonne l'envoi de renforts ciblés."
+      ],
+      "progress": [
+        "Les communications avec le serveur central de l'AGP sont établies.",
+        "Fichiers d'alertes de saturation retrouvés.",
+        "Le centre de supervision est en vue."
+      ],
+      "banter": [
+        "L'état de maintenance de ce secteur contraste vivement avec les décharges extérieures.",
+        "Les balises posées limitent nos trajectoires d'urgence."
+      ],
+      "lowhp": [
+        "Alerte : blindage très affaibli par les mécas de sécurité."
+      ],
+      "win": [
+        "Les transferts ont continué après l'alerte. Je conserve une copie de ces échanges."
+      ],
+      "lose": [
+        "Accès bloqué. Le Contremaître a sécurisé le secteur."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w2-l4-maint-status",
+          "when": "time",
+          "at": 20,
+          "text": "Ce secteur bénéficie toujours de maintenance. Les équipements abandonnés sont ailleurs."
+        },
+        {
+          "id": "w2-l4-agp-ack",
+          "when": "time",
+          "at": 55,
+          "text": "L'usine a signalé sa saturation. L'AGP a accusé réception."
+        },
+        {
+          "id": "w2-l4-boss",
+          "when": "bossStart",
+          "text": "Le Contremaître ordonne l'envoi de renforts ciblés."
+        },
+        {
+          "id": "w2-l4-report",
+          "when": "win",
+          "text": "Les transferts ont continué après l'alerte. Je conserve une copie de ces échanges."
+        }
+      ]
     }
   },
   "w2-l5": {
