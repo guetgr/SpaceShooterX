@@ -93,9 +93,29 @@
     const t = Object.keys(TECH_BY_ID).filter(id=> eq.techs[id] && (eq.techs[id].rang > 0 || eq.techs[id].spe) || eq.load.indexOf(id) >= 0).map(id=>{
       const e = eq.techs[id] || {}; return TECH_BY_ID[id].name + ' r' + (e.rang || 0) + (e.spe ? ' +SPE' : '') + (eq.load.indexOf(id) >= 0 ? ' [emporté]' : '');
     });
-    return a.concat(t).join(' · ') || 'camionnette de base';
+    const pk = eq.perks || emptyPerks();
+    const m = UPGRADE_POOL.filter(u=> pk.cards[u.id] > 0).map(u=> u.name + ' x' + pk.cards[u.id])
+      .concat(FUSIONS.filter(f=> pk.fusions[f.id]).map(f=> f.name), RELIC_LIST().filter(r=> pk.relics[r.id]).map(r=> r.name));
+    return a.concat(t, m).join(' · ') || 'camionnette de base';
   }
-  const emptyEquip = ()=> ({ atelier:{}, techs:{}, load:[] });
+  const emptyPerks = ()=> ({ cards:{}, fusions:{}, relics:{} });
+  const emptyEquip = ()=> ({ atelier:{}, techs:{}, load:[], perks:emptyPerks() });
+  const perkCap = u=> Math.min(u.max, 10);
+  const RELIC_LIST = ()=> Object.keys(RELICS).reduce((a, boss)=> a.concat(RELICS[boss].map(r=> Object.assign({ boss }, r))), []);
+  // compétences DE MISSION (cartes, fusions, reliques) prises avant le départ : appliquées comme si elles avaient été choisies en jeu (progression.js, relics-fusions.js)
+  function applyMissionPerks(sc, pk){
+    UPGRADE_POOL.forEach(u=>{
+      const n = (pk.cards[u.id] | 0); if (!n) return;
+      for (let i = 0; i < n; i++) u.apply(sc.stats);
+      sc.upgradeCounts[u.id] = n;
+      if (u.category === 'weapon') sc.weaponUpgradeCount += n; else if (u.category === 'engine') sc.engineUpgradeCount += n;
+    });
+    FUSIONS.forEach(f=>{ if (pk.fusions[f.id]){ f.apply(sc.stats); sc.upgradeCounts[f.id] = 1; } });
+    RELIC_LIST().forEach(r=>{ if (pk.relics[r.id]){ r.fn(sc); sc.relics.push(r); } });
+    sc.hp = sc.stats.maxHp; sc.shield = sc.stats.shieldMax;
+    try { sc.updateShipTier(); const row = document.getElementById('relicRow'); if (row) row.innerHTML = sc.relics.map(x=> pxImg(x.icon, 14)).join(''); } catch(e){ /* ignore */ }
+    sc.updateHud(true);
+  }
 
   // ---------------------------------------------------------------- enregistrement des parties (mode ?lab)
   function hookGame(){
@@ -104,7 +124,7 @@
     P.create = function(data){
       if (window.__labCtx) { try { localStorage.removeItem('ssx_worlds_v1'); } catch(e){ /* ignore */ } }          // chaque partie compte comme une première validation (prime comprise)
       const r = oCreate.call(this, data);
-      if (window.__labCtx){ if (ui) ui.launching = false; this._lab = { taken:0, c0:getMeta().composants, done:false }; }
+      if (window.__labCtx){ if (ui) ui.launching = false; this._lab = { taken:0, c0:getMeta().composants, done:false }; const pk = window.__labCtx.equip.perks; if (pk) applyMissionPerks(this, pk); }
       return r;
     };
     const oDmg = P.damagePlayer;
@@ -162,6 +182,16 @@
   .lab-in details{border:1px solid #26332d;padding:6px 10px;margin:8px 0}
   .lab-in summary{cursor:pointer;color:#bcd0c6}
   .lab-tab{border-collapse:collapse;font-size:11px;margin:6px 0;width:100%}.lab-tab th,.lab-tab td{text-align:left;padding:3px 8px;border-bottom:1px solid #18221d;color:#9fb3a8}
+  .lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:6px 0 14px}
+  .lab-boss{margin-top:10px;color:#bcd0c6;letter-spacing:1px}
+  .lab-card{background:linear-gradient(180deg,#101814f5,#080c0af5);border:1px solid #2f4238;padding:0 0 8px;cursor:pointer;text-align:center;position:relative;user-select:none}
+  .lab-card .tag{background:#ffc21a;color:#130f03;font-size:9px;letter-spacing:1px;padding:2px 6px;text-align:left}
+  .lab-card.fus .tag{background:#ff7a2b}
+  .lab-card .ci{margin:8px 0 4px;min-height:34px}.lab-card .nm{font-size:11px;letter-spacing:.5px;padding:0 6px}
+  .lab-card .ds{font-size:10px;color:#b5c6bb;padding:3px 8px 0;min-height:42px}
+  .lab-card:hover{border-color:#ffc21a}.lab-card.on{border-color:#9fe3c3;box-shadow:0 0 12px #9fe3c355}
+  .lab-card .ct{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px;font-size:11px}
+  .lab-card .ct button{padding:0 8px;line-height:18px}
   .lab-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1d3a2f;border:1px solid #4a8a6c;color:#d9f5e6;padding:9px 16px;z-index:70000;opacity:0;pointer-events:none;transition:opacity .15s;font:12px monospace}
   .lab-toast.show{opacity:1}
   `;
@@ -185,7 +215,7 @@
     }
     function lastEquip(){
       const mine = ui.runs.filter(r=> r.levelId === st.levelId && r.equip).sort((a, b)=> (a.at || 0) - (b.at || 0));
-      return mine.length ? JSON.parse(JSON.stringify(mine[mine.length - 1].equip)) : emptyEquip();
+      return mine.length ? Object.assign(emptyEquip(), JSON.parse(JSON.stringify(mine[mine.length - 1].equip))) : emptyEquip();
     }
     async function pickLevel(id){ st.levelId = id; st.equip = lastEquip(); await loadVersions(); render(); }
 
@@ -218,6 +248,19 @@
           t.spe ? h('label', {}, h('input', { type:'checkbox', checked:!!e.spe, disabled:e.rang < max, onchange:ev=> { e.spe = ev.target.checked; rerender(); } }), ' spé.') : h('span', {}));
       });
 
+      const pk = eq.perks || (eq.perks = emptyPerks());
+      const perkCard = (it, n, max, on, kind)=>{
+        const c = h('div', { class:'lab-card' + (kind !== 'CARTE' ? ' fus' : '') + (n ? ' on' : ''), title:it.desc, onclick:()=> on(Math.min(max, n + 1 > max && max === 1 ? 0 : n + 1)) },
+          h('div', { class:'tag' }, kind), h('div', { class:'ci' }), h('div', { class:'nm' }, it.name), h('div', { class:'ds' }, it.desc),
+          max > 1 ? h('div', { class:'ct' }, h('button', { onclick:ev=> { ev.stopPropagation(); on(Math.max(0, n - 1)); } }, '−'), h('b', {}, n), h('span', {}, '/ ' + max)) : h('div', { class:'ct' }, h('b', {}, n ? 'ÉQUIPÉ' : '—')));
+        c.querySelector('.ci').innerHTML = pxImg(it.icon, 32);
+        return c;
+      };
+      const cardsUi = UPGRADE_POOL.map(u=> perkCard(u, pk.cards[u.id] | 0, perkCap(u), v=> { pk.cards[u.id] = v; rerender(); }, 'CARTE'));
+      const fusUi = FUSIONS.map(f=> perkCard(f, pk.fusions[f.id] ? 1 : 0, 1, v=> { pk.fusions[f.id] = v ? 1 : 0; rerender(); }, 'FUSION'));
+      const relUi = Object.keys(RELICS).map(boss=> [ h('div', { class:'lab-note lab-boss' }, 'Reliques · ' + boss.toUpperCase()), h('div', { class:'lab-grid' }, RELICS[boss].map(r=> perkCard(r, pk.relics[r.id] ? 1 : 0, 1, v=> { pk.relics[r.id] = v ? 1 : 0; rerender(); }, 'RELIQUE'))) ]);
+      const nPerks = Object.keys(pk.cards).reduce((a, k)=> a + (pk.cards[k] | 0), 0) + Object.keys(pk.fusions).filter(k=> pk.fusions[k]).length + Object.keys(pk.relics).filter(k=> pk.relics[k]).length;
+
       const pct = bud.mid > 0 ? Math.min(100, cost.c/bud.mid*100) : (cost.c > 0 ? 100 : 0);
       const gauge = h('div', { class:'lab-gauge' + (cost.c > bud.max ? ' over' : cost.c > bud.mid ? ' mid' : '') }, h('i', { style:'width:' + pct + '%' }));
       const pcs = Object.keys(cost.pieces).map(k=> cost.pieces[k] + '× pièce ' + k).join(', ');
@@ -241,10 +284,16 @@
         h('h2', {}, 'TECHNOLOGIES'),
         h('p', {}, 'Le coût comprend le prototype, les rangs et la spécialisation (rangs au maximum). ' + BAYS + ' baies, une seule arme et une seule rampe.'),
         techs,
+        h('h2', {}, 'COMPÉTENCES DE MISSION'),
+        h('p', {}, 'Cartes, fusions et reliques comme en partie : clic = +1 (ou équiper), − pour retirer. Appliquées au départ, sans coût en ◆. ' + nPerks + ' choisie(s).'),
+        h('div', { class:'lab-row' }, h('button', { onclick:()=> { eq.perks = emptyPerks(); rerender(); } }, 'TOUT RETIRER')),
+        h('div', { class:'lab-note lab-boss' }, 'Cartes'), h('div', { class:'lab-grid' }, cardsUi),
+        h('div', { class:'lab-note lab-boss' }, 'Fusions'), h('div', { class:'lab-grid' }, fusUi),
+        relUi,
         h('div', { class:'lab-bar' }, h('div', { class:'in' },
           h('div', {}, h('div', {}, 'Coût de l’équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · dépassement ' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c)), pcs ? ' · ' + pcs : ''), gauge),
           h('button', { class:'go', onclick:()=> launch(lvl, cost, bud) }, 'LANCER LA MISSION')))];
-      inner.replaceChildren(...parts.flat().filter(Boolean));
+      inner.replaceChildren(...parts.flat(Infinity).filter(Boolean));
     }
     function buildMetaWith(eq, load){ return buildMeta(Object.assign({}, eq, { load })); }
 
