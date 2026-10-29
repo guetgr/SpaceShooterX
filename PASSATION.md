@@ -39,6 +39,17 @@ Cette mise à jour est **documentaire** : elle ne signifie pas que la nouvelle c
 
 **Ordre de reprise :** lire les règles de `CLAUDE.md`, cette mise à jour, la bible v2 et `docs/carte-du-code.md`, puis contrôler l'état réel des fichiers concernés. Ne considérer aucun nouveau mob, dialogue ou asset comme intégré sans vérification.
 
+### Missions Gemini intégrées — 29 octobre 2026
+
+Les JSON Gemini de `w1-l3`, `w1-l4`, `w1-l5` et `w2-l1` à `w2-l5` sont intégrés (`w1-l1`/`w1-l2` : voir plus haut). Historique de l'éditeur (`.editor-history/`, local, non versionné) : pour chacun, « Version initiale », « Prompt Gemini (brut, tel quel) » et « Adaptation Gemini ».
+
+- **Ennemis inconnus remplacés par des mobs existants** : monde 1 → `diver`, `ghost`, `elite`, `bomber`, `shieldedGrunt`, `tank` ; monde 2 → `grunt`, `sniper`, `charo`, `mothership`, `spider`, `kamikaze`, `splitter`, `swarmer`, `mine` (hors monde 1). Les vrais mobs (découpeur, presse, mécano, sentinelle…) restent à créer.
+- **Objectifs passés en survie** : `w1-l3`, `w1-l4`, `w2-l3`, `w2-l4` (ex-collect/kill). `w2-l1`, `w2-l2`, `w2-l5` aussi pour `w2-l2`/`w2-l5` (ex-kill).
+- **Monde 2 : aucun boss final** (`dechargeur`, `desosseur`, `gardien_confinement`, `contremaitre`, `directeur_traitement` n'existent pas) ; fonds `mars_*` inexistants, fonds actuels conservés. `finalBoss` ne accepte que `meteo|araignee|reacteur|anneau|pdg`.
+- **`w1-l5` reste de type `boss`** : en survie, `finalBoss:'pdg'` lancerait l'Araignée (branche `else arStart()` de `game/level.js`) et `check_worlds` exige un boss au dernier niveau. Le PDG arrive donc à 1,5 s et les vagues Gemini se jouent pendant le combat (pas d'approche préalable comme dans la bible).
+- `w1-l4` : `finalBoss` corrigé `anneaux` → `anneau`. Le monde 2 compte encore 6 niveaux (`w2-l6` = Dreadnought), la bible v2 en prévoit 5.
+- **Tests** : les cas « kill/collect » pointent maintenant sur `w3-l2` / `w3-l3`. Non relancés après les dernières modifications : `level_test.py`, `home_test.py` (échoue déjà : onglet BAIES supprimé par `dfdedab`), `perks_test.py`.
+
 ---
 
 > **Refonte de la progression (branche `progression-agp`, fusionnée dans `main` le 28 oct. 2026)** : design `docs/superpowers/specs/2026-10-27-progression-design.md`, plan `docs/superpowers/plans/2026-10-27-progression-agp.md`. Étapes 1 (composants visibles), 2 (sauvegarde v3 + atelier, plan `docs/superpowers/plans/2026-10-27-atelier-v3.md`), 3 (R&D par technologie, baies d'équipement, assemblage en mission, plan `docs/superpowers/plans/2026-10-27-rd-emplacements.md`) et 6a (textes des secteurs 2 et 3) faites ; étapes 4 (plans et pièces de secteur lâchés en mission) et 5 (distinctions RH, livrées) à planifier une par une.
