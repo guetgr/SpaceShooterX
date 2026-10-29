@@ -23,13 +23,13 @@
     + '#labDialog tr.ab td{opacity:.5}#labDialog td.eq{max-width:340px;font-size:10px;color:#9fb3c0}#labDialog tfoot td{font-weight:600;color:#a4d8bf}.lab-empty{color:#8095a4;padding:18px 0}';
   document.head.append(st);
 
-  function render(){
-    body.replaceChildren();
-    if (!runs.length){ body.append(el('p', 'lab-empty', 'Aucune partie enregistrée pour cette mission. Lancez le LABORATOIRE depuis l’accueil du jeu (bouton en haut à gauche).')); return; }
+  function render(target){
+    target.replaceChildren();
+    if (!runs.length){ target.append(el('p', 'lab-empty', 'Aucune partie enregistrée pour cette mission. Lancez le LABORATOIRE depuis l’accueil du jeu (bouton en haut à gauche).')); return; }
     const col = COLS.find(c=> c[0] === sortKey) || COLS[0];
     const rows = runs.slice().sort((a, b)=> { const x = col[3](a), y = col[3](b); return (x > y ? 1 : x < y ? -1 : 0)*sortDir; });
     const table = el('table'), head = el('tr');
-    COLS.forEach(c=> { const th = el('th', '', c[1] + (c[0] === sortKey ? (sortDir > 0 ? ' ▲' : ' ▼') : '')); th.onclick = ()=> { sortDir = sortKey === c[0] ? -sortDir : 1; sortKey = c[0]; render(); }; head.append(th); });
+    COLS.forEach(c=> { const th = el('th', '', c[1] + (c[0] === sortKey ? (sortDir > 0 ? ' ▲' : ' ▼') : '')); th.onclick = ()=> { sortDir = sortKey === c[0] ? -sortDir : 1; sortKey = c[0]; render(target); }; head.append(th); });
     head.append(el('th', '', 'Équipement'), el('th', '', 'Cartes / reliques'), el('th', ''));
     const th0 = el('thead'); th0.append(head); table.append(th0);
     const tb = el('tbody');
@@ -48,16 +48,19 @@
       el('td', '', real.length ? Math.floor(avg(r=> r.elapsed)/60) + ':' + String(avg(r=> r.elapsed)%60).padStart(2, '0') : '-'), el('td', '', avg(r=> r.hp)), el('td', '', avg(r=> r.taken)),
       el('td', '', avg(r=> r.dealt)), el('td', '', avg(r=> r.kills)), el('td', '', avg(r=> r.composants)), el('td', '', avg(r=> r.cost)), el('td', '', '(abandons exclus)'), el('td', '', ''), el('td', ''));
     const tf = el('tfoot'); tf.append(foot); table.append(tf);
-    body.append(table);
+    target.append(table);
   }
   async function load(){
+    level = S.sel;
     try {
       const r = await fetch('/__lab/runs?level=' + encodeURIComponent(level)), o = await r.json();
       if (r.status === 404) throw new Error('Redémarrez le serveur local pour activer le laboratoire.');
       runs = o.runs || [];
     } catch(e){ runs = []; toast(e.message, true); }
-    render();
+    if (dialog.open) render(body);
+    const tb = $('labTabBody'); if (tb && !$('labPanel').hidden) render(tb);
   }
+  window.LabRuns = { refresh:load };
   btn.onclick = ()=> { level = S.sel; title.textContent = 'Parties de test · ' + level; if (!dialog.open) dialog.showModal(); load(); };
   $('labClose').onclick = ()=> dialog.close();
 })();

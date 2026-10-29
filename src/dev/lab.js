@@ -7,6 +7,7 @@
   const q = new URLSearchParams(location.search);
   if (q.has('edit')) return;
   const LAB = q.has('lab');
+  const EMBED = LAB && q.has('embed') && window.parent !== window;          // intégré à l'éditeur (onglet Laboratoire de editor.html) : niveau choisi par l'éditeur, version « brouillon » possible
   const RUNS = '/__lab/runs', VERSIONS = '/__editor/versions';
   const BAYS = 5;
   const HEAVY = ()=> COMP.heavyTypes;
@@ -28,6 +29,14 @@
   const LS_RUNS = 'ssx_lab_runs_v1';
   const lsRuns = ()=> { try { const a = JSON.parse(window.__realLS.getItem(LS_RUNS) || '[]'); return Array.isArray(a) ? a : []; } catch(e){ return []; } };
   const lsAdd = run=> { try { window.__realLS.setItem(LS_RUNS, JSON.stringify(lsRuns().concat(run).slice(-500))); } catch(e){ /* ignore */ } };
+  // brouillon du niveau en cours d'édition : demandé à l'éditeur (page parente, même origine) au moment du lancement
+  let draftWait = null;
+  const getDraft = levelId=> new Promise(res=>{
+    const t = setTimeout(()=> res(null), 1500);
+    draftWait = d=> { clearTimeout(t); res(d); };
+    window.parent.postMessage({ ssx:1, type:'lab-need-draft', levelId }, location.origin);
+  });
+  const VERSION_KINDS = { manual:'Point nommé', saved:'Enregistrement', initial:'Version initiale', 'before-save':'État précédent', 'before-restore':'Avant restauration' };          // mêmes libellés que l'historique de l'éditeur
   const hash = s=>{ let x = 5381; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return (x >>> 0).toString(16); };
   const allLevels = ()=> WORLDS.reduce((a, w)=> a.concat(w.levels), []);
 
@@ -134,7 +143,7 @@
       at:Date.now(), cards, equip:ctx.equip, equipText:equipText(ctx.equip), cost:ctx.cost, budget:ctx.budget,
     };
     const saved = serverOk ? json(RUNS, { run }) : Promise.resolve(lsAdd(Object.assign(run, { id:String(run.at) })));
-    saved.then(()=> { if (ui) ui.runs.push(run); toast(serverOk ? 'Partie enregistrée' : 'Partie enregistrée dans ce navigateur'); }).catch(e=> toast('Enregistrement impossible : ' + e.message));
+    saved.then(()=> { if (ui) ui.runs.push(run); if (EMBED) window.parent.postMessage({ ssx:1, type:'lab-run' }, location.origin); toast(serverOk ? 'Partie enregistrée' : 'Partie enregistrée dans ce navigateur'); }).catch(e=> toast('Enregistrement impossible : ' + e.message));
   }
 
   // ---------------------------------------------------------------- écran du laboratoire
@@ -178,6 +187,7 @@
   .lab-rd .pips{display:flex;gap:2px;flex-wrap:wrap}.lab-rd .pips i{width:7px;height:7px;border:1px solid currentColor;border-radius:50%}
   .lab-rd .pips i.f{background:#ffce27;border-color:#9c7110}
   .lab-rd .sp{color:#365d37;border:1px solid #487247;padding:1px 4px}
+  .lab-rd .stats{font-size:10px;display:flex;flex-direction:column;gap:2px;min-height:34px}.lab-rd .stats div{display:flex;gap:6px;align-items:baseline}.lab-rd .stats span{flex:1;opacity:.8;font-size:9px;letter-spacing:.3px}.lab-rd .stats em{font-style:normal;opacity:.7}
   .lab-rd .inv{font-size:10px;opacity:.85}
   .lab-in .lab-rd button.buy{background:#ffce27;color:#2b2100;border:2px solid #9c7110;font-weight:700;font-size:11px;padding:6px 6px;text-align:center}
   .lab-in .lab-rd button.buy small{display:block;font-weight:400;font-size:10px;margin-top:2px}
@@ -194,17 +204,19 @@
   function buildUi(){
     document.head.append(h('style', {}, CSS));
     const levels = allLevels();
-    const st = { levelId:levels[0].id, versionId:'', versions:[], equip:emptyEquip() };
+    const start = q.get('level'), st = { levelId:levels.some(l=> l.id === start) ? start : levels[0].id, versionId:'', versions:[], equip:emptyEquip() };
     ui = { runs:[] };
     const root = h('div', { class:'lab-root' }), inner = h('div', { class:'lab-in' });
     root.append(inner); document.body.append(root);
     ui.show = async ()=>{ ui.runs = await loadRuns(); render(); root.classList.add('on'); };
     ui.hide = ()=> root.classList.remove('on');
     ui.visible = ()=> root.classList.contains('on');
+    ui.pick = async id=> { if (!levels.some(l=> l.id === id)) return; if (id !== st.levelId) return pickLevel(id); await loadVersions(true); render(); };          // même niveau : on relit seulement l'historique (nouvelle version enregistrée dans l'éditeur)
 
-    async function loadVersions(){
-      st.versions = []; st.versionId = '';
+    async function loadVersions(keep){
+      const was = st.versionId; st.versions = []; st.versionId = '';
       try { st.versions = (await json(VERSIONS + '?level=' + encodeURIComponent(st.levelId))).versions; } catch(e){ /* historique indisponible */ }
+      if (keep && (was === 'draft' || st.versions.some(v=> v.id === was))) st.versionId = was;
     }
     function lastEquip(){
       const mine = ui.runs.filter(r=> r.levelId === st.levelId && r.equip).sort((a, b)=> (a.at || 0) - (b.at || 0));
@@ -218,14 +230,30 @@
       const eq = st.equip, mineRuns = ui.runs.filter(r=> r.levelId === st.levelId);
       const rerender = ()=> { const y = root.scrollTop; render(); root.scrollTop = y; };
 
-      const lvlSel = h('select', { onchange:e=> pickLevel(e.target.value) }, levels.map(l=> h('option', { value:l.id, selected:l.id === st.levelId }, (l.tuto ? 'TUTO' : String(l.id).toUpperCase()) + ' · ' + l.name)));
+      const lvlSel = h('select', { disabled:EMBED, title:EMBED ? 'le niveau suit la mission choisie dans l’éditeur' : false, onchange:e=> pickLevel(e.target.value) }, levels.map(l=> h('option', { value:l.id, selected:l.id === st.levelId }, (l.tuto ? 'TUTO' : String(l.id).toUpperCase()) + ' · ' + l.name)));
       const verSel = h('select', { onchange:e=> { st.versionId = e.target.value; } },
         h('option', { value:'' }, 'Version publiée (actuelle)'),
-        st.versions.map(v=> h('option', { value:v.id, selected:v.id === st.versionId }, v.title + ' · ' + new Date(v.createdAt).toLocaleString('fr-FR', { dateStyle:'short', timeStyle:'short' }))));
+        EMBED ? h('option', { value:'draft', selected:st.versionId === 'draft' }, 'Brouillon de l’éditeur (non enregistré)') : null,
+        st.versions.map(v=> h('option', { value:v.id, selected:v.id === st.versionId }, v.title + ' — ' + (VERSION_KINDS[v.kind] || 'Version') + ' · ' + new Date(v.createdAt).toLocaleString('fr-FR', { dateStyle:'short', timeStyle:'short' }) + (v.summary ? ' · ' + v.summary.waves + ' vague' + (v.summary.waves === 1 ? '' : 's') + ' · ' + v.summary.creatures + ' créatures' : ''))));
 
-      const atelier = ATELIER_POSTS.map(p=> h('div', { class:'lab-row' }, h('label', {}, p.name),
-        h('select', { onchange:e=> { eq.atelier[p.id] = +e.target.value; rerender(); } },
-          [0, 1, 2, 3, 4, 5].map(mk=> h('option', { value:mk, selected:(eq.atelier[p.id] || 0) === mk }, mk ? 'Mk ' + ROMAN[mk] + ' · ' + ATELIER_COSTS.slice(0, mk).reduce((s, c)=> s + c, 0) + ' ◆' : 'base')))));
+      // atelier : même fiche que la R&D (une étape à la fois, coût cumulé Mk I -> Mk n), avec les valeurs avant / après du poste
+      const atelierCard = p=>{
+        const mk = eq.atelier[p.id] || 0, nc = atelierNextCost(p.id, mk);
+        const paid = ATELIER_COSTS.slice(0, mk).reduce((a, c)=> a + c, 0);
+        const cur = atelierShows(p.id, mk), nxt = mk < ATELIER_MAX ? atelierShows(p.id, mk + 1) : null;
+        const price = nc ? '◆ ' + nc.composants + (nc.pieces ? ' + ' + Object.keys(nc.pieces).map(k=> nc.pieces[k] + ' ' + k.toUpperCase()).join(' + ') : '') : '';
+        const card = h('article', { class:'lab-rd ' + (mk ? 'paper' : 'blue') },
+          h('div', { class:'rh' }, h('span', { class:'ic' }), h('b', {}, p.name), h('span', { class:'tg' }, mk ? 'MK ' + ROMAN[mk] : 'BASE')),
+          h('div', { class:'rdsc' }, p.text),
+          h('div', { class:'stats' }, cur.map((l, i)=> h('div', {}, h('span', {}, l.label), h('b', {}, l.value), nxt ? h('em', {}, ' → ' + nxt[i].value) : null))),
+          h('div', { class:'rst' }, h('span', { class:'pips' }, Array.from({ length:ATELIER_MAX }, (_, k)=> h('i', { class:k < mk ? 'f' : '' })))),
+          h('div', { class:'inv' }, mk ? 'investi : ' + money(paid) : 'camionnette de base'),
+          h('button', { class:'buy', disabled:!nc, onclick:()=> { eq.atelier[p.id] = mk + 1; rerender(); } }, nc ? 'MK ' + ROMAN[mk + 1] : 'COMPLET', h('small', {}, price)),
+          h('div', { class:'rctl' }, h('button', { disabled:!mk, onclick:()=> { eq.atelier[p.id] = mk - 1; rerender(); }, title:'revenir d’une étape' }, '− étape')));
+        card.querySelector('.ic').innerHTML = pxImg('🔧', 22);
+        return card;
+      };
+      const atelier = h('div', { class:'lab-rdgrid' }, ATELIER_POSTS.map(atelierCard));
 
       const techCard = t=>{
         const e = eq.techs[t.id] || (eq.techs[t.id] = { proto:false, rang:0, spe:false }), max = techMaxRang(t);
@@ -258,7 +286,7 @@
       const recent = mineRuns.slice(-5).reverse();
 
       const parts = [
-        h('div', { class:'lab-row' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('span', { style:'flex:1' }), h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
+        h('div', { class:'lab-row' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('span', { style:'flex:1' }), EMBED ? null : h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
         h('p', {}, 'Sauvegarde en mémoire : votre progression n’est jamais touchée. Chaque partie est enregistrée avec son équipement et affichée dans l’éditeur.'),
         h('h2', {}, 'MISSION'),
         h('div', { class:'lab-row' }, h('label', {}, 'Ordre'), lvlSel),
@@ -271,7 +299,9 @@
           ? h('p', {}, 'Tuto : vous êtes censé jouer avec 0 ◆ d’amélioration. Tout reste équipable pour tester.')
           : h('p', {}, 'Censé avoir été récolté avant cet ordre : ≈ ' + money(bud.mid) + ' (de ' + money(bud.min) + ' à ' + money(bud.max) + ').'),
         idx === 0 ? null : h('details', {}, h('summary', {}, 'Détail par ordre précédent'), bud.rows.map(r=> h('div', { class:'lab-note' }, r.name + ' — ' + money(r.val) + ' (' + r.src + ')'))),
-        h('h2', {}, 'ATELIER'), atelier,
+        h('h2', {}, 'ATELIER'),
+        h('p', {}, 'Six postes de la camionnette : le bouton jaune achète le Mk suivant (le coût cumule Mk I à Mk n ; les Mk III à V demandent des pièces de secteur). Les valeurs montrent le poste avant → après.'),
+        atelier,
         h('h2', {}, 'TECHNOLOGIES'),
         h('p', {}, 'Comme dans la R&D : le bouton jaune achète l’étape suivante (prototype, puis rang 1, 2, 3…, puis spécialisation). Le coût de l’équipement cumule toutes les étapes franchies. ' + BAYS + ' baies, une seule arme et une seule rampe.'),
         techUi,
@@ -285,7 +315,11 @@
     async function launch(lvl, cost, bud){
       const eq = st.equip; let version = null;
       try {
-        if (st.versionId){
+        if (st.versionId === 'draft'){
+          const doc = await getDraft(lvl.id); if (!doc) throw new Error('l’éditeur ne répond pas');
+          applyTuning({ tuto:{}, levels:{ [lvl.id]:doc } });
+          version = { id:'draft', title:'brouillon de l’éditeur', hash:hash(JSON.stringify(doc)) };
+        } else if (st.versionId){
           const o = await json(VERSIONS + '?level=' + encodeURIComponent(lvl.id) + '&id=' + st.versionId);
           applyTuning({ tuto:{}, levels:{ [lvl.id]:o.version.document } });
           version = { id:o.version.id, title:o.version.title, hash:o.version.fingerprint.slice(0, 8) };
@@ -302,7 +336,7 @@
       sfx.resume(); sfx.uiStart();
       if (Motion.ok()) Motion.cover(go, .45); else go();
     }
-    loadRuns().then(r=> { ui.runs = r; return pickLevel(st.levelId); }).then(()=> ui.show());
+    loadRuns().then(r=> { ui.runs = r; return pickLevel(st.levelId); }).then(()=> ui.show()).then(()=> { if (EMBED) window.parent.postMessage({ ssx:1, type:'lab-ready' }, location.origin); });
   }
 
   // ---------------------------------------------------------------- démarrage
@@ -310,6 +344,11 @@
     const ping = fetch('/__editor/ping').then(r=> r.ok ? r.json() : null).then(o=> !!(o && o.ok)).catch(()=> false);
     if (LAB){
       slotsOpen = ()=> BAYS;          // laboratoire : toutes les baies sont ouvertes
+      if (EMBED) window.addEventListener('message', ev=>{
+        if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
+        if (ev.data.type === 'lab-select' && ui && ui.pick) ui.pick(ev.data.levelId);
+        else if (ev.data.type === 'lab-draft' && draftWait){ const f = draftWait; draftWait = null; f(ev.data.document || null); }
+      });
       ping.then(ok=>{
         serverOk = ok; hookGame(); buildUi();
         // retour au bureau depuis un rapport : l'écran du laboratoire revient

@@ -42,6 +42,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
 - `tools/editor/app.js` — (script ponctuel, sans description)
 - `tools/editor/lab-runs.js` — (script ponctuel, sans description)
+- `tools/editor/lab-tab.js` — (script ponctuel, sans description)
 - `tools/editor/level-document.js` — (script ponctuel, sans description)
 - `tools/editor/play-window.js` — (script ponctuel, sans description)
 - `tools/editor/preview.js` — (script ponctuel, sans description)

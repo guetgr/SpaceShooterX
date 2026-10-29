@@ -28,7 +28,7 @@
   <section class="workspace">
     <div class="mission-heading"><div><p id="missionPath">Espace de conception</p><h1 id="missionTitle">Préparation du studio</h1></div><span id="missionMode" class="mode-pill">Composition</span></div>
     <nav class="workspace-tabs" aria-label="Vues de l’éditeur">
-      <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button>
+      <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button><button data-view="lab">Laboratoire</button>
       <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnLabRuns">Parties de test</button><button id="btnReset" disabled>Réinitialiser</button>
     </nav>
     <div id="validationSummary" class="validation-summary" hidden></div>
@@ -44,6 +44,7 @@
     </div>
     <div id="form" class="settings-panel" hidden></div>
     <div id="jsonPanel" class="settings-panel" hidden></div>
+    <div id="labPanel" hidden><iframe id="labFrame" class="lab-frame" title="Laboratoire de test"></iframe><h3 class="lab-tab-title">Parties de test de cette mission</h3><div id="labTabBody" class="lab-wrap"></div></div>
   </section>
   <aside class="right">
     <div id="inspector"><div class="inspector-heading"><span>Inspecteur</span><span class="selection-badge">Aucune sélection</span></div><p class="empty-inspector">Sélectionnez une vague pour modifier sa formation et ses propriétés.</p></div>
@@ -76,5 +77,6 @@
 <script src="tools/editor/preview.js"></script>
 <script src="tools/editor/versions.js"></script>
 <script src="tools/editor/lab-runs.js"></script>
+<script src="tools/editor/lab-tab.js"></script>
 </body>
 </html>

@@ -60,7 +60,7 @@ let currentView='composition', settingsRendered=false, jsonRendered=false;
 function setView(view){
   currentView=view;if(view!=='composition')stopPreview();
   if(S.ready&&view==='settings'&&!settingsRendered){$('form').replaceChildren();const vb=document.createElement('div');vb.id='valBanner';vb.className='val';$('form').appendChild(vb);renderSteps($('form'),lvl(S.sel));renderScenarioControls($('form'),lvl(S.sel),()=>{});settingsRendered=true;}
-  if(S.ready&&view==='json'&&!jsonRendered){$('jsonPanel').replaceChildren();renderLevelDocument($('jsonPanel'),lvl(S.sel));jsonRendered=true;} $('compositionPanel').hidden=view!=='composition';$('form').hidden=view!=='settings';$('jsonPanel').hidden=view!=='json';
+  if(S.ready&&view==='json'&&!jsonRendered){$('jsonPanel').replaceChildren();renderLevelDocument($('jsonPanel'),lvl(S.sel));jsonRendered=true;} $('compositionPanel').hidden=view!=='composition';$('form').hidden=view!=='settings';$('jsonPanel').hidden=view!=='json';$('labPanel').hidden=view!=='lab';
   document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
 }
 document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>setView(b.dataset.view));
