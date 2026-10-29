@@ -45,7 +45,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `bossShTrack` | `bosses/core.js` | — |
 | `bossShFill` | `bosses/core.js` | — |
 | `boss-banner` | `bosses/core.js`, `game/tuto.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
-| `home` | `dev/editor-hook.js`, `home/garage.js`, `home/ui.js`, `scenes/GameScene.js`, `scenes/HomeScene.js`, `ui/dom.js`, `ui/motion.js`, `ui/rd-ui.js` | `css/style.css` |
+| `home` | `dev/editor-hook.js`, `dev/lab.js`, `home/garage.js`, `home/ui.js`, `scenes/GameScene.js`, `scenes/HomeScene.js`, `ui/dom.js`, `ui/motion.js`, `ui/rd-ui.js` | `css/style.css` |
 | `homeTop` | — | `css/style.css`, `css/agp.css` |
 | `homeFrag` | `home/ui.js` | — |
 | `homeSettings` | `home/ui.js` | — |

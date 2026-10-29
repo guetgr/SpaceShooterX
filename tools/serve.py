@@ -26,6 +26,9 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
         if parsed.path == '/__editor/versions':
             if self.editor_guard(require_json=False): self.version_documents(parse_qs(parsed.query))
             return
+        if parsed.path == '/__lab/runs':
+            if self.editor_guard(require_json=False): self.lab_runs(parse_qs(parsed.query))
+            return
         if self.path == '/__editor/ping':
             body = b'{"ok":true,"versionHistory":true}'; self.send_response(200); self.send_header('Content-Type', 'application/json'); self.send_header('Content-Length', str(len(body))); self.end_headers(); self.wfile.write(body); return
         super().do_GET()
@@ -54,6 +57,9 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
             return
         if self.path in ['/__editor/levels', '/__editor/validate-level']:
             if self.editor_guard(): self.level_documents()
+            return
+        if self.path == '/__lab/runs':
+            if self.editor_guard(): self.lab_runs()
             return
         self.send_error(404)
 
@@ -98,6 +104,38 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
             with editor_versions.transaction(root) as connection:
                 version = editor_versions.record(connection, document, title, kind)
             self.editor_json({'ok':True, 'version':version})
+        except Exception as error:
+            self.editor_json({'ok':False, 'error':str(error)}, 400)
+
+    # Laboratoire de test (accueil ?lab) : une partie = une ligne JSON dans .editor-history/lab-runs.jsonl (ignoré par Git), lue par l'éditeur.
+    def lab_runs(self, query=None):
+        from pathlib import Path
+        path = Path(getattr(self.server, 'editor_root', R)) / '.editor-history' / 'lab-runs.jsonl'
+        def read():
+            if not path.exists(): return []
+            rows = []
+            for line in path.read_text(encoding='utf-8').splitlines():
+                try: rows.append(json.loads(line))
+                except ValueError: pass
+            return rows
+        try:
+            with editor_versions.LOCK:
+                if query is not None:
+                    level_id = query.get('level', [''])[0]
+                    self.editor_json({'ok':True, 'runs':[r for r in read() if not level_id or r.get('levelId') == level_id]})
+                    return
+                payload = self.read_editor_payload()
+                path.parent.mkdir(exist_ok=True)
+                if 'delete' in payload:
+                    kept = [r for r in read() if r.get('id') != payload['delete']]
+                    path.write_text(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in kept), encoding='utf-8')
+                else:
+                    run = payload.get('run')
+                    if not isinstance(run, dict) or not isinstance(run.get('levelId'), str): raise ValueError('partie invalide')
+                    import time, uuid
+                    run['id'] = uuid.uuid4().hex[:12]; run['at'] = int(time.time() * 1000)
+                    with path.open('a', encoding='utf-8') as f: f.write(json.dumps(run, ensure_ascii=False) + '\n')
+            self.editor_json({'ok':True})
         except Exception as error:
             self.editor_json({'ok':False, 'error':str(error)}, 400)
 

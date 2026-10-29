@@ -41,6 +41,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
 - `tools/editor/app.js` — (script ponctuel, sans description)
+- `tools/editor/lab-runs.js` — (script ponctuel, sans description)
 - `tools/editor/level-document.js` — (script ponctuel, sans description)
 - `tools/editor/play-window.js` — (script ponctuel, sans description)
 - `tools/editor/preview.js` — (script ponctuel, sans description)
@@ -142,3 +143,4 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/superpowers/plans/2026-10-28-editeur-complet.md` — Éditeur de niveaux complet — plan de travail
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées
 - `docs/superpowers/specs/2026-10-28-level-builder.md` — Space Shooter X — Spécification du Level Builder
+- `docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md` — Laboratoire de test des niveaux (tâche 8 de l'éditeur)

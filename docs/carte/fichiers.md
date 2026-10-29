@@ -93,47 +93,48 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 | 85 | `src/fx/boss-lights.js` | Méthodes de GameScene — JEU DE LUMIÈRES des boss (voyants, radar, gyrophare). Les définitions sont dans data/boss-lights.js. Usage : `const L = this.blInit('meteo')` à la création du boss, `this.blUpdate(L, delta, { toWorld, solid |
 | 86 | `src/dev/sandbox.js` | Méthodes de GameScene — bac à sable DEV et HUD des événements. |
 | 87 | `src/dev/editor-hook.js` | Pont entre le jeu et l'éditeur de niveaux (editor.html). Inactif sans ?edit dans l'URL. ?edit=play : aperçu jouable dans l'éditeur   ·   ?edit=bot : jeu caché où tourne le joueur automatique (tools/sim/bot.js) |
-| 88 | `src/game/loop.js` | Méthodes de GameScene — boucle principale update(). |
-| 89 | `src/game/difficulty.js` | Méthodes de GameScene — difficulté : cadence d'apparition, niveau d'alerte, multiplicateurs de PV et de dégâts. |
-| 90 | `src/player/weapons.js` | Méthodes de GameScene — armes du joueur : tirs, missiles, drone, nuke, ciblage. |
-| 91 | `src/enemies/spawning.js` | Méthodes de GameScene — apparition des ennemis et des vagues. |
-| 92 | `src/enemies/ai.js` | Méthodes de GameScene — comportement des ennemis : déplacement, tirs, esquive, mines, bombes, soigneur. |
-| 93 | `src/enemies/mob-fx.js` | Méthodes de GameScene — effets de tir des mobs refaits (turret, tank, bomber) : lueur de charge un peu avant le tir, éclair au moment du tir. L'effet est un sprite posé PAR-DESSUS le mob (couche d'effet seule, centrée sur le sprit |
-| 94 | `src/enemies/bras.js` | Méthodes de GameScene — mob « Bras écartés » (type 'bras') : coque à quatre perches qui chargent en bleu et tirent des orbes bleues. 4 états d'usure dessinés (planche brasSheet) selon la vie ; une perche arrachée ne tire plus ; à  |
-| 95 | `src/enemies/pilleur.js` | Méthodes de GameScene — mob « Le Pilleur de cristaux » (type 'pilleur', niveau `w1-l3`). Drone-collecteur : sa trappe dorsale s'ouvre, il ASPIRE les cristaux qui passent à portée (ceux que tu voulais ramasser), chaque cristal aval |
-| 96 | `src/enemies/eclaireur.js` | Méthodes de GameScene — mob « L'Éclaireur de patrouille » (type 'eclaireur', niveau `w1-l4`, et lancé par les baies du boss L'Anneau). Drone-œil : il patrouille en balayant le sol d'un projecteur violet (dont le bout s'estompe en  |
-| 97 | `src/game/intro.js` | Méthodes de GameScene — cinématique d'intro : décollage depuis la Terre. |
-| 98 | `src/audio/scene-audio.js` | Méthodes de GameScene — sons de mort et ambiance musicale selon la situation. |
-| 99 | `src/bosses/core.js` | Méthodes de GameScene — boss : apparition, phases, tirs, barre de vie, victoire. |
-| 100 | `src/bosses/parts.js` | Méthodes de GameScene — pièces de boss : tentacules, têtes, dégâts par pièce, repousse. |
-| 101 | `src/bosses/ai.js` | Méthodes de GameScene — IA spécifique de chaque boss (dread, faucheuse, ruche, prisme, kraken, éclipse, hydre). |
-| 102 | `src/bosses/araignee.js` | Méthodes de GameScene — boss « Araignée de tri » (boss du niveau `w1-l2`, `finalBoss:'araignee'` dans data/worlds/monde-1.js). Autonome comme le boss du tuto : son état est dans `this.ar`. Elle TRIE : BENNES (les trappes des bras  |
-| 103 | `src/bosses/meteo.js` | Méthodes de GameScene — boss « La Météo » (boss de fin du niveau `w1-l1`, `finalBoss:'meteo'` dans data/worlds/monde-1.js). Autonome comme l'Araignée de tri (bosses/araignee.js) : son état est dans `this.mt`. Elle FAIT L'ORAGE : É |
-| 104 | `src/bosses/reacteur.js` | Méthodes de GameScene — boss « Le Réacteur » (boss de fin du niveau `w1-l3`, `finalBoss:'reacteur'` dans data/worlds/monde-1.js). Autonome comme l'Araignée et la Météo : son état est dans `this.rx`. Il IRRADIE : RAYONNEMENT (le cœ |
-| 105 | `src/bosses/anneau.js` | Méthodes de GameScene — boss « L'Anneau » (boss de fin du niveau `w1-l4`, `finalBoss:'anneau'` dans data/worlds/monde-1.js). Autonome comme l'Araignée, la Météo et le Réacteur : son état est dans `this.an`. Une station orbitale do |
-| 106 | `src/bosses/pdg.js` | Méthodes de GameScene — boss final « Le PDG dans sa tour » (boss de fin du niveau `w1-l5`, `finalBoss:'pdg'` dans data/worlds/monde-1.js). Autonome comme les autres boss de fin : son état est dans `this.pd`. Il a quatre attaques e |
-| 107 | `src/data/tunables.js` | Registre des réglages internes des boss et mobs spéciaux (éditeur de niveaux, JSON `bossTune`). Les constantes AR / MT / RX / AN / PD / BRAS / PIL / EC restent dans leurs modules ; ce fichier ne liste que leurs NOMBRES réglables |
-| 108 | `src/combat/damage.js` | Méthodes de GameScene — collisions et dégâts sur les ennemis, mort des ennemis. |
-| 109 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. |
-| 110 | `src/systems/combo.js` | Méthodes de GameScene — combo et rang de style (multiplicateur d'XP). |
-| 111 | `src/systems/overdrive.js` | Méthodes de GameScene — Overdrive. |
-| 112 | `src/systems/relics-fusions.js` | Méthodes de GameScene — choix de reliques et fusions. |
-| 113 | `src/world/pickups.js` | Méthodes de GameScene — cristaux d'XP, soins, mob doré. |
-| 114 | `src/world/composants.js` | Méthodes de GameScene — composants ◆ : lâchés par les machines détruites, ramassés à l'aimant, comptés dans le HUD (règles : data/composants.js). |
-| 115 | `src/world/meteors.js` | Méthodes de GameScene — météorites. |
-| 116 | `src/events/core.js` | Méthodes de GameScene — planification et déroulement des événements, nébuleuse. |
-| 117 | `src/events/types.js` | Méthodes de GameScene — les différents événements : frappes, couloir, éclipse, EMP, glace, plasma, vortex magnétique. |
-| 118 | `src/events/forces.js` | Méthodes de GameScene — puits de gravité et forces. |
-| 119 | `src/enemies/squads-shields.js` | Méthodes de GameScene — escouades, boucliers ennemis, esquive coordonnée. |
-| 120 | `src/systems/skills.js` | Méthodes de GameScene — compétences actives : ralenti, dernier souffle, foudre en chaîne, updateSkills. |
-| 121 | `src/player/damage.js` | Méthodes de GameScene — dégâts subis par le joueur : armure, bouclier, esquive, réflexion. |
-| 122 | `src/player/skin.js` | Méthodes de GameScene — apparence (teinte) de la camionnette. Les effets qui teintent le vaisseau (dégâts, glace) passent par ici pour ne pas effacer l'apparence choisie. |
-| 123 | `src/player/progression.js` | Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau. |
-| 124 | `src/fx/particles.js` | Méthodes de GameScene — particules : bris de bouclier, traînée de réacteur, impacts. |
-| 125 | `src/fx/juice.js` | JUICE — retour de sensation (« game feel ») centralisé. Trois outils, tous réglés ICI : juiceStop(kind)         arrêt sur image très court (hit-stop) : le temps de jeu se fige ~50-110 ms sur les impacts qui comptent |
-| 126 | `src/main.js` | Point d'entrée : configuration Phaser et démarrage. |
+| 88 | `src/dev/lab.js` | Laboratoire de test des niveaux (docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md). Réservé au serveur local (tools/serve.py). - accueil normal : un bouton LABORATOIRE (si /__editor/ping répond) ouvre l'accueil en m |
+| 89 | `src/game/loop.js` | Méthodes de GameScene — boucle principale update(). |
+| 90 | `src/game/difficulty.js` | Méthodes de GameScene — difficulté : cadence d'apparition, niveau d'alerte, multiplicateurs de PV et de dégâts. |
+| 91 | `src/player/weapons.js` | Méthodes de GameScene — armes du joueur : tirs, missiles, drone, nuke, ciblage. |
+| 92 | `src/enemies/spawning.js` | Méthodes de GameScene — apparition des ennemis et des vagues. |
+| 93 | `src/enemies/ai.js` | Méthodes de GameScene — comportement des ennemis : déplacement, tirs, esquive, mines, bombes, soigneur. |
+| 94 | `src/enemies/mob-fx.js` | Méthodes de GameScene — effets de tir des mobs refaits (turret, tank, bomber) : lueur de charge un peu avant le tir, éclair au moment du tir. L'effet est un sprite posé PAR-DESSUS le mob (couche d'effet seule, centrée sur le sprit |
+| 95 | `src/enemies/bras.js` | Méthodes de GameScene — mob « Bras écartés » (type 'bras') : coque à quatre perches qui chargent en bleu et tirent des orbes bleues. 4 états d'usure dessinés (planche brasSheet) selon la vie ; une perche arrachée ne tire plus ; à  |
+| 96 | `src/enemies/pilleur.js` | Méthodes de GameScene — mob « Le Pilleur de cristaux » (type 'pilleur', niveau `w1-l3`). Drone-collecteur : sa trappe dorsale s'ouvre, il ASPIRE les cristaux qui passent à portée (ceux que tu voulais ramasser), chaque cristal aval |
+| 97 | `src/enemies/eclaireur.js` | Méthodes de GameScene — mob « L'Éclaireur de patrouille » (type 'eclaireur', niveau `w1-l4`, et lancé par les baies du boss L'Anneau). Drone-œil : il patrouille en balayant le sol d'un projecteur violet (dont le bout s'estompe en  |
+| 98 | `src/game/intro.js` | Méthodes de GameScene — cinématique d'intro : décollage depuis la Terre. |
+| 99 | `src/audio/scene-audio.js` | Méthodes de GameScene — sons de mort et ambiance musicale selon la situation. |
+| 100 | `src/bosses/core.js` | Méthodes de GameScene — boss : apparition, phases, tirs, barre de vie, victoire. |
+| 101 | `src/bosses/parts.js` | Méthodes de GameScene — pièces de boss : tentacules, têtes, dégâts par pièce, repousse. |
+| 102 | `src/bosses/ai.js` | Méthodes de GameScene — IA spécifique de chaque boss (dread, faucheuse, ruche, prisme, kraken, éclipse, hydre). |
+| 103 | `src/bosses/araignee.js` | Méthodes de GameScene — boss « Araignée de tri » (boss du niveau `w1-l2`, `finalBoss:'araignee'` dans data/worlds/monde-1.js). Autonome comme le boss du tuto : son état est dans `this.ar`. Elle TRIE : BENNES (les trappes des bras  |
+| 104 | `src/bosses/meteo.js` | Méthodes de GameScene — boss « La Météo » (boss de fin du niveau `w1-l1`, `finalBoss:'meteo'` dans data/worlds/monde-1.js). Autonome comme l'Araignée de tri (bosses/araignee.js) : son état est dans `this.mt`. Elle FAIT L'ORAGE : É |
+| 105 | `src/bosses/reacteur.js` | Méthodes de GameScene — boss « Le Réacteur » (boss de fin du niveau `w1-l3`, `finalBoss:'reacteur'` dans data/worlds/monde-1.js). Autonome comme l'Araignée et la Météo : son état est dans `this.rx`. Il IRRADIE : RAYONNEMENT (le cœ |
+| 106 | `src/bosses/anneau.js` | Méthodes de GameScene — boss « L'Anneau » (boss de fin du niveau `w1-l4`, `finalBoss:'anneau'` dans data/worlds/monde-1.js). Autonome comme l'Araignée, la Météo et le Réacteur : son état est dans `this.an`. Une station orbitale do |
+| 107 | `src/bosses/pdg.js` | Méthodes de GameScene — boss final « Le PDG dans sa tour » (boss de fin du niveau `w1-l5`, `finalBoss:'pdg'` dans data/worlds/monde-1.js). Autonome comme les autres boss de fin : son état est dans `this.pd`. Il a quatre attaques e |
+| 108 | `src/data/tunables.js` | Registre des réglages internes des boss et mobs spéciaux (éditeur de niveaux, JSON `bossTune`). Les constantes AR / MT / RX / AN / PD / BRAS / PIL / EC restent dans leurs modules ; ce fichier ne liste que leurs NOMBRES réglables |
+| 109 | `src/combat/damage.js` | Méthodes de GameScene — collisions et dégâts sur les ennemis, mort des ennemis. |
+| 110 | `src/ui/hud.js` | Méthodes de GameScene — HUD : secousse, rang de style, barres. |
+| 111 | `src/systems/combo.js` | Méthodes de GameScene — combo et rang de style (multiplicateur d'XP). |
+| 112 | `src/systems/overdrive.js` | Méthodes de GameScene — Overdrive. |
+| 113 | `src/systems/relics-fusions.js` | Méthodes de GameScene — choix de reliques et fusions. |
+| 114 | `src/world/pickups.js` | Méthodes de GameScene — cristaux d'XP, soins, mob doré. |
+| 115 | `src/world/composants.js` | Méthodes de GameScene — composants ◆ : lâchés par les machines détruites, ramassés à l'aimant, comptés dans le HUD (règles : data/composants.js). |
+| 116 | `src/world/meteors.js` | Méthodes de GameScene — météorites. |
+| 117 | `src/events/core.js` | Méthodes de GameScene — planification et déroulement des événements, nébuleuse. |
+| 118 | `src/events/types.js` | Méthodes de GameScene — les différents événements : frappes, couloir, éclipse, EMP, glace, plasma, vortex magnétique. |
+| 119 | `src/events/forces.js` | Méthodes de GameScene — puits de gravité et forces. |
+| 120 | `src/enemies/squads-shields.js` | Méthodes de GameScene — escouades, boucliers ennemis, esquive coordonnée. |
+| 121 | `src/systems/skills.js` | Méthodes de GameScene — compétences actives : ralenti, dernier souffle, foudre en chaîne, updateSkills. |
+| 122 | `src/player/damage.js` | Méthodes de GameScene — dégâts subis par le joueur : armure, bouclier, esquive, réflexion. |
+| 123 | `src/player/skin.js` | Méthodes de GameScene — apparence (teinte) de la camionnette. Les effets qui teintent le vaisseau (dégâts, glace) passent par ici pour ne pas effacer l'apparence choisie. |
+| 124 | `src/player/progression.js` | Méthodes de GameScene — montée de niveau, cartes d'amélioration, palier du vaisseau. |
+| 125 | `src/fx/particles.js` | Méthodes de GameScene — particules : bris de bouclier, traînée de réacteur, impacts. |
+| 126 | `src/fx/juice.js` | JUICE — retour de sensation (« game feel ») centralisé. Trois outils, tous réglés ICI : juiceStop(kind)         arrêt sur image très court (hit-stop) : le temps de jeu se fige ~50-110 ms sur les impacts qui comptent |
+| 127 | `src/main.js` | Point d'entrée : configuration Phaser et démarrage. |
 
-**126 fichiers listés** (+ `src/boot.js`, chargeur). Les tailles et numéros de ligne ne sont volontairement pas affichés : ils changeraient à chaque modification et provoqueraient des conflits entre collaborateurs (retrouver un nom avec Grep).
+**127 fichiers listés** (+ `src/boot.js`, chargeur). Les tailles et numéros de ligne ne sont volontairement pas affichés : ils changeraient à chaque modification et provoqueraient des conflits entre collaborateurs (retrouver un nom avec Grep).
 
 ## Détail par fichier
 
@@ -573,6 +574,9 @@ L'ordre est celui de `src/scripts.json` : un fichier ne peut utiliser au démarr
 - Méthodes ajoutées à `GameScene` (mixin) : `updateDevEventHud`, `destroySandboxUI`, `buildSandboxUI`
 
 **`editor-hook.js`** — Pont entre le jeu et l'éditeur de niveaux (editor.html). Inactif sans ?edit dans l'URL. ?edit=play : aperçu jouable dans l'éditeur   ·   ?edit=bot : jeu caché où tourne le joueur automatique (tools/sim/bot.js)
+
+
+**`lab.js`** — Laboratoire de test des niveaux (docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md). Réservé au serveur local (tools/serve.py). - accueil normal : un bouton LABORATOIRE (si /__editor/ping répond) ouvre l'accueil en m
 
 
 ### `src/player/`

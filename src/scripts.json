@@ -86,6 +86,7 @@
   "fx/boss-lights.js",
   "dev/sandbox.js",
   "dev/editor-hook.js",
+  "dev/lab.js",
   "game/loop.js",
   "game/difficulty.js",
   "player/weapons.js",

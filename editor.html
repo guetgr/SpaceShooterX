@@ -29,7 +29,7 @@
     <div class="mission-heading"><div><p id="missionPath">Espace de conception</p><h1 id="missionTitle">Préparation du studio</h1></div><span id="missionMode" class="mode-pill">Composition</span></div>
     <nav class="workspace-tabs" aria-label="Vues de l’éditeur">
       <button class="active" data-view="composition">Composition</button><button data-view="settings">Réglages de mission</button><button data-view="json">Fichier JSON</button>
-      <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnReset" disabled>Réinitialiser</button>
+      <span class="tab-spacer"></span><button id="btnVersions" disabled>Historique des versions</button><button id="btnLabRuns">Parties de test</button><button id="btnReset" disabled>Réinitialiser</button>
     </nav>
     <div id="validationSummary" class="validation-summary" hidden></div>
     <div id="compositionPanel">
@@ -59,6 +59,7 @@
 </main>
 <iframe id="botFrame" title="Simulation automatique"></iframe>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="labDialog"><div class="lab-head"><h2 id="labTitle">Parties de test</h2><button class="btn small" id="labClose">Fermer</button></div><div class="lab-wrap" id="labBody"></div></dialog>
 <dialog id="versionDialog" class="version-dialog" aria-labelledby="versionTitle">
   <div class="version-header"><div><h2 id="versionTitle">Historique des versions</h2><p id="versionMission"></p></div><button class="btn small" id="versionClose" autofocus>Fermer</button></div>
   <div class="version-create"><div><label for="versionName">Créer un point de sauvegarde du brouillon</label><p>Une version automatique est conservée à chaque enregistrement modifié.</p></div><div class="version-create-fields"><input id="versionName" placeholder="Ex. Avant les renforts du boss" maxlength="80" required><button class="btn save" id="versionCreate" disabled>Créer une version</button></div></div>
@@ -74,5 +75,6 @@
 <script src="tools/editor/app.js"></script>
 <script src="tools/editor/preview.js"></script>
 <script src="tools/editor/versions.js"></script>
+<script src="tools/editor/lab-runs.js"></script>
 </body>
 </html>

@@ -204,3 +204,7 @@ Navigateur, `http://localhost:8080/editor.html` (rien de cela n'est couvert par 
 9. Ajouter une vague d'un nouveau type dans la timeline : l'étape MOBS gagne ce type (reconstruction), étapes dépliées conservées.
 10. EXPORTER puis recharger : les valeurs sont dans `src/data/levels/*.json` (vérifier `git diff` : seuls les fichiers modifiés changent), puis annuler si c'était un essai.
 11. Aspect : lisibilité des descriptions dans les en-têtes, largeur des listes (musique, boîtes) sur un écran < 1000 px.
+
+## Laboratoire de test (parties jouées avec équipement choisi)
+
+Design : `docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md`. Avec le serveur local, l'accueil du jeu affiche un bouton **LABORATOIRE** (en haut à gauche) qui ouvre `/?lab` (sauvegarde en mémoire, jamais la vraie). On y choisit l'ordre, la version du niveau (publiée ou de l'historique de l'éditeur), l'atelier (Mk) et les technologies ; l'écran affiche le budget de composants (calculé à partir des données, ou moyenne des parties test réelles, abandons exclus) et le coût de l'équipement. Chaque partie est enregistrée dans `.editor-history/lab-runs.jsonl` (`/__lab/runs`) et lisible dans l'éditeur : bouton **Parties de test** (tableau triable, moyennes). Code : `src/dev/lab.js` (jeu), `tools/editor/lab-runs.js` (éditeur), routes dans `tools/serve.py`.
