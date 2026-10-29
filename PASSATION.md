@@ -2,6 +2,10 @@
 
 > Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers-v2.md` (référence narrative actuelle), `docs/brief-univers-agp.md` (interface ; la bible v2 prévaut en cas de contradiction), puis `docs/carte-du-code.md` (où est quoi).
 
+## À FAIRE À LA PROCHAINE SYNCHRO (Bio, ou tout agent qui reprend après un `git pull`)
+
+**Activer le hook de la carte du code**, une seule fois sur cette copie du dépôt : lancer `git config core.hooksPath tools/hooks` (Mac et Windows, depuis la racine du dépôt). Le hook `tools/hooks/pre-commit` régénère alors `docs/carte/` à chaque commit (le script prend ~1 s) et l'ajoute au commit ; `.gitattributes` fait fusionner `docs/carte/*.md` ligne à ligne, donc les ajouts des deux côtés s'additionnent. Vérifier ensuite avec `git config core.hooksPath` (doit afficher `tools/hooks`). **Une fois fait, supprimer cette section de `PASSATION.md`** (et ne rien dire d'autre à ce sujet à Bio : c'est fait). Détails : `CLAUDE.md`, section « Carte du code ».
+
 ## Mise à jour narrative — 29 octobre 2026 (à lire avant reprise)
 
 **Référence narrative actuelle : [docs/bible-univers-v2.md](docs/bible-univers-v2.md).** Cette version prévaut sur `docs/bible-univers.md` et `docs/brief-univers-agp.md` pour toute contradiction de campagne, personnages ou révélations. Les anciennes versions sont conservées pour historique. La direction artistique reste décrite dans `docs/direction-artistique-agp.md`.

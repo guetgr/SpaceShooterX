@@ -65,17 +65,21 @@
     return { rows, min:Math.round(min), max:Math.round(max), mid:Math.round(mid) };
   }
   // coût cumulé en ◆ (et pièces de secteur) pour atteindre cet équipement depuis la camionnette de base
+  // technologie débloquée = prototype financé (ou déjà montée / emportée) ; le coût est CUMULÉ : prototype, puis rang 1, rang 2… rang n, puis spécialisation
+  const techOwned = (eq, id)=> { const e = eq.techs[id] || {}; return !!(e.proto || e.rang > 0 || e.spe || eq.load.indexOf(id) >= 0); };
+  function techCost(eq, id){
+    const out = { c:0, pieces:{} }; if (!techOwned(eq, id)) return out;
+    const e = eq.techs[id] || {};
+    out.c += rdNextCost(id, 'proto').composants;
+    for (let r = 0; r < (e.rang || 0); r++) out.c += rdNextCost(id, 'rang', r).composants;
+    if (e.spe){ const sp = rdNextCost(id, 'spe'); out.c += sp.composants; Object.keys(sp.pieces || {}).forEach(k=>{ out.pieces[k] = (out.pieces[k] || 0) + sp.pieces[k]; }); }
+    return out;
+  }
   function equipCost(eq){
     let c = 0; const pieces = {};
     const addP = p=> { if (p) Object.keys(p).forEach(k=>{ pieces[k] = (pieces[k] || 0) + p[k]; }); };
     ATELIER_POSTS.forEach(p=>{ for (let i = 0; i < (eq.atelier[p.id] || 0); i++){ c += ATELIER_COSTS[i]; addP(ATELIER_PIECES[i]); } });
-    Object.keys(TECH_BY_ID).forEach(id=>{
-      const e = eq.techs[id] || {}, owned = e.rang > 0 || e.spe || eq.load.indexOf(id) >= 0;
-      if (!owned) return;
-      c += rdNextCost(id, 'proto').composants;
-      for (let r = 0; r < (e.rang || 0); r++) c += rdNextCost(id, 'rang', r).composants;
-      if (e.spe){ const s = rdNextCost(id, 'spe'); c += s.composants; addP(s.pieces); }
-    });
+    Object.keys(TECH_BY_ID).forEach(id=>{ const t = techCost(eq, id); c += t.c; addP(t.pieces); });
     return { c, pieces };
   }
   function buildMeta(eq){
@@ -83,39 +87,19 @@
     ATELIER_POSTS.forEach(p=>{ m.atelier[p.id] = eq.atelier[p.id] || 0; });
     Object.keys(TECH_BY_ID).forEach(id=>{
       const e = eq.techs[id] || {};
-      if (e.rang > 0 || e.spe || eq.load.indexOf(id) >= 0) m.rd[id] = { plan:true, proto:true, rang:e.rang || 0, spe:!!e.spe };
+      if (techOwned(eq, id)) m.rd[id] = { plan:true, proto:true, rang:e.rang || 0, spe:!!e.spe };
     });
     m.chargement = eq.load.slice();
     return m;
   }
   function equipText(eq){
     const a = ATELIER_POSTS.filter(p=> eq.atelier[p.id] > 0).map(p=> p.name + ' MK ' + ROMAN[eq.atelier[p.id]]);
-    const t = Object.keys(TECH_BY_ID).filter(id=> eq.techs[id] && (eq.techs[id].rang > 0 || eq.techs[id].spe) || eq.load.indexOf(id) >= 0).map(id=>{
+    const t = Object.keys(TECH_BY_ID).filter(id=> techOwned(eq, id)).map(id=>{
       const e = eq.techs[id] || {}; return TECH_BY_ID[id].name + ' r' + (e.rang || 0) + (e.spe ? ' +SPE' : '') + (eq.load.indexOf(id) >= 0 ? ' [emporté]' : '');
     });
-    const pk = eq.perks || emptyPerks();
-    const m = UPGRADE_POOL.filter(u=> pk.cards[u.id] > 0).map(u=> u.name + ' x' + pk.cards[u.id])
-      .concat(FUSIONS.filter(f=> pk.fusions[f.id]).map(f=> f.name), RELIC_LIST().filter(r=> pk.relics[r.id]).map(r=> r.name));
-    return a.concat(t, m).join(' · ') || 'camionnette de base';
+    return a.concat(t).join(' · ') || 'camionnette de base';
   }
-  const emptyPerks = ()=> ({ cards:{}, fusions:{}, relics:{} });
-  const emptyEquip = ()=> ({ atelier:{}, techs:{}, load:[], perks:emptyPerks() });
-  const perkCap = u=> Math.min(u.max, 10);
-  const RELIC_LIST = ()=> Object.keys(RELICS).reduce((a, boss)=> a.concat(RELICS[boss].map(r=> Object.assign({ boss }, r))), []);
-  // compétences DE MISSION (cartes, fusions, reliques) prises avant le départ : appliquées comme si elles avaient été choisies en jeu (progression.js, relics-fusions.js)
-  function applyMissionPerks(sc, pk){
-    UPGRADE_POOL.forEach(u=>{
-      const n = (pk.cards[u.id] | 0); if (!n) return;
-      for (let i = 0; i < n; i++) u.apply(sc.stats);
-      sc.upgradeCounts[u.id] = n;
-      if (u.category === 'weapon') sc.weaponUpgradeCount += n; else if (u.category === 'engine') sc.engineUpgradeCount += n;
-    });
-    FUSIONS.forEach(f=>{ if (pk.fusions[f.id]){ f.apply(sc.stats); sc.upgradeCounts[f.id] = 1; } });
-    RELIC_LIST().forEach(r=>{ if (pk.relics[r.id]){ r.fn(sc); sc.relics.push(r); } });
-    sc.hp = sc.stats.maxHp; sc.shield = sc.stats.shieldMax;
-    try { sc.updateShipTier(); const row = document.getElementById('relicRow'); if (row) row.innerHTML = sc.relics.map(x=> pxImg(x.icon, 14)).join(''); } catch(e){ /* ignore */ }
-    sc.updateHud(true);
-  }
+  const emptyEquip = ()=> ({ atelier:{}, techs:{}, load:[] });
 
   // ---------------------------------------------------------------- enregistrement des parties (mode ?lab)
   function hookGame(){
@@ -124,7 +108,7 @@
     P.create = function(data){
       if (window.__labCtx) { try { localStorage.removeItem('ssx_worlds_v1'); } catch(e){ /* ignore */ } }          // chaque partie compte comme une première validation (prime comprise)
       const r = oCreate.call(this, data);
-      if (window.__labCtx){ if (ui) ui.launching = false; this._lab = { taken:0, c0:getMeta().composants, done:false }; const pk = window.__labCtx.equip.perks; if (pk) applyMissionPerks(this, pk); }
+      if (window.__labCtx){ if (ui) ui.launching = false; this._lab = { taken:0, c0:getMeta().composants, done:false }; }
       return r;
     };
     const oDmg = P.damagePlayer;
@@ -172,8 +156,6 @@
   .lab-row>label{min-width:190px}
   .lab-in select,.lab-in button{background:#101a16;color:#d9e3dc;border:1px solid #2f4a3e;padding:5px 8px;font:inherit;cursor:pointer}
   .lab-in button.go{background:#9fe3c3;color:#0a1512;border-color:#9fe3c3;font-weight:700;padding:9px 18px}
-  .lab-tech{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:4px 0;border-bottom:1px solid #18221d}
-  .lab-tech small{color:#7b9187}
   .lab-bar{position:fixed;left:0;right:0;bottom:0;background:#0b1210;border-top:1px solid #2f4a3e;padding:10px 16px}
   .lab-bar .in{max-width:780px;margin:0 auto;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
   .lab-gauge{height:8px;background:#18221d;margin-top:5px;position:relative;min-width:240px}
@@ -182,16 +164,27 @@
   .lab-in details{border:1px solid #26332d;padding:6px 10px;margin:8px 0}
   .lab-in summary{cursor:pointer;color:#bcd0c6}
   .lab-tab{border-collapse:collapse;font-size:11px;margin:6px 0;width:100%}.lab-tab th,.lab-tab td{text-align:left;padding:3px 8px;border-bottom:1px solid #18221d;color:#9fb3a8}
-  .lab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:6px 0 14px}
   .lab-boss{margin-top:10px;color:#bcd0c6;letter-spacing:1px}
-  .lab-card{background:linear-gradient(180deg,#101814f5,#080c0af5);border:1px solid #2f4238;padding:0 0 8px;cursor:pointer;text-align:center;position:relative;user-select:none}
-  .lab-card .tag{background:#ffc21a;color:#130f03;font-size:9px;letter-spacing:1px;padding:2px 6px;text-align:left}
-  .lab-card.fus .tag{background:#ff7a2b}
-  .lab-card .ci{margin:8px 0 4px;min-height:34px}.lab-card .nm{font-size:11px;letter-spacing:.5px;padding:0 6px}
-  .lab-card .ds{font-size:10px;color:#b5c6bb;padding:3px 8px 0;min-height:42px}
-  .lab-card:hover{border-color:#ffc21a}.lab-card.on{border-color:#9fe3c3;box-shadow:0 0 12px #9fe3c355}
-  .lab-card .ct{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:6px;font-size:11px}
-  .lab-card .ct button{padding:0 8px;line-height:18px}
+  .lab-rdgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:6px 0 14px}
+  .lab-rd{padding:8px 9px 9px;display:flex;flex-direction:column;gap:5px;border:1px solid #0006;box-shadow:2px 2px 0 #0007}
+  .lab-rd.paper{background:linear-gradient(180deg,#e3d7b4,#cfc19a);color:#3a3022}
+  .lab-rd.blue{background:linear-gradient(180deg,#0f2a3d,#0a1c2b);color:#9fd5e2}
+  .lab-rd .rh{display:flex;align-items:center;gap:6px;border-bottom:1px solid currentColor;padding-bottom:4px}
+  .lab-rd .ic{display:grid;place-items:center;width:26px;height:26px;border:1px solid currentColor}
+  .lab-rd .rh b{flex:1;font-size:11px;letter-spacing:.5px;line-height:1.15}
+  .lab-rd .tg{font-size:8px;border:1px solid currentColor;padding:2px 4px}
+  .lab-rd .rdsc{font-size:11px;line-height:1.25;min-height:42px}
+  .lab-rd .rst{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.5px;flex-wrap:wrap}
+  .lab-rd .pips{display:flex;gap:2px;flex-wrap:wrap}.lab-rd .pips i{width:7px;height:7px;border:1px solid currentColor;border-radius:50%}
+  .lab-rd .pips i.f{background:#ffce27;border-color:#9c7110}
+  .lab-rd .sp{color:#365d37;border:1px solid #487247;padding:1px 4px}
+  .lab-rd .inv{font-size:10px;opacity:.85}
+  .lab-in .lab-rd button.buy{background:#ffce27;color:#2b2100;border:2px solid #9c7110;font-weight:700;font-size:11px;padding:6px 6px;text-align:center}
+  .lab-in .lab-rd button.buy small{display:block;font-weight:400;font-size:10px;margin-top:2px}
+  .lab-in .lab-rd button.buy:disabled{background:#7f7762;color:#3f3a2e;border-color:#4d4436;cursor:default}
+  .lab-rd .rctl{display:flex;justify-content:space-between;align-items:center;font-size:10px}
+  .lab-in .lab-rd .rctl button{background:transparent;color:inherit;border:1px solid currentColor;font-size:10px;padding:2px 6px}
+  .lab-in .lab-rd .rctl button:disabled{opacity:.35;cursor:default}
   .lab-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1d3a2f;border:1px solid #4a8a6c;color:#d9f5e6;padding:9px 16px;z-index:70000;opacity:0;pointer-events:none;transition:opacity .15s;font:12px monospace}
   .lab-toast.show{opacity:1}
   `;
@@ -234,32 +227,30 @@
         h('select', { onchange:e=> { eq.atelier[p.id] = +e.target.value; rerender(); } },
           [0, 1, 2, 3, 4, 5].map(mk=> h('option', { value:mk, selected:(eq.atelier[p.id] || 0) === mk }, mk ? 'Mk ' + ROMAN[mk] + ' · ' + ATELIER_COSTS.slice(0, mk).reduce((s, c)=> s + c, 0) + ' ◆' : 'base')))));
 
-      const techs = TECHS.filter(techAvailable).map(t=>{
-        const e = eq.techs[t.id] || (eq.techs[t.id] = { rang:0, spe:false }), max = techMaxRang(t), on = eq.load.indexOf(t.id) >= 0;
-        return h('div', { class:'lab-tech' },
-          h('div', {}, h('b', {}, t.name), ' ', h('small', {}, 'secteur ' + t.sector + (t.tag ? ' · ' + t.tag : ''))),
-          h('label', {}, h('input', { type:'checkbox', checked:on, onchange:ev=>{
-            const next = ev.target.checked ? eq.load.concat(t.id) : eq.load.filter(i=> i !== t.id);
-            const chk = loadoutCheck(buildMetaWith(eq, next), next, BAYS);
-            if (!chk.ok){ toast('Chargement refusé : ' + ({ arme:'une seule ARME', rampe:'une seule RAMPE', baies:BAYS + ' baies maximum' }[chk.reason] || chk.reason)); rerender(); return; }
-            eq.load = next; rerender(); } }), ' emporté'),
-          h('select', { onchange:ev=> { e.rang = +ev.target.value; if (e.rang < max) e.spe = false; rerender(); } },
-            Array.from({ length:max + 1 }, (_, r)=> h('option', { value:r, selected:e.rang === r }, 'rang ' + r + '/' + max))),
-          t.spe ? h('label', {}, h('input', { type:'checkbox', checked:!!e.spe, disabled:e.rang < max, onchange:ev=> { e.spe = ev.target.checked; rerender(); } }), ' spé.') : h('span', {}));
-      });
-
-      const pk = eq.perks || (eq.perks = emptyPerks());
-      const perkCard = (it, n, max, on, kind)=>{
-        const c = h('div', { class:'lab-card' + (kind !== 'CARTE' ? ' fus' : '') + (n ? ' on' : ''), title:it.desc, onclick:()=> on(Math.min(max, n + 1 > max && max === 1 ? 0 : n + 1)) },
-          h('div', { class:'tag' }, kind), h('div', { class:'ci' }), h('div', { class:'nm' }, it.name), h('div', { class:'ds' }, it.desc),
-          max > 1 ? h('div', { class:'ct' }, h('button', { onclick:ev=> { ev.stopPropagation(); on(Math.max(0, n - 1)); } }, '−'), h('b', {}, n), h('span', {}, '/ ' + max)) : h('div', { class:'ct' }, h('b', {}, n ? 'ÉQUIPÉ' : '—')));
-        c.querySelector('.ci').innerHTML = pxImg(it.icon, 32);
-        return c;
+      const techCard = t=>{
+        const e = eq.techs[t.id] || (eq.techs[t.id] = { proto:false, rang:0, spe:false }), max = techMaxRang(t);
+        const owned = techOwned(eq, t.id), on = eq.load.indexOf(t.id) >= 0, inv = techCost(eq, t.id);
+        const what = !owned ? 'proto' : e.rang < max ? 'rang' : (t.spe && !e.spe) ? 'spe' : null, nc = what ? rdNextCost(t.id, what, e.rang) : null;
+        const label = !what ? 'COMPLET' : what === 'proto' ? 'PROTOTYPE' : what === 'rang' ? 'RANG ' + (e.rang + 1) + '/' + max + ' · ' + rdUpgradeAt(t, e.rang + 1).name : 'SPECIALISATION · ' + t.spe.name;
+        const price = nc ? '◆ ' + nc.composants + (nc.pieces ? ' + ' + Object.keys(nc.pieces).map(k=> nc.pieces[k] + ' ' + k.toUpperCase()).join(' + ') : '') : '';
+        const back = ()=> { if (e.spe) e.spe = false; else if (e.rang > 0) e.rang--; else { e.proto = false; eq.load = eq.load.filter(i=> i !== t.id); } rerender(); };
+        const card = h('article', { class:'lab-rd ' + (owned ? 'paper' : 'blue') },
+          h('div', { class:'rh' }, h('span', { class:'ic' }), h('b', {}, t.name), t.tag ? h('span', { class:'tg' }, t.tag) : null),
+          h('div', { class:'rdsc' }, t.desc),
+          h('div', { class:'rst' }, h('span', {}, 'PROTO ', h('b', {}, owned ? 'OUI' : 'NON')), h('span', { class:'pips' }, Array.from({ length:max }, (_, k)=> h('i', { class:k < e.rang ? 'f' : '' }))), e.spe ? h('span', { class:'sp' }, 'SPE VALIDEE') : null),
+          h('div', { class:'inv' }, owned ? 'investi : ' + money(inv.c) : 'non débloquée'),
+          h('button', { class:'buy', disabled:!what, onclick:()=> { if (what === 'proto') e.proto = true; else if (what === 'rang') e.rang++; else e.spe = true; rerender(); } }, label, h('small', {}, price)),
+          h('div', { class:'rctl' }, h('button', { disabled:!owned, onclick:back, title:'revenir d’une étape' }, '− étape'),
+            h('label', {}, h('input', { type:'checkbox', checked:on, disabled:!owned, onchange:ev=>{
+              const next = ev.target.checked ? eq.load.concat(t.id) : eq.load.filter(i=> i !== t.id);
+              const chk = loadoutCheck(buildMetaWith(eq, next), next, BAYS);
+              if (!chk.ok){ toast('Chargement refusé : ' + ({ arme:'une seule ARME', rampe:'une seule RAMPE', baies:BAYS + ' baies maximum' }[chk.reason] || chk.reason)); rerender(); return; }
+              eq.load = next; rerender(); } }), ' emporté')));
+        card.querySelector('.ic').innerHTML = pxImg(t.icon, 22);
+        return card;
       };
-      const cardsUi = UPGRADE_POOL.map(u=> perkCard(u, pk.cards[u.id] | 0, perkCap(u), v=> { pk.cards[u.id] = v; rerender(); }, 'CARTE'));
-      const fusUi = FUSIONS.map(f=> perkCard(f, pk.fusions[f.id] ? 1 : 0, 1, v=> { pk.fusions[f.id] = v ? 1 : 0; rerender(); }, 'FUSION'));
-      const relUi = Object.keys(RELICS).map(boss=> [ h('div', { class:'lab-note lab-boss' }, 'Reliques · ' + boss.toUpperCase()), h('div', { class:'lab-grid' }, RELICS[boss].map(r=> perkCard(r, pk.relics[r.id] ? 1 : 0, 1, v=> { pk.relics[r.id] = v ? 1 : 0; rerender(); }, 'RELIQUE'))) ]);
-      const nPerks = Object.keys(pk.cards).reduce((a, k)=> a + (pk.cards[k] | 0), 0) + Object.keys(pk.fusions).filter(k=> pk.fusions[k]).length + Object.keys(pk.relics).filter(k=> pk.relics[k]).length;
+      const techList = TECHS.filter(techAvailable);
+      const techUi = [...new Set(techList.map(t=> t.sector))].map(sec=> [ h('div', { class:'lab-note lab-boss' }, 'SECTEUR ' + sec), h('div', { class:'lab-rdgrid' }, techList.filter(t=> t.sector === sec).map(techCard)) ]);
 
       const pct = bud.mid > 0 ? Math.min(100, cost.c/bud.mid*100) : (cost.c > 0 ? 100 : 0);
       const gauge = h('div', { class:'lab-gauge' + (cost.c > bud.max ? ' over' : cost.c > bud.mid ? ' mid' : '') }, h('i', { style:'width:' + pct + '%' }));
@@ -282,14 +273,8 @@
         idx === 0 ? null : h('details', {}, h('summary', {}, 'Détail par ordre précédent'), bud.rows.map(r=> h('div', { class:'lab-note' }, r.name + ' — ' + money(r.val) + ' (' + r.src + ')'))),
         h('h2', {}, 'ATELIER'), atelier,
         h('h2', {}, 'TECHNOLOGIES'),
-        h('p', {}, 'Le coût comprend le prototype, les rangs et la spécialisation (rangs au maximum). ' + BAYS + ' baies, une seule arme et une seule rampe.'),
-        techs,
-        h('h2', {}, 'COMPÉTENCES DE MISSION'),
-        h('p', {}, 'Cartes, fusions et reliques comme en partie : clic = +1 (ou équiper), − pour retirer. Appliquées au départ, sans coût en ◆. ' + nPerks + ' choisie(s).'),
-        h('div', { class:'lab-row' }, h('button', { onclick:()=> { eq.perks = emptyPerks(); rerender(); } }, 'TOUT RETIRER')),
-        h('div', { class:'lab-note lab-boss' }, 'Cartes'), h('div', { class:'lab-grid' }, cardsUi),
-        h('div', { class:'lab-note lab-boss' }, 'Fusions'), h('div', { class:'lab-grid' }, fusUi),
-        relUi,
+        h('p', {}, 'Comme dans la R&D : le bouton jaune achète l’étape suivante (prototype, puis rang 1, 2, 3…, puis spécialisation). Le coût de l’équipement cumule toutes les étapes franchies. ' + BAYS + ' baies, une seule arme et une seule rampe.'),
+        techUi,
         h('div', { class:'lab-bar' }, h('div', { class:'in' },
           h('div', {}, h('div', {}, 'Coût de l’équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · dépassement ' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c)), pcs ? ' · ' + pcs : ''), gauge),
           h('button', { class:'go', onclick:()=> launch(lvl, cost, bud) }, 'LANCER LA MISSION')))];

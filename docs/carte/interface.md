@@ -28,7 +28,7 @@ Un id sans utilisation = texte/structure purement visuel ou reste d'un ancien é
 | `waveFill` | `ui/hud.js` | — |
 | `waveIco` | — | — |
 | `waveTxt` | `ui/hud.js` | — |
-| `relicRow` | `dev/lab.js`, `systems/relics-fusions.js` | `css/style.css`, `css/agp.css` |
+| `relicRow` | `systems/relics-fusions.js` | `css/style.css`, `css/agp.css` |
 | `boss-hp-wrap2` | `game/level.js`, `scenes/GameScene.js` | `css/style.css`, `css/agp.css` |
 | `bossLabel2` | — | — |
 | `bossHpFill2` | — | — |
