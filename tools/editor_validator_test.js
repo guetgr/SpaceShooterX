@@ -69,7 +69,7 @@ const L1 = 'w1-l1';            // survive 60 s, menace 1, boss final (meteo)
 { // après la fin de l'objectif (survive 60 s) ; kill : pas de règle
   assert.ok(has(W(L1, { events:[{ kind:'crystal', at:61 }] }), 'après la fin de l\'objectif'));
   assert.ok(!has(W(L1, { events:[{ kind:'crystal', at:59 }] }), 'après la fin de l\'objectif'));
-  assert.ok(!has(W('w1-l4', { events:[{ kind:'crystal', at:900 }] }), 'après la fin de l\'objectif'));
+  assert.ok(!has(W('w2-l2', { events:[{ kind:'crystal', at:900 }] }), 'après la fin de l\'objectif'));
   assert.ok(has(W(L1, { norma:{ messages:[{ id:'t', when:'time', at:100, text:'Trop tard' }] } }), 'Boîte N.O.R.M.A. « t »'));
   assert.ok(!has(W(L1, { norma:{ messages:[{ id:'t', when:'time', at:30, text:'Ok' }] } }), 'Boîte N.O.R.M.A. « t »'));
 }

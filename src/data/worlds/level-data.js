@@ -626,108 +626,264 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   },
   "w1-l3": {
     "id": "w1-l3",
-    "name": "PLUIE DE CRISTAUX",
-    "type": "collect",
+    "name": "MISE HORS TENSION",
+    "type": "survive",
     "threat": 2,
     "bg": "cristaux",
     "goal": {
-      "gems": 25
+      "seconds": 90
     },
-    "spawns": [
-      {
-        "type": "sat",
-        "from": 0,
-        "w": 8
-      },
-      {
-        "type": "satgun",
-        "from": 8,
-        "w": 6
-      },
-      {
-        "type": "bras",
-        "from": 16,
-        "w": 4,
-        "tier": 1
-      },
-      {
-        "type": "pilleur",
-        "from": 12,
-        "w": 4,
-        "tier": 1
-      }
-    ],
+    "intro": null,
+    "spawns": [],
     "finalBoss": "reacteur",
     "reward": {
       "clear": 30,
       "first": 60
     },
-    "events": [
-      {
-        "kind": "crystal",
-        "at": 15
-      }
-    ],
     "world": "w1",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
+    "waves": [
+      {
+        "type": "satgun",
+        "at": 2,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "pilleur",
+        "at": 8,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 40,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "turret",
+        "at": 14,
+        "count": 2,
+        "spacing": 1.2,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "healer",
+        "at": 20,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "pilleur",
+        "at": 28,
+        "count": 2,
+        "spacing": 0.9,
+        "formation": "line",
+        "spread": 160,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "shooter",
+        "at": 36,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 200,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "tank",
+        "at": 44,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "healer",
+        "at": 48,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "turret",
+        "at": 55,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 200,
+        "x": 30,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "pilleur",
+        "at": 62,
+        "count": 2,
+        "spacing": 0.6,
+        "formation": "line",
+        "spread": 150,
+        "x": 60,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "drone",
+        "at": 70,
+        "count": 6,
+        "spacing": 0,
+        "formation": "star",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "tank",
+        "at": 78,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      }
+    ],
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 30,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 1,
+          "bigChance": 0.1,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 65,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 1,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
     "spawnClock": "mission",
-    "intro": null,
     "boss": null,
     "bossName": null,
-    "hpMul": 1,
+    "hpMul": 1.1,
     "dmgMul": 1,
-    "timelineOnly": 0,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.29,
-      "end": 0.865,
-      "seconds": 70
+      "start": 1.3,
+      "end": 0.9,
+      "seconds": 80
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "Le réacteur alimente toujours le secteur. Sa coupure est indispensable pour poursuivre."
+      ],
+      "boss": [
+        "Le Réacteur bascule en régime critique. Évitez les émissions d'énergie directe."
+      ],
+      "progress": [
+        "L'alimentation de la zone baisse progressivement.",
+        "Des pilleurs de cristaux tentent d'absorber l'énergie résiduelle.",
+        "Le noyau du réacteur est désormais sans protection."
+      ],
+      "banter": [
+        "Interrompre une source d'énergie active annule notre assurance incendie.",
+        "Le propriétaire réclame la suspension de l'intervention. Demande rejetée."
+      ],
+      "lowhp": [
+        "Alerte surcharge thermique. Les tirs ennemis endommagent les régulateurs."
+      ],
+      "win": [
+        "Installation désormais hors service. Les documents ont enfin raison."
+      ],
+      "lose": [
+        "Coupure manquée. Le réacteur a rétabli l'alimentation des lignes de défense."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w1-l3-claim",
+          "when": "time",
+          "at": 32,
+          "text": "Le propriétaire est joignable. Il a attendu que vous touchiez à son alimentation."
+        },
+        {
+          "id": "w1-l3-instability",
+          "when": "time",
+          "at": 60,
+          "text": "Maintenance instable détectée. La zone devient électriquement hostile."
+        },
+        {
+          "id": "w1-l3-boss",
+          "when": "bossStart",
+          "text": "Le Réacteur bascule en régime critique. Évitez les émissions d'énergie directe."
+        },
+        {
+          "id": "w1-l3-report",
+          "when": "win",
+          "text": "Installation désormais hors service. Les documents ont enfin raison."
+        }
+      ]
     }
   },
   "w1-l4": {
     "id": "w1-l4",
-    "name": "PATROUILLE",
-    "type": "kill",
-    "threat": 2,
+    "name": "ACCES REFUSE",
+    "type": "survive",
+    "threat": 3,
     "bg": "patrouille",
     "goal": {
-      "count": 40
+      "seconds": 100
     },
-    "spawns": [
-      {
-        "type": "sat",
-        "from": 0,
-        "w": 6
-      },
-      {
-        "type": "satgun",
-        "from": 6,
-        "w": 6
-      },
-      {
-        "type": "eclaireur",
-        "from": 6,
-        "w": 6,
-        "tier": 1
-      },
-      {
-        "type": "bras",
-        "from": 14,
-        "w": 4,
-        "tier": 1
-      },
-      {
-        "type": "pilleur",
-        "from": 18,
-        "w": 3,
-        "tier": 1
-      }
-    ],
+    "intro": null,
+    "spawns": [],
     "finalBoss": "anneau",
     "reward": {
       "clear": 35,
@@ -736,23 +892,235 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "world": "w1",
     "schemaVersion": 2,
     "tuto": false,
-    "waves": [],
-    "events": [],
+    "waves": [
+      {
+        "type": "diver",
+        "at": 2,
+        "count": 3,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 190,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "ghost",
+        "at": 9,
+        "count": 2,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 160,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "eclaireur",
+        "at": 16,
+        "count": 4,
+        "spacing": 0.4,
+        "formation": "column",
+        "spread": 100,
+        "x": 30,
+        "y": 0,
+        "alert": 1,
+        "tier": 2
+      },
+      {
+        "type": "elite",
+        "at": 24,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "bomber",
+        "at": 32,
+        "count": 2,
+        "spacing": 1.0,
+        "formation": "line",
+        "spread": 200,
+        "x": 40,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "diver",
+        "at": 40,
+        "count": 4,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 220,
+        "x": 50,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "ghost",
+        "at": 48,
+        "count": 3,
+        "spacing": 0.7,
+        "formation": "line",
+        "spread": 170,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "elite",
+        "at": 56,
+        "count": 1,
+        "spacing": 0,
+        "formation": "line",
+        "spread": 180,
+        "x": 70,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "shieldedGrunt",
+        "at": 58,
+        "count": 2,
+        "spacing": 0.5,
+        "formation": "line",
+        "spread": 120,
+        "x": 70,
+        "y": 0,
+        "alert": 1
+      },
+      {
+        "type": "bomber",
+        "at": 68,
+        "count": 3,
+        "spacing": 0.8,
+        "formation": "line",
+        "spread": 210,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      },
+      {
+        "type": "diver",
+        "at": 76,
+        "count": 5,
+        "spacing": 0.4,
+        "formation": "star",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 3
+      },
+      {
+        "type": "elite",
+        "at": 84,
+        "count": 2,
+        "spacing": 1.2,
+        "formation": "line",
+        "spread": 180,
+        "x": 50,
+        "y": 0,
+        "alert": 2
+      }
+    ],
+    "events": [
+      {
+        "kind": "crystal",
+        "at": 35,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 1,
+          "bigChance": 0.15,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      },
+      {
+        "kind": "crystal",
+        "at": 72,
+        "duration": 5,
+        "params": {
+          "tickMs": 1000,
+          "perTick": 2,
+          "bigChance": 0.2,
+          "fallMin": 90,
+          "fallMax": 120
+        }
+      }
+    ],
     "spawnClock": "mission",
-    "intro": null,
     "boss": null,
     "bossName": null,
-    "hpMul": 1,
-    "dmgMul": 1,
-    "timelineOnly": 0,
+    "hpMul": 1.2,
+    "dmgMul": 1.1,
+    "timelineOnly": 1,
     "zoom": {
-      "start": 1.27,
-      "end": 0.8200000000000001,
-      "seconds": 70
+      "start": 1.28,
+      "end": 0.88,
+      "seconds": 90
     },
     "ambient": {
-      "golden": true,
-      "smallEvents": true
+      "golden": false,
+      "smallEvents": false
+    },
+    "norma": {
+      "start": [
+        "La sécurité privée verrouille l'accès aux bureaux. La concentration de tirs augmente."
+      ],
+      "boss": [
+        "L'Anneau de sécurité bloque l'accès direct. Neutralisez ses générateurs."
+      ],
+      "progress": [
+        "Les patrouilles ont reçu de nouvelles consignes. Vous n'êtes plus un intrus. Vous êtes leur priorité.",
+        "Intercepteurs et unités lourdes verrouillent l'axe principal.",
+        "Le dernier périmètre de défense s'effondre."
+      ],
+      "banter": [
+        "Leur budget défense dépasse largement le coût du recyclage contesté.",
+        "Mines et champ de force détectés. La direction ne souhaite pas recevoir."
+      ],
+      "lowhp": [
+        "Alerte : dommage critique sur le système de navigation."
+      ],
+      "win": [
+        "Il reste une installation à traiter. Elle contient le propriétaire et l'essentiel de son mécontentement."
+      ],
+      "lose": [
+        "Accès refusé. La sécurité privée a maintenu son verrouillage."
+      ],
+      "tickEvery": [
+        120,
+        150
+      ],
+      "messages": [
+        {
+          "id": "w1-l4-priority",
+          "when": "time",
+          "at": 30,
+          "text": "Les patrouilles ont reçu de nouvelles consignes. Vous n'êtes plus un intrus. Vous êtes leur priorité."
+        },
+        {
+          "id": "w1-l4-boss-approach",
+          "when": "time",
+          "at": 70,
+          "text": "Il reste une installation à traiter. Elle contient le propriétaire et l'essentiel de son mécontentement."
+        },
+        {
+          "id": "w1-l4-boss",
+          "when": "bossStart",
+          "text": "L'Anneau de sécurité bloque l'accès direct. Neutralisez ses générateurs."
+        },
+        {
+          "id": "w1-l4-report",
+          "when": "win",
+          "text": "Périmètre privé franchi. L'accès au commandement est ouvert."
+        }
+      ]
     }
   },
   "w1-l5": {

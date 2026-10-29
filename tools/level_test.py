@@ -106,15 +106,15 @@ with sync_playwright() as pw:
     f2 = p.evaluate("getMeta().composants"); bk = bank()
     check(bk.get('prime') == 10 and f2 - f1 == bk.get('total'), 'rejeu : prime réduite à 10 (%s, +%s)' % (bk, f2 - f1))
 
-    print('kills (w1-l4)')
-    start('w1-l4', "levelById('w1-l4').goal.count = 5; levelById('w1-l4').finalBoss = null")       # le boss de fin est testé à part plus bas
+    print('kills (w2-l2)')
+    start('w2-l2', "levelById('w2-l2').goal.count = 5; levelById('w2-l2').finalBoss = null")       # le boss de fin est testé à part plus bas
     p.evaluate("(()=>{ %s.runKills = 5; })()" % SC); p.wait_for_timeout(3800)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par kills')
 
     print('boss de fin (w1-l4, Anneau)')
-    start('w1-l4', "levelById('w1-l4').goal.count = 3; levelById('w1-l4').finalBoss = 'anneau'")
-    p.evaluate("(()=>{ %s.runKills = 3; })()" % SC); p.wait_for_timeout(3500)
-    check(p.evaluate("!!%s.an" % SC), "L'Anneau arrive quand les kills sont faits")
+    start('w1-l4', "levelById('w1-l4').goal.seconds = 3; levelById('w1-l4').finalBoss = 'anneau'")
+    p.wait_for_timeout(5000)
+    check(p.evaluate("!!%s.an" % SC), "L'Anneau arrive à la fin du temps")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
     p.wait_for_timeout(2500)
     p.evaluate("(()=>{ const sc = %s; sc.dodgeInvuln = 1e9; sc.anStartAtk('bays'); })()" % SC); p.wait_for_timeout(2500)       # le joueur est invulnérable (délai de coup) : on teste le boss, pas l'esquive
@@ -130,7 +130,7 @@ with sync_playwright() as pw:
     check(go_visible() and title() == 'INTERVENTION VALIDEE', "victoire à la mort de L'Anneau")
     p.evaluate("(()=>{ %s.dodgeInvuln = 0; })()" % SC)
     print("mob Éclaireur (w1-l4) : verrouillage et tirs qui visent le joueur")
-    start('w1-l4', "levelById('w1-l4').goal.count = 999; levelById('w1-l4').finalBoss = null")
+    start('w1-l4', "levelById('w1-l4').goal.seconds = 999; levelById('w1-l4').finalBoss = null")
     p.evaluate("(()=>{ const sc = %s; sc.enemies.clear(true, true); sc.enemyBullets.clear(true, true); sc.player.x = 200; const e = sc.spawnOneEnemy('eclaireur', 200); window.__ec = e; e.y = sc.visibleYRange(0).min + 40; e.stopY = e.y + 60; e.hp = e.maxHp = 1e7; })()" % SC); p.wait_for_timeout(6000)
     check(p.evaluate("!!(window.__ec && window.__ec.cone)"), "l'Éclaireur a son projecteur")
     check(p.evaluate("window.__ec.state !== 'patrol' || window.__ec.detT > 0 || window.__ec.f > 60"), "l'Éclaireur patrouille et te repère")
@@ -140,8 +140,8 @@ with sync_playwright() as pw:
     check(p.evaluate("!!%s._ecRet && %s._ecRet.visible" % (SC, SC)), 'le viseur est affiché sur le joueur')
     print('  erreurs JS jusqu ici :', errs[:3])
 
-    print('cristaux (w1-l3)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 4; levelById('w1-l3').finalBoss = null")       # le boss de fin est testé à part plus bas
+    print('cristaux (w2-l4)')
+    start('w2-l4', "levelById('w2-l4').goal.gems = 4; levelById('w2-l4').finalBoss = null")       # le boss de fin est testé à part plus bas
     p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(3800)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par cristaux')
 
@@ -215,7 +215,7 @@ with sync_playwright() as pw:
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort de La Météo')
 
     print('boss de fin (w1-l3, Le Réacteur)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 4; levelById('w1-l3').finalBoss = 'reacteur'")
+    start('w1-l3', "levelById('w1-l3').goal.seconds = 3; levelById('w1-l3').finalBoss = 'reacteur'")
     p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(2500)
     check(p.evaluate("!!%s.rx" % SC), "Le Réacteur arrive quand les cristaux sont ramassés")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
@@ -223,7 +223,7 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ %s.rxDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du Réacteur')
     print('mob Pilleur (w1-l3)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 999; levelById('w1-l3').finalBoss = null")
+    start('w1-l3', "levelById('w1-l3').goal.seconds = 999; levelById('w1-l3').finalBoss = null")
     p.evaluate("(()=>{ const sc = %s; sc.enemies.clear(true, true); const e = sc.spawnOneEnemy('pilleur', 200); window.__pl = e; e.y = sc.visibleYRange(0).min + 40; e.stopY = e.y + 60; e.hp = e.maxHp = 1e7; for (let i = 0; i < 8; i++) sc.spawnGemAt(e.x + (i - 4)*14, e.y + 10 + i*8, 3, 'gemM', 0); })()" % SC); p.wait_for_timeout(5500)
     check(p.evaluate("!!(window.__pl && window.__pl.eaten > 0)"), "le Pilleur avale des cristaux et remplit son réservoir")
     check(p.evaluate("!!(window.__pl && window.__pl.bm)"), 'le Pilleur a son faisceau laser')

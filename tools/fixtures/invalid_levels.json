@@ -518,7 +518,7 @@
   },
   {
    "id": "objectif-impossible",
-   "level": "w1-l4",
+   "level": "w2-l2",
    "set": {
     "spawns": [],
     "waves": []
@@ -527,7 +527,7 @@
   },
   {
    "id": "objectif-impossible-timelineonly",
-   "level": "w1-l4",
+   "level": "w2-l2",
    "set": {
     "timelineOnly": 1,
     "waves": []

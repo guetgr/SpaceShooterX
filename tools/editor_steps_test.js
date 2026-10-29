@@ -89,7 +89,7 @@ for (const id of Object.keys(docs)){
 }
 
 // mobs : un sous-bloc par type du tirage
-{ const doc = docs['w1-l4'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
+{ const doc = docs['w2-l2'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
   assert.strictEqual(mobs.fields.length, types.length * 4);
   types.forEach(t=> { const g = mobs.fields.filter(f=> f.path[1] === t); assert.deepStrictEqual(g.map(f=> f.path[2]), ['hpMul', 'dmgMul', 'speedMul', 'scoreMul']); g.forEach(f=> assert.deepStrictEqual([f.min, f.max, f.def, f.optional], [0.1, 10, 1, true])); });
   assert.ok(M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).every(s=> s.id !== 'mobs')); }
@@ -100,7 +100,7 @@ for (const id of Object.keys(docs)){
   used.forEach(b=> { const tid = M.BOSS_TUNE_ID[b]; assert.ok(tid && tunablesCatalog[tid], 'finalBoss ' + b + ' sans id TUNABLES'); const d = docs[Object.keys(docs).find(k=> docs[k].finalBoss === b)], step = M.buildSteps(d, cats(d)).find(s=> s.id === 'boss');
     assert.strictEqual(step.fields.filter(f=> f.path[1] === tid).length, tunablesCatalog[tid].length, b);
     const arr = step.fields.find(f=> f.kind === 'numlist'); assert.ok(arr && arr.len >= 2); });
-  const l4 = docs['w1-l4'], ids = M.bossIds(l4); assert.ok(['an', 'ec', 'bras', 'pil'].every(i=> ids.includes(i)), 'w1-l4 : ' + ids);
+  const l4 = docs['w1-l4'], ids = M.bossIds(l4); assert.ok(['an', 'ec'].every(i=> ids.includes(i)), 'w1-l4 : ' + ids);
   assert.deepStrictEqual(M.bossIds(docs['w2-l1']), []);
   // un id par mob spécial présent dans les spawns, même sans boss
   assert.ok(M.bossIds({ spawns:[{ type:'pilleur' }], waves:[{ type:'bras' }] }).join() === 'pil,bras'); }
