@@ -20,8 +20,14 @@
   };
   const json = async (url, body)=>{
     const r = await fetch(url, body ? { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(body) } : {});
-    const o = await r.json(); if (!r.ok || !o.ok) throw new Error(o.error || 'erreur serveur'); return o;
+    let o = null; try { o = await r.json(); } catch(e){ throw new Error('pas de serveur local (réponse non JSON)'); }
+    if (!r.ok || !o.ok) throw new Error(o.error || 'erreur serveur'); return o;
   };
+  // Sans serveur local (site en ligne) : les parties restent dans le navigateur (vrai localStorage, hors sauvegarde en mémoire), sans passer par l'éditeur.
+  let serverOk = false;
+  const LS_RUNS = 'ssx_lab_runs_v1';
+  const lsRuns = ()=> { try { const a = JSON.parse(window.__realLS.getItem(LS_RUNS) || '[]'); return Array.isArray(a) ? a : []; } catch(e){ return []; } };
+  const lsAdd = run=> { try { window.__realLS.setItem(LS_RUNS, JSON.stringify(lsRuns().concat(run).slice(-500))); } catch(e){ /* ignore */ } };
   const hash = s=>{ let x = 5381; for (let i = 0; i < s.length; i++) x = ((x << 5) + x + s.charCodeAt(i)) | 0; return (x >>> 0).toString(16); };
   const allLevels = ()=> WORLDS.reduce((a, w)=> a.concat(w.levels), []);
 
@@ -123,7 +129,8 @@
       taken:Math.round(L.taken), dealt:Math.round(sc.runDamage || 0), kills:sc.runKills || 0, composants:getMeta().composants - L.c0,
       at:Date.now(), cards, equip:ctx.equip, equipText:equipText(ctx.equip), cost:ctx.cost, budget:ctx.budget,
     };
-    json(RUNS, { run }).then(()=> { if (ui) ui.runs.push(run); toast('Partie enregistrée'); }).catch(e=> toast('Enregistrement impossible : ' + e.message));
+    const saved = serverOk ? json(RUNS, { run }) : Promise.resolve(lsAdd(Object.assign(run, { id:String(run.at) })));
+    saved.then(()=> { if (ui) ui.runs.push(run); toast(serverOk ? 'Partie enregistrée' : 'Partie enregistrée dans ce navigateur'); }).catch(e=> toast('Enregistrement impossible : ' + e.message));
   }
 
   // ---------------------------------------------------------------- écran du laboratoire
@@ -154,11 +161,12 @@
   .lab-gauge.mid i{background:#e0b95a}.lab-gauge.over i{background:#e0605a}
   .lab-in details{border:1px solid #26332d;padding:6px 10px;margin:8px 0}
   .lab-in summary{cursor:pointer;color:#bcd0c6}
+  .lab-tab{border-collapse:collapse;font-size:11px;margin:6px 0;width:100%}.lab-tab th,.lab-tab td{text-align:left;padding:3px 8px;border-bottom:1px solid #18221d;color:#9fb3a8}
   .lab-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1d3a2f;border:1px solid #4a8a6c;color:#d9f5e6;padding:9px 16px;z-index:70000;opacity:0;pointer-events:none;transition:opacity .15s;font:12px monospace}
   .lab-toast.show{opacity:1}
   `;
 
-  async function loadRuns(){ try { return (await json(RUNS)).runs; } catch(e){ return []; } }
+  async function loadRuns(){ if (!serverOk) return lsRuns(); try { return (await json(RUNS)).runs; } catch(e){ return []; } }
 
   function buildUi(){
     document.head.append(h('style', {}, CSS));
@@ -221,7 +229,9 @@
         h('h2', {}, 'MISSION'),
         h('div', { class:'lab-row' }, h('label', {}, 'Ordre'), lvlSel),
         h('div', { class:'lab-row' }, h('label', {}, 'Version du niveau'), verSel),
-        h('p', {}, mineRuns.length + ' partie(s) enregistrée(s) pour cet ordre.' + (recent.length ? ' Dernières : ' + recent.map(r=> r.outcome + ' ' + r.elapsed + ' s').join(' · ') : '')),
+        h('p', {}, mineRuns.length + ' partie(s) enregistrée(s) pour cet ordre.' + (serverOk ? ' Tableau complet dans l’éditeur (Parties de test).' : ' Pas de serveur local : parties gardées dans ce navigateur, sans l’éditeur.')),
+        recent.length ? h('table', { class:'lab-tab' }, h('tr', {}, ['Issue', 'Durée', 'PV', 'Subis', 'Infligés', '◆', 'Coût / budget'].map(t=> h('th', {}, t))),
+          recent.map(r=> h('tr', {}, [r.outcome, Math.floor(r.elapsed/60) + ':' + String(r.elapsed%60).padStart(2, '0'), r.hp + '/' + r.maxHp, r.taken, r.dealt, r.composants, r.cost + ' / ' + r.budget].map(t=> h('td', {}, t))))) : null,
         h('h2', {}, 'BUDGET DE COMPOSANTS'),
         idx === 0
           ? h('p', {}, 'Tuto : vous êtes censé jouer avec 0 ◆ d’amélioration. Tout reste équipable pour tester.')
@@ -263,19 +273,22 @@
 
   // ---------------------------------------------------------------- démarrage
   function init(){
+    const ping = fetch('/__editor/ping').then(r=> r.ok ? r.json() : null).then(o=> !!(o && o.ok)).catch(()=> false);
     if (LAB){
       slotsOpen = ()=> BAYS;          // laboratoire : toutes les baies sont ouvertes
-      hookGame(); buildUi();
-      // retour au bureau depuis un rapport : l'écran du laboratoire revient
-      setInterval(()=> { if (ui && !ui.visible() && !ui.launching && document.body.classList.contains('at-home')) ui.show(); }, 400);
+      ping.then(ok=>{
+        serverOk = ok; hookGame(); buildUi();
+        // retour au bureau depuis un rapport : l'écran du laboratoire revient
+        setInterval(()=> { if (ui && !ui.visible() && !ui.launching && document.body.classList.contains('at-home')) ui.show(); }, 400);
+      });
     } else {
-      fetch('/__editor/ping').then(r=> r.ok ? r.json() : null).then(o=>{
-        if (!o || !o.ok) return;
+      ping.then(ok=>{
+        if (!ok) return;
         document.head.append(h('style', {}, CSS));
         const b = h('button', { class:'lab-btn', onclick:()=> { location.href = location.pathname + '?lab'; } }, 'LABORATOIRE');
         document.body.append(b);
         setInterval(()=> b.classList.toggle('on', document.body.classList.contains('at-home')), 400);
-      }).catch(()=>{});
+      });
     }
   }
   const wait = setInterval(()=>{ if (window.__phaserGame && typeof GameScene !== 'undefined'){ clearInterval(wait); init(); } }, 200);
