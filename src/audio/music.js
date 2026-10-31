@@ -119,7 +119,8 @@ const MUSIC_LEVEL = { 'w1-l1':['w1_l1_a','w1_l1_b'], 'w1-l2':['w1_l2_a','w1_l2_b
 
 // chaque boss a sa paire de morceaux (alternés d'une apparition à l'autre); les boss sans paire utilisent boss_p1. Boucles de 56 s, démarrées au début du morceau
 const MUSIC_BOSS = { dread:['bossd_a','bossd_b'], faucheuse:['bossf_a','bossf_b'], ruche:['bossr_a','bossr_b'], prisme:['bossp_a','bossp_b'], tuto1:['w1b_antenne_a'], tuto2:['w1b_antenne_b'],
-                     fb_meteo:['w1b_meteo_a','w1b_meteo_b'], fb_araignee:['w1b_araignee_a','w1b_araignee_b'], fb_reacteur:['w1b_reacteur_a','w1b_reacteur_b'], fb_anneau:['w1b_anneau_a','w1b_anneau_b'], fb_pdg:['w1b_pdg_a','w1b_pdg_b'] };      // fb_* : boss de fin d'ordre du monde 1      // tuto: a = phase 1, puis b/c/d en alternance
+                     fb_meteo:['w1b_meteo_a','w1b_meteo_b'], fb_araignee:['w1b_araignee_a','w1b_araignee_b'], fb_reacteur:['w1b_reacteur_a','w1b_reacteur_b'], fb_anneau:['w1b_anneau_a','w1b_anneau_b'], fb_pdg:['w1b_pdg_a','w1b_pdg_b'],
+                     fb_crabe:['w2b_crabe_a','w2b_crabe_b'], fb_incinerateur:['w2b_incinerateur_a','w2b_incinerateur_b'], fb_benne:['w2b_benne_a','w2b_benne_b'], fb_broyeur:['w2b_broyeur_a','w2b_broyeur_b'], fb_reparateur:['w2b_reparateur_a','w2b_reparateur_b'] };      // fb_* : boss de fin d'ordre du monde 1      // tuto: a = phase 1, puis b/c/d en alternance
 
 const MUSIC_BOSS_KEYS = [].concat(...Object.values(MUSIC_BOSS));
 

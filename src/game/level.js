@@ -5,7 +5,7 @@
 mixin(GameScene, {
   // appelé à la fin de create() : remet à zéro l'état du niveau
   levelInit(){
-    this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; this._ecRet = null;
+    this.lvT = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; if (this.w2) this.w2Cleanup(); this.w2 = null; this._ecRet = null;
     const d = this.lvDef || (this.tuto ? levelById('w1-tuto') : null);
     this.lvWaves = [];
     ((d && d.waves) || []).forEach(w=>{ for (let i=0;i<w.count;i++) this.lvWaves.push({ type:w.type, at:w.at + i*w.spacing }); });
@@ -34,7 +34,7 @@ mixin(GameScene, {
     if (d.type === 'boss'){
       if (!this.lvBossOut && this.lvT >= 1.5 && !this.curEvent){ this.lvBossOut = true; if (d.finalBoss === 'pdg'){ this.normaAnchor('bossStart'); this.pdStart(); } else this.spawnBoss(d.boss); }       // le boss du monde 1 est « Le PDG » (bosses/pdg.js), pas le Dreadnought
     } else if (d.finalBoss){                                     // niveau de survie qui finit par un boss : il arrive quand le temps est écoulé, la victoire vient de sa destruction
-      if (!this.ar && !this.mt && !this.rx && !this.an && this.levelProgress().frac >= 1 && !this.curEvent){ this.normaAnchor('bossStart'); if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else this.arStart(); }
+      if (!this.ar && !this.mt && !this.rx && !this.an && !this.w2 && this.levelProgress().frac >= 1 && !this.curEvent){ this.normaAnchor('bossStart'); if (d.finalBoss === 'meteo') this.mtStart(); else if (d.finalBoss === 'reacteur') this.rxStart(); else if (d.finalBoss === 'anneau') this.anStart(); else if (BOSS_W2[d.finalBoss]) this.w2Start(d.finalBoss); else this.arStart(); }
     } else if (this.levelProgress().frac >= 1) this.levelWin();
   },
 
@@ -54,7 +54,7 @@ mixin(GameScene, {
   levelProgress(){
     const d = this.lvDef; if (!d) return { frac:0, label:'' };
     const g = d.goal || {};
-    if (d.finalBoss && (this.ar || this.mt || this.rx || this.an || this.pd)){ const B = this.ar || this.mt || this.rx || this.an || this.pd; return { frac: Math.max(0, 1 - B.hp / B.max), label:'BOSS' }; }
+    if (d.finalBoss && (this.ar || this.mt || this.rx || this.an || this.pd || this.w2)){ const B = this.ar || this.mt || this.rx || this.an || this.pd || this.w2; return { frac: Math.max(0, 1 - B.hp / B.max), label:'BOSS' }; }
     if (d.type === 'survive') return { frac: Math.min(1, this.lvT / g.seconds), label: Math.max(0, Math.ceil(g.seconds - this.lvT)) + ' s' };
     if (d.type === 'kill')    return { frac: Math.min(1, this.runKills / g.count), label: Math.min(this.runKills, g.count) + '/' + g.count };
     if (d.type === 'collect') return { frac: Math.min(1, this.lvGems / g.gems), label: Math.min(this.lvGems, g.gems) + '/' + g.gems };
@@ -65,7 +65,7 @@ mixin(GameScene, {
   // valeurs 0..1 des objectifs de FINITION de cette partie (voir data/completion.js) ; appelé par endRun, victoire ou défaite
   levelComp(victory){
     const d = this.lvDef; if (!d) return null;
-    const boss = this.ar || this.mt || this.rx || this.an || this.pd, bossOut = !!boss || this.lvBossOut;
+    const boss = this.ar || this.mt || this.rx || this.an || this.pd || this.w2, bossOut = !!boss || this.lvBossOut;
     const clean = Math.max(0, 1 - (this.runHits || 0) * 0.12);
     if (d.type === 'boss'){
       const b = this.currentBoss;

@@ -251,6 +251,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BOSS_SPRITES` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_DMG` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_HP` | const | `src/data/bosses.js` |  |
+| `BOSS_W2` | const | `src/data/boss-w2.js` |  |
 | `bossAI_dread` | méthode | `src/bosses/ai.js` | `GameScene` |
 | `bossAI_eclipse` | méthode | `src/bosses/ai.js` | `GameScene` |
 | `bossAI_faucheuse` | méthode | `src/bosses/ai.js` | `GameScene` |
@@ -1280,4 +1281,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1273 symboles.
+1274 symboles.
