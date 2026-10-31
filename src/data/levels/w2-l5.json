@@ -3,8 +3,8 @@
   "name": "ATELIER DE BROYAGE",
   "type": "mission",
   "threat": 5,
-  "boss": "dread",
-  "bossName": null,
+  "boss": null,
+  "bossName": "LE REPARATEUR EN CHEF",
   "reward": {
     "clear": 60,
     "first": 120
@@ -59,7 +59,7 @@
   ],
   "bg": "broyeur",
   "intro": null,
-  "finalBoss": null,
+  "finalBoss": "reparateur",
   "hpMul": 1,
   "dmgMul": 1,
   "timelineOnly": 0,

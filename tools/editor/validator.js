@@ -8,7 +8,7 @@
 //   bestiary [{type}] (types permis dans spawns / waves), decorCatalog [{kind}], musicCatalog { level:[], boss:[] }.
 // Les règles partagées avec le serveur sont écrites une fois dans tools/fixtures/invalid_levels.json (lu par editor_validator_test.js ET level_files_test.py).
 (function(root){
-  const FINAL_BOSSES = ['meteo', 'araignee', 'reacteur', 'anneau', 'pdg'];                              // level_files.py : « Boss final inconnu »
+  const FINAL_BOSSES = ['meteo', 'araignee', 'reacteur', 'anneau', 'pdg', 'crabe', 'incinerateur', 'benne', 'broyeur', 'reparateur'];                              // level_files.py : « Boss final inconnu »
   const BOSSES = ['dread', 'faucheuse', 'ruche', 'prisme', 'kraken', 'eclipse', 'hydre'];               // level_files.py : « Boss inconnu »
   const NORMA_POOLS = ['start', 'boss', 'progress', 'banter', 'lowhp', 'win', 'lose'];
   const NORMA_WHEN = ['levelStart', 'time', 'eventStart', 'eventEnd', 'bossStart', 'win', 'lose'];

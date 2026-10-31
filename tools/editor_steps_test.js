@@ -96,12 +96,12 @@ for (const id of Object.keys(docs)){
 
 // (d) boss : chaque finalBoss utilisé a son id TUNABLES ; les champs du boss viennent du registre
 { const used = uniq(Object.values(docs).map(d=> d.finalBoss).filter(Boolean));
-  assert.deepStrictEqual(used.slice().sort(), ['anneau', 'araignee', 'meteo', 'pdg', 'reacteur']);
+  assert.deepStrictEqual(used.slice().sort(), ['anneau', 'araignee', 'benne', 'broyeur', 'crabe', 'incinerateur', 'meteo', 'pdg', 'reacteur', 'reparateur']);
   used.forEach(b=> { const tid = M.BOSS_TUNE_ID[b]; assert.ok(tid && tunablesCatalog[tid], 'finalBoss ' + b + ' sans id TUNABLES'); const d = docs[Object.keys(docs).find(k=> docs[k].finalBoss === b)], step = M.buildSteps(d, cats(d)).find(s=> s.id === 'boss');
     assert.strictEqual(step.fields.filter(f=> f.path[1] === tid).length, tunablesCatalog[tid].length, b);
     const arr = step.fields.find(f=> f.kind === 'numlist'); assert.ok(arr && arr.len >= 2); });
   const l4 = docs['w1-l4'], ids = M.bossIds(l4); assert.ok(['an', 'ec'].every(i=> ids.includes(i)), 'w1-l4 : ' + ids);
-  assert.deepStrictEqual(M.bossIds(docs['w2-l1']), []);
+  assert.deepStrictEqual(M.bossIds(docs['w3-l1']), []);
   // un id par mob spécial présent dans les spawns, même sans boss
   assert.ok(M.bossIds({ spawns:[{ type:'pilleur' }], waves:[{ type:'bras' }] }).join() === 'pil,bras'); }
 

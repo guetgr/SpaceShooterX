@@ -32,9 +32,9 @@
     }
   ],
   "bg": "quai",
-  "boss": "dread",
-  "finalBoss": null,
-  "bossName": null,
+  "boss": null,
+  "finalBoss": "crabe",
+  "bossName": "LE CRABE A SCIES",
   "hpMul": 1,
   "dmgMul": 1,
   "timelineOnly": 0,

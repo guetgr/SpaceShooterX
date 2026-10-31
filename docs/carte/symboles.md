@@ -205,6 +205,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `bankCombo` | méthode | `src/systems/combo.js` | `GameScene` |
 | `BESTIARY_KEY` | const | `src/data/bestiary.js` |  |
 | `BESTIARY_LIST` | const | `src/data/bestiary.js` |  |
+| `bestiaryBossKill` | fonction | `src/data/bestiary.js` |  |
 | `bestiaryKeyFor` | fonction | `src/data/achievements.js` |  |
 | `BG_TERRE_B64` | const | `src/data/image-assets.js` |  |
 | `BG_ZONES` | const | `src/gfx/procedural.js` |  |
@@ -240,6 +241,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BOSS_SPRITES` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_DMG` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_HP` | const | `src/data/bosses.js` |  |
+| `BOSS_W2` | const | `src/data/boss-w2.js` |  |
 | `bossAI_dread` | méthode | `src/bosses/ai.js` | `GameScene` |
 | `bossAI_eclipse` | méthode | `src/bosses/ai.js` | `GameScene` |
 | `bossAI_faucheuse` | méthode | `src/bosses/ai.js` | `GameScene` |
@@ -1224,6 +1226,11 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `VORTEX_POS` | const | `src/home/galaxy.js` |  |
 | `VORTEX_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `vortexTimeText` | fonction | `src/data/vortex.js` |  |
+| `W2_BENNE_B64` | const | `src/data/image-assets.js` |  |
+| `W2_BROYEUR_B64` | const | `src/data/image-assets.js` |  |
+| `W2_CRABE_B64` | const | `src/data/image-assets.js` |  |
+| `W2_INCINERATEUR_B64` | const | `src/data/image-assets.js` |  |
+| `W2_REPARATEUR_B64` | const | `src/data/image-assets.js` |  |
 | `warpPulse` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `wasWorldSeen` | fonction | `src/data/world-progress.js` |  |
 | `waveDamage` | méthode | `src/enemies/ai.js` | `GameScene` |
@@ -1288,3 +1295,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
 1280 symboles.
+1302 symboles.

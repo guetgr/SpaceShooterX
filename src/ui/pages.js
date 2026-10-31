@@ -148,7 +148,7 @@ mixin(GameScene, {
       const cell = document.createElement('div');
       cell.className = 'bestiary-cell';
       cell.innerHTML =
-        '<img src="'+src+'" alt="'+entry.label+'">'+
+        '<img src="'+src+'" alt="'+entry.label+'"'+(entry.flipY ? ' style="transform:scaleY(-1)"' : '')+'>'+
         '<div class="bestiary-name">'+entry.label+'</div>'+
         '<div class="bestiary-count'+(count===0?' zero':'')+'">'+count+' tué'+(count>1?'s':'')+'</div>';
       grid.appendChild(cell);

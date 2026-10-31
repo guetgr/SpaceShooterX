@@ -331,6 +331,7 @@ mixin(GameScene, {
     this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill'); this.mtSfx('mtRoar', mt.wx);
   },
   mtDead(){        // effondrement final : grosse explosion bleue, éclairs dans tous les sens, chaque pièce en un morceau ; puis fin du niveau
+    bestiaryBossKill(this, 'meteo');
     const mt = this.mt; if (mt.dead) return; mt.dead = true;
     const cx = mt.wx, cy = mt.wy + 60*mt.U*1.6;
     this.cameras.main.flash(600, 200, 230, 255, false); this.cameras.main.shake(900, 0.014);

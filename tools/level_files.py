@@ -209,7 +209,7 @@ def validate_level(d, original, root=ROOT):
                     for k, t in row['norma'].items(): norma_text(t, 'events.norma.' + k)
     for key in ['bg','intro','boss','finalBoss','bossName']:
         if not (d[key] is None or isinstance(d[key],str)): raise ValueError(key + ' : texte ou null requis')
-    if d['finalBoss'] not in [None,'meteo','araignee','reacteur','anneau','pdg']: raise ValueError('Boss final inconnu')
+    if d['finalBoss'] not in [None,'meteo','araignee','reacteur','anneau','pdg','crabe','incinerateur','benne','broyeur','reparateur']: raise ValueError('Boss final inconnu')
     if d['boss'] not in [None,'dread','faucheuse','ruche','prisme','kraken','eclipse','hydre']: raise ValueError('Boss inconnu')
     if d['intro'] not in [None,'earth']: raise ValueError('intro : « earth » ou null requis')
     kinds = bg_kinds(root)
