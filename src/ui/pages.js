@@ -54,16 +54,12 @@ mixin(GameScene, {
     return items;
   },
 
-  // atouts GLOBAUX : les postes de l'atelier et les modules du catalogue R&D achetés (permanents, appliqués à chaque mission, jamais perdus)
+  // atouts GLOBAUX : les améliorations de R&D et d'atelier achetées (permanentes, appliquées à chaque mission, jamais perdues)
   globalGearItems(){
-    const out = [];
-    ATELIER_POSTS.forEach(p=>{
-      const mk = atelierMk(this.meta && this.meta.atelier, p.id); if (mk <= 0) return;
-      out.push({ icon:'🔧', name:p.name + ' MK ' + ROMAN[mk], desc:p.text, count:mk, max:ATELIER_MAX, kind:'GLOBAL' });
-    });
-    Object.keys(this.techState || {}).forEach(id=>{
-      const t = TECH_BY_ID[id], ts = this.techState[id];
-      out.push({ icon:t.icon, name:t.name + ' · ' + (ts.assembled ? 'ASSEMBLEE' : 'NON ASSEMBLEE'), desc:t.desc, count:ts.rang, max:techMaxRang(t), kind:'GLOBAL' });
+    const out = [], meta = this.meta || getMeta();
+    RD_UPGRADES.forEach(u=>{
+      const L = rdLevel(meta, u.id); if (L <= 0) return;
+      out.push({ icon:'🔧', name:u.name, desc:u.show(L), count:L, max:rdAbsMax(u), kind:'GLOBAL' });
     });
     return out;
   },
@@ -166,7 +162,7 @@ mixin(GameScene, {
   renderCodexPage(){
     const list = document.getElementById('codexList');
     list.innerHTML = '';
-    const cdx = this.codex || getCodex(), dev = DEV_SEE_ALL, meta = this.meta || getMeta();
+    const cdx = this.codex || getCodex(), dev = DEV_SEE_ALL;
     const sec = (txt, col)=>{ const d = document.createElement('div'); d.className = 'ach-sec'; if (col) d.style.color = col; d.textContent = txt; list.appendChild(d); };
     const sub = (txt)=>{ const d = document.createElement('div'); d.className = 'cdx-sub'; d.textContent = txt; list.appendChild(d); };
     const row = (icon, name, desc, got)=>{
@@ -193,16 +189,13 @@ mixin(GameScene, {
     });
     if (!shownAny){ const d = document.createElement('div'); d.className = 'cdx-sub'; d.textContent = 'Bats un boss pour découvrir ses reliques.'; list.appendChild(d); }
 
-    const fus = FUSIONS.filter(f=> dev || cdx.fusions[f.id] || !f.techs || f.techs.every(t=> rdEntry(meta, t).proto));
+    const fus = FUSIONS;
     sec('FUSIONS DE CARTES  ' + FUSIONS.filter(f=>cdx.fusions[f.id]).length + '/' + FUSIONS.length);
     fus.forEach(f=> row(f.icon, f.name, f.desc, !!cdx.fusions[f.id]));
     const cards = UPGRADE_POOL;
     sec('CARTES DE NIVEAU  ' + UPGRADE_POOL.filter(u=>cdx.cards[u.id]).length + '/' + UPGRADE_POOL.length);
     cards.forEach(u=> row(u.icon, u.name, u.desc, !!cdx.cards[u.id]));
 
-    const techs = TECHS.filter(t=> techAvailable(t)), gs = techs.filter(t=> cdx.usedSkills[t.id]).length, ts = techs.length;
-    sec('TECHNOLOGIES  ' + gs + '/' + ts);
-    techs.filter(t=> dev || cdx.skills[t.id]).forEach(t=> row(t.icon, t.name, t.desc, !!cdx.usedSkills[t.id]));
     document.getElementById('codexSummary').textContent = 'Reliques ' + usedR + '/' + totR + ' · Fusions ' + FUSIONS.filter(f=>cdx.fusions[f.id]).length + '/' + FUSIONS.length + ' · Cartes ' + UPGRADE_POOL.filter(u=>cdx.cards[u.id]).length + '/' + UPGRADE_POOL.length + ' · Technologies ' + gs + '/' + ts + '  —  en grisé : débloqué, pas encore utilisé en jeu';
   },
 

@@ -6,6 +6,33 @@
 
 **Activer le hook de la carte du code**, une seule fois sur cette copie du dépôt : lancer `git config core.hooksPath tools/hooks` (Mac et Windows, depuis la racine du dépôt). Le hook `tools/hooks/pre-commit` régénère alors `docs/carte/` à chaque commit (le script prend ~1 s) et l'ajoute au commit ; `.gitattributes` fait fusionner `docs/carte/*.md` ligne à ligne, donc les ajouts des deux côtés s'additionnent. Vérifier ensuite avec `git config core.hooksPath` (doit afficher `tools/hooks`). **Une fois fait, supprimer cette section de `PASSATION.md`** (et ne rien dire d'autre à ce sujet à Bio : c'est fait). Détails : `CLAUDE.md`, section « Carte du code ».
 
+## Refonte R&D et atelier — 31 octobre 2026 (à lire avant toute reprise de la progression)
+
+**Prioritaire sur les anciennes sections « technologies », « baies », « Mk I à V » ci-dessous (devenues historiques).** Détail des règles : `CLAUDE.md` (Sauvegardes), tableau des valeurs : `docs/rd-ameliorations.md`.
+
+### Décisions validées (par Guet)
+- Il n'y a QUE deux systèmes de progression : **atelier** et **R&D**. Tout ce qui n'était pas dans la liste a été retiré (technologies, plans, prototypes, baies, chargement, cartes d'assemblage, fusions ORAGE et VORTEX, carte TIR MULTIPLE, relique REFRACTEUR, fusion TEMPETE DE PLOMB).
+- R&D : 4 intercalaires (CANON 5, CARCASSE 5, BOUCLIER 6, PROPULSEURS 5), secteurs de déblocage fixés dans le prompt. Atelier : 5 emplacements (LASER, AIMANT, ORDINATEUR DE BORD, 2 réservés) ; améliorations exclusives : aimant (portée S1, collecte auto S6), ordinateur (choix S2, relances S4, atout double S7, vision en nébuleuse S8).
+- Plafond = 4 × (secteur atteint − secteur de déblocage + 1) ; « secteur atteint » = dernier secteur OUVERT par la campagne (`rdWorldReached`), 9 au plus. Premier achat = premier bénéfice.
+- Double tir = deux projectiles côte à côte, garantis dès le démarrage (choix de Claude parmi 3 formes proposées, Guet n'a pas tranché : à confirmer).
+
+### Implémenté (testé : `rd_test.js`, `home_test.py`, `perks_test.py`, `smoke_test.py`)
+- `src/data/rd.js`, `ui/rd-ui.js`, `home/garage.js`, `data/meta.js` (v4 + migration), moteur : double tir (`player/weapons.js`), vitesse de recharge / réserve de secours / riposte séparée puissance et portée / récupération des charges / durée d'esquive / propulsion d'urgence / collecte automatique (`game/loop.js`, `player/damage.js`).
+- Migration : v2 et v3 → v4, une seule fois, tout remboursé au prix payé (postes Mk 40/70/120/200/340, technologies proto + rangs + spécialisation, arbre de la v2). Les pièces de secteur n'étaient gagnées nulle part : elles disparaissent.
+- Laboratoire de test (`dev/lab.js`) : un seul bloc AMELIORATIONS, plafonné au secteur du niveau testé.
+
+### Choix de Claude à relire (non demandés tels quels)
+- **Valeurs et prix PROVISOIRES** (`docs/rd-ameliorations.md`). Bonus par niveau : +2 % puissance, +1,5 % cadence / vitesse / réactivité / PV…, prix linéaire +15 % de c0 par niveau.
+- **Valeurs entières** (perforation, charges d'esquive, choix d'atouts, relances) : 1 unité par niveau, prix géométrique, borne `max` (10 / 6 / 3 / 8) ; pas de probabilité. Atout double reste une chance (max 50 %).
+- **Dépendances** : les réglages du bouclier exigent la capacité (niveau 1), ceux de l'esquive exigent une charge, la portée de riposte exige la puissance.
+- **Réserve de secours** : une fois par mission, sous 30 % de PV, ajoute 4 PV de bouclier par niveau (peut dépasser la capacité). **Récupération** : 1 charge d'esquive revient toutes les 30 s − 0,6 s par niveau (8 s minimum). **Propulsion d'urgence** : vivacité × (1 + 10 % par niveau) pendant une esquive. L'esquive reste une invulnérabilité sans déplacement.
+
+### Reste à faire
+- Régler les valeurs avec `tools/sim_balance.py` (le bot achète via `__sim.buy`).
+- Nettoyer le code moteur devenu inatteignable (lasers, shotgun, missiles, drone, nuke, overdrive, foudre, trou noir…, stats associées dans `makeDefaultStats`) et les ressources audio/visuelles associées.
+- Décider la fonction des emplacements 4 et 5 ; le déblocage de l'ordinateur au secteur 2 donne ses réglages de choix d'atouts (relances S4, atout double S7, vision S8).
+- Seuils d'alerte de la partie infinie (`ALERT_THRESHOLDS`, `?dev`) calés sur l'ancien total de rangs : à revoir.
+
 ## Mise à jour narrative — 29 octobre 2026 (à lire avant reprise)
 
 **Référence narrative actuelle : [docs/bible-univers-v2.md](docs/bible-univers-v2.md).** Cette version prévaut sur `docs/bible-univers.md` et `docs/brief-univers-agp.md` pour toute contradiction de campagne, personnages ou révélations. Les anciennes versions sont conservées pour historique. La direction artistique reste décrite dans `docs/direction-artistique-agp.md`.

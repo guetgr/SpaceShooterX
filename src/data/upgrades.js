@@ -6,8 +6,6 @@ const UPGRADE_POOL = [
     apply:(s)=>{ s.fireRate *= 0.85; } },
   { id:'damage', icon:'💥', name:'DEGATS+', desc:'+20% de dégâts par tir', max:Infinity, category:'weapon',
     apply:(s)=>{ s.damage *= 1.20; } },
-  { id:'spread', icon:'🔱', name:'TIR MULTIPLE', desc:'+1 projectile en éventail', max:Infinity, category:'weapon',
-    apply:(s)=>{ s.spreadCount += 1; } },
   { id:'speed', icon:'🚀', name:'REACTEURS', desc:'Vaisseau plus réactif', max:Infinity, category:'engine',
     apply:(s)=>{ s.moveResponsiveness += 2.6; } },
   { id:'magnet', icon:'🧲', name:'AIMANT', desc:'Attire les cristaux de plus loin', max:Infinity, category:'utility',

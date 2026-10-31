@@ -5,36 +5,22 @@
 .an-posts{display:flex;flex-direction:column;gap:6px}.an-post-row{background:#1a2925;border:1px solid #425a4b;padding:8px}.apr-head{display:flex;align-items:center;gap:6px}.apr-head b{flex:1;font-size:7px;color:#eef1e7}.apr-mk{font-size:6px;color:#ffce27}.apr-pips{display:flex;gap:2px}.apr-pips i{width:8px;height:8px;border:1px solid #46584b;background:#142019}.apr-pips i.f{background:#ffce27;border-color:#ffce27}
 .apr-fx{display:flex;flex-wrap:wrap;gap:2px 12px;margin:6px 0;font-family:var(--vt);font-size:14px;line-height:1.1;color:#a9bdb0}.apr-fx b{color:#cddbd1;font-weight:400}
 #atelierNext .apr-buy{width:100%;min-height:44px;background:#ffce27;color:#152019;border:0;font-size:7px;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;text-align:center}#atelierNext .apr-buy:disabled{background:#26352d;color:#7f9387}.apr-buy small{flex-basis:100%;font-family:var(--vt);font-size:12px}.apr-buy .uii{vertical-align:middle}
-#atelierNext .apr-dev{margin-top:6px;width:100%;background:none;border:1px dashed #c5ac43;padding:8px;font-size:6px;color:#c5ac43}
 /* la scène reste visible quand la liste des postes défile : on voit l'aimant et le canon apparaître à l'achat */
 #atelierNext .an-scene{position:sticky;top:0;z-index:2;border-bottom:1px solid #405248}
 
-/* Baies d'équipement (garage) et ligne CHARGEMENT de la fiche d'ordre */
-.an-baies .bays{ display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:8px; }
-.bay{ display:flex; flex-direction:column; gap:3px; padding:7px; background:#1a2925; border:1px solid #425a4b; min-height:46px; }
-.bay b{ font-size:6px; color:#ffce27; letter-spacing:1px; }
-.bay span{ font-family:var(--vt); font-size:15px; line-height:1; color:#cddbd1; }
-.bay.lock{ opacity:.6; border-style:dashed; }
-.bay small{ display:block; font-size:12px; color:#82978b; }
-.bay-tech{ display:flex; align-items:center; gap:8px; margin-bottom:6px; padding:6px 8px; background:#16211d; border:1px solid #33463b; }
-.bay-tech span{ flex:1; font-family:var(--vt); font-size:16px; line-height:1; color:#cddbd1; }
-.bay-tech i{ font-style:normal; font-size:12px; color:#ffce27; }
-#atelierNext .bay-tech button{ min-height:44px; min-width:84px; background:#ffce27; color:#152019; border:0; font-size:7px; }
-.bay-none{ font-family:var(--vt); font-size:15px; color:#82978b; }
-.om-load{ align-items:center; }
-.om-mod{ margin-left:8px; min-height:30px; padding:4px 8px; font-size:6px; background:none; border:1px solid var(--agp-yellow,#ffce27); color:var(--agp-yellow,#ffce27); }
+/* Emplacements de l'atelier (garage) : un bloc par emplacement, ses améliorations dessous */
+.an-slot{ margin-bottom:8px; padding:7px; background:#16211d; border:1px solid #33463b; }
+.an-slot .as-head{ display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+.an-slot .as-no{ font-size:5px; letter-spacing:1px; color:#82978b; }
+.an-slot .as-head b{ flex:1; font-size:7px; color:#ffce27; }
+.an-slot .as-head em{ font-style:normal; font-size:5px; letter-spacing:.6px; color:#8fd19a; }
+.an-slot > p{ margin:3px 0 6px; font-family:var(--vt); font-size:14px; line-height:1.05; color:#a9bdb0; }
+.an-slot.st-reserved,.an-slot.st-locked{ opacity:.62; border-style:dashed; }
+.an-slot.st-reserved .as-head em,.an-slot.st-locked .as-head em{ color:#ffb38a; }
+.an-slot .an-post-row{ margin-top:5px; }
+.apr-desc{ margin:3px 0 0; font-family:var(--vt); font-size:13px; line-height:1.05; color:#a9bdb0; }
+.an-post-row.st-locked{ opacity:.7; }
 
-/* Camionnette réduite + zones d'équipement (baies) posées dessus */
+/* Camionnette réduite */
 #atelierNext .an-scene{ height:232px; }
 #atelierNext .an-ship{ width:78%; left:11%; bottom:-6px; }
-#atelierNext .an-zone{ position:absolute; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:0; box-sizing:border-box; cursor:pointer;
-  background:rgba(120,132,126,.38); border:1.5px dashed #c5d0c9; color:#e4ece6; font-family:var(--px); font-size:5px; letter-spacing:.5px; text-align:center; overflow:hidden; pointer-events:auto; }
-#atelierNext .an-zone:not(.lock):not(.on){ animation:anZonePulse 2.2s ease-in-out infinite; }
-#atelierNext .an-zone.on{ background:rgba(21,32,25,.72); border:1.5px solid #ffce27; }
-#atelierNext .an-zone.lock{ background:rgba(20,26,23,.62); border-color:#5e6d65; cursor:default; }
-#atelierNext .an-zone.sel{ border:2px solid #ffce27; box-shadow:0 0 10px rgba(255,206,39,.6); animation:none; }
-#atelierNext .an-zone span{ font-size:5px; line-height:1.15; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-#atelierNext .an-zone img{ image-rendering:pixelated; }
-@keyframes anZonePulse{ 50%{ background:rgba(150,162,156,.55); } }
-@media(prefers-reduced-motion:reduce){ #atelierNext .an-zone{ animation:none!important; } }
-.bay .bay-off{ margin-top:4px; align-self:flex-start; min-height:34px; padding:6px 10px; background:#2a1d1a; color:#ffb38a; border:1px solid #7a4a38; font-size:7px; letter-spacing:.5px; }

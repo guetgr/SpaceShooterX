@@ -54,7 +54,6 @@ mixin(GameScene, {
     return FUSIONS.filter(f=>{
       if ((this.upgradeCounts[f.id]||0) > 0) return false;
       if (f.cards && !f.cards.every(c=> (this.upgradeCounts[c[0]]||0) >= c[1])) return false;
-      if (f.techs && !f.techs.every(t=> this.techState[t] && this.techState[t].assembled)) return false;      // technologies emportées ET assemblées
       return true;
     });
   },

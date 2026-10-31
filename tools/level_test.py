@@ -104,7 +104,6 @@ with sync_playwright() as pw:
     # f1-f0 peut dépasser bk['total'] : les paliers de FINITION franchis ajoutent des composants à part (data/completion.js)
     check(bk.get('prime') == 30 and f1 - f0 >= bk.get('total'), '1re victoire : composants + prime AGP de 30 (%s, +%s)' % (bk, f1 - f0))
 
-    check(p.evaluate("!!(getMeta().rd.laser_auto && getMeta().rd.laser_auto.plan)"), '1re victoire de w1-l1 : le plan du LASER AUTO-CIBLEUR est acquis (R&D)')
 
     print('rejeu : pas de nouveau bonus de 1re victoire')
     start('w1-l1', "levelById('w1-l1').bossAt = 3; levelById('w1-l1').finalBoss = null; levelById('w1-l1').boss = 'dread'")

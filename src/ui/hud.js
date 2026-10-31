@@ -55,7 +55,7 @@ mixin(GameScene, {
     const shieldTrack = document.getElementById('shieldTrack');
     if (this.stats.shieldMax > 0){
       shieldTrack.style.display = '';
-      document.getElementById('shieldFill').style.width = Math.max(0,(this.shield/this.stats.shieldMax*100)) + '%';
+      document.getElementById('shieldFill').style.width = Math.min(100, Math.max(0,(this.shield/this.stats.shieldMax*100))) + '%';
     } else {
       shieldTrack.style.display = 'none';
     }

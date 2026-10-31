@@ -93,8 +93,8 @@ mixin(GameScene, {
       this.shield -= amount;
       this.shakeHud('shieldTrack', this.shield <= 0);
       this.cameras.main.flash(110, 79, 242, 255, false);
-      if (this.stats.shieldReflect > 0){
-        this.reflectShieldDamage(amount * 0.5 * this.stats.shieldReflect);
+      if (this.stats.reflectPower > 0){
+        this.reflectShieldDamage(amount * 0.5 * this.stats.reflectPower);
       }
       if (this.shield <= 0){
         this.shield = 0;
@@ -110,6 +110,12 @@ mixin(GameScene, {
 
     const finalAmount = amount * (1 - this.stats.armorPct);
     this.hp -= finalAmount;
+    // RESERVE DE SECOURS : une fois par mission, quand les PV passent sous 30 %, la réserve se libère en bouclier (peut dépasser la capacité)
+    if (this.stats.shieldReserve > 0 && !this.reserveUsed && this.hp > 0 && this.hp < this.stats.maxHp*0.30){
+      this.reserveUsed = true; this.shield += this.stats.shieldReserve; this.shieldRegenDelay = 0;
+      this.cameras.main.flash(160, 79, 242, 255, false); sfx.shieldHit();
+      this.notice('RESERVE DE SECOURS', '+' + this.stats.shieldReserve + ' de bouclier');
+    }
     if (this.combo.n > 0) this.bankCombo(true);
     if (!this.lastStandUsed && this.hp > 0 && this.hp <= this.stats.maxHp*0.12 && this.shield <= 0 && !(this.odShield > 0)) this.lastStand();    // seulement quand il ne reste que 12% de VIE et plus aucun bouclier
     this.shakeHud('hpTrack', this.hp < this.stats.maxHp*0.25);
@@ -134,7 +140,7 @@ mixin(GameScene, {
 
   reflectShieldDamage(amount){
     sfx.reflect();
-    const lv = Math.max(1, this.stats.shieldReflect || 1), radius = 150 + 40*lv, dmg = 14*lv + amount*(1 + 0.08*(this.alertLevel-1));
+    const lv = this.stats.reflectPower, radius = 150 + this.stats.reflectRange, dmg = 14*lv + amount*(1 + 0.08*(this.alertLevel-1));
     const px = this.player.x, py = this.player.y;
     const ring = this.add.image(px, py, 'shockRing').setDepth(9).setBlendMode(Phaser.BlendModes.ADD).setTint(0x7fe8ff).setAlpha(0.95).setScale(0.12);
     this.tweens.add({ targets:ring, scaleX:radius*2/256, scaleY:radius*2/256, alpha:0, duration:420, ease:'Quad.easeOut', onComplete:()=> ring.destroy() });
@@ -157,7 +163,7 @@ mixin(GameScene, {
   tryDodge(){
     if (!this.running || this.dodgeCharges <= 0) return;
     this.dodgeCharges -= 1;
-    this.dodgeInvuln = 400 + (this.stats.secondSouffle>0 ? 300*this.stats.secondSouffle : 0);
+    this.dodgeInvuln = this.stats.dodgeDur;
     this.cameras.main.flash(120, 79, 242, 255, false);
     this.spawnHitParticles(this.player.x, this.player.y, 10);
     sfx.dodge();

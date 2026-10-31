@@ -1,13 +1,14 @@
 "use strict";
-// Méta-progression (sauvegarde permanente v3) : composants, pièces de secteur, atelier, R&D (rd), chargement ; niveau d'alerte de la partie infinie.
-// Les sauvegardes d'avant la R&D (`ssx_meta_v2`, ou v3 sans clé `rd`) sont lues et converties par metaFromLegacy : l'ancien arbre de compétences est remboursé en entier.
+// Méta-progression (sauvegarde permanente, clé `ssx_meta_v3`, format `v:4`) : composants ◆ et niveaux d'améliorations R&D / atelier (`niv`, data/rd.js) ; niveau d'alerte de la partie infinie.
+// Les sauvegardes d'avant (v2 { fragments, tree }, v3 { atelier Mk I à V, rd technologies, chargement }) sont converties UNE fois par metaFromLegacy : tout ce qu'elles avaient payé
+// (arbre de compétences, postes d'atelier, technologies) est remboursé en composants ◆ au prix payé, les composants et la progression de campagne (ssx_worlds_v1) sont intacts.
 
 const META_KEY = 'ssx_meta_v3';
 const META_KEY_V2 = 'ssx_meta_v2';
+const META_VERSION = 4;
 
 function defaultMeta(){
-  const atelier = {}; ATELIER_POSTS.forEach(p=>{ atelier[p.id] = 0; });
-  return { v:3, composants:0, pieces:{ s1:0, s2:0, s3:0, s4:0, s5:0 }, atelier, rd:{}, chargement:[], notice:null };
+  return { v:META_VERSION, composants:0, niv:{}, notice:null };
 }
 
 // entier >= 0 tiré d'une valeur de sauvegarde (nombre ou texte numérique), 0 sinon
@@ -18,13 +19,19 @@ function normalizeMeta(raw){
   const m = defaultMeta();
   if (!raw || typeof raw !== 'object') return m;
   m.composants = metaNum(raw.composants);
-  Object.keys(m.pieces).forEach(k=>{ m.pieces[k] = metaNum(raw.pieces && raw.pieces[k]); });
-  Object.keys(m.atelier).forEach(k=>{ m.atelier[k] = atelierMk(raw.atelier, k); });
-  if (raw.rd && typeof raw.rd === 'object') Object.keys(raw.rd).forEach(k=>{ if (TECH_BY_ID[k]) m.rd[k] = rdEntry(raw, k); });
-  if (Array.isArray(raw.chargement)) raw.chargement.forEach(id=>{ if (typeof id === 'string' && TECH_BY_ID[id] && m.chargement.indexOf(id) < 0) m.chargement.push(id); });
+  RD_UPGRADES.forEach(u=>{ const L = rdLevel(raw, u.id); if (L > 0) m.niv[u.id] = L; });
   m.notice = raw.notice === 'restructuration' ? raw.notice : null;
   return m;
 }
+
+// Anciens prix, figés pour rembourser : postes d'atelier Mk I à V, technologies (prototype + rangs + spécialisation) par secteur.
+const LEGACY_ATELIER_COSTS = [40, 70, 120, 200, 340];
+const LEGACY_TECH_PROTO = { 1:30, 2:60, 3:100, 4:150, 5:200 }, LEGACY_TECH_RANGMUL = { 1:1, 2:1.5, 3:2, 4:2.5, 5:3 }, LEGACY_TECH_SPE = { 1:150, 2:250, 3:400, 4:600, 5:800 };
+// technologie : [secteur, rangs maximum, a une spécialisation]
+const LEGACY_TECHS = { laser_continu:[1,9,1], laser_auto:[1,5,1], missiles_guidage:[1,14,1], bouclier_reactif:[1,6,0], ricochets:[1,2,0],
+  drone:[2,8,1], missiles_demolition:[2,17,1], blindage_lourd:[2,9,1], nano_reparation:[2,18,1], benne:[2,32,1],
+  overdrive:[3,12,0], canon_experimental:[3,8,1], arc_electrique:[3,2,1], champ_lent:[3,3,0], pulsar:[3,3,0],
+  trou_noir:[4,2,1], eclats:[4,2,0], rapatriement:[5,3,1] };
 
 // Ancien arbre de compétences (supprimé) : coûts figés { nœud: [coût du rang 1, pas par rang, rang max] }, pour rembourser les sauvegardes qui en ont encore.
 const TREE_LEGACY_COSTS = { t_multi:[10,8,4], t_perforant:[10,8,3], t_percebouclier:[12,10,1], t_velocite:[8,6,4], t_laser_c:[30,0,1], t_laser_c_portee:[10,8,4],
@@ -55,13 +62,28 @@ function treeLegacyRefund(tree){
   return sum;
 }
 
-// sauvegarde d'avant la R&D (v2 { fragments, tree }, ou v3 sans clé `rd`) -> méta actuelle : tout l'ancien arbre est remboursé en composants,
-// les plans de technologie sont accordés pour chaque ordre déjà gagné
+// composants rendus par les achats d'une sauvegarde v3 d'avant la refonte (postes d'atelier Mk, technologies de la R&D)
+function legacyV3Refund(raw){
+  let sum = 0;
+  Object.keys(raw.atelier || {}).forEach(id=>{
+    const mk = Math.min(LEGACY_ATELIER_COSTS.length, metaNum(raw.atelier[id]));
+    for (let i = 0; i < mk; i++) sum += LEGACY_ATELIER_COSTS[i];
+  });
+  Object.keys(raw.rd || {}).forEach(id=>{
+    const t = LEGACY_TECHS[id], e = raw.rd[id]; if (!t || !e || typeof e !== 'object') return;
+    if (!e.proto && !metaNum(e.rang) && !e.spe) return;
+    sum += LEGACY_TECH_PROTO[t[0]];
+    for (let r = 0, n = Math.min(t[1], metaNum(e.rang)); r < n; r++) sum += Math.round((25 + 15*r)*LEGACY_TECH_RANGMUL[t[0]]);
+    if (e.spe && t[2]) sum += LEGACY_TECH_SPE[t[0]];
+  });
+  return sum;
+}
+
+// ancienne sauvegarde (v2, ou v3 d'avant la refonte) -> méta v4 : composants + tous les achats remboursés, niveaux d'amélioration à zéro, un avis « restructuration »
 function metaFromLegacy(raw, composants){
-  const refund = treeLegacyRefund(raw.tree);
-  const m = normalizeMeta(Object.assign({}, raw, { composants: composants + refund }));
-  Object.keys(getWorldProgress().levels).forEach(id=>{ if (TECH_PLAN_LEVEL[id]) rdGrantPlan(m, TECH_PLAN_LEVEL[id]); });
-  if (refund > 0) m.notice = 'restructuration';
+  const refund = treeLegacyRefund(raw.tree) + legacyV3Refund(raw);
+  const m = normalizeMeta({ composants: composants + refund });
+  if (refund > 0 || raw.notice === 'restructuration') m.notice = 'restructuration';
   return m;
 }
 
@@ -69,7 +91,7 @@ function metaRead(key){ try { const o = JSON.parse(localStorage.getItem(key) || 
 
 function getMeta(){
   const v3 = metaRead(META_KEY);
-  if (v3) return ('rd' in v3) ? normalizeMeta(v3) : metaFromLegacy(v3, metaNum(v3.composants));
+  if (v3) return (v3.v >= META_VERSION) ? normalizeMeta(v3) : metaFromLegacy(v3, metaNum(v3.composants));
   const v2 = metaRead(META_KEY_V2);
   return v2 ? metaFromLegacy(v2, metaNum(v2.fragments)) : defaultMeta();
 }
@@ -78,11 +100,11 @@ function setMeta(meta){
   try { localStorage.setItem(META_KEY, JSON.stringify(normalizeMeta(meta))); } catch(e){ /* ignore */ }
 }
 
-// au démarrage : écrit la méta convertie (voir metaFromLegacy), une seule fois (renvoie true si une conversion a eu lieu)
+// au démarrage : écrit la méta convertie (voir metaFromLegacy), une seule fois (renvoie true si une conversion a eu lieu) ; une sauvegarde déjà en v4 n'est jamais retouchée
 function migrateMeta(){
   try {
     const v3 = metaRead(META_KEY);
-    if (v3 && 'rd' in v3) return false;                                                                                    // déjà convertie
+    if (v3 && v3.v >= META_VERSION) return false;                                                                         // déjà convertie
     if (!v3 && (localStorage.getItem(META_KEY) !== null || !metaRead(META_KEY_V2))) return false;          // v3 illisible, ou rien à convertir
     setMeta(getMeta());
     return true;
@@ -90,13 +112,13 @@ function migrateMeta(){
 }
 
 // "Niveau d'alerte" de la partie infinie (?dev) — plus la camionnette et l'arbre sont investis, plus les mobs sont méchants
-// points = rangs de R&D + 4 par Mk d'atelier ; en niveau, la menace est fixée par le niveau (GameScene)
+// points = niveaux d'améliorations R&D et atelier achetés ; en niveau, la menace est fixée par le niveau (GameScene)
 const ALERT_THRESHOLDS = [6, 14, 24, 36, 50, 90, 140, 170, 200, 230, 260, 290, 342, 381];   // le niveau 15 = l'arbre complet
 const ALERT_CAP = 20;
 
 const sumRanks = o=> Object.values(o || {}).reduce((a, v)=> a + v, 0);
 
-function metaPoints(meta){ return 4*sumRanks(meta.atelier) + Object.values(meta.rd || {}).reduce((a, e)=> a + (e.rang || 0), 0); }
+function metaPoints(meta){ return sumRanks(meta.niv); }
 
 function computeAlertLevel(points){
   let lvl = 1;

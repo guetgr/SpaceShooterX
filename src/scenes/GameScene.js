@@ -59,17 +59,15 @@ class GameScene extends Phaser.Scene{
     if (this.pacts.indexOf('p_fragile') >= 0) this.stats.maxHp *= 0.6;
     if (this.pacts.indexOf('p_sansshield') >= 0) this.stats.shieldMax = 0;
     this.achv.maxAlert = Math.max(this.achv.maxAlert || 0, this.alertLevel);
-    // technologies (data/techs.js) : le chargement est lu ici, mais RIEN n'est actif au départ — chaque technologie s'assemble par une carte (techAssemble)
-    // qui pose l'arme, les missiles, le drone… et les indicateurs ci-dessous. Le tutoriel aussi : la toute 1re fois, rien n'est encore équipé (chargement vide) ;
-    // une fois qu'on a progressé en R&D, rejouer le tuto reflète le chargement en cours, comme les autres ordres (décision de Guet, 27 oct. 2026).
+    // armes et drapeaux du moteur (lasers, drone, missiles…) : plus aucun système ne les active, ils restent à faux
     this.laserDestructeurOwned = this.reticuleOmniscientOwned = this.fragmentationOwned = this.nukeOwned = this.swarmMissilesOwned = false;
     this.phoenixOwned = this.doublePhoenixOwned = this.droneOwned = this.droneSwarmOwned = this.sangsueOwned = false;
-    this.techState = {};
-    loadoutSanitize(this.meta, slotsOpen()).forEach(id=>{ const e = rdEntry(this.meta, id); this.techState[id] = { rang:e.rang, assembled:false, spe:e.spe, picks:0 }; });
     this.laserBeamTimer = 0;
     this.phoenixCharges = 0;
     this.dodgeCharges = this.stats.dodgeCharges;
-    this.autoCollectTimer = 8000;
+    this.dodgeRecoverT = 0;                // RECUPERATION DES CHARGES : temps écoulé vers la prochaine charge (ms)
+    this.reserveUsed = false;              // RESERVE DE SECOURS : une seule fois par mission
+    this.autoCollectTimer = this.stats.autoCollectMs;
     this.nukeTimer = 6000;
     this.swarmMissileTimer = 0;
     this.droneAngle = 0;
@@ -142,7 +140,7 @@ class GameScene extends Phaser.Scene{
       this.shieldAura.setTexture('aura_' + startKey);
     }
 
-    this.droneSprites = [];                 // créés à l'assemblage du DRONE SATELLITE (techSync)
+    this.droneSprites = [];
 
     // input drag — worldX/Y tient compte du zoom de la caméra, contrairement à x/y bruts
     this.input.on('pointerdown', (p)=>{

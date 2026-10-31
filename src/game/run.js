@@ -73,7 +73,6 @@ mixin(GameScene, {
     let rec = null, prime = 0;
     if (this.lvDef && victory){
       rec = recordLevelClear(this.lvDef.id, this.score);
-      if (rec && rec.plan) rdGrantPlan(this.meta, rec.plan);      // plan de technologie de l'ordre (data/techs.js), inscrit dans la meta de la partie avant son enregistrement
       prime = composantsPrime(this.lvDef.reward, !!(rec && rec.first));
     }
     // FINITION de l'ordre (barre de l'accueil) : enregistrée victoire OU défaite, comme le tuto

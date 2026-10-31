@@ -55,8 +55,7 @@ function firstOpenLevel(p){
   return null;
 }
 
-// enregistre une victoire. Renvoie { first, unlockedLevel, unlockedWorld, plan } (ids ou null) pour que l'écran de résultat annonce les déblocages ;
-// `plan` = technologie dont l'ordre accorde le plan à la 1re victoire (TECH_PLAN_LEVEL) : c'est l'appelant qui l'inscrit dans SA meta (rdGrantPlan), pour ne pas la périmer.
+// enregistre une victoire. Renvoie { first, unlockedLevel, unlockedWorld } (ids ou null) pour que l'écran de résultat annonce les déblocages ;
 function recordLevelClear(id, score){
   const l = levelById(id); if (!l) return null;
   const p = getWorldProgress(), before = p.levels[id];
@@ -67,7 +66,7 @@ function recordLevelClear(id, score){
   p.levels[id] = e; p.last = id;
   setWorldProgress(p);
   const opened = nxt && !wasOpen && isLevelUnlocked(nxt.id, p);
-  return { first: !before, unlockedLevel: opened && nxt.world === l.world ? nxt.id : null, unlockedWorld: opened && nxt.world !== l.world ? nxt.world : null, plan: !before ? (TECH_PLAN_LEVEL[id] || null) : null };
+  return { first: !before, unlockedLevel: opened && nxt.world === l.world ? nxt.id : null, unlockedWorld: opened && nxt.world !== l.world ? nxt.world : null };
 }
 
 function markWorldSeen(key){ const p = getWorldProgress(); p.seen[key] = 1; setWorldProgress(p); }      // animations de déverrouillage jouées une seule fois

@@ -70,13 +70,22 @@ function makeDefaultStats(){
     droneDamageMul: 1,
     sangsueRadiusBonus: 0,
     sangsueHealMul: 1,
+    // R&D et atelier (data/rd.js) : tout démarre neutre
+    doubleShotMul: 1,      // DOUBLE TIR : part des dégâts du 2e projectile
+    shieldRegenMul: 1,     // vitesse de recharge du bouclier
+    reflectPower: 0,       // puissance de l'onde de riposte (0 = pas de riposte)
+    reflectRange: 0,       // rayon supplémentaire de l'onde de riposte (px)
+    shieldReserve: 0,      // bouclier libéré une fois par mission quand les PV passent sous 30 %
+    dodgeDur: 400,         // durée d'invulnérabilité d'une esquive (ms)
+    dodgeRecoverMs: 0,     // délai pour récupérer une charge d'esquive (0 = jamais)
+    dodgeBoost: 0,         // vivacité supplémentaire pendant une esquive
+    autoCollectMs: 8000,   // intervalle de la collecte automatique (ms)
   };
 }
 
-// atouts GLOBAUX permanents : l'atelier (postes Mk I à V), appliqué à chaque mission et au tutoriel.
-// Les technologies emportées (R&D) n'y sont PAS : elles s'assemblent en mission par des cartes (GameScene.techAssemble).
+// atouts GLOBAUX permanents : R&D et atelier (data/rd.js), appliqués une seule fois à chaque mission et au tutoriel.
 function applyGlobalGear(stats, meta){
-  atelierApply(stats, meta.atelier);
+  rdApply(stats, meta);
 }
 
 function computeStartingStatsPreview(){

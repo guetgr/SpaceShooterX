@@ -34,12 +34,12 @@ uiIconsInit();                                                       // icônes 
 function startGame(){
   CloudSave.boot(()=>{
     if (window.__ssxStarted) return; window.__ssxStarted = true;
-    migrateMeta();                                                    // sauvegarde v2 -> v3 (data/meta.js), une seule fois
+    migrateMeta();                                                    // sauvegardes v2 et v3 -> v4 (data/meta.js), une seule fois
     fitUi();
     const game = new Phaser.Game(config); window.__phaserGame = game; fitUi();
     if (DEV_SEE_ALL){                       // accès console / tests automatiques (tools/smoke_test.py)
       window.__game = game;
-      window.__T = { TECHS, UPGRADE_POOL, RELICS, FUSIONS, sfx };
+      window.__T = { RD_UPGRADES, UPGRADE_POOL, RELICS, FUSIONS, sfx };
     }
   });
 }

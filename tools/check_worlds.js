@@ -7,7 +7,7 @@ const store = {};
 const ctx = vm.createContext({ console, localStorage:{ getItem:k=> (k in store ? store[k] : null), setItem:(k,v)=>{ store[k] = String(v); }, removeItem:k=>{ delete store[k]; } } });
 const load = f=> vm.runInContext(fs.readFileSync(path.join(R, 'src', f), 'utf8'), ctx, { filename:f });
 const order = JSON.parse(fs.readFileSync(path.join(R, 'src/scripts.json'), 'utf8'));
-['data/events.js', 'data/bosses.js', 'data/player-stats.js', 'data/atelier.js', 'data/techs.js', 'data/meta.js'].forEach(load);
+['data/events.js', 'data/bosses.js', 'data/player-stats.js', 'data/rd.js', 'data/meta.js'].forEach(load);
 order.filter(f=> f === 'data/worlds.js' || f.startsWith('data/worlds/') || f === 'data/world-progress.js').forEach(load);
 const run = s=> vm.runInContext(s, ctx);
 

@@ -46,18 +46,14 @@ const AGP_LORE = {
     'PV MAX': 'INTEGRITE COQUE', 'BOUCLIER': 'CHAMP DE SECURITE', 'DEGATS PAR TIR': 'CHARGE PAR TIR',
     'CADENCE': 'CADENCE DE TIR', 'PROJECTILES': 'BUSES ACTIVES', 'ARMURE': 'ASSURANCE DOMMAGES',
   },
-  // R&D : plan récupéré, recherche, baie pleine
+  // R&D : recherche achetée
   rd: {
-    plan: "Document technique récupéré. Il ne vous appartient pas. Moi non plus.",
     research: "Cette modification annule immédiatement la garantie constructeur.",
-    loadoutFull: "Capacité de la baie atteinte. Veuillez renoncer à quelque chose.",
-    arme: "Une seule ARME par chargement. Le règlement est sans appel.",
-    rampe: "Une seule RAMPE de missiles par chargement. Le règlement est sans appel.",
   },
   // garage : achats d'atelier, verrous, restructuration du catalogue
   atelier: {
     buy: "Modification non homologuée enregistrée. Votre véhicule n'est plus couvert.",
-    migration: "Le catalogue R&D a été restructuré. Vos dépenses vous ont été recréditées. Exceptionnellement.",
+    migration: "Le catalogue R&D a été restructuré. Toutes vos dépenses vous ont été recréditées, au prix payé. Exceptionnellement.",
   },
 };
 

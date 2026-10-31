@@ -151,22 +151,8 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `arW` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `arWound` | méthode | `src/bosses/araignee.js` | `GameScene` |
 | `ASHIELD_EXCL` | const | `src/core/constants.js` |  |
-| `assemblyCards` | méthode | `src/player/progression.js` | `GameScene` |
-| `ATELIER_COSTS` | const | `src/data/atelier.js` |  |
-| `ATELIER_MAX` | const | `src/data/atelier.js` |  |
-| `ATELIER_OPS` | const | `src/data/atelier.js` |  |
-| `ATELIER_PIECES` | const | `src/data/atelier.js` |  |
-| `ATELIER_POST_BY_ID` | const | `src/data/atelier.js` |  |
-| `ATELIER_POSTS` | const | `src/data/atelier.js` |  |
-| `atelierApply` | fonction | `src/data/atelier.js` |  |
-| `atelierApplyRow` | fonction | `src/data/atelier.js` |  |
-| `atelierBuy` | fonction | `src/data/atelier.js` |  |
-| `atelierCanBuy` | fonction | `src/data/atelier.js` |  |
+| `ATELIER_SLOTS` | const | `src/data/rd.js` |  |
 | `AtelierGarage` | const | `src/home/garage.js` |  |
-| `atelierMk` | fonction | `src/data/atelier.js` |  |
-| `atelierNextCost` | fonction | `src/data/atelier.js` |  |
-| `atelierRows` | fonction | `src/data/atelier.js` |  |
-| `atelierShows` | fonction | `src/data/atelier.js` |  |
 | `AURA_PAD` | const | `src/gfx/procedural.js` |  |
 | `auraTexFor` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `B64_DRDEATH` | const | `src/data/image-assets.js` |  |
@@ -480,7 +466,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `firstOpenLevel` | fonction | `src/data/world-progress.js` |  |
 | `fitBgToView` | méthode | `src/world/background.js` | `GameScene` |
 | `fitUi` | fonction | `src/main.js` |  |
-| `flag` | const | `src/data/techs.js` |  |
 | `FLANK_TYPES` | const | `src/core/constants.js` |  |
 | `flipVortex` | méthode | `src/events/core.js` | `GameScene` |
 | `focusOrbitalLevel` | méthode | `src/home/orbital.js` | `HomeScene` |
@@ -601,6 +586,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LB_KEY` | const | `src/data/leaderboard.js` |  |
 | `leadAngle` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `leaveHome` | méthode | `src/home/ui.js` | `HomeScene` |
+| `LEGACY_ATELIER_COSTS` | const | `src/data/meta.js` |  |
+| `LEGACY_TECH_PROTO` | const | `src/data/meta.js` |  |
+| `LEGACY_TECHS` | const | `src/data/meta.js` |  |
+| `legacyV3Refund` | fonction | `src/data/meta.js` |  |
 | `LEVEL_BASE` | const | `src/data/tuning-apply.js` |  |
 | `LEVEL_COMPLETION` | const | `src/data/completion.js` |  |
 | `LEVEL_FILES` | const | `src/data/worlds/level-data.js` |  |
@@ -620,10 +609,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `levelZoom` | méthode | `src/game/level.js` | `GameScene` |
 | `load` | méthode | `src/audio/music.js` | `FileMusic` |
 | `loadFiles` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
-| `loadoutCheck` | fonction | `src/data/techs.js` |  |
-| `loadoutLine` | méthode | `src/home/ui.js` | `HomeScene` |
-| `loadoutSanitize` | fonction | `src/data/techs.js` |  |
-| `loadoutToggle` | fonction | `src/data/techs.js` |  |
 | `loopSet` | méthode | `src/audio/sfx-engine.js` | `Sfx` |
 | `LT_B64` | const | `src/data/image-assets.js` |  |
 | `makeBossPart` | méthode | `src/bosses/parts.js` | `GameScene` |
@@ -632,6 +617,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `markWorldSeen` | fonction | `src/data/world-progress.js` |  |
 | `META_KEY` | const | `src/data/meta.js` |  |
 | `META_KEY_V2` | const | `src/data/meta.js` |  |
+| `META_VERSION` | const | `src/data/meta.js` |  |
 | `metaFromLegacy` | fonction | `src/data/meta.js` |  |
 | `metaNum` | fonction | `src/data/meta.js` |  |
 | `metaPoints` | fonction | `src/data/meta.js` |  |
@@ -772,6 +758,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `PARTICLE_PAL_LIST` | const | `src/gfx/builders.js` |  |
 | `PARTICLE_ROWS` | const | `src/gfx/builders.js` |  |
 | `pauseGearItems` | méthode | `src/ui/pages.js` | `GameScene` |
+| `pc` | const | `src/data/rd.js` |  |
 | `PD` | const | `src/bosses/pdg.js` |  |
 | `PD_FX_B64` | const | `src/data/image-assets.js` |  |
 | `PD_SHEET` | const | `src/bosses/pdg.js` |  |
@@ -875,19 +862,29 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `rawGet` | fonction | `src/core/cloud-save.js` |  |
 | `rawRemove` | fonction | `src/core/cloud-save.js` |  |
 | `rawSet` | fonction | `src/core/cloud-save.js` |  |
-| `rdApplyRanks` | fonction | `src/data/techs.js` |  |
+| `RD_BY_ID` | const | `src/data/rd.js` |  |
+| `RD_PER_WORLD` | const | `src/data/rd.js` |  |
+| `RD_TABS` | const | `src/data/rd.js` |  |
+| `RD_UPGRADES` | const | `src/data/rd.js` |  |
+| `RD_WORLD_MAX` | const | `src/data/rd.js` |  |
+| `rdAbsMax` | const | `src/data/rd.js` |  |
+| `rdAnyBuyable` | fonction | `src/data/rd.js` |  |
+| `rdApply` | fonction | `src/data/rd.js` |  |
 | `rdButton` | méthode | `src/ui/rd-ui.js` | `GameScene` |
-| `rdBuy` | fonction | `src/data/techs.js` |  |
+| `rdBuy` | fonction | `src/data/rd.js` |  |
 | `rdBuyAction` | méthode | `src/ui/rd-ui.js` | `GameScene` |
-| `rdCanBuy` | fonction | `src/data/techs.js` |  |
+| `rdCanBuy` | fonction | `src/data/rd.js` |  |
+| `rdCap` | fonction | `src/data/rd.js` |  |
 | `rdCardHtml` | méthode | `src/ui/rd-ui.js` | `GameScene` |
-| `rdEntry` | fonction | `src/data/techs.js` |  |
-| `rdGrantPlan` | fonction | `src/data/techs.js` |  |
+| `rdInvested` | fonction | `src/data/rd.js` |  |
+| `rdLevel` | fonction | `src/data/rd.js` |  |
 | `rdMoreUpdate` | méthode | `src/ui/rd-ui.js` | `GameScene` |
-| `rdNextCost` | fonction | `src/data/techs.js` |  |
-| `rdNextStep` | fonction | `src/data/techs.js` |  |
-| `rdUpgradeAt` | fonction | `src/data/techs.js` |  |
-| `rdWorld` | méthode | `src/ui/rd-ui.js` | `GameScene` |
+| `rdOfGroup` | const | `src/data/rd.js` |  |
+| `rdPrice` | fonction | `src/data/rd.js` |  |
+| `rdTab` | méthode | `src/ui/rd-ui.js` | `GameScene` |
+| `rdU` | fonction | `src/data/rd.js` |  |
+| `rdView` | fonction | `src/data/rd.js` |  |
+| `rdWorldReached` | fonction | `src/data/rd.js` |  |
 | `realBossAlive` | méthode | `src/events/core.js` | `GameScene` |
 | `recordCompletion` | fonction | `src/data/completion.js` |  |
 | `recordLevelClear` | fonction | `src/data/world-progress.js` |  |
@@ -920,7 +917,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `rnd` | const | `src/audio/sfx-engine.js` |  |
 | `rollDamage` | méthode | `src/player/weapons.js` | `GameScene` |
 | `rollFireCd` | méthode | `src/enemies/ai.js` | `GameScene` |
-| `ROMAN` | const | `src/data/techs.js` |  |
 | `RU_DEATH_B64` | const | `src/data/image-assets.js` |  |
 | `RU_P1_B64` | const | `src/data/image-assets.js` |  |
 | `RU_P2_B64` | const | `src/data/image-assets.js` |  |
@@ -1036,7 +1032,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `SKIN_KEY` | const | `src/data/ship-skins.js` |  |
 | `sliceIntoFrames` | méthode | `src/scenes/BootScene.js` | `BootScene` |
 | `slotNow` | méthode | `src/audio/music.js` | `FileMusic` |
-| `slotsOpen` | fonction | `src/data/techs.js` |  |
 | `SNIPER_BULLET_B64` | const | `src/data/image-assets.js` |  |
 | `SNIPER_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `SNIPER_IDLE_B64` | const | `src/data/image-assets.js` |  |
@@ -1117,15 +1112,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `TANK_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `TANK_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `tapGalaxy` | méthode | `src/home/galaxy.js` | `HomeScene` |
-| `TECH_BY_ID` | const | `src/data/techs.js` |  |
-| `TECH_COST` | const | `src/data/techs.js` |  |
-| `techAssemble` | méthode | `src/player/progression.js` | `GameScene` |
-| `techAvailable` | fonction | `src/data/techs.js` |  |
-| `techCards` | méthode | `src/player/progression.js` | `GameScene` |
-| `techEffect` | méthode | `src/player/progression.js` | `GameScene` |
-| `techMaxRang` | const | `src/data/techs.js` |  |
-| `TECHS` | const | `src/data/techs.js` |  |
-| `techSync` | méthode | `src/player/progression.js` | `GameScene` |
 | `throwEmp` | méthode | `src/events/types.js` | `GameScene` |
 | `tick` | méthode | `src/audio/music.js` | `FileMusic` |
 | `tickCorridor` | méthode | `src/events/types.js` | `GameScene` |
@@ -1185,7 +1171,6 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `UI_ICONS` | const | `src/ui/ui-icons.js` |  |
 | `uiIco` | fonction | `src/ui/ui-icons.js` |  |
 | `uiIconsInit` | fonction | `src/ui/ui-icons.js` |  |
-| `up` | const | `src/data/techs.js` |  |
 | `update` | méthode | `src/game/loop.js` | `GameScene` |
 | `update` | méthode | `src/scenes/HomeScene.js` | `HomeScene` |
 | `updateBgDecor` | méthode | `src/world/background.js` | `GameScene` |
@@ -1302,4 +1287,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1295 symboles.
+1280 symboles.

@@ -25,7 +25,7 @@ Dernier script, **`src/main.js`** : `config` Phaser (400x700, `Scale.NONE`, scè
 `BootScene.create` fabrique textures et animations puis `scene.start('game')` ; `GameScene.create` sans `autoStart` appelle `showStartScreen()`, qui **lance** la scène `home`.
 
 ### Accueil ↔ niveau
-- Accueil : `HomeScene` (`scenes/HomeScene.js`) + méthodes dans `home/` (`ui.js` panneaux HTML `#home`, `galaxy.js` carte stellaire, `background.js` décor). Trois pages : HANGAR · CARTE · ARBRE (R&D = `ui/tree-ui.js`, méthodes de GameScene).
+- Accueil : `HomeScene` (`scenes/HomeScene.js`) + méthodes dans `home/` (`ui.js` panneaux HTML `#home`, `galaxy.js` carte stellaire, `background.js` décor). Trois pages : ATELIER (`home/garage.js`) · CARTE · R&D (`ui/rd-ui.js`, méthodes de GameScene).
 - `HomeScene.launchLevel` (`home/ui.js`) → `Motion.cover` (rideau GSAP ; repli : fondu caméra) → `gs.scene.restart({autoStart:true, levelId})` ou `{autoStart:true, tuto:true}` pour le tuto (niveau `w1-tuto`).
 - `GameScene.create` : stats, atouts globaux, pactes, DOM ; avec `autoStart` il **endort** l'accueil (`scene.sleep('home')`) puis `startRun()` (`game/run.js`).
 - Déroulé : intro de décollage (`game/intro.js`, état `introActive`/`introT`) → boucle (`game/loop.js`, `update`) → objectif et victoire (`game/level.js` : `levelInit/levelUpdate/levelProgress/levelWin`, qui appelle `endRun(true)` après 2,3 s) ou mort du vaisseau (`player/damage.js` → `endRun`).
@@ -34,11 +34,11 @@ Dernier script, **`src/main.js`** : `config` Phaser (400x700, `Scale.NONE`, scè
 - Partie infinie et bac à sable : `?dev` seulement (boutons DEV de `ui/dom.js`, `dev/sandbox.js`).
 
 ### Chaîne des stats (de la base au combat)
-`makeDefaultStats` (`data/player-stats.js`) → modules R&D : `applyTree` dans `GameScene.create` (`node.apply(stats, rang)` pour chaque nœud de `ALL_TREE_NODES`, `data/skill-tree.js`) → succès `applyAchvBuffs` (`data/achievements.js`) → ascension `applyAscension` (`data/meta.js`) → pactes → en partie : cartes `UPGRADE_POOL` (`data/upgrades.js`, tirées par `levelUp` dans `player/progression.js`) → reliques et fusions (`data/relics.js`, `data/fusions.js`, `systems/relics-fusions.js`).
+`makeDefaultStats` (`data/player-stats.js`) → R&D et atelier : `applyGlobalGear` → `rdApply` dans `GameScene.create` (`data/rd.js`, niveaux dans `meta.niv`) → succès `applyAchvBuffs` (`data/achievements.js`) → ascension `applyAscension` (`data/meta.js`) → pactes → en partie : cartes `UPGRADE_POOL` (`data/upgrades.js`, tirées par `levelUp` dans `player/progression.js`) → reliques et fusions (`data/relics.js`, `data/fusions.js`, `systems/relics-fusions.js`).
 Tuto : stats repartent de `makeDefaultStats` (dégâts 14) + `applyTree` **seulement** (ni succès, ni ascension).
 
 ### Les deux familles d'atouts (ne jamais les mélanger dans une liste)
-- **GLOBAUX** = modules du catalogue R&D, permanents, appliqués à chaque mission (`treeState`, `treeBonus`).
+- **GLOBAUX** = améliorations R&D et atelier (`data/rd.js`), permanentes, appliquées à chaque mission.
 - **DE MISSION** = cartes, fusions, reliques choisies en partie, perdus en fin de mission.
 Affichage : pause (onglets ATOUTS GLOBAUX / DE MISSION, `ui/pages.js`), transmission de début de mission (`normaStart`), rapport de fin (`endRun`), atelier. Test : `perks_test.py`. Les armes débloquées par l'arbre ne sont que **proposées** en cartes (flags `…Owned` dans `GameScene.create`).
 
@@ -65,7 +65,7 @@ Chaque mission est un JSON `src/data/levels/<id>.json` (16, `schemaVersion` 2) ;
 | Ordre de chargement / rôle d'un fichier | `docs/carte/fichiers.md`, `src/scripts.json` |
 | Où est la fonction/constante X | `docs/carte/symboles.md` |
 | Mondes et niveaux (ordres de mission) | `src/data/worlds/*.js`, `data/worlds.js`, déblocages `data/world-progress.js` |
-| Compétences R&D | `data/skill-tree.js` ; UI `ui/tree-ui.js` ; doc `docs/arbre-competences.md` |
+| R&D et atelier | `data/rd.js` ; UI `ui/rd-ui.js` (R&D) et `home/garage.js` (atelier) ; tableau `docs/rd-ameliorations.md` |
 | Cartes de montée de niveau | `data/upgrades.js` ; tirage `player/progression.js` |
 | Reliques / fusions | `data/relics.js`, `data/fusions.js`, `systems/relics-fusions.js` |
 | Ennemis, escouades, boucliers, IA | `enemies/` (ex. `squads-shields.js`), art `data/enemy-art.js` |

@@ -1,7 +1,7 @@
 "use strict";
 // Laboratoire de test des niveaux (docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md). Réservé au serveur local (tools/serve.py).
 //  - accueil normal : un bouton LABORATOIRE (si /__editor/ping répond) ouvre l'accueil en mode ?lab (sauvegarde EN MÉMOIRE, voir boot.js) ;
-//  - ?lab : un écran choisit le niveau (version publiée ou de l'historique de l'éditeur), l'équipement (atelier, technologies) et affiche le budget de composants ;
+//  - ?lab : un écran choisit le niveau (version publiée ou de l'historique de l'éditeur), l'équipement (améliorations R&D et atelier) et affiche le budget de composants ;
 //  - chaque partie est envoyée à /__lab/runs (fichier .editor-history/lab-runs.jsonl), lu par l'éditeur (tools/editor/lab-runs.js).
 (function(){
   const q = new URLSearchParams(location.search);
@@ -9,7 +9,6 @@
   const LAB = q.has('lab');
   const EMBED = LAB && q.has('embed') && window.parent !== window;          // intégré à l'éditeur (onglet Laboratoire de editor.html) : niveau choisi par l'éditeur, version « brouillon » possible
   const RUNS = '/__lab/runs', VERSIONS = '/__editor/versions';
-  const BAYS = 5;
   const HEAVY = ()=> COMP.heavyTypes;
   const money = n=> Math.round(n) + ' ◆';
 
@@ -73,42 +72,23 @@
     });
     return { rows, min:Math.round(min), max:Math.round(max), mid:Math.round(mid) };
   }
-  // coût cumulé en ◆ (et pièces de secteur) pour atteindre cet équipement depuis la camionnette de base
-  // technologie débloquée = prototype financé (ou déjà montée / emportée) ; le coût est CUMULÉ : prototype, puis rang 1, rang 2… rang n, puis spécialisation
-  const techOwned = (eq, id)=> { const e = eq.techs[id] || {}; return !!(e.proto || e.rang > 0 || e.spe || eq.load.indexOf(id) >= 0); };
-  function techCost(eq, id){
-    const out = { c:0, pieces:{} }; if (!techOwned(eq, id)) return out;
-    const e = eq.techs[id] || {};
-    out.c += rdNextCost(id, 'proto').composants;
-    for (let r = 0; r < (e.rang || 0); r++) out.c += rdNextCost(id, 'rang', r).composants;
-    if (e.spe){ const sp = rdNextCost(id, 'spe'); out.c += sp.composants; Object.keys(sp.pieces || {}).forEach(k=>{ out.pieces[k] = (out.pieces[k] || 0) + sp.pieces[k]; }); }
-    return out;
-  }
+  // coût cumulé en ◆ pour atteindre cet équipement depuis la camionnette de base (niveau 1 à n de chaque amélioration)
   function equipCost(eq){
-    let c = 0; const pieces = {};
-    const addP = p=> { if (p) Object.keys(p).forEach(k=>{ pieces[k] = (pieces[k] || 0) + p[k]; }); };
-    ATELIER_POSTS.forEach(p=>{ for (let i = 0; i < (eq.atelier[p.id] || 0); i++){ c += ATELIER_COSTS[i]; addP(ATELIER_PIECES[i]); } });
-    Object.keys(TECH_BY_ID).forEach(id=>{ const t = techCost(eq, id); c += t.c; addP(t.pieces); });
-    return { c, pieces };
+    let c = 0;
+    RD_UPGRADES.forEach(u=>{ c += rdInvested(u, eq.niv[u.id] || 0); });
+    return { c };
   }
   function buildMeta(eq){
     const m = defaultMeta();
-    ATELIER_POSTS.forEach(p=>{ m.atelier[p.id] = eq.atelier[p.id] || 0; });
-    Object.keys(TECH_BY_ID).forEach(id=>{
-      const e = eq.techs[id] || {};
-      if (techOwned(eq, id)) m.rd[id] = { plan:true, proto:true, rang:e.rang || 0, spe:!!e.spe };
-    });
-    m.chargement = eq.load.slice();
+    RD_UPGRADES.forEach(u=>{ const L = Math.min(rdAbsMax(u), eq.niv[u.id] || 0); if (L > 0) m.niv[u.id] = L; });
     return m;
   }
   function equipText(eq){
-    const a = ATELIER_POSTS.filter(p=> eq.atelier[p.id] > 0).map(p=> p.name + ' MK ' + ROMAN[eq.atelier[p.id]]);
-    const t = Object.keys(TECH_BY_ID).filter(id=> techOwned(eq, id)).map(id=>{
-      const e = eq.techs[id] || {}; return TECH_BY_ID[id].name + ' r' + (e.rang || 0) + (e.spe ? ' +SPE' : '') + (eq.load.indexOf(id) >= 0 ? ' [emporté]' : '');
-    });
-    return a.concat(t).join(' · ') || 'camionnette de base';
+    const t = RD_UPGRADES.filter(u=> eq.niv[u.id] > 0).map(u=> u.name + ' ' + eq.niv[u.id]);
+    return t.join(' · ') || 'camionnette de base';
   }
-  const emptyEquip = ()=> ({ atelier:{}, techs:{}, load:[] });
+  const emptyEquip = ()=> ({ niv:{} });
+  const worldRank = lvl=> Math.max(1, WORLDS.findIndex(w=> w.id === lvl.world) + 1);          // secteur du niveau testé : plafond des niveaux d'amélioration
 
   // ---------------------------------------------------------------- enregistrement des parties (mode ?lab)
   function hookGame(){
@@ -255,59 +235,31 @@
         EMBED ? h('option', { value:'draft', selected:st.versionId === 'draft' }, 'Brouillon de l’éditeur (non enregistré)') : null,
         st.versions.map(v=> h('option', { value:v.id, selected:v.id === st.versionId }, v.title + ' — ' + (VERSION_KINDS[v.kind] || 'Version') + ' · ' + new Date(v.createdAt).toLocaleString('fr-FR', { dateStyle:'short', timeStyle:'short' }) + (v.summary ? ' · ' + v.summary.waves + ' vague' + (v.summary.waves === 1 ? '' : 's') + ' · ' + v.summary.creatures + ' créatures' : ''))));
 
-      // atelier : même fiche que la R&D (une étape à la fois, coût cumulé Mk I -> Mk n), avec les valeurs avant / après du poste
-      const atelierCard = p=>{
-        const mk = eq.atelier[p.id] || 0, nc = atelierNextCost(p.id, mk);
-        const paid = ATELIER_COSTS.slice(0, mk).reduce((a, c)=> a + c, 0);
-        const cur = atelierShows(p.id, mk), nxt = mk < ATELIER_MAX ? atelierShows(p.id, mk + 1) : null;
-        const price = nc ? '◆ ' + nc.composants + (nc.pieces ? ' + ' + Object.keys(nc.pieces).map(k=> nc.pieces[k] + ' ' + k.toUpperCase()).join(' + ') : '') : '';
-        const card = h('article', { class:'lab-rd ' + (mk ? 'paper' : 'blue') },
-          h('div', { class:'rh' }, h('span', { class:'ic' }), h('b', {}, p.name), h('span', { class:'tg' }, mk ? 'MK ' + ROMAN[mk] : 'BASE')),
-          h('div', { class:'rdsc' }, p.text),
-          h('div', { class:'stats' }, cur.map((l, i)=> h('div', {}, h('span', {}, l.label), h('b', {}, l.value), nxt ? h('em', {}, ' → ' + nxt[i].value) : null))),
-          h('div', { class:'rst' }, h('span', { class:'pips' }, Array.from({ length:ATELIER_MAX }, (_, k)=> h('i', { class:k < mk ? 'f' : '' })))),
-          h('div', { class:'inv' }, mk ? 'investi : ' + money(paid) : 'camionnette de base'),
-          h('button', { class:'buy', disabled:!nc, onclick:()=> { eq.atelier[p.id] = mk + 1; rerender(); } }, nc ? 'MK ' + ROMAN[mk + 1] : 'COMPLET', h('small', {}, price)),
-          h('div', { class:'rctl' }, h('button', { disabled:!mk, onclick:()=> { eq.atelier[p.id] = mk - 1; rerender(); }, title:'revenir d’une étape' }, '− étape')));
+      // R&D et atelier : une fiche par amélioration, niveaux + / − dans la limite du plafond du secteur du niveau testé
+      const world = worldRank(lvl);
+      const upCard = u=>{
+        const L = eq.niv[u.id] || 0, cap = rdCap(u, world), locked = world < u.from;
+        const cur = L > 0 ? u.show(L) : 'aucun', nxt = L < cap ? u.show(L + 1) : null;
+        const card = h('article', { class:'lab-rd ' + (L ? 'paper' : 'blue') },
+          h('div', { class:'rh' }, h('span', { class:'ic' }), h('b', {}, u.name), h('span', { class:'tg' }, locked ? 'SECTEUR ' + u.from : 'NIV ' + L + ' / ' + cap)),
+          h('div', { class:'rdsc' }, u.desc),
+          locked ? null : h('div', { class:'stats' }, h('div', {}, h('span', {}, 'ACTUEL'), h('b', {}, cur), nxt ? h('em', {}, ' → ' + nxt) : null)),
+          h('div', { class:'inv' }, L ? 'investi : ' + money(rdInvested(u, L)) : (locked ? 'non débloquée' : 'camionnette de base')),
+          h('button', { class:'buy', disabled:L >= cap, onclick:()=> { eq.niv[u.id] = L + 1; rerender(); } }, L >= cap ? (locked ? 'BLOQUÉE' : 'PLAFOND') : 'NIVEAU ' + (L + 1), h('small', {}, L >= cap ? '' : '◆ ' + rdPrice(u, L + 1))),
+          h('div', { class:'rctl' }, h('button', { disabled:!L, onclick:()=> { eq.niv[u.id] = L - 1; rerender(); }, title:'revenir d’un niveau' }, '− niveau')));
         card.querySelector('.ic').innerHTML = pxImg('🔧', 22);
         return card;
       };
-      const atelier = h('div', { class:'lab-rdgrid' }, ATELIER_POSTS.map(atelierCard));
-
-      const techCard = t=>{
-        const e = eq.techs[t.id] || (eq.techs[t.id] = { proto:false, rang:0, spe:false }), max = techMaxRang(t);
-        const owned = techOwned(eq, t.id), on = eq.load.indexOf(t.id) >= 0, inv = techCost(eq, t.id);
-        const what = !owned ? 'proto' : e.rang < max ? 'rang' : (t.spe && !e.spe) ? 'spe' : null, nc = what ? rdNextCost(t.id, what, e.rang) : null;
-        const label = !what ? 'COMPLET' : what === 'proto' ? 'PROTOTYPE' : what === 'rang' ? 'RANG ' + (e.rang + 1) + '/' + max + ' · ' + rdUpgradeAt(t, e.rang + 1).name : 'SPECIALISATION · ' + t.spe.name;
-        const price = nc ? '◆ ' + nc.composants + (nc.pieces ? ' + ' + Object.keys(nc.pieces).map(k=> nc.pieces[k] + ' ' + k.toUpperCase()).join(' + ') : '') : '';
-        const back = ()=> { if (e.spe) e.spe = false; else if (e.rang > 0) e.rang--; else { e.proto = false; eq.load = eq.load.filter(i=> i !== t.id); } rerender(); };
-        const card = h('article', { class:'lab-rd ' + (owned ? 'paper' : 'blue') },
-          h('div', { class:'rh' }, h('span', { class:'ic' }), h('b', {}, t.name), t.tag ? h('span', { class:'tg' }, t.tag) : null),
-          h('div', { class:'rdsc' }, t.desc),
-          h('div', { class:'rst' }, h('span', {}, 'PROTO ', h('b', {}, owned ? 'OUI' : 'NON')), h('span', { class:'pips' }, Array.from({ length:max }, (_, k)=> h('i', { class:k < e.rang ? 'f' : '' }))), e.spe ? h('span', { class:'sp' }, 'SPE VALIDEE') : null),
-          h('div', { class:'inv' }, owned ? 'investi : ' + money(inv.c) : 'non débloquée'),
-          h('button', { class:'buy', disabled:!what, onclick:()=> { if (what === 'proto') e.proto = true; else if (what === 'rang') e.rang++; else e.spe = true; rerender(); } }, label, h('small', {}, price)),
-          h('div', { class:'rctl' }, h('button', { disabled:!owned, onclick:back, title:'revenir d’une étape' }, '− étape'),
-            h('label', {}, h('input', { type:'checkbox', checked:on, disabled:!owned, onchange:ev=>{
-              const next = ev.target.checked ? eq.load.concat(t.id) : eq.load.filter(i=> i !== t.id);
-              const chk = loadoutCheck(buildMetaWith(eq, next), next, BAYS);
-              if (!chk.ok){ toast('Chargement refusé : ' + ({ arme:'une seule ARME', rampe:'une seule RAMPE', baies:BAYS + ' baies maximum' }[chk.reason] || chk.reason)); rerender(); return; }
-              eq.load = next; rerender(); } }), ' emporté')));
-        card.querySelector('.ic').innerHTML = pxImg(t.icon, 22);
-        return card;
-      };
-      const techList = TECHS.filter(techAvailable);
-      const techUi = [...new Set(techList.map(t=> t.sector))].map(sec=> [ h('div', { class:'lab-note lab-boss' }, 'SECTEUR ' + sec), h('div', { class:'lab-rdgrid' }, techList.filter(t=> t.sector === sec).map(techCard)) ]);
+      const groupName = g=> (RD_TABS.find(t=> t.id === g) || { name:g.toUpperCase() }).name;
+      const upUi = [...new Set(RD_UPGRADES.map(u=> u.group))].map(g=> [ h('div', { class:'lab-note lab-boss' }, groupName(g)), h('div', { class:'lab-rdgrid' }, rdOfGroup(g).map(upCard)) ]);
 
       const pct = bud.mid > 0 ? Math.min(100, cost.c/bud.mid*100) : (cost.c > 0 ? 100 : 0);
       const gauge = h('div', { class:'lab-gauge' + (cost.c > bud.max ? ' over' : cost.c > bud.mid ? ' mid' : '') }, h('i', { style:'width:' + pct + '%' }));
-      const pcs = Object.keys(cost.pieces).map(k=> cost.pieces[k] + '× pièce ' + k).join(', ');
       const recent = mineRuns.slice(-5).reverse();
 
       const sec = (id, title, info, ...kids)=> h('details', { class:'lab-sec', open:!!st.open[id], ontoggle:e=> { st.open[id] = e.target.open; } },
         h('summary', {}, h('span', {}, title), h('i', {}, info || '')), h('div', { class:'lab-body' }, kids));
-      const atelierPaid = ATELIER_POSTS.reduce((a, p)=> a + ATELIER_COSTS.slice(0, eq.atelier[p.id] || 0).reduce((x, c)=> x + c, 0), 0);
-      const nTech = TECHS.filter(t=> techAvailable(t) && techOwned(eq, t.id)).length, nPost = ATELIER_POSTS.filter(p=> eq.atelier[p.id] > 0).length;
+      const nUp = RD_UPGRADES.filter(u=> eq.niv[u.id] > 0).length;
       const parts = [
         EMBED ? null : h('div', { class:'lab-row top' }, h('h1', {}, 'LABORATOIRE DE TEST'), h('button', { onclick:()=> { location.href = location.pathname; } }, 'QUITTER')),
         EMBED ? null : h('p', {}, 'Sauvegarde en mémoire : votre progression n’est jamais touchée.'),
@@ -322,16 +274,13 @@
             ? h('p', {}, 'Tuto : vous êtes censé jouer avec 0 ◆ d’amélioration. Tout reste équipable pour tester.')
             : h('p', {}, 'Censé avoir été récolté avant cet ordre : ≈ ' + money(bud.mid) + ' (de ' + money(bud.min) + ' à ' + money(bud.max) + ').'),
           idx === 0 ? null : bud.rows.map(r=> h('div', { class:'lab-note' }, r.name + ' — ' + money(r.val) + ' (' + r.src + ')'))),
-        sec('atelier', 'ATELIER', nPost + ' poste(s) · ' + money(atelierPaid),
-          h('p', {}, 'Le bouton jaune achète le Mk suivant ; le coût cumule Mk I à Mk n (Mk III à V : pièces de secteur).'), atelier),
-        sec('techs', 'TECHNOLOGIES', nTech + ' débloquée(s) · ' + money(cost.c - atelierPaid),
-          h('p', {}, 'Le bouton jaune achète l’étape suivante : prototype, rang 1, 2, 3…, spécialisation. ' + BAYS + ' baies, une arme et une rampe au plus.'), techUi),
+        sec('ameliorations', 'AMELIORATIONS', nUp + ' active(s) · ' + money(cost.c),
+          h('p', {}, 'Le bouton jaune achète le niveau suivant ; le coût cumule les niveaux 1 à n. Plafond : 4 niveaux par secteur atteint depuis le déblocage (ici secteur ' + world + ').'), upUi),
         h('div', { class:'lab-bar' }, h('div', { class:'in' },
-          h('div', { class:'cost' }, h('div', {}, 'Équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · +' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c)), pcs ? ' · ' + pcs : ''), gauge),
+          h('div', { class:'cost' }, h('div', {}, 'Équipement : ', h('b', {}, money(cost.c)), idx === 0 ? ' · budget 0 ◆' : ' / budget ≈ ' + money(bud.mid) + (cost.c > bud.mid ? ' · +' + money(cost.c - bud.mid) : ' · reste ' + money(bud.mid - cost.c))), gauge),
           h('button', { class:'go', onclick:()=> launch(lvl, cost, bud) }, 'LANCER')))];
       inner.replaceChildren(...parts.flat(Infinity).filter(Boolean));
     }
-    function buildMetaWith(eq, load){ return buildMeta(Object.assign({}, eq, { load })); }
 
     async function launch(lvl, cost, bud){
       const eq = st.equip; let version = null;
@@ -349,8 +298,8 @@
           version = { id:null, title:'publiée', hash:hash(JSON.stringify((typeof LEVEL_FILES !== 'undefined' && LEVEL_FILES[lvl.id]) || lvl.id)) };
         }
       } catch(e){ toast('Version indisponible : ' + e.message); return; }
-      const meta = buildMeta(eq); meta.chargement = loadoutSanitize(meta, BAYS); setMeta(meta);
-      window.__labCtx = { levelId:lvl.id, levelName:lvl.name, version, equip:JSON.parse(JSON.stringify(Object.assign({}, eq, { load:meta.chargement }))), cost:Math.round(cost.c), budget:bud.mid };
+      const meta = buildMeta(eq); setMeta(meta);
+      window.__labCtx = { levelId:lvl.id, levelName:lvl.name, version, equip:JSON.parse(JSON.stringify(eq)), cost:Math.round(cost.c), budget:bud.mid };
       ui.hide(); ui.launching = true;
       const game = window.__phaserGame, home = game.scene.getScene('home'), gs = game.scene.getScene('game');
       const go = ()=>{ home.scene.setVisible(true, 'game'); gs.input.enabled = true; gs.meta = getMeta(); gs.scene.restart(lvl.tuto ? { autoStart:true, tuto:true } : { autoStart:true, levelId:lvl.id }); };
@@ -364,7 +313,6 @@
   function init(){
     const ping = fetch('src/boot.js', { method:'HEAD' }).then(r=> r.headers.get('X-SSX-Dev') === '1').catch(()=> false);          // serveur local (tools/serve.py) ?
     if (LAB){
-      slotsOpen = ()=> BAYS;          // laboratoire : toutes les baies sont ouvertes
       // « REFAIRE L'INTERVENTION » d'un test du brouillon : on relit d'abord le brouillon (l'éditeur a pu changer depuis la dernière partie)
       if (EMBED) document.addEventListener('click', e=>{
         const b = e.target.closest && e.target.closest('#btnRetry'), c = window.__labCtx;

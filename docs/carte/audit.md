@@ -35,7 +35,6 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 
 ## Outils (`tools/`)
 
-- `tools/atelier_test.js` — Vérifie les règles de l'atelier (postes, Mk I à V, coûts, achat), sans navigateur : node tools/atelier_test.js
 - `tools/build.py` — Fabrique les versions « un seul fichier HTML » du jeu (tout est embarqué : code, CSS, images, sons, polices).
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
@@ -76,12 +75,12 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/orbit_scenarios_test.js` — (script ponctuel, sans description)
 - `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
-- `tools/rd_test.js` — Vérifie le catalogue des technologies et les règles de R&D (plans, prototypes, rangs, spécialisations), sans navigateur : node tools/rd_test.js
+- `tools/rd_table.js` — Génère docs/rd-ameliorations.md : tableau d'équilibrage des améliorations R&D et atelier (data/rd.js). node tools/rd_table.js
+- `tools/rd_test.js` — Vérifie la R&D et l'atelier (data/rd.js, data/meta.js), sans navigateur : node tools/rd_test.js
 - `tools/serve.py` — Serveur local de développement (sans cache : tu modifies un fichier, tu rafraîchis la page, c'est pris en compte).
 - `tools/sim/bot.js` — Simulateur d'équilibrage : joueur automatique + avance rapide, injecté dans la page par tools/sim_balance.py
 - `tools/sim_balance.py` — Simulateur d'équilibrage des niveaux : un joueur automatique joue les niveaux en avance rapide (~60x le temps réel), sans affichage ni son.
 - `tools/smoke_test.py` — Test de fumée headless : charge le jeu, lance une partie, vérifie qu'il n'y a aucune erreur JS.
-- `tools/techs_test.py` — Technologies en mission : le chargement remplace l'arbre. Rien n'est actif au départ ; chaque technologie emportée s'ASSEMBLE par une carte
 - `tools/timeline_test.js` — Contrat des vagues : application, remise à zéro, temps, redémarrage et saturation.
 - `tools/tunables_test.py` — Réglages internes des boss / mobs spéciaux (src/data/tunables.js, lvDef.bossTune).
 
@@ -134,6 +133,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/prompts-chatgpt-boss.md` — Space Shooter X — prompts ChatGPT pour les 7 BOSS (avec leurs phases)
 - `docs/prompts-chatgpt-sprites.md` — Prompts ChatGPT — planches des nouveaux monstres de Space Shooter X
 - `docs/rapport-equilibrage.md` — Space Shooter X — rapport d'équilibrage (bot de test)
+- `docs/rd-ameliorations.md` — Améliorations R&D et atelier — tableau d'équilibrage
 - `docs/responsive.md` — Responsive : même lisibilité sur téléphone, tablette et PC
 - `docs/space-shooter-x-analyse.md` — SPACE SHOOTER X — Analyse équilibrage, cohérence et pouvoir addictif
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée

@@ -41,6 +41,19 @@ mixin(GameScene, {
       return;
     }
 
+    if (mode === 'bullet'){          // tir de base : un projectile, ou DOUBLE TIR (R&D) = deux projectiles côte à côte, le 2e à `doubleShotMul` des dégâts
+      const n = Math.max(1, this.stats.spreadCount);
+      for (let i=0;i<n;i++){
+        const b = this.playerBullets.create(this.player.x + (i - (n-1)/2)*14, this.player.y-20, 'bulletP2');
+        b.setDepth(5); b.setScale(0.34);
+        b.pierceLeft = this.stats.pierce;
+        b.damage = this.rollDamage(this.stats.damage * (i > 0 ? this.stats.doubleShotMul : 1)); b.crit = this._lastCrit;
+        this.physics.velocityFromRotation(Phaser.Math.DegToRad(-90), this.stats.bulletSpeed, b.body.velocity);
+      }
+      sfx.laser();
+      return;
+    }
+
     const isLaser = mode === 'laser';
     const n = this.stats.spreadCount;
     const spreadAngle = n > 1 ? Math.min(14, 150/(n-1)) : 14; // degrees between shots (l'éventail se resserre quand il y a beaucoup de projectiles: jamais plus de 150°)

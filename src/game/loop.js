@@ -84,7 +84,7 @@ mixin(GameScene, {
 
     // move player toward target — frame-rate independent smoothing
     const prevX = this.player.x;
-    const smoothT = (1 - Math.exp(-this.stats.moveResponsiveness * (delta/1000))) * (this._ice ? (this.odActive > 0 ? 0.16 : 0.33) : 1);
+    const smoothT = (1 - Math.exp(-this.stats.moveResponsiveness * (this.dodgeInvuln > 0 ? 1 + this.stats.dodgeBoost : 1) * (delta/1000))) * (this._ice ? (this.odActive > 0 ? 0.16 : 0.33) : 1);
     this.player.x = Phaser.Math.Linear(this.player.x, this.playerTarget.x, smoothT);
     if (this._ice && !this.introActive){ this.player.x += (this._iceVx || 0) * (this.odActive > 0 ? 0.95 : 0.6); this._iceVx = this.player.x - prevX; const vr = this.visibleXRange(10); this.player.x = Phaser.Math.Clamp(this.player.x, vr.min, vr.max); }
     if (this.introActive && this._introEarth){
@@ -145,6 +145,11 @@ mixin(GameScene, {
     this.updateShipDamage(delta);
 
     if (this.dodgeInvuln > 0) this.dodgeInvuln -= delta;
+    // RECUPERATION DES CHARGES : une charge d'esquive dépensée revient au bout de `dodgeRecoverMs` (jamais sans l'amélioration)
+    if (this.stats.dodgeRecoverMs > 0 && this.dodgeCharges < this.stats.dodgeCharges){
+      this.dodgeRecoverT += delta;
+      if (this.dodgeRecoverT >= this.stats.dodgeRecoverMs){ this.dodgeRecoverT = 0; this.dodgeCharges += 1; this.updateHud(false); }
+    } else this.dodgeRecoverT = 0;
 
     if (this.hitCooldown > 0){
       this.hitCooldown -= delta;
@@ -210,7 +215,7 @@ mixin(GameScene, {
       if (this.shieldRegenDelay > 0){
         this.shieldRegenDelay -= delta * (this.odActive > 0 ? 2 : 1);   // overdrive: le bouclier se régénère 2x plus vite (délai et recharge)
       } else {
-        const regenRate = this.stats.shieldMax / 2.5 * (this.odActive > 0 ? 2 : 1); // full refill in ~2.5s once it starts
+        const regenRate = this.stats.shieldMax / 2.5 * this.stats.shieldRegenMul * (this.odActive > 0 ? 2 : 1); // full refill in ~2.5s once it starts
         this.shield = Math.min(this.stats.shieldMax, this.shield + regenRate*(delta/1000));
       }
     }
@@ -262,7 +267,7 @@ mixin(GameScene, {
     if (this.stats.autoCollect > 0){
       this.autoCollectTimer -= delta;
       if (this.autoCollectTimer <= 0){
-        this.autoCollectTimer = 8000;
+        this.autoCollectTimer = this.stats.autoCollectMs;
         this.gems.children.iterate(g=>{
           if (g && g.active) this.physics.moveToObject(g, this.player, 420);
         });

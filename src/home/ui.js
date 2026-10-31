@@ -190,21 +190,13 @@ mixin(HomeScene, {
       '<div class="om-row"><span>OBJECTIF</span><em>' + levelGoalText(l) + '</em></div>' +
       '<div class="om-row om-risk"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
       '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
-      (l.type === 'tuto' ? '' : this.loadoutLine()) +
       this.finitionLine(l, p);
     $('menuNormaTxt').textContent = unl ? agpBrief(l) : AGP_LINES.locked;               // la note de service est dite par N.O.R.M.A., au-dessus de la fiche (présentation des transmissions en mission)
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
-    if ($('btnLoadout')) $('btnLoadout').onclick = ()=>{ sfx.uiSelect(); this.goHomePage(-1); AtelierGarage.openSection('baies'); };
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
     this.focusOrbitalLevel();
     this.updateOrbitalUi();
     this.setHomeVanTier(l.threat);
-  },
-
-  // ligne « CHARGEMENT » de la fiche d'ordre : les technologies emportées + raccourci vers les baies du garage
-  loadoutLine(){
-    const names = loadoutSanitize(getMeta(), slotsOpen()).map(id=> TECH_BY_ID[id].name);
-    return '<div class="om-row om-load"><span>CHARGEMENT</span><em>' + (names.join(' · ') || 'AUCUN') + '</em><button id="btnLoadout" class="om-mod">MODIFIER</button></div>';
   },
 
   // ligne « FINITION n% » de la fiche d'un niveau + le prochain objectif à faire (donne envie de rejouer)
@@ -220,13 +212,12 @@ mixin(HomeScene, {
     this.applyHomeSkin(false);
     AtelierGarage.refresh();
     const m = meta || getMeta();
-    document.getElementById('tabHangar').classList.toggle('buy', ATELIER_POSTS.some(p=> atelierCanBuy(m, p.id).ok));      // point doré : un poste est achetable
+    document.getElementById('tabHangar').classList.toggle('buy', rdAnyBuyable(m, RD_UPGRADES.filter(u=> u.group === 'aimant' || u.group === 'ordinateur')));      // point doré : une amélioration d'atelier est achetable
   },
 
   // arbre : le panneau (méthodes de GameScene) se redessine quand on arrive sur la page ; le point doré de l'onglet signale un achat possible
   renderHomeTree(meta){
-    const buy = TECHS.some(t=> techAvailable(t) && rdNextStep(meta, t.id) && rdCanBuy(meta, t.id, rdNextStep(meta, t.id)).ok);
-    document.getElementById('tabTree').classList.toggle('buy', buy);
+    document.getElementById('tabTree').classList.toggle('buy', rdAnyBuyable(meta, RD_UPGRADES.filter(u=> RD_TABS.some(t=> t.id === u.group))));
   },
 
   // fragments, stats du hangar, point doré : après un achat dans l'arbre
