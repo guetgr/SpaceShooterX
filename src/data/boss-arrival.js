@@ -7,7 +7,7 @@ const BOSS_RUSH = 1.5;          // ordre « boss » : le boss arrive dès la fin
 const BOSS_EVENT_DURATION = 15; // durée supposée d'un événement sans durée forcée
 
 // boss « finaux » des ordres (modules src/bosses/*.js) : nom affiché ; `boss:'dread'` = boss générique provisoire (src/data/bosses.js)
-const FINAL_BOSS_NAMES = { meteo:'La Météo', araignee:'Araignée de tri', reacteur:'Le Réacteur', anneau:'L\'Anneau', pdg:'Le PDG dans sa tour' };
+const FINAL_BOSS_NAMES = { meteo:'La Météo', araignee:'Araignée de tri', reacteur:'Le Réacteur', anneau:'L\'Anneau', pdg:'Le PDG dans sa tour', crabe:'Le Crabe à scies', incinerateur:'L\'Incinérateur', benne:'La Benne folle', broyeur:'Le Broyeur', reparateur:'Le Réparateur en chef' };
 
 function levelBossAt(d){
   if (typeof d.bossAt === 'number' && isFinite(d.bossAt)) return d.bossAt;

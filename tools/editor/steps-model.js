@@ -74,9 +74,9 @@
   };
 
   // boss de fin / mobs spéciaux -> id du registre TUNABLES (src/data/tunables.js)
-  const BOSS_TUNE_ID = { araignee:'ar', meteo:'mt', reacteur:'rx', anneau:'an', pdg:'pd' };
+  const BOSS_TUNE_ID = { araignee:'ar', meteo:'mt', reacteur:'rx', anneau:'an', pdg:'pd', crabe:'cb', incinerateur:'ic', benne:'bn', broyeur:'by', reparateur:'rp' };
   const MOB_TUNE_ID = { bras:'bras', pilleur:'pil', eclaireur:'ec' };
-  const TUNE_LABEL = { ar:'Araignée de tri', mt:'La Météo', rx:'Le Réacteur', an:'L\'Anneau', pd:'Le PDG dans sa tour', bras:'Bras écartés', pil:'Pilleur de cristaux', ec:'Éclaireur de patrouille' };
+  const TUNE_LABEL = { ar:'Araignée de tri', mt:'La Météo', rx:'Le Réacteur', an:'L\'Anneau', pd:'Le PDG dans sa tour', cb:'Le Crabe à scies', ic:"L'Incinérateur", bn:'La Benne folle', by:'Le Broyeur', rp:'Le Réparateur en chef', bras:'Bras écartés', pil:'Pilleur de cristaux', ec:'Éclaireur de patrouille' };
   const NORMA_POOL_LABEL = { start:'Début de mission', boss:'Arrivée du boss', progress:'Avancement', banter:'Vannes', lowhp:'Coque faible', win:'Victoire', lose:'Défaite' };
   const NORMA_WHEN = [['levelStart', 'Début de mission'], ['time', 'À une date (s)'], ['eventStart', 'Début d\'un événement'], ['eventEnd', 'Fin d\'un événement'], ['bossStart', 'Arrivée du boss'], ['win', 'Victoire'], ['lose', 'Défaite']];
   const NORMA_TUTO_KEYS = ['move', 'shoot', 'boss', 'aim', 'ring', 'p2', 'p3', 'win', 'lose'];

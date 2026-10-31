@@ -96,7 +96,7 @@ const L1 = 'w1-l1';            // menace 1, boss final (meteo) arrivant à 60 s
   assert.ok(!has(W(L1, Object.assign({ eventTune:{ crystal:{ tickMs:300 } } }, off)), 'eventTune.crystal'));   // grand événement : jugé atteignable
 }
 { // musique de boss sans boss final
-  assert.ok(has(W('w2-l1', { audio:{ boss:musicCatalog.boss[0] } }), 'audio.boss est ignoré'));
+  assert.ok(has(W('w3-l1', { audio:{ boss:musicCatalog.boss[0] } }), 'audio.boss est ignoré'));
   assert.ok(!has(W(L1, { audio:{ boss:musicCatalog.boss[0] } }), 'audio.boss est ignoré'));
 }
 // toast d'export : première erreur par niveau, 3 niveaux au plus

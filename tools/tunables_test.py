@@ -15,7 +15,8 @@ SNAP = os.path.join(R, 'tools', 'tunables_snapshot.json')
 PHASER = os.path.join(R, 'vendor', 'phaser.min.js')
 
 DUMP = """()=>{
-  const roots = { ar:AR, mt:MT, rx:RX, an:AN, pd:PD, bras:BRAS, pil:PIL, ec:EC, antenne:TUTO_TUNE.boss };
+  const w2 = id=>{ const { hp, thresh, dmg, killScore } = BOSS_W2[id]; return { hp, thresh, dmg, killScore }; };      // boss du secteur 2 : les nombres réglables (pas la géométrie des pièces)
+  const roots = { ar:AR, mt:MT, rx:RX, an:AN, pd:PD, cb:w2('crabe'), ic:w2('incinerateur'), bn:w2('benne'), by:w2('broyeur'), rp:w2('reparateur'), bras:BRAS, pil:PIL, ec:EC, antenne:TUTO_TUNE.boss };
   const out = {};
   const walk = (v, p)=>{
     if (typeof v === 'number') out[p] = v;

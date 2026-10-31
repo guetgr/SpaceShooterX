@@ -28,7 +28,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "timelineOnly": 0,
     "zoom": {
       "start": 1.35,
-      "end": 1,
+      "end": 1.0,
       "seconds": 90
     },
     "ambient": {
@@ -140,7 +140,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "zoom": {
       "start": 1.33,
       "end": 0.955,
-      "seconds": 54
+      "seconds": 54.0
     },
     "ambient": {
       "golden": true,
@@ -348,6 +348,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "world": "w1",
     "schemaVersion": 2,
     "tuto": false,
+    "goal": {},
     "waves": [],
     "events": [],
     "spawnClock": "difficulty",
@@ -501,9 +502,9 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": "quai",
-    "boss": "dread",
-    "finalBoss": null,
-    "bossName": null,
+    "boss": null,
+    "finalBoss": "crabe",
+    "bossName": "LE CRABE A SCIES",
     "hpMul": 1,
     "dmgMul": 1,
     "timelineOnly": 0,
@@ -552,9 +553,9 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": "tri",
     "intro": null,
-    "boss": "dread",
-    "finalBoss": null,
-    "bossName": null,
+    "boss": null,
+    "finalBoss": "incinerateur",
+    "bossName": "L'INCINERATEUR",
     "hpMul": 1,
     "dmgMul": 1,
     "timelineOnly": 0,
@@ -618,9 +619,9 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": "compactage",
     "intro": null,
-    "boss": "dread",
-    "finalBoss": null,
-    "bossName": null,
+    "boss": null,
+    "finalBoss": "benne",
+    "bossName": "LA BENNE FOLLE",
     "hpMul": 1,
     "dmgMul": 1,
     "timelineOnly": 0,
@@ -693,9 +694,9 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": "benne",
     "intro": null,
-    "boss": "dread",
-    "finalBoss": null,
-    "bossName": null,
+    "boss": null,
+    "finalBoss": "broyeur",
+    "bossName": "LE BROYEUR",
     "hpMul": 1,
     "dmgMul": 1,
     "timelineOnly": 0,
@@ -715,8 +716,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "name": "ATELIER DE BROYAGE",
     "type": "mission",
     "threat": 5,
-    "boss": "dread",
-    "bossName": null,
+    "boss": null,
+    "bossName": "LE REPARATEUR EN CHEF",
     "reward": {
       "clear": 60,
       "first": 120
@@ -771,7 +772,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": "broyeur",
     "intro": null,
-    "finalBoss": null,
+    "finalBoss": "reparateur",
     "hpMul": 1,
     "dmgMul": 1,
     "timelineOnly": 0,
@@ -791,6 +792,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "name": "DREADNOUGHT",
     "type": "boss",
     "threat": 6,
+    "goal": {},
     "intro": null,
     "reward": {
       "clear": 110,

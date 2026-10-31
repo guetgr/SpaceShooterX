@@ -73,6 +73,7 @@ mixin(GameScene, {
     if (this.rx) this.rxUpdate(delta);
     if (this.an) this.anUpdate(delta);
     if (this.pd) this.pdUpdate(delta);
+    if (this.w2) this.w2Update(delta);
     this.ecLockUpdate(delta);
 
     // progressively dezoom from a close-in start to the full field, revealing
@@ -216,7 +217,7 @@ mixin(GameScene, {
     }
 
     // spawn
-    if (!this.bossActive && !this.sandbox && !this.lvEnding && !this.tuto && !this.ar && !this.mt && !this.rx && !this.an && !this.pd){
+    if (!this.bossActive && !this.sandbox && !this.lvEnding && !this.tuto && !this.ar && !this.mt && !this.rx && !this.an && !this.pd && !this.w2){
       this.spawnTimer -= delta;
       if (this.spawnTimer <= 0){
         this.spawnTimer = this.getSpawnInterval();

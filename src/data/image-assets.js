@@ -314,3 +314,10 @@ const EC_SHEET_B64 = asset('sprites/ec_sheet.webp');             // mob « L'Éc
 const EC_FX_B64 = {};
 ['cone', 'coneHot', 'reticle'].forEach(n=>{ EC_FX_B64[n] = asset('sprites/ec_fx_' + n + '.webp'); });      // faisceau de balayage, viseur de verrouillage
 const TUTO_NDEB = 8;
+
+// boss du secteur 2 (sprite 512x512 nez en haut) : vignettes du bestiaire
+const W2_CRABE_B64 = asset('sprites/w2_crabe.webp');
+const W2_INCINERATEUR_B64 = asset('sprites/w2_incinerateur.webp');
+const W2_BENNE_B64 = asset('sprites/w2_benne.webp');
+const W2_BROYEUR_B64 = asset('sprites/w2_broyeur.webp');
+const W2_REPARATEUR_B64 = asset('sprites/w2_reparateur.webp');

@@ -39,6 +39,16 @@ const MUSIC_FILES = {
   w1_l4_a: asset('audio/music/w1_l4_a.mp3'),
   w1_l4_b: asset('audio/music/w1_l4_b.mp3'),
   // monde 2 (Mars, planète poubelle) : deux morceaux par ordre (alternés)
+  w2b_crabe_a: asset('audio/music/w2b_crabe_a.mp3'),
+  w2b_crabe_b: asset('audio/music/w2b_crabe_b.mp3'),
+  w2b_incinerateur_a: asset('audio/music/w2b_incinerateur_a.mp3'),
+  w2b_incinerateur_b: asset('audio/music/w2b_incinerateur_b.mp3'),
+  w2b_benne_a: asset('audio/music/w2b_benne_a.mp3'),
+  w2b_benne_b: asset('audio/music/w2b_benne_b.mp3'),
+  w2b_broyeur_a: asset('audio/music/w2b_broyeur_a.mp3'),
+  w2b_broyeur_b: asset('audio/music/w2b_broyeur_b.mp3'),
+  w2b_reparateur_a: asset('audio/music/w2b_reparateur_a.mp3'),
+  w2b_reparateur_b: asset('audio/music/w2b_reparateur_b.mp3'),
   w2_l1_a: asset('audio/music/w2_l1_a.mp3'),
   w2_l2_a: asset('audio/music/w2_l2_a.mp3'),
   w2_l3_a: asset('audio/music/w2_l3_a.mp3'),
@@ -80,4 +90,4 @@ const MUSIC_FILES = {
 };
 
 // durée (s) des boucles du monde 1 : nombre entier de mesures de 2 s (les autres morceaux : 48 s, ou 56 s pour les boss historiques)
-const MUSIC_LEN = { w2_l1_a:40, w2_l2_a:32, w2_l3_a:40, w2_l4_a:24, w2_l5_a:40, w2_l1_b:40, w2_l2_b:40, w2_l3_b:24, w2_l4_b:32, w2_l5_b:40, menu_terre_a:24, menu_terre_b:40, menu_terre_c:32, menu_terre_d:40, menu_mars_a:32, menu_mars_b:40, menu_mars_c:32, menu_mars_d:32, dezoom_a:32, dezoom_b:24, dezoom_c:32, dezoom_d:40, dezoom_e:32, dezoom_f:24, dezoom_g:40, w1_tuto_a:40, w1_tuto_b:32, w1_l1_a:40, w1_l1_b:40, w1_l2_a:24, w1_l2_b:24, w1_l3_a:40, w1_l3_b:32, w1_l4_a:40, w1_l4_b:40, w1b_antenne_a:32, w1b_antenne_b:32, w1b_meteo_a:32, w1b_meteo_b:24, w1b_araignee_a:24, w1b_araignee_b:40, w1b_reacteur_a:24, w1b_reacteur_b:40, w1b_anneau_a:32, w1b_anneau_b:40, w1b_pdg_a:40, w1b_pdg_b:32 };
+const MUSIC_LEN = { w2b_crabe_a:24, w2b_crabe_b:40, w2b_incinerateur_a:40, w2b_incinerateur_b:40, w2b_benne_a:40, w2b_benne_b:44, w2b_broyeur_a:40, w2b_broyeur_b:40, w2b_reparateur_a:24, w2b_reparateur_b:40, w2_l1_a:40, w2_l2_a:32, w2_l3_a:40, w2_l4_a:24, w2_l5_a:40, w2_l1_b:40, w2_l2_b:40, w2_l3_b:24, w2_l4_b:32, w2_l5_b:40, menu_terre_a:24, menu_terre_b:40, menu_terre_c:32, menu_terre_d:40, menu_mars_a:32, menu_mars_b:40, menu_mars_c:32, menu_mars_d:32, dezoom_a:32, dezoom_b:24, dezoom_c:32, dezoom_d:40, dezoom_e:32, dezoom_f:24, dezoom_g:40, w1_tuto_a:40, w1_tuto_b:32, w1_l1_a:40, w1_l1_b:40, w1_l2_a:24, w1_l2_b:24, w1_l3_a:40, w1_l3_b:32, w1_l4_a:40, w1_l4_b:40, w1b_antenne_a:32, w1b_antenne_b:32, w1b_meteo_a:32, w1b_meteo_b:24, w1b_araignee_a:24, w1b_araignee_b:40, w1b_reacteur_a:24, w1b_reacteur_b:40, w1b_anneau_a:32, w1b_anneau_b:40, w1b_pdg_a:40, w1b_pdg_b:32 };

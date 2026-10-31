@@ -5,7 +5,7 @@
 mixin(GameScene, {
   // appelé à la fin de create() : remet à zéro l'état du niveau
   levelInit(){
-    this.lvT = 0; this.lvBossAt = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; this._ecRet = null;
+    this.lvT = 0; this.lvBossAt = 0; this.lvGems = 0; this.lvEnding = false; this.lvBossOut = false; this.lvResult = null; this.ar = null; this.mt = null; this.rx = null; this.an = null; this.pd = null; if (this.w2) this.w2Cleanup(); this.w2 = null; this._ecRet = null;
     const d = this.lvDef || (this.tuto ? levelById('w1-tuto') : null);
     this.lvWaves = [];
     ((d && d.waves) || []).forEach(w=>{ for (let i=0;i<w.count;i++) this.lvWaves.push({ ...w, at:w.at + i*w.spacing, unitIndex:i }); });
@@ -40,6 +40,7 @@ mixin(GameScene, {
       else if (d.finalBoss === 'meteo') this.mtStart();
       else if (d.finalBoss === 'reacteur') this.rxStart();
       else if (d.finalBoss === 'anneau') this.anStart();
+      else if (BOSS_W2[d.finalBoss]) this.w2Start(d.finalBoss);
       else if (d.finalBoss) this.arStart();
       else this.spawnBoss(d.boss);
     }
@@ -100,7 +101,7 @@ mixin(GameScene, {
   levelProgress(){
     const d = this.lvDef; if (!d) return { frac:0, label:'' };
     if (this.lvBossOut){
-      const B = this.ar || this.mt || this.rx || this.an || this.pd; if (B) return { frac: Math.max(0, 1 - B.hp / B.max), label:'BOSS' };
+      const B = this.ar || this.mt || this.rx || this.an || this.pd || this.w2; if (B) return { frac: Math.max(0, 1 - B.hp / B.max), label:'BOSS' };
       const b = this.currentBoss;
       return { frac: (b && b.maxHp) ? Math.max(0, 1 - b.hp / b.maxHp) : 0, label:'BOSS' };
     }
@@ -111,7 +112,7 @@ mixin(GameScene, {
   // valeurs 0..1 des objectifs de FINITION de cette partie (voir data/completion.js) ; appelé par endRun, victoire ou défaite
   levelComp(victory){
     const d = this.lvDef; if (!d) return null;
-    const mod = this.ar || this.mt || this.rx || this.an || this.pd, gb = this.currentBoss, bossOut = !!mod || this.lvBossOut;
+    const mod = this.ar || this.mt || this.rx || this.an || this.pd || this.w2, gb = this.currentBoss, bossOut = !!mod || this.lvBossOut;
     const clean = Math.max(0, 1 - (this.runHits || 0) * 0.12);
     const hit = mod ? Math.max(0, 1 - mod.hp / mod.max) : ((bossOut && gb && gb.maxHp) ? Math.max(0, 1 - gb.hp / gb.maxHp) : null);
     if (d.type === 'boss') return { boss: hit === null ? 0 : hit, win: victory ? 1 : 0, clean };
