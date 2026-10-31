@@ -28,7 +28,7 @@ ok(run("ATELIER_SLOTS.length") === 5 && run("ATELIER_SLOTS[3].from") === null &&
 const cap = (id, w)=> run("rdCap(RD_BY_ID['" + id + "'], " + w + ")");
 ok(cap('c_puissance', 1) === 4 && cap('c_puissance', 2) === 8 && cap('c_puissance', 9) === 36, 'débloquée au secteur 1 : 4, 8, …, 36');
 ok(cap('c_vitesse', 1) === 0 && cap('c_vitesse', 2) === 4 && cap('c_vitesse', 9) === 32, 'secteur 2 : bloquée au 1, 4 au 2, 32 au 9');
-ok(cap('c_double', 1) === 4 && cap('c_double', 9) === 36, 'double tir accessible dès le secteur 1 : 4 niveaux, 36 au secteur 9');
+ok(cap('c_double', 1) === 4 && cap('c_double', 9) === 8, 'double tir accessible dès le secteur 1 : 4 niveaux, borné à 8');
 ok(cap('c_perfo', 3) === 10 || cap('c_perfo', 3) === 4, 'perforation : 4 au secteur 3');
 ok(run("rdCap(RD_BY_ID['k_nano'], 4)") === 4 && run("rdCap(RD_BY_ID['k_nano'], 9)") === 24, 'secteur 4 : 4 puis 24 au secteur 9');
 ok(cap('c_perfo', 9) === 10 && cap('p_charges', 9) === 6, 'les valeurs entières sont bornées par `max`');
@@ -61,8 +61,8 @@ RD_IDS.forEach(id=>{
 });
 ok(JSON.stringify(S({})) === JSON.stringify(base), 'aucun niveau : statistiques inchangées');
 ok(near(S({ c_puissance:1 }).damage, 10.2) && near(S({ c_puissance:4 }).damage, 10.8), 'puissance : +2 % par niveau de la valeur de base (pas de cumul)');
-{ const s = S({ c_double:1 }); ok(s.spreadCount === 2 && near(s.doubleShotMul, 0.5), 'double tir niveau 1 : deux projectiles garantis, le 2e à 50 %'); }
-ok(near(S({ c_double:32 }).doubleShotMul, Math.min(1, 0.5 + 0.016*31)), 'double tir : le 2e projectile progresse');
+{ const s = S({ c_double:1 }); ok(s.spreadCount === 2, 'double tir niveau 1 : un projectile de plus, garanti'); }
+ok(S({ c_double:5 }).spreadCount === 6, 'double tir : un niveau = un projectile de plus');
 ok(S({ k_blindage:36 }).armorPct <= 0.5 && S({ k_collision:36 }).collisionMul >= 0.3 && S({ b_reprise:36 }).shieldRegenDelayMul >= 0.25, 'bornes : blindage, collisions, délai de recharge');
 ok(S({ p_charges:3 }).dodgeCharges === 3 && S({ p_duree:2 }).dodgeDur === 440 && S({ p_recup:1 }).dodgeRecoverMs === 29400, 'esquive : charges, durée, récupération');
 ok(S({ a_collecte:1 }).autoCollect === 1 && S({ a_collecte:1 }).autoCollectMs === 19000, 'collecte automatique : activée, intervalle raccourci par niveau');

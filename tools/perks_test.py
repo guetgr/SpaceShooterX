@@ -22,7 +22,7 @@ def run(tree, tuto=False, niv=None, v2=False, v3=None):
         p.wait_for_function('window.__ssxScene && window.__ssxScene.scene.isActive("home")',timeout=90000); p.wait_for_timeout(1200)
         p.evaluate("document.getElementById('btnLaunch').click()"); p.wait_for_timeout(5000)
         out['tuto']=p.evaluate("!!window.__ssxScene.tuto")
-        out['stats']=p.evaluate("(()=>{const s=window.__ssxScene; return {dmg:s.stats.damage, hp:s.stats.maxHp, spread:s.stats.spreadCount, dsm:s.stats.doubleShotMul, bonus:s.gearBonus, summary:s.globalGearSummary()}})()")
+        out['stats']=p.evaluate("(()=>{const s=window.__ssxScene; return {dmg:s.stats.damage, hp:s.stats.maxHp, spread:s.stats.spreadCount, bonus:s.gearBonus, summary:s.globalGearSummary()}})()")
         p.evaluate("(()=>{const s=window.__ssxScene; s.upgradeCounts[UPGRADE_POOL[0].id]=2;})()")
         p.evaluate("document.getElementById('pauseBtn').click()"); p.wait_for_timeout(700)
         out['G']=p.evaluate("(()=>{const s=window.__ssxScene; return s.globalGearItems().map(x=>x.name)})()")
@@ -44,7 +44,7 @@ ck(tr['stats']['dmg']>tb['stats']['dmg'] and tr['stats']['hp']>tb['stats']['hp']
 ck(not tb['errs'] and not tr['errs'],'tutoriel : pas d\'erreur JS')
 # double tir garanti dès le démarrage
 dt=run({}, niv={'c_double':1})
-ck(dt['stats'].get('spread')==2 and abs(dt['stats'].get('dsm')-0.5)<1e-9,'double tir niveau 1 : deux projectiles dès le départ')
+ck(dt['stats'].get('spread')==2,'double tir niveau 1 : un projectile de plus dès le départ')
 # ancienne sauvegarde v3 (atelier Mk + technologie) : remboursée, plus aucun atout fantôme
 m3=run({}, v3={'v':3,'composants':50,'atelier':{'coque':2,'canon':2},'rd':{'laser_continu':{'plan':True,'proto':True}},'chargement':['laser_continu']})
 ck(m3['G']==[] and m3['stats']['dmg']==base['stats']['dmg'] and not m3['errs'],'migration v3 : achats remboursés, aucun atout fantôme, pas d\'erreur JS')

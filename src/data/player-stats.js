@@ -71,7 +71,6 @@ function makeDefaultStats(){
     sangsueRadiusBonus: 0,
     sangsueHealMul: 1,
     // R&D et atelier (data/rd.js) : tout démarre neutre
-    doubleShotMul: 1,      // DOUBLE TIR : part des dégâts du 2e projectile
     shieldRegenMul: 1,     // vitesse de recharge du bouclier
     reflectPower: 0,       // puissance de l'onde de riposte (0 = pas de riposte)
     reflectRange: 0,       // rayon supplémentaire de l'onde de riposte (px)

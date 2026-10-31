@@ -14,7 +14,7 @@
 - Il n'y a QUE deux systèmes de progression : **atelier** et **R&D**. Tout ce qui n'était pas dans la liste a été retiré (technologies, plans, prototypes, baies, chargement, cartes d'assemblage, fusions ORAGE et VORTEX, carte TIR MULTIPLE, relique REFRACTEUR, fusion TEMPETE DE PLOMB).
 - R&D : 4 intercalaires (CANON 5, CARCASSE 5, BOUCLIER 6, PROPULSEURS 5), secteurs de déblocage fixés dans le prompt (sauf DOUBLE TIR, passé au secteur 1 par Guet). Atelier : 5 emplacements (LASER, AIMANT, ORDINATEUR DE BORD, 2 réservés) ; améliorations exclusives : aimant (portée S1, collecte auto S6), ordinateur (choix S2, relances S4, atout double S7, vision en nébuleuse S8).
 - Plafond = 4 × (secteur atteint − secteur de déblocage + 1) ; « secteur atteint » = dernier secteur OUVERT par la campagne (`rdWorldReached`), 9 au plus. Premier achat = premier bénéfice.
-- Double tir = deux projectiles côte à côte, garantis dès le démarrage (choix de Claude parmi 3 formes proposées, Guet n'a pas tranché : à confirmer).
+- Double tir (secteur 1) : chaque niveau = 1 projectile de plus, en éventail (tir de base 14° entre balles), même dégâts, garanti dès le démarrage ; borné à 8 niveaux, prix géométrique (décidé par Guet).
 
 ### Implémenté (testé : `rd_test.js`, `home_test.py`, `perks_test.py`, `smoke_test.py`)
 - `src/data/rd.js`, `ui/rd-ui.js`, `home/garage.js`, `data/meta.js` (v4 + migration), moteur : double tir (`player/weapons.js`), vitesse de recharge / réserve de secours / riposte séparée puissance et portée / récupération des charges / durée d'esquive / propulsion d'urgence / collecte automatique (`game/loop.js`, `player/damage.js`).
