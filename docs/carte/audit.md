@@ -16,7 +16,7 @@ En portée globale, la dernière définition écrase les autres (ou plante pour 
 
 ## Références cassées
 
-- Ids demandés au DOM mais inexistants : aucun
+- Ids demandés au DOM mais inexistants : `rdMoreDown`, `rdMoreUp`
 - `asset(...)` hors manifeste : aucun
 
 ## Candidats « code mort » : fonctions / constantes de premier niveau qui n'apparaissent qu'une fois (3)
@@ -35,20 +35,30 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 
 ## Outils (`tools/`)
 
-- `tools/_tmp_w2.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 - `tools/atelier_test.js` — Vérifie les règles de l'atelier (postes, Mk I à V, coûts, achat), sans navigateur : node tools/atelier_test.js
 - `tools/build.py` — Fabrique les versions « un seul fichier HTML » du jeu (tout est embarqué : code, CSS, images, sons, polices).
 - `tools/check_worlds.js` — Vérifie les mondes/niveaux (format) et la logique de progression, sans navigateur : node tools/check_worlds.js
 - `tools/composants_test.js` — Vérifie les règles de calcul des composants (prime AGP, franchise d'accident), sans navigateur : node tools/composants_test.js
 - `tools/cut_satgun.py` — Découpe la planche « satellite qui tire » (concept ChatGPT, fond peint + légendes) en une bande d'images 200x200 à fond transparent :
+- `tools/editor/app.js` — (script ponctuel, sans description)
+- `tools/editor/lab-runs.js` — (script ponctuel, sans description)
+- `tools/editor/lab-tab.js` — (script ponctuel, sans description)
+- `tools/editor/layout.js` — (script ponctuel, sans description)
 - `tools/editor/level-document.js` — (script ponctuel, sans description)
+- `tools/editor/play-window.js` — (script ponctuel, sans description)
+- `tools/editor/preview.js` — (script ponctuel, sans description)
 - `tools/editor/steps-model.js` — (script ponctuel, sans description)
 - `tools/editor/steps-ui.js` — (script ponctuel, sans description)
 - `tools/editor/timeline.js` — (script ponctuel, sans description)
 - `tools/editor/validator.js` — (script ponctuel, sans description)
+- `tools/editor/versions.js` — (script ponctuel, sans description)
+- `tools/editor_preview_test.py` — Tests des modes agrandi et fenêtre séparée de l'éditeur, sans modifier les missions.
 - `tools/editor_steps_test.js` — (script ponctuel, sans description)
 - `tools/editor_steps_ui_test.js` — (script ponctuel, sans description)
+- `tools/editor_studio_test.py` — Régression du studio : aucune écriture dans les missions, serveur temporaire isolé.
 - `tools/editor_validator_test.js` — (script ponctuel, sans description)
+- `tools/editor_versions.py` — Historique local des missions : snapshots immuables, métadonnées légères, transactions SQLite.
+- `tools/editor_versions_test.py` — Versions des missions : persistance, récupération, validation et rollback ; niveaux du projet intacts.
 - `tools/enemy_stats_test.py` — Équivalence des stats des mobs (registre src/data/enemy-stats.js) + surcharge par niveau.
 - `tools/event_params_node_test.js` — (script ponctuel, sans description)
 - `tools/event_params_test.py` — Paramètres des événements (EVENT_DEFS) : équivalence avec le comportement d'origine.
@@ -63,6 +73,7 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `tools/level_look_test.js` — (script ponctuel, sans description)
 - `tools/level_test.py` — Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 - `tools/norma_level_test.js` — (script ponctuel, sans description)
+- `tools/orbit_scenarios_test.js` — (script ponctuel, sans description)
 - `tools/orbital_home_test.py` — Régression du hublot : sélection, occlusion, finition, navigation et mobile.
 - `tools/perks_test.py` — Atouts GLOBAUX (R&D, permanents) vs atouts de MISSION (cartes de la partie) : les modules R&D sont appliqués au décollage et listés séparément en paus
 - `tools/rd_test.js` — Vérifie le catalogue des technologies et les règles de R&D (plans, prototypes, rangs, spécialisations), sans navigateur : node tools/rd_test.js
@@ -77,11 +88,12 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 ## Documents (`docs/`, racine)
 
 - `CLAUDE.md` — CLAUDE.md
-- `PASSATION.md` — PASSATION — Space Shooter X (état au 28 oct. 2026)
+- `PASSATION.md` — PASSATION — Space Shooter X (contexte narratif mis à jour le 29 oct. 2026)
 - `README.md` — Space Shooter X
 - `docs/HUD-MINIMAL.md` — HUD de mission — version minimale
 - `docs/REPRISE-GARAGE.md` — Garage AGP — point de reprise
 - `docs/arbre-competences.md` — L'arbre de compétences — fonctionnement et état des lieux
+- `docs/bible-univers-v2.md` — SPACE SHOOTER X — BIBLE DE L'UNIVERS — VERSION 2.0
 - `docs/bible-univers.md` — SPACE SHOOTER X
 - `docs/brief-univers-agp.md` — Brief de référence — univers AGP, ton, interface (à lire avant de toucher à l'interface ou aux textes)
 - `docs/captures-prompt-2026-10-26/README.md` — Space Shooter X — captures de référence
@@ -114,7 +126,9 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/deroule-partie-complete.md` — Space Shooter X — déroulé d'UNE partie complète (alerte 1 → alerte 26 = boss final)
 - `docs/direction-artistique-agp.md` — Direction artistique « AGP-OS » — première proposition
 - `docs/editeur-niveaux.md` — Éditeur des missions — timeline et JSON
+- `docs/editor-studio.md` — AGP Studio — éditeur de missions
 - `docs/menu-accueil.md` — Menu d'accueil, mondes et progression
+- `docs/missions-orbite-bible-v2.md` — Deux premiers niveaux — bible de l’univers v2
 - `docs/musique-suno.md` — Space Shooter X — cahier des charges de la musique (pour Suno)
 - `docs/niveaux-alerte.md` — Space Shooter X — ce que fait le jeu à CHAQUE niveau d'alerte (relevé dans le code)
 - `docs/prompts-chatgpt-boss.md` — Space Shooter X — prompts ChatGPT pour les 7 BOSS (avec leurs phases)
@@ -125,8 +139,10 @@ Un nom présent une seule fois dans tout le dépôt (src, index.html, editor.htm
 - `docs/space-shooter-x-gameplay.md` — SPACE SHOOTER X — Boucle de gameplay détaillée
 - `docs/suno-prompts.md` — Space Shooter X — les prompts Suno (version finale : 22 prompts = 44 morceaux pour 42 pistes)
 - `docs/superpowers/plans/2026-10-27-atelier-v3.md` — Étape 2 — sauvegarde v3 et atelier à six postes : plan d'implémentation
+- `docs/superpowers/plans/2026-10-27-plans-pieces.md` — Étape 4 — plans de technologie et pièces de secteur lâchés en mission : plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-progression-agp.md` — Refonte de la progression AGP — plan d'implémentation
 - `docs/superpowers/plans/2026-10-27-rd-emplacements.md` — Étape 3 — R&D par technologie, emplacements, chargement et assemblage en mission : plan d'implémentation
 - `docs/superpowers/plans/2026-10-28-editeur-complet.md` — Éditeur de niveaux complet — plan de travail
 - `docs/superpowers/specs/2026-10-27-progression-design.md` — Refonte de la progression — composants, atelier, R&D, emplacements, cartes, livrées
 - `docs/superpowers/specs/2026-10-28-level-builder.md` — Space Shooter X — Spécification du Level Builder
+- `docs/superpowers/specs/2026-10-29-laboratoire-de-test-design.md` — Laboratoire de test des niveaux (tâche 8 de l'éditeur)

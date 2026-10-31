@@ -38,7 +38,7 @@ mixin(GameScene, {
     }
   },
 
-  spawnOneEnemy(type, xOverride){
+  spawnOneEnemy(type, xOverride, waveOptions){
     if (this.enemies.countActive(true) >= ENEMY_HARD_CAP) return null;   // plafond absolu (fluidité)
     // certains ennemis se balancent latéralement après leur spawn — on leur laisse
     // assez de marge pour que le wobble ne les sorte pas de la zone visible (zoom)
@@ -51,6 +51,7 @@ mixin(GameScene, {
     const e = this.enemies.create(x, spawnY, art ? art.tex : type);
     e.setDepth(4);
     e.enemyType = type;
+    if(waveOptions && waveOptions.tier)e.waveTier=waveOptions.tier;
     if (art){
       e.setScale(art.scale);
       e.setFlipY(art.flipY !== false); // les anciens sprites regardent vers le haut (on les retourne); les sprites 8 bits sont déjà dessinés vers le bas

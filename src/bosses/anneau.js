@@ -294,6 +294,7 @@ mixin(GameScene, {
     this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill');
   },
   anDead(){        // l'anneau se détache et s'envole, chaque pièce part en un morceau, grosse explosion ; puis fin du niveau
+    bestiaryBossKill(this, 'anneau');
     const an = this.an; if (an.dead) return; an.dead = true;
     const [cx, cy] = this.anW(AN.hub[0], AN.hub[1]);
     this.cameras.main.flash(600, 225, 215, 255, false); this.cameras.main.shake(900, 0.014);

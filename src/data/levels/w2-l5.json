@@ -1,7 +1,7 @@
 {
   "id": "w2-l5",
   "name": "ATELIER DE BROYAGE",
-  "type": "kill",
+  "type": "mission",
   "threat": 5,
   "boss": null,
   "bossName": "LE REPARATEUR EN CHEF",
@@ -12,9 +12,6 @@
   "world": "w2",
   "schemaVersion": 2,
   "tuto": false,
-  "goal": {
-    "count": 60
-  },
   "waves": [],
   "events": [
     {
@@ -74,5 +71,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

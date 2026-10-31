@@ -1,11 +1,8 @@
 {
   "id": "w3-l3",
   "name": "FOSSE COMMUNE",
-  "type": "collect",
+  "type": "mission",
   "threat": 7,
-  "goal": {
-    "gems": 40
-  },
   "reward": {
     "clear": 80,
     "first": 160
@@ -125,7 +122,7 @@
   ],
   "bg": null,
   "intro": null,
-  "boss": null,
+  "boss": "dread",
   "finalBoss": null,
   "bossName": null,
   "hpMul": 1,
@@ -139,5 +136,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

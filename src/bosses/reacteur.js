@@ -313,6 +313,7 @@ mixin(GameScene, {
     this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill'); this.rxSfx('rxRoar', rx.wx);
   },
   rxDead(){        // fusion du cœur : grosse explosion verte, anneaux de choc, chaque pièce en un morceau ; puis fin du niveau
+    bestiaryBossKill(this, 'reacteur');
     const rx = this.rx; if (rx.dead) return; rx.dead = true;
     const [cx, cy] = this.rxW(RX.core[0], RX.core[1]);
     this.cameras.main.flash(600, 210, 255, 220, false); this.cameras.main.shake(900, 0.014);

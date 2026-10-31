@@ -4,8 +4,9 @@
 //  2. expose asset('sprites/x.png') -> data URI, utilisable dès la première ligne des autres fichiers
 //  3. charge les fichiers de src/scripts.json dans l'ordre
 // Il faut un serveur local (fetch ne marche pas en file://) : lance serve.bat.
-// ?sandbox : sauvegarde EN MÉMOIRE (rien n'est écrit dans le vrai localStorage) — utilisé par l'éditeur de niveaux (editor.html) pour tester sans abîmer la progression.
-if (/[?&]sandbox\b/.test(location.search)) {
+// ?sandbox (et ?lab) : sauvegarde EN MÉMOIRE (rien n'est écrit dans le vrai localStorage) — utilisé par l'éditeur de niveaux (editor.html) pour tester sans abîmer la progression.
+if (/[?&](sandbox|lab)\b/.test(location.search)) {
+  window.__realLS = window.localStorage;          // le vrai stockage reste joignable (parties du laboratoire quand il n'y a pas de serveur local)          // ?lab : laboratoire de test (src/dev/lab.js), même sauvegarde en mémoire
   const mem = {};
   const fake = { getItem: k => (k in mem ? mem[k] : null), setItem: (k, v) => { mem[k] = String(v); }, removeItem: k => { delete mem[k]; }, clear: () => { Object.keys(mem).forEach(k => delete mem[k]); }, key: i => Object.keys(mem)[i] || null, get length() { return Object.keys(mem).length; } };
   try { Object.defineProperty(window, 'localStorage', { value: fake, configurable: true }); } catch (e) { /* ignore */ }

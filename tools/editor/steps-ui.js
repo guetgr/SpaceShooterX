@@ -278,12 +278,9 @@
     });
   }
 
-  function renderSteps(parent, level){
-    const sec = section('ETAPES DU NIVEAU', true), body = sec.querySelector('.body');
-    body.appendChild(el('p', 'sub', 'Déroulé de la mission, étape par étape. Dépliez une étape pour régler ses valeurs ; une valeur orange est modifiée (cliquez sur ↺ pour revenir à l\'origine). Tout est écrit dans le JSON du niveau (EXPORTER).'));
-    const holder = el('div', 'st-list'); body.appendChild(holder);
-    const ctx = { id:level.id, holder, views:[], sig:null, doc:()=> editorLevelDocument(level.id) };
-    ctx.commit = (field, value)=>{
+  // écrit une valeur de champ dans le brouillon ('' = ok, sinon message d'erreur) : commun au panneau des étapes et à l'inspecteur du boss
+  function commitFor(ctx){
+    return (field, value)=>{
       let d;
       try { d = M().applyFieldValue(ctx.doc(), field, value); } catch(e){ return String(e && e.message || e); }
       stepsStore(ctx.id, d, field);
@@ -291,11 +288,32 @@
       if (field.path[0] === 'tutorial' && field.path[1] === 'comp' && typeof updateSum === 'function') updateSum();
       return '';
     };
+  }
+
+  // une seule étape (ex. 'boss') rendue dans `parent` : utilisée par l'inspecteur de la timeline
+  function renderStepOnly(parent, level, stepId){
+    const holder = el('div', 'st-list'); parent.appendChild(holder);
+    const ctx = { id:level.id, holder, views:[], sig:null, doc:()=> editorLevelDocument(level.id) };
+    ctx.commit = commitFor(ctx);
+    try {
+      const doc = ctx.doc(), step = M().buildSteps(doc, catalogsFor(ctx.id)).find(x=> x.id === stepId);
+      if (!step){ holder.appendChild(el('div', 'warn', 'Étape introuvable : ' + stepId)); return; }
+      const r = renderStep(ctx, step, doc); r.box.open = true; holder.appendChild(r.box);
+    } catch(e){ holder.appendChild(el('div', 'warn', 'Affichage impossible (' + (e && e.message || e) + ')')); }
+  }
+
+  function renderSteps(parent, level){
+    const sec = section('ETAPES DU NIVEAU', true), body = sec.querySelector('.body');
+    body.appendChild(el('p', 'sub', 'Déroulé de la mission, étape par étape. Dépliez une étape pour régler ses valeurs ; une valeur orange est modifiée (cliquez sur ↺ pour revenir à l\'origine). Tout est écrit dans le JSON du niveau (EXPORTER).'));
+    const holder = el('div', 'st-list'); body.appendChild(holder);
+    const ctx = { id:level.id, holder, views:[], sig:null, doc:()=> editorLevelDocument(level.id) };
+    ctx.commit = commitFor(ctx);
     S.refreshSteps = ()=> refresh(ctx);
     build(ctx);
     parent.appendChild(sec);
   }
 
   root.renderSteps = renderSteps;
+  root.renderStepOnly = renderStepOnly;
   root.stepsStore = stepsStore;
 })(typeof globalThis !== 'undefined' ? globalThis : this);

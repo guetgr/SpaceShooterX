@@ -1,12 +1,9 @@
 {
   "id": "w1-l3",
   "name": "PLUIE DE CRISTAUX",
-  "type": "collect",
+  "type": "mission",
   "threat": 2,
   "bg": "cristaux",
-  "goal": {
-    "gems": 25
-  },
   "spawns": [
     {
       "type": "sat",
@@ -61,5 +58,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

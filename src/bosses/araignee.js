@@ -320,6 +320,7 @@ mixin(GameScene, {
     this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill'); this.arSfx('arRoar', ar.wx);
   },
   arDead(){        // effondrement final : grosse explosion, chaque bras en un morceau, éclats et étincelles ; puis fin du niveau
+    bestiaryBossKill(this, 'araignee');
     const ar = this.ar; if (ar.dead) return; ar.dead = true;
     const cx = ar.wx, cy = ar.wy + 84*ar.U*1.6;
     this.cameras.main.flash(600, 255, 255, 255, false); this.cameras.main.shake(900, 0.014);

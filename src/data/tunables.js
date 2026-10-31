@@ -10,6 +10,46 @@
 // tunablesApply(lvDef) est appelé au début de chaque mission (GameScene.create) : il remet D'ABORD toutes les valeurs d'origine, PUIS applique lvDef.bossTune.
 // AJOUTER UN RÉGLAGE : ajouter une ligne ici (chemin existant dans la constante, valeur d'origine dans les bornes), relancer tools/tunables_test.py.
 const TUNABLES = {
+  // Boss du secteur 2 (bosses/w2.js, configs dans data/boss-w2.js : BOSS_W2.<boss>)
+  cb: [
+    { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Crabe à scies' },
+    { path:'thresh', len:2, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état d\'usure suivant (2 paliers décroissants)' },
+    { path:'dmg.saw', label:'Dégâts scie', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : scie' },
+    { path:'dmg.shard', label:'Dégâts éclat', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : éclat' },
+    { path:'dmg.contact', label:'Dégâts contact', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : contact' },
+  ],
+  ic: [
+    { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Incinérateur' },
+    { path:'thresh', len:2, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état d\'usure suivant (2 paliers décroissants)' },
+    { path:'dmg.fire', label:'Dégâts flamme', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : flamme' },
+    { path:'dmg.orb', label:'Dégâts orbe de feu', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : orbe de feu' },
+    { path:'dmg.lava', label:'Dégâts boule de lave', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : boule de lave' },
+    { path:'dmg.shard', label:'Dégâts éclat', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : éclat' },
+    { path:'dmg.zone', label:'Dégâts flaque brûlante', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : flaque brûlante' },
+    { path:'dmg.contact', label:'Dégâts contact', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : contact' },
+  ],
+  bn: [
+    { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Benne folle' },
+    { path:'thresh', len:2, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état d\'usure suivant (2 paliers décroissants)' },
+    { path:'dmg.cube', label:'Dégâts cube de ferraille', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : cube de ferraille' },
+    { path:'dmg.shard', label:'Dégâts éclat', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : éclat' },
+    { path:'dmg.contact', label:'Dégâts contact', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : contact' },
+  ],
+  by: [
+    { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Broyeur' },
+    { path:'thresh', len:2, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état d\'usure suivant (2 paliers décroissants)' },
+    { path:'dmg.tooth', label:'Dégâts dent', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : dent' },
+    { path:'dmg.shard', label:'Dégâts éclat', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : éclat' },
+    { path:'dmg.piston', label:'Dégâts bras à pistons', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : bras à pistons' },
+    { path:'dmg.contact', label:'Dégâts contact', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : contact' },
+  ],
+  rp: [
+    { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie du Réparateur en chef' },
+    { path:'thresh', len:2, ordered:'desc', label:'Paliers d\'usure', min:1, max:99, step:1, unit:'% de vie', help:'Pourcentage de vie sous lequel le boss passe à l\'état d\'usure suivant (2 paliers décroissants)' },
+    { path:'dmg.beam', label:'Dégâts chalumeau', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : chalumeau' },
+    { path:'dmg.drone', label:'Dégâts drone', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : drone' },
+    { path:'dmg.contact', label:'Dégâts contact', min:0, max:60, step:1, unit:'dégâts', help:'Dégâts : contact' },
+  ],
   // Araignée de tri (bosses/araignee.js, AR)
   ar: [
     { path:'hp', label:'PV', min:50, max:20000, step:50, unit:'PV', help:'Points de vie de l\'Araignée de tri' },
@@ -135,7 +175,7 @@ const TUNABLES = {
 };
 
 // Racines : id -> constante vivante. `antenne` (TUTO_TUNE.boss) n'est pas gérée ici (schéma seulement).
-const TUNABLE_ROOTS = { ar:()=> AR, mt:()=> MT, rx:()=> RX, an:()=> AN, pd:()=> PD, bras:()=> BRAS, pil:()=> PIL, ec:()=> EC };
+const TUNABLE_ROOTS = { ar:()=> AR, mt:()=> MT, rx:()=> RX, an:()=> AN, pd:()=> PD, cb:()=> BOSS_W2.crabe, ic:()=> BOSS_W2.incinerateur, bn:()=> BOSS_W2.benne, by:()=> BOSS_W2.broyeur, rp:()=> BOSS_W2.reparateur, bras:()=> BRAS, pil:()=> PIL, ec:()=> EC };
 const TUNABLES_PRISTINE = {};
 
 function tunablePathGet(root, path){

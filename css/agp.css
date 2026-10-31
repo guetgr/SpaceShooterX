@@ -244,7 +244,7 @@
 /* ===================================================================
    RAPPORT D'INTERVENTION (écran de fin de mission)
    =================================================================== */
-#gameover{ justify-content:center; padding:10px 12px; overflow-y:auto; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
+#gameover{ justify-content:flex-start; padding:0; overflow:hidden; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
 #gameover.win, #gameover:not(.win){ --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
 .rp-doc{
   position:relative; width:100%; max-width:340px; padding:8px 24px 11px; text-align:left; color:var(--agp-ink); background-color:var(--agp-paper);
@@ -286,16 +286,20 @@
 .go-extra{ margin:3px 0 0; font-size:16px; line-height:1; text-align:left; color:#3b463e; }
 .go-extra div{ padding:1px 0; }
 .go-extra .go-near{ color:#8a4a00; } .go-extra .go-boss{ color:#a02a20; }
-.rp-norma{ margin-top:5px; padding:5px 8px 6px; background:#0a100d; border:2px solid var(--agp-ink); }
-.rp-norma .rp-lab{ color:var(--agp-yellow); }
-.rp-norma p{ margin:2px 0 0; font-family:var(--vt); font-size:18px; line-height:1; color:#8dffb8; min-height:36px; }
-.rp-norma p.typing::after{ content:'█'; margin-left:2px; animation:blink .5s steps(2) infinite; }
+.rp-norma{ display:flex; gap:6px; align-items:flex-start; margin-top:6px; }      /* même présentation que les transmissions en mission : visage + boîte (.nm-av / .nm-body) */
+.rp-norma .nm-body{ flex:1; min-width:0; min-height:44px; }
+.rp-norma .nm-txt{ min-height:36px; }
+.rp-norma .nm-txt.typing::after{ content:'█'; margin-left:2px; animation:blink .5s steps(2) infinite; }
+.rp-norma:has(.typing) .nm-mouth{ animation:nmTalk .2s steps(2) infinite; }
 @keyframes blink{ 50%{ opacity:0; } }
 .new-best{ margin:8px 8px 0; padding:2px 6px; text-align:center; font-family:var(--px); font-size:7px; letter-spacing:1px; color:#14110a; background:#ffd75a; }
-#gameover > .btn{ width:100%; max-width:340px; margin-top:6px; font-size:10px; letter-spacing:1px; padding:9px 10px; }
-#gameover > .btn.secondary{ margin-top:5px; padding:7px 10px; min-width:0; font-size:8px; }
-#gameover > .btn:not(.secondary) + .btn:not(.secondary){ margin-top:8px; }
-#gameover > .btn:not(.secondary):not(.hidden) ~ .btn:not(.secondary){ }
+/* le document défile seul ; les boutons restent fixes en bas de l'écran */
+.rp-scroll{ flex:1 1 auto; min-height:0; width:100%; overflow-y:auto; padding:10px 12px 8px; display:flex; flex-direction:column; align-items:center; scrollbar-width:none; }
+.rp-scroll::-webkit-scrollbar{ display:none; }
+.rp-scroll > .rp-doc{ flex:none; margin:auto 0; }
+.rp-btns{ flex:none; width:100%; display:flex; flex-direction:column; align-items:center; gap:7px; padding:14px 12px 12px; background:linear-gradient(transparent,#060a08 38%); }
+.rp-btns > .btn{ flex:none; width:100%; max-width:340px; margin:0; font-size:10px; letter-spacing:1px; padding:10px 10px; }
+.rp-btns > .btn.secondary{ padding:8px 10px; min-width:0; font-size:8px; }
 
 /* écran de fin du tutoriel : même calepin que le rapport d'intervention */
 #tutoEnd .te-big{ color:var(--agp-ink); text-shadow:none; }
@@ -364,3 +368,8 @@
 .trace path.next{ stroke:var(--agp-yellow); stroke-dasharray:5 5; stroke-width:2.5; animation:traceFlow .9s linear infinite; filter:drop-shadow(0 0 4px rgba(255,194,26,.8)); }
 @keyframes traceFlow{ to{ stroke-dashoffset:-10; } }
 @media (prefers-reduced-motion: reduce){ .node-ico, .trace path.next{ animation:none !important; } }
+
+/* écran de fin du tuto : même mise en page que le rapport d'intervention (document qui défile, boutons fixes en bas) */
+#tutoEnd{ justify-content:flex-start; padding:0; overflow:hidden; gap:0; --accent:#ffc21a; --accent-dim:rgba(255,194,26,.16); }
+.rp-row{ display:flex; gap:8px; width:100%; max-width:340px; }
+.overlay .rp-row > .btn, .overlay .rp-row > .btn.secondary{ flex:1; min-width:0; margin:0; padding:8px 6px; font-size:8px; letter-spacing:.5px; }

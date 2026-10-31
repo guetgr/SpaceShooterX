@@ -69,9 +69,25 @@ mixin(GameScene, {
     scroll.innerHTML = isWorldUnlocked(world.id) ? list.map(t=> this.rdCardHtml(meta, t)).join('') :
       '<div class="rd-locked">ACCES NON AUTORISE<small>Secteur non atteint : validez d\'abord l\'incident majeur du secteur précédent.</small></div>';
     scroll.scrollTop = y;
+    this.rdMoreUpdate(); setTimeout(()=> this.rdMoreUpdate(), 500);      // la page peut encore être masquée / en glissement : on remesure après
+  },
+
+  // indices de défilement : petit chevron discret (haut / bas) tant qu'il reste des cartes hors de vue
+  rdMoreUpdate(){
+    const sc = document.getElementById('treeScroll'), up = document.getElementById('rdMoreUp'), dn = document.getElementById('rdMoreDown');
+    if (!sc || !up || !dn) return;
+    up.hidden = sc.scrollTop < 8;
+    dn.hidden = sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 8;
   },
 
   setupRdUi(){
+    const sc = document.getElementById('treeScroll');
+    ['Up', 'Down'].forEach(d=>{
+      const m = document.createElement('div'); m.id = 'rdMore' + d; m.className = 'rd-more rd-more-' + d.toLowerCase(); m.hidden = true; m.setAttribute('aria-hidden', 'true');
+      m.innerHTML = uiIco('arrow_r', 10);
+      sc.after(m);
+    });
+    sc.addEventListener('scroll', ()=> this.rdMoreUpdate(), { passive:true });
     document.getElementById('treeTabs').onclick = e=>{
       const t = e.target.closest('.ttab'); if (!t || t.dataset.id === this.rdWorld().id) return;
       sfx.uiSelect(); this._rdWorldId = t.dataset.id; this._rdNote = null;

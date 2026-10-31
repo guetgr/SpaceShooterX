@@ -1,6 +1,61 @@
-﻿# PASSATION — Space Shooter X (état au 28 oct. 2026)
+# PASSATION — Space Shooter X (contexte narratif mis à jour le 29 oct. 2026)
 
-> Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers.md` (bible de l'univers, référence du lore), `docs/brief-univers-agp.md` (ton de l'interface), puis `docs/carte-du-code.md` (où est quoi).
+> Lire d'abord `CLAUDE.md` (règles), `docs/bible-univers-v2.md` (référence narrative actuelle), `docs/brief-univers-agp.md` (interface ; la bible v2 prévaut en cas de contradiction), puis `docs/carte-du-code.md` (où est quoi).
+
+## À FAIRE À LA PROCHAINE SYNCHRO (Bio, ou tout agent qui reprend après un `git pull`)
+
+**Activer le hook de la carte du code**, une seule fois sur cette copie du dépôt : lancer `git config core.hooksPath tools/hooks` (Mac et Windows, depuis la racine du dépôt). Le hook `tools/hooks/pre-commit` régénère alors `docs/carte/` à chaque commit (le script prend ~1 s) et l'ajoute au commit ; `.gitattributes` fait fusionner `docs/carte/*.md` ligne à ligne, donc les ajouts des deux côtés s'additionnent. Vérifier ensuite avec `git config core.hooksPath` (doit afficher `tools/hooks`). **Une fois fait, supprimer cette section de `PASSATION.md`** (et ne rien dire d'autre à ce sujet à Bio : c'est fait). Détails : `CLAUDE.md`, section « Carte du code ».
+
+## Mise à jour narrative — 29 octobre 2026 (à lire avant reprise)
+
+**Référence narrative actuelle : [docs/bible-univers-v2.md](docs/bible-univers-v2.md).** Cette version prévaut sur `docs/bible-univers.md` et `docs/brief-univers-agp.md` pour toute contradiction de campagne, personnages ou révélations. Les anciennes versions sont conservées pour historique. La direction artistique reste décrite dans `docs/direction-artistique-agp.md`.
+
+### Contexte commun à tous les développeurs et agents
+
+- Le joueur est un employé de l'AGP, chargé de nettoyer la galaxie avec sa camionnette. Le nettoyage ordinaire n'est normalement pas hostile : les premiers tirs de satellites pendant le tuto constituent une anomalie explicite.
+- N.O.R.M.A. intervient dès le départ dans les menus et en mission : conseils de jeu, astuces, piques et progression de l'intrigue. Messages courts, lisibles, non bloquants. Les révélations passent une seule fois, les tentatives suivantes utilisent des variantes.
+- **Monde 1 : orbite basse terrestre**, un tuto et cinq niveaux (le dernier est le niveau boss). Une entreprise a déclaré ses installations abandonnées mais en protège encore le matériel. Le joueur termine sa tournée malgré cette résistance.
+- **Le PDG du monde 1 dirige une autre entreprise, pas l'AGP.** Son affaire est autonome : aucun lien secret, document-passerelle ou trafic partagé avec l'AGP. Sa défaite clôt le monde 1.
+- **Monde 2 : Mars directement**, cinq niveaux sans nouveau tuto. La Casse lunaire ne précède plus Mars. Les mondes suivants restent à définir : ne pas simplement décaler les anciens mondes ni reprendre leurs révélations comme validées.
+- Mars est une planète poubelle avec des mécas industriels lourds, câbles, outils et pièces récupérées. Inspiration visuelle Mechanicus, identité originale au jeu. Pas de religion des machines ni de ferveur industrielle. Humour modéré, surtout par N.O.R.M.A. ; environnement et ennemis pris au sérieux.
+
+### Monde 2 validé — trame de développement
+
+| Niveau | Mission / incident | Découverte |
+|---|---|---|
+| 1 — Zone de déchargement | Dégager les arrivées ; **Le Déchargeur**. | La zone saturée continue de recevoir des cargaisons. |
+| 2 — Matière première | Dégager le tri ; **Le Désosseur**. | Les machines utilisent les cargaisons pour leur propre maintenance ; le reste retourne en décharge. |
+| 3 — Stockage définitif | Neutraliser les déchets dangereux ; **Le Gardien de confinement**. | Des conteneurs intacts sont enregistrés comme détruits ou recyclés. |
+| 4 — Maintien en activité | Atteindre la supervision ; **Le Contremaître**. | L'AGP a reçu les alertes de saturation, mais a maintenu les transferts. |
+| 5 — Traitement en cours | Courte approche puis boss **Le Directeur de traitement**. | « Traité » signifie trié puis stocké ; les rapports AGP annoncent « recyclé ». |
+
+Mobs, rôles, attaques et interventions de N.O.R.M.A. sont détaillés dans la bible v2 § 4. La destination suivante, la réaction de l'AGP, les responsables et l'ampleur du système restent ouverts.
+
+### Conséquences pour le code — à traiter séparément
+
+Cette mise à jour est **documentaire** : elle ne signifie pas que la nouvelle campagne est implémentée. L'état technique du 28 octobre conservé ci-dessous est historique ; le dépôt peut avoir évolué depuis et doit être vérifié avant reprise.
+
+1. Comparer la bible v2 aux données des mondes, JSON de niveaux, textes `agp-lore.js` et transmissions `norma` ; relever les écarts avant de les corriger.
+2. Préparer la migration narrative Lune/Mars : intitulés, planètes et décors, ordres de mission, mobs, boss et dialogues. Ne pas changer silencieusement les IDs, sauvegardes, déblocages, plans R&D ou pièces de secteur.
+3. Les comportements de mobs et boss décrivent la cible de conception : réutiliser les mécaniques existantes quand elles conviennent ; proposer séparément toute modification de gameplay ou d'équilibrage.
+4. Ne pas confondre validation de concept et asset final : les concepts récents du drone relais et de l'Antenne-Mère sont validés visuellement, leurs animations ne sont pas finalisées. Les essais récents de découpage/visée du satellite de défense ont été refusés pour production. Ne pas remplacer les assets fonctionnels du dépôt par ces prototypes.
+5. Revue visuelle privée : https://space-shooter-x-sprites-20261028.guetguetr.chatgpt.site (concepts et étapes ; ne fait pas autorité sur l'état du code).
+
+**Ordre de reprise :** lire les règles de `CLAUDE.md`, cette mise à jour, la bible v2 et `docs/carte-du-code.md`, puis contrôler l'état réel des fichiers concernés. Ne considérer aucun nouveau mob, dialogue ou asset comme intégré sans vérification.
+
+### Missions Gemini intégrées — 29 octobre 2026
+
+Les JSON Gemini de `w1-l3`, `w1-l4`, `w1-l5` et `w2-l1` à `w2-l5` sont intégrés (`w1-l1`/`w1-l2` : voir plus haut). Historique de l'éditeur (`.editor-history/`, local, non versionné) : pour chacun, « Version initiale », « Prompt Gemini (brut, tel quel) » et « Adaptation Gemini ».
+
+- **Ennemis inconnus remplacés par des mobs existants** : monde 1 → `diver`, `ghost`, `elite`, `bomber`, `shieldedGrunt`, `tank` ; monde 2 → `grunt`, `sniper`, `charo`, `mothership`, `spider`, `kamikaze`, `splitter`, `swarmer`, `mine` (hors monde 1). Les vrais mobs (découpeur, presse, mécano, sentinelle…) restent à créer.
+- **Plus d'objectif de niveau (29 oct. 2026, décidé par Guet)** : tout ordre se gagne en battant son boss. Les types `survive`, `kill`, `collect` sont devenus `mission` (`boss` = dernier ordre du secteur, boss dès le départ) ; la clé `goal` est supprimée des 42 JSON ; les 17 ordres sans boss reçoivent le Dreadnought générique `boss:'dread'` (PROVISOIRE, en attendant leurs vrais boss : Mars 1 à 5, mondes 3 à 8). Le boss arrive après les autres mobs de la timeline (`levelBossAt`, `src/data/boss-arrival.js`) ou à `bossAt` (écrit à la main pour les ordres sans vagues). Effets de bord à relire : les ordres 2 à 4 du monde 1 voient leur boss arriver quelques secondes plus tôt qu'avant (dernière vague + 5 s au lieu de l'ancienne durée) ; les ordres 1 à 5 de Mars finissent maintenant sur un Dreadnought provisoire ; finition : lignes `goal` (« Approche du boss »), `boss`, `win`, `clean` pour tous. Éditeur : étape « MISSION » (arrivée du boss), bloc Boss glissable dans la timeline. Tests adaptés (`level_test.py`, tests de l'éditeur, fixtures).
+- **Objectifs passés en survie** : `w1-l3` (ex-collect), `w1-l4` (ex-kill), `w2-l2` (ex-kill), `w2-l4` (ex-collect) et `w2-l5` (ex-kill). `w2-l1` et `w2-l3` l'étaient déjà.
+- **Monde 2 : aucun boss final** (`dechargeur`, `desosseur`, `gardien_confinement`, `contremaitre`, `directeur_traitement` n'existent pas) ; fonds `mars_*` inexistants, fonds actuels conservés. `finalBoss` n'accepte que `meteo|araignee|reacteur|anneau|pdg`.
+- **`w1-l5` reste de type `boss`** : en survie, `finalBoss:'pdg'` lancerait l'Araignée (branche `else arStart()` de `game/level.js`) et `check_worlds` exige un boss au dernier niveau. Le PDG arrive donc à 1,5 s et les vagues Gemini se jouent pendant le combat (pas d'approche préalable comme dans la bible).
+- `w1-l4` : `finalBoss` corrigé `anneaux` → `anneau`. Le monde 2 compte encore 6 niveaux (`w2-l6` = Dreadnought), la bible v2 en prévoit 5.
+- **Tests** : les cas « kill/collect » pointent maintenant sur `w3-l2` / `w3-l3`. Non relancés après les dernières modifications : `level_test.py`, `home_test.py` (échoue déjà : onglet BAIES supprimé par `dfdedab`), `perks_test.py`.
+
+---
 
 > **Refonte de la progression (branche `progression-agp`, fusionnée dans `main` le 28 oct. 2026)** : design `docs/superpowers/specs/2026-10-27-progression-design.md`, plan `docs/superpowers/plans/2026-10-27-progression-agp.md`. Étapes 1 (composants visibles), 2 (sauvegarde v3 + atelier, plan `docs/superpowers/plans/2026-10-27-atelier-v3.md`), 3 (R&D par technologie, baies d'équipement, assemblage en mission, plan `docs/superpowers/plans/2026-10-27-rd-emplacements.md`) et 6a (textes des secteurs 2 et 3) faites ; étapes 4 (plans et pièces de secteur lâchés en mission) et 5 (distinctions RH, livrées) à planifier une par une.
 
@@ -50,7 +105,7 @@ Jeu complet et jouable sur navigateur (mobile portrait), habillé dans l'univers
 - **À part, pas dans ce sprint** : outil de game design (bestiaire, niveaux d'alerte, test live + import) à spécifier séparément, probablement en extension de `editor.html`.
 
 **Prochaines étapes proposées**
-- **Refonte de la progression** : étapes 4 et 5 du design (plans et pièces de secteur lâchés en mission, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : vagues des secteurs 2 et 3 selon la bible, boss Broyeur et Directeur (images à générer), planètes à échanger (la Casse lunaire affiche aujourd'hui une géante rouge, Mars une planète violette).
+- **Refonte de la progression** : étapes 4 et 5 du design (plans et pièces de secteur lâchés en mission, distinctions RH → livrées), chacune avec son propre plan. Étape 6b : feuille de route narrative à revoir selon la bible v2 : Mars devient le monde 2 et les mondes suivants restent à définir. Auditer données, décors, mobs et boss avant migration.
 - **Simulateur** : `sim_balance.py campaign` saute désormais le tutoriel (le bot ne sait pas le jouer depuis le boss Antenne-Mère).
 - Tester le HUD et la carte sur de **vrais téléphones** (lisibilité, rythme des animations, parallaxe).
 - **Icônes manquantes** à faire générer (brief ComfyUI à écrire) : niveaux des secteurs 2 et 3 (à ajouter dans `LEVEL_ICONS`), objets en orbite des secteurs 2 et 3 (`theme.orbiter`), puis les ~100 icônes de compétences, cartes, reliques et pactes (aujourd'hui des émojis réduits en pixel). Import : `tools/import_sprites_niveaux.py`, `tools/import_decors_carte.py`.

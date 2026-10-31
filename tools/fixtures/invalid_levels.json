@@ -507,32 +507,29 @@
    "expect": "Difficulté invalide"
   },
   {
-   "id": "objectif-nul",
+   "id": "bossat-nul",
    "level": "w1-l1",
    "set": {
-    "goal": {
-     "seconds": 0
-    }
+    "bossAt": 0
    },
-   "expect": "Objectif positif requis"
+   "expect": "bossAt"
   },
   {
-   "id": "objectif-impossible",
-   "level": "w1-l4",
+   "id": "boss-manquant",
+   "level": "w1-l1",
    "set": {
-    "spawns": [],
-    "waves": []
+    "finalBoss": null,
+    "boss": null
    },
-   "expect": "Objectif impossible"
+   "expect": "Boss manquant"
   },
   {
-   "id": "objectif-impossible-timelineonly",
-   "level": "w1-l4",
+   "id": "bossat-valide",
+   "level": "w1-l1",
    "set": {
-    "timelineOnly": 1,
-    "waves": []
+    "bossAt": 45
    },
-   "expect": "Objectif impossible"
+   "expect": null
   },
   {
    "id": "zoom-hors-bornes",
@@ -545,6 +542,159 @@
     }
    },
    "expect": "zoom.seconds"
+  },
+  {
+   "id": "wave-formation-valid",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "formation": "star",
+      "spread": 180,
+      "x": 50,
+      "y": 20,
+      "alert": 6,
+      "minAlert": 1,
+      "tier": 2,
+      "hpMul": 2,
+      "dmgMul": 3,
+      "speedMul": 1.5
+     }
+    ]
+   },
+   "expect": null
+  },
+  {
+   "id": "wave-formation-unknown",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "formation": "spiral"
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-alert-decimal",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "alert": 1.5
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-alert-too-high",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "alert": 21
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-spread-invalid",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "spread": 0
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-x-invalid",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "x": 101
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-hp-invalid",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "hpMul": 0
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-min-alert-bool",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "minAlert": true
+     }
+    ]
+   },
+   "expect": "Vague invalide"
+  },
+  {
+   "id": "wave-extra-field",
+   "level": "w1-l1",
+   "set": {
+    "waves": [
+     {
+      "type": "sat",
+      "at": 5,
+      "count": 5,
+      "spacing": 0,
+      "unknown": 2
+     }
+    ]
+   },
+   "expect": "Vague invalide"
   }
  ]
 }

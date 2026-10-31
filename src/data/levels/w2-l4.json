@@ -1,11 +1,8 @@
 {
   "id": "w2-l4",
   "name": "BENNE A CRISTAUX",
-  "type": "collect",
+  "type": "mission",
   "threat": 4,
-  "goal": {
-    "gems": 35
-  },
   "reward": {
     "clear": 55,
     "first": 110
@@ -73,5 +70,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

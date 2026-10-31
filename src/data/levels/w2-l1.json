@@ -1,11 +1,8 @@
 {
   "id": "w2-l1",
   "name": "QUAI DE DECHARGEMENT",
-  "type": "survive",
+  "type": "mission",
   "threat": 3,
-  "goal": {
-    "seconds": 75
-  },
   "intro": "earth",
   "reward": {
     "clear": 40,
@@ -49,5 +46,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 75
 }

@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="css/rd.css">
 <link rel="stylesheet" href="css/home-orbital.css">
 </head>
-<body>
+<body class="at-home">
 <div id="stage">
   <div id="game-container">
     <div class="scanlines"></div>
@@ -83,12 +83,18 @@
             <span class="map-arrow ghost"></span>
           </div>
           <div class="map-gap world-only"></div>
+          <div id="menuNorma" class="world-only"><div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A.</div><div class="nm-txt" id="menuNormaTxt"></div></div></div>
           <div class="level-card world-only" id="levelCard"></div>
           <button class="btn world-only" id="btnLaunch">PRENDRE LE SERVICE</button>
           <div id="mapOrbit" class="world-only"></div>
-          <div class="gx-title galaxy-only">REPARTITION DES SECTEURS</div>
-          <div class="gx-hint galaxy-only">Glisse pour parcourir · touche un secteur</div>
-          <button class="btn secondary galaxy-only" id="btnBackWorld">RETOUR AU SECTEUR</button>
+          <div id="vortexCard" class="level-card galaxy-only hidden">
+            <div class="om-top"><span class="om-no">ORDRE SPECIAL</span><span class="om-tag t-std">HEURES SUPPLEMENTAIRES</span></div>
+            <div class="lc-name">LE VORTEX</div>
+            <div class="om-row"><span>OBJECTIF</span><em>Tenir le plus longtemps possible</em></div>
+            <div class="om-row"><span>RECORD DUREE</span><em id="vxTime">--</em></div>
+            <div class="om-row"><span>RECORD DEGATS</span><em id="vxDmg">--</em></div>
+            <div class="vx-btns"><button class="btn" id="btnVortexGo">ENTRER DANS LE VORTEX</button><button class="btn secondary" id="btnVortexClose">FERMER</button></div>
+          </div>
         </section>
         <section class="home-page" id="pageTree">
           <svg class="rd-tree-lines" viewBox="0 0 400 700" aria-hidden="true"><path d="M41 158V524 M41 225H52 M41 345H52 M41 465H52"></path><circle cx="41" cy="225" r="3"></circle><circle cx="41" cy="345" r="3"></circle><circle cx="41" cy="465" r="3"></circle></svg>
@@ -266,7 +272,7 @@
     <button id="odBtn"><span>OD</span></button>
     <div id="redVig"></div>
     <div id="gameover" class="overlay hidden">
-      <div class="rp-doc">
+      <div class="rp-scroll"><div class="rp-doc">
         <div class="rp-head"><i class="agp-logo">AGP</i><span class="rp-h1">RAPPORT D'INTERVENTION</span><span class="rp-no" id="rpNo">N° 00000</span></div>
         <div class="go-level" id="goLevel"></div>
         <div class="go-title">INTERVENTION VALIDEE</div>
@@ -281,12 +287,14 @@
         <div class="go-rewards" id="goRewards"></div>
         <div class="rp-eval"><span class="rp-lab">EVALUATION</span><b class="rp-grade" id="rpGrade">D</b><span class="rp-mention" id="rpMention"></span></div>
         <div class="go-extra" id="goExtra"></div>
-        <div class="rp-norma"><span class="rp-lab">N.O.R.M.A</span><p id="rpNorma"></p></div>
+        <div class="rp-norma"><div class="nm-av"><i class="nm-eye"></i><i class="nm-mouth"></i></div><div class="nm-body"><div class="nm-head">N.O.R.M.A.</div><div class="nm-txt" id="rpNorma"></div></div></div>
         <div class="new-best hidden" id="newBest"><i data-ico="star"></i> RENDEMENT RECORD <i data-ico="star"></i></div>
+      </div></div>
+      <div class="rp-btns">
+        <button class="btn hidden" id="btnNext">ORDRE SUIVANT</button>
+        <button class="btn" id="btnRetry">REFAIRE L'INTERVENTION</button>
+        <button class="btn secondary" id="btnGoMenu">RETOUR AU BUREAU</button>
       </div>
-      <button class="btn hidden" id="btnNext">ORDRE SUIVANT</button>
-      <button class="btn" id="btnRetry">REFAIRE L'INTERVENTION</button>
-      <button class="btn secondary" id="btnGoMenu">RETOUR AU BUREAU</button>
     </div>
 
   </div>

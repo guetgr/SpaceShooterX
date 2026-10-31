@@ -166,8 +166,11 @@ def main():
     css_text = {f: read(f) for f in css_files}
     outputs = {}
 
+    # un seul découpage du dépôt en mots (au lieu d'une recherche regex par symbole sur tout le texte : c'était le goulot, plusieurs minutes)
+    tokens = collections.Counter(re.findall(r'[\w$]+', big))
+
     def count_word(name):
-        return len(re.findall(r'(?<![\w$])' + re.escape(name) + r'(?![\w$])', big))
+        return tokens[name]
 
     # ------------------------------------------------------------------ fichiers.md
     o = [HEADER, "# Carte des fichiers (ordre de chargement)\n\n",
@@ -238,8 +241,8 @@ def main():
     id_usage = collections.OrderedDict()
     for hid in html_ids:
         pat = re.compile(r"""['"`]%s['"`]|#%s(?![\w-])|\bid="%s\"|getElementById\(\s*['"]%s['"]""" % ((re.escape(hid),) * 4))
-        files = [f for f, t in js_text.items() if pat.search(t)]
-        in_css = [c for c, t in css_text.items() if re.search(r'#%s(?![\w-])' % re.escape(hid), t)]
+        files = [f for f, t in js_text.items() if hid in t and pat.search(t)]
+        in_css = [c for c, t in css_text.items() if hid in t and re.search(r'#%s(?![\w-])' % re.escape(hid), t)]
         id_usage[hid] = (files, in_css)
     dyn_ids = set(re.findall(r"""\.id\s*=\s*['"]([\w-]+)['"]""", big)) | set(re.findall(r"""id=\\?"([\w-]+)\\?\"""", '\n'.join(js_text.values()))) | set(re.findall(r"""setAttribute\(\s*['"]id['"]\s*,\s*['"]([\w-]+)['"]""", big))
     used_in_js = set(re.findall(r"""getElementById\(\s*['"]([\w-]+)['"]\s*\)""", '\n'.join(js_text.values()))) | set(re.findall(r"""(?<![\w.])\$\(\s*['"]([\w-]+)['"]\s*\)""", '\n'.join(js_text.values())))
@@ -281,10 +284,13 @@ def main():
                 if re.match(r'^[0-9a-f]{3,8}$', nm) and m.group(2): continue
                 names.setdefault(nm, (cf, ln))
     non_css = '\n'.join(t for f, t in corpus.items() if not f.endswith('.py'))
-    dead_css = sorted(n for n in names if not re.search(r'(?<![\w-])' + re.escape(n) + r'(?![\w-])', non_css))
+    css_words = set(re.findall(r'[\w-]+', non_css))
+    dead_css = sorted(n for n in names if n not in css_words)
     o.append('### Classes / ids CSS que ni le HTML ni le JS ne mentionnent (%d candidats)\n\nPeut aussi être une classe construite par concaténation de texte : vérifier avant de supprimer.\n\n' % len(dead_css))
     o.append(', '.join('`%s` (%s)' % (n, names[n][0].split('/')[-1]) for n in dead_css) + '\n\n')
-    used_anim = lambda nm: any(re.search(r'(?<![\w-])%s(?![\w-])' % re.escape(nm), t.replace('@keyframes %s' % nm, '')) for t in list(css_text.values()) + [non_css])
+    kf_words = collections.Counter(re.findall(r'[\w-]+', '\n'.join(list(css_text.values()) + [non_css])))
+    kf_defs = collections.Counter(re.findall(r'@keyframes ([\w-]+)', '\n'.join(css_text.values()) + '\n' + non_css))
+    used_anim = lambda nm: kf_words[nm] - kf_defs[nm] > 0
     dead_kf = sorted(nm for cf in css_files for nm, _ in keyframes[cf] if not used_anim(nm))
     o.append('### @keyframes jamais utilisés (%d)\n\n%s\n\n' % (len(dead_kf), ', '.join('`%s`' % k for k in dead_kf) or '—'))
     # assets
@@ -296,13 +302,14 @@ def main():
     broken = sorted(r for r in refs if r not in manifest and re.search(r'\.\w{2,5}$', r))
     o.append('### ⚠ `asset(...)` qui visent un fichier absent du manifeste (%d)\n\n%s\n\n' % (len(broken), ', '.join('`%s`' % r for r in broken) or '—'))
     code_only = '\n'.join(t for f, t in corpus.items() if f.startswith('src/') or f == 'index.html') + '\n'.join(css_text.values())
+    code_words = set(re.findall(r'[\w-]+', code_only))
     unref = []
     for a in manifest:
         base = os.path.splitext(os.path.basename(a))[0]
         keys = {base, re.sub(r'_\d+$', '', base)}
         if a.startswith('fonts/'):
             continue
-        if not any(re.search(r'(?<![\w-])' + re.escape(k) + r'(?![\w-])', code_only) or (a in code_only) for k in keys):
+        if not any((k in code_words if re.fullmatch(r'[\w-]+', k) else re.search(r'(?<![\w-])' + re.escape(k) + r'(?![\w-])', code_only)) or (a in code_only) for k in keys):
             unref.append(a)
     o.append("### Assets dont le nom n'apparaît nulle part dans le code (%d candidats)\n\nLes sons enregistrés sont référencés par leur nom dans `audio/sfx-files.js`, les sprites par `asset('…')` ou par des clés de texture : vérifier avant de supprimer.\n\n" % len(unref))
     o.append(', '.join('`%s`' % a for a in unref) + '\n')

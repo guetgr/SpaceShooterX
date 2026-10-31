@@ -51,4 +51,18 @@ const BESTIARY_LIST = [
   { type:'boss_kraken',    label:'BOSS KRAKEN',     bossId:'kraken' },
   { type:'boss_eclipse',   label:'BOSS ECLIPSE',    bossId:'eclipse' },
   { type:'boss_hydre',     label:'BOSS HYDRE',      bossId:'hydre' },
+  // boss de fin d'ordre autonomes (modules src/bosses/*.js) : comptés à leur mort par bestiaryBossKill
+  { type:'boss_meteo', label:'LA METEO', tex:'mtSheet', frame:0, finalBoss:true },
+  { type:'boss_araignee', label:'ARAIGNEE DE TRI', tex:'arSheet', frame:0, finalBoss:true },
+  { type:'boss_reacteur', label:'LE REACTEUR', tex:'rxSheet', frame:0, finalBoss:true },
+  { type:'boss_anneau', label:"L'ANNEAU", tex:'anSheet', frame:0, finalBoss:true },
+  { type:'boss_pdg', label:'LE PDG', tex:'pdSheet', frame:0, finalBoss:true },
+  { type:'boss_crabe', label:'LE CRABE A SCIES', tex:'w2Crabe', frame:0, flipY:true, finalBoss:true },
+  { type:'boss_incinerateur', label:"L'INCINERATEUR", tex:'w2Incinerateur', frame:0, flipY:true, finalBoss:true },
+  { type:'boss_benne', label:'LA BENNE FOLLE', tex:'w2Benne', frame:0, flipY:true, finalBoss:true },
+  { type:'boss_broyeur', label:'LE BROYEUR', tex:'w2Broyeur', frame:0, flipY:true, finalBoss:true },
+  { type:'boss_reparateur', label:'LE REPARATEUR EN CHEF', tex:'w2Reparateur', frame:0, flipY:true, finalBoss:true },
 ];
+
+// compte la mort d'un boss autonome (ils ne passent pas par killEnemy) : clé `boss_<id>`, enregistrée avec le reste du bestiaire
+function bestiaryBossKill(scene, id){ const k = 'boss_' + id; scene.bestiary.kills[k] = (scene.bestiary.kills[k] || 0) + 1; scene.bestiaryDirty = true; }

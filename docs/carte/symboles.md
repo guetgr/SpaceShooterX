@@ -219,6 +219,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `bankCombo` | méthode | `src/systems/combo.js` | `GameScene` |
 | `BESTIARY_KEY` | const | `src/data/bestiary.js` |  |
 | `BESTIARY_LIST` | const | `src/data/bestiary.js` |  |
+| `bestiaryBossKill` | fonction | `src/data/bestiary.js` |  |
 | `bestiaryKeyFor` | fonction | `src/data/achievements.js` |  |
 | `BG_TERRE_B64` | const | `src/data/image-assets.js` |  |
 | `BG_ZONES` | const | `src/gfx/procedural.js` |  |
@@ -241,13 +242,16 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `BOSS_ART` | const | `src/gfx/boss-art.js` |  |
 | `BOSS_DEFS` | const | `src/data/bosses.js` |  |
 | `BOSS_DMG_CAP` | const | `src/data/bosses.js` |  |
+| `BOSS_EVENT_DURATION` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_HP_BY_ALERT` | const | `src/data/bosses.js` |  |
 | `BOSS_LIGHTS` | const | `src/data/boss-lights.js` |  |
+| `BOSS_MARGIN` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_ORDER` | const | `src/data/bosses.js` |  |
 | `BOSS_PAL` | const | `src/gfx/sprite-rows.js` |  |
 | `BOSS_PHASE2_FROM` | const | `src/data/bosses.js` |  |
 | `BOSS_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `BOSS_RUN_ALERT_HP` | const | `src/data/balance.js` |  |
+| `BOSS_RUSH` | const | `src/data/boss-arrival.js` |  |
 | `BOSS_SPRITES` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_DMG` | const | `src/data/bosses.js` |  |
 | `BOSS_TIER_HP` | const | `src/data/bosses.js` |  |
@@ -317,6 +321,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `cleanupBossParts` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `cleanupGroup` | méthode | `src/game/loop.js` | `GameScene` |
 | `clearWells` | méthode | `src/events/forces.js` | `GameScene` |
+| `closeVortexCard` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `CLOUDS_EARTH_B64` | const | `src/data/image-assets.js` |  |
 | `CloudSave` | const | `src/core/cloud-save.js` |  |
 | `codexMark` | méthode | `src/ui/rd-ui.js` | `GameScene` |
@@ -464,6 +469,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `FAU_TRANS_B64` | const | `src/data/image-assets.js` |  |
 | `FileMusic` | classe | `src/audio/music.js` |  |
 | `fillPauseSub` | méthode | `src/ui/dom.js` | `GameScene` |
+| `FINAL_BOSS_NAMES` | const | `src/data/boss-arrival.js` |  |
 | `findNearestEnemies` | méthode | `src/player/weapons.js` | `GameScene` |
 | `findNearestEnemy` | méthode | `src/player/weapons.js` | `GameScene` |
 | `finishBoot` | méthode | `src/scenes/BootScene.js` | `BootScene` |
@@ -484,6 +490,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `FX_ANCHOR` | const | `src/data/boss-antenne.js` |  |
 | `GAL_FONT` | const | `src/home/galaxy.js` |  |
 | `GAL_STEP` | const | `src/home/galaxy.js` |  |
+| `GAL_TAP_SLOP` | const | `src/home/galaxy.js` |  |
 | `galaxyBlast` | méthode | `src/world/background.js` | `GameScene` |
 | `galaxyCurve` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `galaxyPos` | méthode | `src/home/galaxy.js` | `HomeScene` |
@@ -511,6 +518,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `getShipSkin` | fonction | `src/data/ship-skins.js` |  |
 | `getSpawnInterval` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `getTextureFrameDataURL` | méthode | `src/ui/pages.js` | `GameScene` |
+| `getVortexRecords` | fonction | `src/data/vortex.js` |  |
 | `getWorldProgress` | fonction | `src/data/world-progress.js` |  |
 | `GHOST_EXPL_B64` | const | `src/data/image-assets.js` |  |
 | `GHOST_FADE_B64` | const | `src/data/image-assets.js` |  |
@@ -537,6 +545,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `healerPulse` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `hexShade` | fonction | `src/gfx/procedural.js` |  |
 | `HOME_ORBIT` | const | `src/home/background.js` |  |
+| `HOME_ORBIT_FRONT` | const | `src/home/orbital.js` |  |
 | `HOME_ORBIT_VIEW` | const | `src/home/orbital.js` |  |
 | `HOME_STAT_LINES` | const | `src/home/ui.js` |  |
 | `homeMusic` | méthode | `src/home/ui.js` | `HomeScene` |
@@ -589,6 +598,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LATE_HP_GROWTH` | const | `src/data/balance.js` |  |
 | `lateDmgMul` | méthode | `src/game/difficulty.js` | `GameScene` |
 | `launchLevel` | méthode | `src/home/ui.js` | `HomeScene` |
+| `launchVortex` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `layoutBossParts` | méthode | `src/bosses/ai.js` | `GameScene` |
 | `LB_KEY` | const | `src/data/leaderboard.js` |  |
 | `leadAngle` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
@@ -598,12 +608,14 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `LEVEL_FILES` | const | `src/data/worlds/level-data.js` |  |
 | `LEVEL_ICONS` | const | `src/data/image-assets.js` |  |
 | `LEVEL_TYPES` | const | `src/data/worlds.js` |  |
+| `levelBossAt` | fonction | `src/data/boss-arrival.js` |  |
 | `levelById` | fonction | `src/data/worlds.js` |  |
 | `levelComp` | méthode | `src/game/level.js` | `GameScene` |
 | `levelCompletionDefs` | fonction | `src/data/completion.js` |  |
 | `levelGoalText` | fonction | `src/home/ui.js` |  |
 | `levelInit` | méthode | `src/game/level.js` | `GameScene` |
 | `levelProgress` | méthode | `src/game/level.js` | `GameScene` |
+| `levelSpawnWave` | méthode | `src/game/level.js` | `GameScene` |
 | `levelUp` | méthode | `src/player/progression.js` | `GameScene` |
 | `levelUpdate` | méthode | `src/game/level.js` | `GameScene` |
 | `levelWin` | méthode | `src/game/level.js` | `GameScene` |
@@ -751,7 +763,10 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `onEnemyHitsPlayer` | méthode | `src/combat/damage.js` | `GameScene` |
 | `onMissileHitsEnemy` | méthode | `src/combat/damage.js` | `GameScene` |
 | `openPauseMenu` | méthode | `src/ui/dom.js` | `GameScene` |
+| `openVortexCard` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `ORBIT_W1_B64` | const | `src/data/image-assets.js` |  |
+| `orbitDragEnd` | méthode | `src/home/orbital.js` | `HomeScene` |
+| `orbitDragMove` | méthode | `src/home/orbital.js` | `HomeScene` |
 | `pactBonus` | fonction | `src/data/pacts-style.js` |  |
 | `PACTS` | const | `src/data/pacts-style.js` |  |
 | `panOf` | méthode | `src/game/intro.js` | `GameScene` |
@@ -870,6 +885,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `rdCardHtml` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `rdEntry` | fonction | `src/data/techs.js` |  |
 | `rdGrantPlan` | fonction | `src/data/techs.js` |  |
+| `rdMoreUpdate` | méthode | `src/ui/rd-ui.js` | `GameScene` |
 | `rdNextCost` | fonction | `src/data/techs.js` |  |
 | `rdNextStep` | fonction | `src/data/techs.js` |  |
 | `rdUpgradeAt` | fonction | `src/data/techs.js` |  |
@@ -877,6 +893,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `realBossAlive` | méthode | `src/events/core.js` | `GameScene` |
 | `recordCompletion` | fonction | `src/data/completion.js` |  |
 | `recordLevelClear` | fonction | `src/data/world-progress.js` |  |
+| `recordVortexRun` | fonction | `src/data/vortex.js` |  |
 | `reflectShieldDamage` | méthode | `src/player/damage.js` | `GameScene` |
 | `refreshBossBar` | méthode | `src/bosses/parts.js` | `GameScene` |
 | `refreshGalaxy` | méthode | `src/home/galaxy.js` | `HomeScene` |
@@ -1012,6 +1029,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `SHOOTER_ROWS` | const | `src/gfx/sprite-rows.js` |  |
 | `SHOOTER_SHEET_B64` | const | `src/data/image-assets.js` |  |
 | `showCombo` | méthode | `src/systems/combo.js` | `GameScene` |
+| `showGalaxyNow` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `showHomeTree` | méthode | `src/home/ui.js` | `HomeScene` |
 | `showRelicChoice` | méthode | `src/systems/relics-fusions.js` | `GameScene` |
 | `showStartScreen` | méthode | `src/ui/dom.js` | `GameScene` |
@@ -1180,6 +1198,7 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `updateDodge` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `updateDrone` | méthode | `src/player/weapons.js` | `GameScene` |
 | `updateEnemyAI` | méthode | `src/enemies/ai.js` | `GameScene` |
+| `updateEnemyBehavior` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `updateEnemyShields` | méthode | `src/enemies/squads-shields.js` | `GameScene` |
 | `updateEvent` | méthode | `src/events/core.js` | `GameScene` |
 | `updateEventPlan` | méthode | `src/events/core.js` | `GameScene` |
@@ -1217,10 +1236,19 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `VORTEX_ARRIVE_B64` | const | `src/data/image-assets.js` |  |
 | `VORTEX_DEATH_B64` | const | `src/data/image-assets.js` |  |
 | `VORTEX_IDLE_B64` | const | `src/data/image-assets.js` |  |
+| `VORTEX_KEY` | const | `src/data/vortex.js` |  |
 | `VORTEX_PAL` | const | `src/gfx/sprite-rows.js` |  |
+| `VORTEX_POS` | const | `src/home/galaxy.js` |  |
 | `VORTEX_ROWS` | const | `src/gfx/sprite-rows.js` |  |
+| `vortexTimeText` | fonction | `src/data/vortex.js` |  |
+| `W2_BENNE_B64` | const | `src/data/image-assets.js` |  |
+| `W2_BROYEUR_B64` | const | `src/data/image-assets.js` |  |
+| `W2_CRABE_B64` | const | `src/data/image-assets.js` |  |
+| `W2_INCINERATEUR_B64` | const | `src/data/image-assets.js` |  |
+| `W2_REPARATEUR_B64` | const | `src/data/image-assets.js` |  |
 | `warpPulse` | méthode | `src/home/galaxy.js` | `HomeScene` |
 | `wasWorldSeen` | fonction | `src/data/world-progress.js` |  |
+| `waveDamage` | méthode | `src/enemies/ai.js` | `GameScene` |
 | `WBG2_CLUSTERS` | const | `src/world/bg-monde2.js` |  |
 | `wbg2Lamp` | méthode | `src/world/bg-monde2.js` | `GameScene` |
 | `wbg2LampAt` | méthode | `src/world/bg-monde2.js` | `GameScene` |
@@ -1281,4 +1309,4 @@ Cherchez un nom (Ctrl+F) pour savoir où il est défini. « méthode » = métho
 | `ZOOM_END` | const | `src/core/constants.js` |  |
 | `ZOOM_START` | const | `src/core/constants.js` |  |
 
-1274 symboles.
+1302 symboles.

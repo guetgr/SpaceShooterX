@@ -87,7 +87,7 @@
       opts = Object.assign({ sens:1, noise:0.12, react:6, cap:null }, opts || {});
       seedState = seed >>> 0 || 1;
       const sc0 = SC(), g = sc0.game, L = levelById(levelId);
-      const cap = opts.cap || (L.type === 'survive' ? L.goal.seconds*3 + 60 : 300);
+      const cap = opts.cap || (L.type === 'boss' ? 300 : levelBossAt(L)*3 + 120);          // le boss arrive à levelBossAt ; le temps simulé laisse le combat se jouer
       const f0 = getMeta().composants;
       sc0.scene.restart({ autoStart:true, levelId });
       let sc = null, tick = 0, t0 = clock, minHp = 1, cards = 0, introDone = false;

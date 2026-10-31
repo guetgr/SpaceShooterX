@@ -89,19 +89,19 @@ for (const id of Object.keys(docs)){
 }
 
 // mobs : un sous-bloc par type du tirage
-{ const doc = docs['w1-l4'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
+{ const doc = docs['w3-l2'], mobs = M.buildSteps(doc, cats(doc)).find(s=> s.id === 'mobs'), types = uniq(doc.spawns.map(s=> s.type));
   assert.strictEqual(mobs.fields.length, types.length * 4);
   types.forEach(t=> { const g = mobs.fields.filter(f=> f.path[1] === t); assert.deepStrictEqual(g.map(f=> f.path[2]), ['hpMul', 'dmgMul', 'speedMul', 'scoreMul']); g.forEach(f=> assert.deepStrictEqual([f.min, f.max, f.def, f.optional], [0.1, 10, 1, true])); });
   assert.ok(M.buildSteps(docs['w1-tuto'], cats(docs['w1-tuto'])).every(s=> s.id !== 'mobs')); }
 
 // (d) boss : chaque finalBoss utilisé a son id TUNABLES ; les champs du boss viennent du registre
 { const used = uniq(Object.values(docs).map(d=> d.finalBoss).filter(Boolean));
-  assert.deepStrictEqual(used.slice().sort(), ['anneau', 'araignee', 'meteo', 'pdg', 'reacteur']);
+  assert.deepStrictEqual(used.slice().sort(), ['anneau', 'araignee', 'benne', 'broyeur', 'crabe', 'incinerateur', 'meteo', 'pdg', 'reacteur', 'reparateur']);
   used.forEach(b=> { const tid = M.BOSS_TUNE_ID[b]; assert.ok(tid && tunablesCatalog[tid], 'finalBoss ' + b + ' sans id TUNABLES'); const d = docs[Object.keys(docs).find(k=> docs[k].finalBoss === b)], step = M.buildSteps(d, cats(d)).find(s=> s.id === 'boss');
     assert.strictEqual(step.fields.filter(f=> f.path[1] === tid).length, tunablesCatalog[tid].length, b);
     const arr = step.fields.find(f=> f.kind === 'numlist'); assert.ok(arr && arr.len >= 2); });
-  const l4 = docs['w1-l4'], ids = M.bossIds(l4); assert.ok(['an', 'ec', 'bras', 'pil'].every(i=> ids.includes(i)), 'w1-l4 : ' + ids);
-  assert.deepStrictEqual(M.bossIds(docs['w2-l1']), []);
+  const l4 = docs['w1-l4'], ids = M.bossIds(l4); assert.ok(['an', 'ec'].every(i=> ids.includes(i)), 'w1-l4 : ' + ids);
+  assert.deepStrictEqual(M.bossIds(docs['w3-l1']), []);
   // un id par mob spécial présent dans les spawns, même sans boss
   assert.ok(M.bossIds({ spawns:[{ type:'pilleur' }], waves:[{ type:'bras' }] }).join() === 'pil,bras'); }
 
@@ -138,11 +138,15 @@ for (const id of Object.keys(docs)){
   assert.ok(s.fields.find(f=> f.path.join('.') === 'audio.boss').options.length > 1); }
 
 // (c) applyFieldValue : aller-retour, retour au défaut, conteneurs vides, validation
-{ const doc = docs['w1-l2'], steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
+{ const doc = clone(docs['w1-l2']); delete doc.norma; delete doc.bossAt; doc.events=[{kind:'meteors',at:30}]; doc.spawns=[{type:'sat',from:0,w:8},{type:'satgun',from:10,w:6},{type:'bras',from:20,w:4,tier:1}]; doc.waves=[];
+  const steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
   const before = JSON.stringify(doc);
   // champ obligatoire : écrit, jamais effacé
-  let d = M.applyFieldValue(doc, F('goal.seconds'), 90); assert.strictEqual(d.goal.seconds, 90); assert.strictEqual(JSON.stringify(doc), before, 'le document source ne change pas');
-  d = M.applyFieldValue(d, F('goal.seconds'), 75); assert.strictEqual(d.goal.seconds, 75); assert.strictEqual(JSON.stringify(d), before);
+  let d = M.applyFieldValue(doc, F('threat'), 3); assert.strictEqual(d.threat, 3); assert.strictEqual(JSON.stringify(doc), before, 'le document source ne change pas');
+  d = M.applyFieldValue(d, F('threat'), doc.threat); assert.strictEqual(d.threat, doc.threat); assert.strictEqual(JSON.stringify(d), before);
+  // arrivée du boss : facultative, automatique (après les autres mobs) tant qu'on ne la fixe pas ; revenir à la valeur automatique supprime la clé
+  assert.strictEqual(M.autoBossAt(doc), 45, 'événement à 30 s + 15 s');
+  d = M.applyFieldValue(doc, F('bossAt'), 100); assert.strictEqual(d.bossAt, 100); d = M.applyFieldValue(d, F('bossAt'), M.autoBossAt(doc)); assert.ok(!('bossAt' in d)); assert.strictEqual(JSON.stringify(d), before);
   // facultatif : créé, puis la valeur par défaut supprime clé ET conteneurs vides
   const mob = F('mobs.sat.hpMul'); assert.ok(mob);
   d = M.applyFieldValue(doc, mob, 2); assert.strictEqual(M.getByPath(d, mob.path), 2); assert.deepStrictEqual(d.mobs, { sat:{ hpMul:2 } });
@@ -173,14 +177,15 @@ for (const id of Object.keys(docs)){
   const ab = F('audio.boss'); d = M.applyFieldValue(doc, ab, musicCatalog.boss[0]); assert.strictEqual(d.audio.boss, musicCatalog.boss[0]); d = M.applyFieldValue(d, ab, ''); assert.ok(!('audio' in d));
   d = M.applyFieldValue(doc, F('audio.level'), [musicCatalog.level[0]]); assert.strictEqual(d.audio.level.length, 1); assert.throws(()=> M.applyFieldValue(doc, F('audio.level'), musicCatalog.level.slice(0, 3)), /au plus/);
   d = M.applyFieldValue(doc, F('ambient.golden'), false); assert.strictEqual(d.ambient.golden, false); assert.throws(()=> M.applyFieldValue(doc, F('ambient.golden'), 1), /booléen/);
-  assert.throws(()=> M.applyFieldValue(doc, F('goal.seconds'), 5000), /entre/); assert.throws(()=> M.applyFieldValue(doc, F('goal.seconds'), NaN), /nombre/);
+  assert.throws(()=> M.applyFieldValue(doc, F('bossAt'), 5000), /entre/); assert.throws(()=> M.applyFieldValue(doc, F('bossAt'), NaN), /nombre/);
   // tuto : chemin ['tutorial', groupe, clé]
   const td = docs['w1-tuto'], tf = M.buildSteps(td, cats(td)).flatMap(s=> s.fields).find(f=> f.path.join('.') === 'tutorial.boss.hp');
   d = M.applyFieldValue(td, tf, 900); assert.strictEqual(d.tutorial.boss.hp, 900); assert.strictEqual(td.tutorial.boss.hp, 700);
 }
 
 // sécurité : pollution de prototype, limites du serveur, pas d'aliasing
-{ const doc = docs['w1-l2'], steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
+{ const doc = clone(docs['w1-l2']); delete doc.norma; doc.events=[{kind:'meteors',at:30}]; doc.spawns=[{type:'sat',from:0,w:8},{type:'satgun',from:10,w:6},{type:'bras',from:20,w:4,tier:1}]; doc.waves=[];
+  const steps = M.buildSteps(doc, cats(doc)), F = p=> steps.flatMap(s=> s.fields).find(f=> f.path.join('.') === p);
   const clean = ()=> { assert.strictEqual(({}).hpMul, undefined); assert.strictEqual(({}).x, undefined); assert.strictEqual(Object.prototype.hpMul, undefined); };
   const base = F('mobs.sat.hpMul');
   for (const bad of ['__proto__', 'constructor', 'prototype']){
@@ -195,7 +200,7 @@ for (const id of Object.keys(docs)){
     assert.ok(mobs.fields.every(f=> !['__proto__', 'constructor', 'prototype'].includes(f.path[1])));
     mobs.fields.forEach(f=> M.applyFieldValue(evil, f, 2)); clean(); });
   assert.deepStrictEqual(M.mobTypes(evil), ['sat', 'satgun', 'bras']);
-  assert.deepStrictEqual(M.mobTypes(docs['w1-l5']).length, 20);              // sans catalogue : repli sur les types connus
+  assert.deepStrictEqual(M.mobTypes(docs['w1-l5']).length, M.mobTypes(docs['w1-l5'], cats(docs['w1-l5'])).length);              // sans catalogue : repli sur les types connus (même résultat qu'avec le catalogue)
   assert.deepStrictEqual(M.bossIds({ finalBoss:'__proto__', spawns:[{ type:'constructor' }] }), []);
   assert.deepStrictEqual(Array.from(M.mobTypes({ spawns:[{ type:'inconnu' }] })), []);
   assert.deepStrictEqual(M.bossIds({ spawns:[] }), []);

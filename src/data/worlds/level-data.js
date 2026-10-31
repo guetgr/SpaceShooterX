@@ -105,12 +105,9 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w1-l1": {
     "id": "w1-l1",
     "name": "DECOLLAGE",
-    "type": "survive",
+    "type": "mission",
     "threat": 1,
     "bg": "debris",
-    "goal": {
-      "seconds": 60
-    },
     "intro": "earth",
     "spawns": [
       {
@@ -148,17 +145,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 60
   },
   "w1-l2": {
     "id": "w1-l2",
     "name": "CEINTURE DE DEBRIS",
-    "type": "survive",
+    "type": "mission",
     "threat": 1,
     "bg": "station",
-    "goal": {
-      "seconds": 75
-    },
     "spawns": [
       {
         "type": "sat",
@@ -207,17 +202,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 75
   },
   "w1-l3": {
     "id": "w1-l3",
     "name": "PLUIE DE CRISTAUX",
-    "type": "collect",
+    "type": "mission",
     "threat": 2,
     "bg": "cristaux",
-    "goal": {
-      "gems": 25
-    },
     "spawns": [
       {
         "type": "sat",
@@ -272,17 +265,15 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w1-l4": {
     "id": "w1-l4",
     "name": "PATROUILLE",
-    "type": "kill",
+    "type": "mission",
     "threat": 2,
     "bg": "patrouille",
-    "goal": {
-      "count": 40
-    },
     "spawns": [
       {
         "type": "sat",
@@ -338,7 +329,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w1-l5": {
     "id": "w1-l5",
@@ -479,11 +471,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w2-l1": {
     "id": "w2-l1",
     "name": "QUAI DE DECHARGEMENT",
-    "type": "survive",
+    "type": "mission",
     "threat": 3,
-    "goal": {
-      "seconds": 75
-    },
     "intro": "earth",
     "reward": {
       "clear": 40,
@@ -527,16 +516,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 75
   },
   "w2-l2": {
     "id": "w2-l2",
     "name": "CHAINE DE TRI",
-    "type": "kill",
+    "type": "mission",
     "threat": 3,
-    "goal": {
-      "count": 50
-    },
     "reward": {
       "clear": 45,
       "first": 90
@@ -580,16 +567,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w2-l3": {
     "id": "w2-l3",
     "name": "ZONE DE COMPACTAGE",
-    "type": "survive",
+    "type": "mission",
     "threat": 4,
-    "goal": {
-      "seconds": 80
-    },
     "reward": {
       "clear": 50,
       "first": 100
@@ -648,16 +633,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 80
   },
   "w2-l4": {
     "id": "w2-l4",
     "name": "BENNE A CRISTAUX",
-    "type": "collect",
+    "type": "mission",
     "threat": 4,
-    "goal": {
-      "gems": 35
-    },
     "reward": {
       "clear": 55,
       "first": 110
@@ -725,12 +708,13 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w2-l5": {
     "id": "w2-l5",
     "name": "ATELIER DE BROYAGE",
-    "type": "kill",
+    "type": "mission",
     "threat": 5,
     "boss": null,
     "bossName": "LE REPARATEUR EN CHEF",
@@ -741,9 +725,6 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "world": "w2",
     "schemaVersion": 2,
     "tuto": false,
-    "goal": {
-      "count": 60
-    },
     "waves": [],
     "events": [
       {
@@ -803,7 +784,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w2-l6": {
     "id": "w2-l6",
@@ -879,11 +861,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w3-l1": {
     "id": "w3-l1",
     "name": "REGISTRE DES DEPARTS",
-    "type": "survive",
+    "type": "mission",
     "threat": 6,
-    "goal": {
-      "seconds": 90
-    },
     "intro": "earth",
     "reward": {
       "clear": 70,
@@ -1003,7 +982,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1012,21 +991,19 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "zoom": {
       "start": 1.35,
       "end": 0.9299999999999999,
-      "seconds": 81.0
+      "seconds": 81
     },
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w3-l2": {
     "id": "w3-l2",
     "name": "ARCHIVES SCELLEES",
-    "type": "kill",
+    "type": "mission",
     "threat": 6,
-    "goal": {
-      "count": 60
-    },
     "reward": {
       "clear": 75,
       "first": 150
@@ -1141,7 +1118,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": null,
     "intro": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1155,16 +1132,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w3-l3": {
     "id": "w3-l3",
     "name": "FOSSE COMMUNE",
-    "type": "collect",
+    "type": "mission",
     "threat": 7,
-    "goal": {
-      "gems": 40
-    },
     "reward": {
       "clear": 80,
       "first": 160
@@ -1284,7 +1259,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": null,
     "intro": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1298,16 +1273,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w3-l4": {
     "id": "w3-l4",
     "name": "AUDIT DE FIN DE VIE",
-    "type": "survive",
+    "type": "mission",
     "threat": 7,
-    "goal": {
-      "seconds": 100
-    },
     "reward": {
       "clear": 85,
       "first": 170
@@ -1431,7 +1404,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     ],
     "bg": null,
     "intro": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1440,12 +1413,13 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "zoom": {
       "start": 1.29,
       "end": 0.7949999999999999,
-      "seconds": 90.0
+      "seconds": 90
     },
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 100
   },
   "w3-l5": {
     "id": "w3-l5",
@@ -1461,7 +1435,6 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "world": "w3",
     "schemaVersion": 2,
     "tuto": false,
-    "goal": {},
     "waves": [],
     "events": [],
     "spawnClock": "difficulty",
@@ -1586,11 +1559,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w4-l1": {
     "id": "w4-l1",
     "name": "CENTRE DE TRI AERIEN",
-    "type": "survive",
+    "type": "mission",
     "threat": 8,
-    "goal": {
-      "seconds": 90
-    },
     "intro": "earth",
     "reward": {
       "clear": 80,
@@ -1710,7 +1680,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1724,16 +1694,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w4-l2": {
     "id": "w4-l2",
     "name": "ALVEOLES",
-    "type": "kill",
+    "type": "mission",
     "threat": 9,
-    "goal": {
-      "count": 70
-    },
     "intro": null,
     "reward": {
       "clear": 85,
@@ -1848,7 +1816,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -1862,16 +1830,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w4-l3": {
     "id": "w4-l3",
     "name": "MIEL INDUSTRIEL",
-    "type": "collect",
+    "type": "mission",
     "threat": 9,
-    "goal": {
-      "gems": 45
-    },
     "intro": null,
     "reward": {
       "clear": 90,
@@ -1991,7 +1957,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2005,16 +1971,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w4-l4": {
     "id": "w4-l4",
     "name": "TOURNEE DE NUIT",
-    "type": "survive",
+    "type": "mission",
     "threat": 10,
-    "goal": {
-      "seconds": 105
-    },
     "intro": null,
     "reward": {
       "clear": 95,
@@ -2138,7 +2102,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2152,14 +2116,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 105
   },
   "w4-l5": {
     "id": "w4-l5",
     "name": "LA REINE",
     "type": "boss",
     "threat": 11,
-    "goal": {},
     "intro": null,
     "reward": {
       "clear": 150,
@@ -2293,11 +2257,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w5-l1": {
     "id": "w5-l1",
     "name": "SALLE D'EXPOSITION",
-    "type": "survive",
+    "type": "mission",
     "threat": 11,
-    "goal": {
-      "seconds": 95
-    },
     "intro": "earth",
     "reward": {
       "clear": 90,
@@ -2417,7 +2378,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2431,16 +2392,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 95
   },
   "w5-l2": {
     "id": "w5-l2",
     "name": "REFLEXIONS",
-    "type": "kill",
+    "type": "mission",
     "threat": 12,
-    "goal": {
-      "count": 75
-    },
     "intro": null,
     "reward": {
       "clear": 95,
@@ -2555,7 +2514,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2569,16 +2528,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w5-l3": {
     "id": "w5-l3",
     "name": "EXTRACTION DE CRISTAUX",
-    "type": "collect",
+    "type": "mission",
     "threat": 12,
-    "goal": {
-      "gems": 50
-    },
     "intro": null,
     "reward": {
       "clear": 100,
@@ -2698,7 +2655,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2712,16 +2669,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w5-l4": {
     "id": "w5-l4",
     "name": "PARCOURS DE VISITE",
-    "type": "survive",
+    "type": "mission",
     "threat": 13,
-    "goal": {
-      "seconds": 105
-    },
     "intro": null,
     "reward": {
       "clear": 105,
@@ -2845,7 +2800,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -2859,14 +2814,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 105
   },
   "w5-l5": {
     "id": "w5-l5",
     "name": "LE PRISME",
     "type": "boss",
     "threat": 14,
-    "goal": {},
     "intro": null,
     "reward": {
       "clear": 160,
@@ -3000,11 +2955,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w6-l1": {
     "id": "w6-l1",
     "name": "POINT DE REJET",
-    "type": "survive",
+    "type": "mission",
     "threat": 14,
-    "goal": {
-      "seconds": 95
-    },
     "intro": "earth",
     "reward": {
       "clear": 100,
@@ -3124,7 +3076,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3138,16 +3090,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 95
   },
   "w6-l2": {
     "id": "w6-l2",
     "name": "LA FOSSE",
-    "type": "kill",
+    "type": "mission",
     "threat": 14,
-    "goal": {
-      "count": 80
-    },
     "intro": null,
     "reward": {
       "clear": 105,
@@ -3262,7 +3212,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3276,16 +3226,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w6-l3": {
     "id": "w6-l3",
     "name": "PERLES TOXIQUES",
-    "type": "collect",
+    "type": "mission",
     "threat": 15,
-    "goal": {
-      "gems": 50
-    },
     "intro": null,
     "reward": {
       "clear": 110,
@@ -3405,7 +3353,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3419,16 +3367,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w6-l4": {
     "id": "w6-l4",
     "name": "MAREE NOIRE",
-    "type": "survive",
+    "type": "mission",
     "threat": 16,
-    "goal": {
-      "seconds": 110
-    },
     "intro": null,
     "reward": {
       "clear": 115,
@@ -3552,7 +3498,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3566,14 +3512,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 110
   },
   "w6-l5": {
     "id": "w6-l5",
     "name": "LE KRAKEN",
     "type": "boss",
     "threat": 17,
-    "goal": {},
     "intro": null,
     "reward": {
       "clear": 170,
@@ -3707,11 +3653,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w7-l1": {
     "id": "w7-l1",
     "name": "CREPUSCULE",
-    "type": "survive",
+    "type": "mission",
     "threat": 17,
-    "goal": {
-      "seconds": 100
-    },
     "intro": "earth",
     "reward": {
       "clear": 110,
@@ -3831,7 +3774,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3845,16 +3788,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 100
   },
   "w7-l2": {
     "id": "w7-l2",
     "name": "COURONNE SOLAIRE",
-    "type": "kill",
+    "type": "mission",
     "threat": 17,
-    "goal": {
-      "count": 85
-    },
     "intro": null,
     "reward": {
       "clear": 115,
@@ -3969,7 +3910,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -3983,16 +3924,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w7-l3": {
     "id": "w7-l3",
     "name": "POUSSIERE D'OR",
-    "type": "collect",
+    "type": "mission",
     "threat": 18,
-    "goal": {
-      "gems": 55
-    },
     "intro": null,
     "reward": {
       "clear": 120,
@@ -4112,7 +4051,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4126,16 +4065,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w7-l4": {
     "id": "w7-l4",
     "name": "TOTALITE",
-    "type": "survive",
+    "type": "mission",
     "threat": 18,
-    "goal": {
-      "seconds": 110
-    },
     "intro": null,
     "reward": {
       "clear": 125,
@@ -4259,7 +4196,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4273,14 +4210,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 110
   },
   "w7-l5": {
     "id": "w7-l5",
     "name": "L'ECLIPSE",
     "type": "boss",
     "threat": 19,
-    "goal": {},
     "intro": null,
     "reward": {
       "clear": 180,
@@ -4414,11 +4351,8 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
   "w8-l1": {
     "id": "w8-l1",
     "name": "SALLE D'ATTENTE",
-    "type": "survive",
+    "type": "mission",
     "threat": 19,
-    "goal": {
-      "seconds": 100
-    },
     "intro": "earth",
     "reward": {
       "clear": 120,
@@ -4538,7 +4472,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4552,16 +4486,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 100
   },
   "w8-l2": {
     "id": "w8-l2",
     "name": "FORMULAIRE 27B",
-    "type": "kill",
+    "type": "mission",
     "threat": 19,
-    "goal": {
-      "count": 90
-    },
     "intro": null,
     "reward": {
       "clear": 125,
@@ -4676,7 +4608,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4690,16 +4622,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w8-l3": {
     "id": "w8-l3",
     "name": "PIECES JUSTIFICATIVES",
-    "type": "collect",
+    "type": "mission",
     "threat": 20,
-    "goal": {
-      "gems": 60
-    },
     "intro": null,
     "reward": {
       "clear": 130,
@@ -4819,7 +4749,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4833,16 +4763,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 90
   },
   "w8-l4": {
     "id": "w8-l4",
     "name": "RECOURS GRACIEUX",
-    "type": "survive",
+    "type": "mission",
     "threat": 20,
-    "goal": {
-      "seconds": 115
-    },
     "intro": null,
     "reward": {
       "clear": 135,
@@ -4966,7 +4894,7 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
       }
     ],
     "bg": null,
-    "boss": null,
+    "boss": "dread",
     "finalBoss": null,
     "bossName": null,
     "hpMul": 1,
@@ -4980,14 +4908,14 @@ const LEVEL_FILES = (typeof window !== "undefined" && window.__LEVEL_FILES) || {
     "ambient": {
       "golden": true,
       "smallEvents": true
-    }
+    },
+    "bossAt": 115
   },
   "w8-l5": {
     "id": "w8-l5",
     "name": "L'HYDRE",
     "type": "boss",
     "threat": 20,
-    "goal": {},
     "intro": null,
     "reward": {
       "clear": 200,

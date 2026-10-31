@@ -1,11 +1,8 @@
 {
   "id": "w2-l2",
   "name": "CHAINE DE TRI",
-  "type": "kill",
+  "type": "mission",
   "threat": 3,
-  "goal": {
-    "count": 50
-  },
   "reward": {
     "clear": 45,
     "first": 90
@@ -49,5 +46,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

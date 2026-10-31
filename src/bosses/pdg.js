@@ -340,6 +340,7 @@ mixin(GameScene, {
     this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill');
   },
   pdDead(){        // la tour se disloque en pièces, pluie de pièces d'or et de contrats ; puis fin du niveau
+    bestiaryBossKill(this, 'pdg');
     const pd = this.pd; if (pd.dead) return; pd.dead = true;
     const [cx, cy] = this.pdW(256, 200), [hx, hy] = this.pdW(PD.cockpit[0], PD.cockpit[1]);
     this.cameras.main.flash(600, 255, 240, 200, false); this.cameras.main.shake(900, 0.014);

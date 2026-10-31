@@ -41,7 +41,7 @@ mixin(GameScene, {
     this.spreadOffsets(count).forEach(off=>{
       const b = this.enemyBullets.create(e.x, e.y+14, e.bulletTex || 'bulletE');
       b.setDepth(4);
-      b.damage = 7;
+      b.damage = this.waveDamage(e, 7);
       const ang = baseAngle + off;
       if (e.bulletTex){
         b.setScale(e.bulletScale);
@@ -92,6 +92,15 @@ mixin(GameScene, {
   },
 
   updateEnemyAI(e, delta){
+    if (!e.waveAlert) return this.updateEnemyBehavior(e,delta);
+    const alert=this.alertLevel, weapon=this.weaponTier;
+    try { this.alertLevel=e.waveAlert; this.weaponTier=weaponTierFor(e.waveAlert); return this.updateEnemyBehavior(e,delta); }
+    finally { this.alertLevel=alert; this.weaponTier=weapon; }
+  },
+
+  waveDamage(e, amount){ return amount*((e && e.waveDmgMul)||1); },
+
+  updateEnemyBehavior(e, delta){
     if (e.enemyType === 'shooter'){
       if (e.y >= e.stopY && e.body.velocity.y !== 0){
         e.body.velocity.y = 0;
@@ -257,7 +266,7 @@ mixin(GameScene, {
           if (this._bLoad <= BULLET_CAP) this.spreadOffsets(this.weaponTier*2+1).forEach(off=>{
             const b = this.enemyBullets.create(e.x, e.y+20, e.bulletTex || 'bulletE');
             b.setDepth(4);
-            b.damage = 9;
+            b.damage = this.waveDamage(e, 9);
             const ang = baseAngle+off;
             if (e.bulletTex){
               b.setScale(e.bulletScale);
@@ -401,7 +410,7 @@ mixin(GameScene, {
         e.mineDropTimer = Phaser.Math.Between(2600, 3600);
         // "tir secondaire"/"3e tir" de la mine: largue plusieurs mines d'un coup
         const mineCount = this.weaponTier;
-        for (let i=0;i<mineCount;i++) this.deployMine(e.x, e.y);
+        for (let i=0;i<mineCount;i++) this.deployMine(e.x, e.y, e);
       }
     } else if (e.enemyType === 'boss'){
       this.updateBossAI(e, delta);
@@ -413,7 +422,7 @@ mixin(GameScene, {
     if (!this.player.active || this._bLoad > BULLET_CAP) return;
     const b = this.enemyBullets.create(e.x, e.y+14, e.bulletTex || 'bulletE');
     b.setDepth(4);
-    b.damage = 7;
+    b.damage = this.waveDamage(e, 7);
     const angle = this.leadAngle(e, 210);
     if (e.bulletTex){
       b.setScale(e.bulletScale);
@@ -428,7 +437,7 @@ mixin(GameScene, {
     sfx.heavyShot({ pan:this.panOf(e.x) });
     const b = this.enemyBullets.create(e.x, e.y+20, e.bulletTex || 'bulletHeavy');
     b.setDepth(4);
-    b.damage = 18;
+    b.damage = this.waveDamage(e, 18);
     const angle = Phaser.Math.Angle.Between(e.x,e.y,this.player.x,this.player.y);
     if (e.bulletTex){
       b.setScale(e.bulletScale);
@@ -440,7 +449,7 @@ mixin(GameScene, {
     this.physics.velocityFromRotation(angle, this.eSpd(140), b.body.velocity);
   },
 
-  deployMine(x, y){
+  deployMine(x, y, source){
     sfx.mineDrop({ pan:this.panOf(x) });
     if (this.enemies.countActive(true) >= ENEMY_HARD_CAP) return;
     const mini = this.enemies.create(x + Phaser.Math.Between(-50,50), y + Phaser.Math.Between(10,40), 'mine2');
@@ -454,6 +463,7 @@ mixin(GameScene, {
     mini.hp = st.hp*hpScale; mini.maxHp = mini.hp;
     mini.scoreValue = st.score;
     mini.contactDamage = st.dmg;
+    if(source){mini.waveDmgMul=source.waveDmgMul||1;mini.contactDamage*=mini.waveDmgMul;if(source.waveAlert)mini.waveAlert=source.waveAlert;}
     this.spawnHitParticles(x, y, 4);
   },
 
@@ -464,7 +474,7 @@ mixin(GameScene, {
     this.mobFx(e, 'flash');
     const bomb = this.enemyBullets.create(e.x + [-55.5, -1.7, 51.7][(i || 0) % 3] * e.scaleX, e.y - 4, 'bomb');
     bomb.setDepth(4);
-    bomb.damage = 10;
+    bomb.damage = this.waveDamage(e, 10);
     bomb.body.velocity.y = 90;
     this.time.delayedCall(1600, ()=>{
       if (!bomb.active) return;
@@ -474,7 +484,7 @@ mixin(GameScene, {
       sfx.bombBoom({ pan:this.panOf(e.x) });
       const d = Phaser.Math.Distance.Between(bx, by, this.player.x, this.player.y);
       if (d < 70){
-        this.damagePlayer(16);
+        this.damagePlayer(this.waveDamage(e,16));
       }
     });
   },
@@ -485,7 +495,7 @@ mixin(GameScene, {
     const base = Phaser.Math.Angle.Between(e.x, e.y + 32, this.player.x, this.player.y), n = this.alertLevel >= 3 ? 3 : (this.alertLevel >= 2 ? 2 : 1), H = BRAS.shotHead, sc = 0.3;
     this.spreadOffsets(n).forEach(off=>{
       const ang = base + off, b = this.enemyBullets.create(e.x, e.y + 32, 'brFxOrb', 0);          // orbe de plasma animée (feuille de la bibliothèque d'effets), la tête vers l'avant
-      b.setDepth(4); b.damage = 8; b.setScale(sc).setOrigin(H[0]/64, H[1]/128).setRotation(ang - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
+      b.setDepth(4); b.damage = this.waveDamage(e, 8); b.setScale(sc).setOrigin(H[0]/64, H[1]/128).setRotation(ang - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
       const r = 5.25 / sc; b.body.setCircle(r, H[0] - r, H[1] - r); b.play('brOrb');
       this.physics.velocityFromRotation(ang, this.eSpd(235), b.body.velocity);
     });
@@ -499,7 +509,7 @@ mixin(GameScene, {
     const pa = Phaser.Math.Angle.Between(x, y, this.player.x, this.player.y), close = Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < 300;
     for (let i=0;i<n;i++){
       const b = this.enemyBullets.create(x, y, 'tutoDebris', Phaser.Math.Between(0, TUTO_NDEB-1));
-      b.setDepth(4).setScale(0.6); b.damage = 6;
+      b.setDepth(4).setScale(0.6); b.damage = this.waveDamage(e, 6);
       const r = Math.max(6, b.width*0.28); b.body.setCircle(r, b.width/2 - r, b.height/2 - r);
       const ang = (i === 0 && close) ? pa + Phaser.Math.FloatBetween(-0.25, 0.25) : Math.random()*Math.PI*2;
       this.physics.velocityFromRotation(ang, Phaser.Math.Between(70, 140), b.body.velocity);
@@ -511,7 +521,7 @@ mixin(GameScene, {
     if (!this.player.active || this._bLoad > BULLET_CAP) return;
     const b = this.enemyBullets.create(e.x, e.y+16, e.bulletTex || 'bulletHeavy');
     b.setDepth(4);
-    b.damage = 20;
+    b.damage = this.waveDamage(e, 20);
     const angle = Phaser.Math.Angle.Between(e.x,e.y,this.player.x,this.player.y);
     if (e.bulletTex){
       b.setScale(e.bulletScale);

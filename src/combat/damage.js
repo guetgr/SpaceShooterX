@@ -99,6 +99,7 @@ mixin(GameScene, {
         this.shieldShatter(ow, true);
         return;
       } }
+    if (!enemy.invuln) this.runDamage += Math.min(amount, Math.max(0, (enemy.hp || 0) + (enemy.shieldHp || 0)));      // dégâts infligés (classement du vortex) : sans le trop-plein sur un ennemi déjà condamné
     if (enemy.isBossPart){ this.damageBossPart(enemy, amount); return; }
     if (enemy.invuln){ this.blinkHit(enemy); return; }       // boss momentanément intouchable
     if (enemy._shInv && this.time.now < enemy._shInv){ if (enemy.shieldHp <= 0) return; }   // 2 s d'invincibilité après la casse du bouclier (pas pour les boss)

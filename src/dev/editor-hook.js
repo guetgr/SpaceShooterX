@@ -8,6 +8,7 @@
   const q = new URLSearchParams(location.search);
   if (!q.has('edit') || window.parent === window) return;
   const mode = q.get('edit') || 'play';
+  try { music.muted = true; sfx.muted = true; music.applyVol(); sfx.applyVol(); } catch(e){ /* ignore */ }          // pas de son dans les aperçus de l'éditeur : seule la musique du laboratoire (?lab&embed) joue
   const send = m=> window.parent.postMessage(Object.assign({ ssx:1 }, m), location.origin);
   const SKILLS = { casual:{ sens:0.8, noise:0.3, react:9 }, average:{ sens:1.0, noise:0.12, react:6 }, expert:{ sens:1.3, noise:0.05, react:3 } };
 
@@ -136,11 +137,15 @@
     if (ev.origin !== location.origin || !ev.data || ev.data.ssx !== 1) return;
     const m = ev.data;
     try {
+      if(m.type==='rebase'){for(const [id,doc] of Object.entries(m.documents||{})){if(LEVEL_BASE[id]){const base={};TUNE_LEVEL_FIELDS.forEach(k=>{if(doc[k]!==undefined)base[k]=JSON.parse(JSON.stringify(doc[k]));});LEVEL_BASE[id]=base;}}return;}
+      if(m.type==='resize-preview'){window.dispatchEvent(new Event('resize'));return;}
+      if(m.type==='pause-preview'){window.__game.loop.sleep();try{music.stop();if(sfx.ctx)sfx.ctx.suspend();}catch(e){}return;}
+      if(m.type==='play'){sfx.resume();window.__game.loop.wake();}
       if (m.type === 'apply') applyTuning(m.overrides);
       else if (m.type === 'play'){ applyTuning(m.overrides); launch(m.levelId); }
       else if (m.type === 'bot') runBot(m);
       else if (m.type === 'snapshot') send({ type:'snapshot', levels:snapshot() });
     } catch(e){ send({ type:'apply-error', error:String(e && e.message || e) }); }
   });
-  const wait = setInterval(()=>{ if (window.__ssxScene && window.__ssxScene.scene.isActive('home')){ clearInterval(wait); ready(); } }, 200);
+  const wait = setInterval(()=>{ if (window.__ssxScene && window.__ssxScene.scene.isActive('home')){ clearInterval(wait); ready(); if(mode==='play')window.__game.loop.sleep(); } }, 200);
 })();

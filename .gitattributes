@@ -12,3 +12,5 @@
 *.jpg binary
 *.mp3 binary
 *.woff2 binary
+# Carte du code générée (tools/gen_codemap.py) : en cas de fusion, les lignes des deux côtés sont gardées (une ligne par fichier/symbole), puis le hook ou le script les remet d'équerre
+docs/carte/*.md text eol=lf merge=union

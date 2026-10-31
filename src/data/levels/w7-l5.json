@@ -3,7 +3,6 @@
   "name": "L'ECLIPSE",
   "type": "boss",
   "threat": 19,
-  "goal": {},
   "intro": null,
   "reward": {
     "clear": 180,

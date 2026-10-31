@@ -6,13 +6,8 @@ const HOME_STAT_LINES = [
 ];
 
 function levelGoalText(l){
-  const g = l.goal || {};
-  if (l.type === 'survive') return 'Survivre <b>' + g.seconds + ' s</b>';
-  if (l.type === 'kill') return 'Éliminer <b>' + g.count + '</b> ennemis';
-  if (l.type === 'collect') return 'Récolter <b>' + g.gems + '</b> cristaux';
   if (l.type === 'tuto') return 'Apprendre les bases : <b>satellites, débris, boss</b>';
-  if (l.type === 'boss') return 'Vaincre le boss : <b>' + (l.bossName || (BOSS_DEFS[l.boss] || {}).name || l.boss) + '</b>';
-  return '';
+  return 'Vaincre le boss : <b>' + (l.bossName || (l.finalBoss && FINAL_BOSS_NAMES[l.finalBoss]) || (BOSS_DEFS[l.boss] || {}).name || l.boss) + '</b>';
 }
 
 mixin(HomeScene, {
@@ -26,7 +21,6 @@ mixin(HomeScene, {
     };
     $('tabTree').onclick = ()=> this.goHomePage(1);
     $('btnGalaxy').onclick = ()=> this.enterGalaxy();
-    $('btnBackWorld').onclick = ()=> this.enterWorldView(this.homeWorld);
     $('btnLaunch').onclick = ()=> this.launchLevel();
     Motion.bindPress();
     Norma.startTicker(document.getElementById('homeTicker'), ()=> this.homeOn);
@@ -48,9 +42,12 @@ mixin(HomeScene, {
       if (!pts.has(e.pointerId)) return;
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
       if (pts.size === 2 && pinch0 && Math.abs(pinchDist() - pinch0) > 60){ pinch0 = 0; if (canGalaxy()) this.enterGalaxy(); }
+
+      if (down && pts.size === 1 && canGalaxy()) this.orbitDragMove(e.clientX - sx, e.clientY - sy, box.getBoundingClientRect().width / GAME_W);
     });
-    const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; };
+    const pinchEnd = e=>{ pts.delete(e.pointerId); pinch0 = 0; this.orbitDragEnd(0, 0); };
     box.addEventListener('pointercancel', pinchEnd);
+    box.addEventListener('click', e=>{ if (this._orbitDragged && performance.now() - this._orbitDragged < 350){ e.stopPropagation(); e.preventDefault(); } }, true);      // un glissement ne déclenche pas le clic sur un niveau
     box.addEventListener('wheel', e=>{ if (e.deltaY > 20 && !e.target.closest('#levelCard') && canGalaxy()) this.enterGalaxy(); }, { passive:true });
     box.addEventListener('pointerdown', e=>{
       pts.set(e.pointerId, { x:e.clientX, y:e.clientY });
@@ -61,10 +58,11 @@ mixin(HomeScene, {
       if (e.target.closest && e.target.closest('#treeTabs') && e.clientX - box.getBoundingClientRect().left > 32) down = false;
     });
     box.addEventListener('pointerup', e=>{
-      pinchEnd(e);
+      pts.delete(e.pointerId); pinch0 = 0;
       if (!down) return; down = false;
       if (!this.homeOn || document.querySelector('.overlay:not(.hidden)')) return;
       const dx = e.clientX - sx, dy = e.clientY - sy;
+      if (this.orbitDragEnd(dx, performance.now() - st)) return;
       if (dy > 90 && dy > Math.abs(dx)*1.5 && performance.now() - st < 700 && canGalaxy()){ this.enterGalaxy(); return; }
       if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)*1.5 && performance.now() - st < 700){
         // sur la carte du monde (planète + niveaux en orbite) : glisser passe d'un niveau à l'autre, pas d'une page à l'autre
@@ -83,21 +81,28 @@ mixin(HomeScene, {
     music.setScene({ mode:'menu', menuWorld: w ? w.order : 0, galaxy: !!galaxy });
   },
 
-  enterHome(){
+  enterHome(atStart){
     this.homeOn = true; this._launching = false;
     Motion.breath(document.getElementById('btnLaunch'));
     document.body.classList.add('at-home');
     document.getElementById('home').classList.remove('hidden');
     this.cameras.main.resetFX(); this.cameras.main.fadeIn(350, 5, 4, 12); Motion.uncover();
-    const p = getWorldProgress(), last = p.last && levelById(p.last);
+    const p = getWorldProgress(), last = p.last && levelById(p.last), fromVortex = !!this._fromVortex; this._fromVortex = false;
     const nxt = last ? (nextLevelOf(p.last) || last) : firstOpenLevel(p);                  // on se place sur le niveau qui suit le dernier joué
-    this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
-    this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
-    const front = firstOpenLevel(p);                                                       // monde où l'on en est : la camionnette y stationne sur la carte stellaire
-    this.homeCurrent = Math.max(0, WORLDS.findIndex(w=> front ? w.id === front.world : w === WORLDS[WORLDS.length - 1]));
+    if (!fromVortex || !levelById(this.homeSel)){                                         // retour du vortex : on garde le secteur et l'ordre visés avant d'y entrer
+      this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === (nxt || WORLDS[0].levels[0]).world));
+      this.homeSel = (nxt && isLevelUnlocked(nxt.id, p)) ? nxt.id : (firstOpenLevel(p) || WORLDS[this.homeWorld].levels[0]).id;
+    }
+    const played = !atStart && !fromVortex && this._launched && levelById(this._launched);               // retour d'un niveau : on retrouve le niveau qu'on avait lancé
+    if (played){
+      this.homeWorld = Math.max(0, WORLDS.findIndex(w=> w.id === played.world));
+      this.homeSel = played.id;                                                           // toujours le niveau lancé, jamais « le dernier débloqué »
+    }
+    this.homeCurrent = this.homeWorld;                                                     // la camionnette et le scintillement restent sur le monde visé, pas sur le dernier débloqué
     this.resetMapView(); this.homeMusic(false);
     this.page = 99; this.goHomePage(0, true);                                              // toujours sur la carte à l'arrivée
     this.refreshHome();
+    if (atStart || fromVortex) this.showGalaxyNow();                                                      // au démarrage du jeu : on arrive sur la carte des secteurs (pas au retour d'un niveau)
     // nouveau monde débloqué depuis la dernière visite : voyage animé sur la carte stellaire (jamais en mode DEV, où tout est ouvert)
     if (!DEV_SEE_ALL){
       const k = WORLDS.findIndex((w, i)=> i > 0 && isWorldUnlocked(w.id, p) && !wasWorldSeen('w:' + w.id));
@@ -141,6 +146,7 @@ mixin(HomeScene, {
   selectHomeLevel(id){
     if (this.homeSel !== id) sfx.uiSelect();
     this.homeSel = id;
+    const sl = levelById(id); if (sl) (this.worldMemo = this.worldMemo || {})[sl.world] = id;      // mémoire du niveau choisi, par monde (le temps de la session)
     this.renderHomeMap();
   },
 
@@ -185,13 +191,11 @@ mixin(HomeScene, {
       '<div class="om-row om-risk"><span>RISQUE</span><em>' + pips + ' ' + AGP_LORE.risk(l.threat) + '</em></div>' +
       '<div class="om-row"><span>PRIME</span><em>' + uiIco('frag') + ' <b>+' + composantsPrime(l.reward, false) + '</b>' + (rec ? ' · record <b>' + rec.best + '</b>' : ' · 1re fois <b>+' + (composantsPrime(l.reward, true) - composantsPrime(l.reward, false)) + '</b>') + '</em></div>' +
       (l.type === 'tuto' ? '' : this.loadoutLine()) +
-      this.finitionLine(l, p) +
-      '<details class="om-details"><summary>DETAILS · N.O.R.M.A.</summary><div class="om-brief"><span>N.O.R.M.A</span>' + (unl ? agpBrief(l) : AGP_LINES.locked) + '</div></details>';
+      this.finitionLine(l, p);
+    $('menuNormaTxt').textContent = unl ? agpBrief(l) : AGP_LINES.locked;               // la note de service est dite par N.O.R.M.A., au-dessus de la fiche (présentation des transmissions en mission)
     $('levelCard').querySelector('.lc-name').textContent = (l.type === 'tuto' ? '' : 'ORDRE ' + String(l.num).padStart(2, '0') + ' — ') + (unl ? l.name : '? ? ?');
     if ($('btnLoadout')) $('btnLoadout').onclick = ()=>{ sfx.uiSelect(); this.goHomePage(-1); AtelierGarage.openSection('baies'); };
     const lb = $('btnLaunch'); lb.disabled = !unl; lb.textContent = unl ? (rec ? 'REFAIRE L\'INTERVENTION' : 'PRENDRE LE SERVICE') : 'ACCES REFUSE'; Motion.syncBreath(lb);
-    const tip=$('levelCard').querySelector('.completion-tip');
-    if(tip) $('levelCard').querySelector('.om-details').appendChild(tip);
     this.focusOrbitalLevel();
     this.updateOrbitalUi();
     this.setHomeVanTier(l.threat);
@@ -241,7 +245,7 @@ mixin(HomeScene, {
   launchLevel(){
     const l = levelById(this.homeSel);
     if (!l || !isLevelUnlocked(l.id) || this._launching) return;
-    this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
+    this._launched = l.id; this._launching = true; sfx.resume(); sfx.uiStart(); Motion.punch(document.getElementById('btnLaunch'));
     const go = ()=>{
       const gs = this.scene.get('game');
       this.scene.setVisible(true, 'game'); gs.input.enabled = true;

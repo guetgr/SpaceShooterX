@@ -1,11 +1,8 @@
 {
   "id": "w2-l3",
   "name": "ZONE DE COMPACTAGE",
-  "type": "survive",
+  "type": "mission",
   "threat": 4,
-  "goal": {
-    "seconds": 80
-  },
   "reward": {
     "clear": 50,
     "first": 100
@@ -64,5 +61,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 80
 }

@@ -84,6 +84,5 @@ function timelineScenarioTracks(tracks, level, duration, px){
     lane('POOL · '+sp.type,[{at,duration:Math.max(1,duration-at),text:doc.timelineOnly?'POOL DESACTIVE':sp.type+' · poids '+sp.w+(sp.tier?' · tier '+sp.tier:''),detail:'Activation aléatoire ; aucune arrivée individuelle garantie à cet instant.'}]);
   });
   doc.events.forEach(e=>lane('EVENEMENT',[{at:e.at,duration:e.duration,text:(S.eventCatalog.find(x=>x.id===e.kind)||{name:e.kind}).name,detail:e.at+' s minimum ; attente du slot libre et de la fin du boss. Durée : '+(e.duration?e.duration+' s':'défaut de l’événement')} ]));
-  if(!level.tuto && doc.type==='survive')lane('OBJECTIF',[{at:doc.goal.seconds,text:doc.finalBoss?'Objectif atteint → '+doc.finalBoss:'Fin de mission',detail:'Le boss attend la fin d’un grand événement en cours.'}]);
-  if(!level.tuto && doc.type==='boss')lane('BOSS',[{at:1.5,text:doc.finalBoss||doc.boss}]);
+  if(!level.tuto)lane('BOSS',[{at:typeof doc.bossAt==='number'?doc.bossAt:EditorSteps.autoBossAt(doc),text:doc.finalBoss||doc.boss||'aucun boss',detail:'Le but de l’ordre : vaincre le boss. Il arrive après les autres mobs de la timeline (ou à la date fixée), puis attend la fin d’un grand événement en cours.'}]);
 }

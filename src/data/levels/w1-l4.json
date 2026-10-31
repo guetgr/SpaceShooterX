@@ -1,12 +1,9 @@
 {
   "id": "w1-l4",
   "name": "PATROUILLE",
-  "type": "kill",
+  "type": "mission",
   "threat": 2,
   "bg": "patrouille",
-  "goal": {
-    "count": 40
-  },
   "spawns": [
     {
       "type": "sat",
@@ -62,5 +59,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 90
 }

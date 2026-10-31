@@ -1,12 +1,9 @@
 {
   "id": "w1-l1",
   "name": "DECOLLAGE",
-  "type": "survive",
+  "type": "mission",
   "threat": 1,
   "bg": "debris",
-  "goal": {
-    "seconds": 60
-  },
   "intro": "earth",
   "spawns": [
     {
@@ -44,5 +41,6 @@
   "ambient": {
     "golden": true,
     "smallEvents": true
-  }
+  },
+  "bossAt": 60
 }

@@ -12,7 +12,7 @@ const BOSS_W2 = (()=>{
   const glowAt = (s, g, a, r, col, al)=> s.glow(g, a.x, a.y, r, col, al);
 
   return {
-  crabe: { sfx:'cb', tex:'crabe', hp:1000, label:'LE CRABE A SCIES', seed:11, dmg:{ saw:16, shard:9, spark:0, contact:14 }, killScore:900,
+  crabe: { sfx:'cb', tex:'crabe', hp:1000, thresh:[66, 33], label:'LE CRABE A SCIES', seed:11, dmg:{ saw:16, shard:9, spark:0, contact:14 }, killScore:900,
     anchors:{ clawL:[225, 80], clawR:[290, 80], core:[256, 300] },
     parts:[
       { type:'poly', pts:[[88,112],[125,68],[190,60],[238,66],[240,112],[208,150],[196,198],[108,194],[84,150]], pivot:[170, 200], fn:s=>({ rot:Math.sin(s.t*1.7)*0.04 - (s.pose.open || 0)*0.14 + (s.pose.snap || 0)*0.2 }) },
@@ -38,7 +38,7 @@ const BOSS_W2 = (()=>{
             const a = s.A('clawL'), c = s.A('clawR'), m = { x:(a.x + c.x)/2, y:(a.y + c.y)/2 + 20 }; s.ring(m.x, m.y, 70, 0.35, '#ffd090'); fan(s, m, 9, 1.4, DOWN, 260 - b*30, { kind:'shard', r:6 }); s.shake = 0.4; }); } },
     ] },
 
-  incinerateur: { sfx:'ic', tex:'incinerateur', hp:1100, label:"L'INCINERATEUR", seed:23, dmg:{ fire:7, orb:10, lava:14, shard:8, zone:6, contact:15 }, killScore:1000,
+  incinerateur: { sfx:'ic', tex:'incinerateur', hp:1100, thresh:[66, 33], label:"L'INCINERATEUR", seed:23, dmg:{ fire:7, orb:10, lava:14, shard:8, zone:6, contact:15 }, killScore:1000,
     anchors:{ core:[262, 256] },
     parts:[{ type:'circle', c:[262, 256], r:94, pivot:[262, 256], fn:s=>({ rot:s.t*(0.25 + (s.pose.heat || 0)*2.2) }) }],
     over(s, g){ const h = s.pose.heat || 0, c = s.A('core'); s.glow(g, c.x, c.y, 120*s.K + h*40, 'rgba(255,120,40,.8)', 0.35 + 0.15*Math.sin(s.t*3) + h*0.45); if (h > 0.3) s.glow(g, c.x, c.y, 50*s.K, '#fff0c0', h*0.8);
@@ -57,7 +57,7 @@ const BOSS_W2 = (()=>{
             s.flash(c.x, c.y, '#ffb050', 50, 0.3); s.snd('icLava'); lob(s, c, t, 'lava', 13, 1.2, e=>{ s.snd('icSplash'); s.impact(e.tx, e.ty, 120); s.zone(e.tx, e.ty, 46, 2.6, '#ffb040'); s.burst(e.tx, e.ty, 10, '#ff9a30', 200, 0.6); }); }); } } },
     ] },
 
-  benne: { sfx:'bn', tex:'benne', hp:1200, label:'LA BENNE FOLLE', seed:37, dmg:{ cube:12, shard:8, contact:16 }, killScore:1100,
+  benne: { sfx:'bn', tex:'benne', hp:1200, thresh:[66, 33], label:'LA BENNE FOLLE', seed:37, dmg:{ cube:12, shard:8, contact:16 }, killScore:1100,
     anchors:{ cab:[256, 170], blade:[256, 22], skip:[256, 400], hopperL:[200, 380], hopperR:[312, 380] },
     parts:[{ type:'poly', pts:[[170,340],[342,340],[342,472],[170,472]], pivot:[256, 400], fn:s=>({ dx:Math.sin(s.t*38)*(0.6 + (s.pose.rush || 0)*1.6), dy:Math.cos(s.t*31)*(0.5 + (s.pose.rush || 0)*1.2) }) }],
     over(s, g){ const sp = (3 + (s.pose.rush || 0)*14)*s.t*14, si = s.pose.siren || 0;
@@ -78,7 +78,7 @@ const BOSS_W2 = (()=>{
         go(s){ for (let b = 0; b < 3; b++){ s.at(b*0.8, ()=>{ s.snd('bnCharge'); s.flash(0, 0, '#ffb060', 46, 0.3, 'blade').charge = true; }); s.at(b*0.8 + 0.3, ()=>{ s.snd('bnBurst'); fan(s, s.A('blade'), 7 + b*2, 1.0, DOWN + (b - 1)*0.1, 280, { kind:'cube', r:10, spin:8 }); }); } } },
     ] },
 
-  broyeur: { sfx:'by', tex:'broyeur', hp:1300, label:'LE BROYEUR', seed:41, dmg:{ tooth:10, shard:8, piston:22, contact:16 }, killScore:1200,
+  broyeur: { sfx:'by', tex:'broyeur', hp:1300, thresh:[66, 33], label:'LE BROYEUR', seed:41, dmg:{ tooth:10, shard:8, piston:22, contact:16 }, killScore:1200,
     anchors:{ rollL:[160, 255], rollR:[388, 255], head:[270, 40], hatch:[270, 420], mid:[272, 255] },
     parts:[
       { type:'circle', c:[160, 255], r:84, pivot:[160, 255], fn:s=>({ rot:s.rollA }) },
@@ -113,7 +113,7 @@ const BOSS_W2 = (()=>{
           s.at(2.4, ()=>{ s.pull = 0; s.snd('byExpel'); const c = s.A('mid'); s.ring(c.x, c.y, 200, 0.4, '#ff8a50'); for (const sg of [-1, 1]) fan(s, c, 8, 1.1, DOWN + sg*0.55, 250, { kind:'tooth', r:7, spin:8 }); s.shake = 0.5; }); } },
     ] },
 
-  reparateur: { sfx:'rp', tex:'reparateur', hp:1400, label:'LE REPARATEUR EN CHEF', seed:53, dmg:{ beam:9, drone:9, contact:16 }, killScore:1300, escort:true,
+  reparateur: { sfx:'rp', tex:'reparateur', hp:1400, thresh:[66, 33], label:'LE REPARATEUR EN CHEF', seed:53, dmg:{ beam:9, drone:9, contact:16 }, killScore:1300, escort:true,
     anchors:{ core:[258, 305], t0:[25, 190], t1:[20, 365], t2:[140, 460], t3:[370, 455], t4:[490, 365], t5:[490, 200] },
     parts:[-153, 166, 127, 53, 14.5, -24].map((d, i)=>({ type:'sector', c:[258, 305], rmin:100, rmax:340, a0:(d - 15)*Math.PI/180, a1:(d + 15)*Math.PI/180, pivot:[258, 305],
       fn:s=>({ rot:Math.sin(s.t*1.4 + i*1.1)*0.03 + (s.pose.arms || 0)*Math.sin(s.t*9 + i*2)*0.035 + (s.pose.arms || 0)*(i % 2 ? 1 : -1)*0.05 }) })),

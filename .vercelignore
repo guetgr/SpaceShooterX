@@ -1,9 +1,13 @@
 sources/
 docs/
-tools/
+tools/*.py
+tools/*.js
+tools/*.json
+tools/*.bat
+tools/__pycache__/
+tools/fixtures/
+tools/fonds-monde2/
+tools/sim/
 backups/
 dist/
 *.md
-
-
-editor.html

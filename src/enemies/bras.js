@@ -17,7 +17,7 @@ const BRAS = {
 mixin(GameScene, {
   brasInit(e){
     const sp = this.lvDef && this.lvDef.spawns && this.lvDef.spawns.find(s=> s.type === 'bras');
-    e.tier = Phaser.Math.Clamp((sp && sp.tier) || 1, 1, 4);
+    e.tier = Phaser.Math.Clamp(e.waveTier || (sp && sp.tier) || 1, 1, 4);
     e._st = 0; e.vq = []; e.cur = null; e.seq = Math.random() < 0.5 ? 0 : 1; e.salvos = 0; e.leaving = false;
     e.fireCd = Phaser.Math.Between(900, 1500); e.smokeCd = 500;
   },
@@ -60,7 +60,7 @@ mixin(GameScene, {
       c.chg.forEach(a=>{ const p = this.brasPort(e, a[0]); a[1].setPosition(p[0], p[1]); });
       if (!c.fired && c.t >= c.charge){
         c.fired = true;
-        c.chg.forEach(a=>{ const p = this.brasPort(e, a[0]); a[1].destroy(); this.brasOrb(p[0], p[1], BRAS.ports[a[0]][2]); const m = this.add.sprite(p[0], p[1], 'brFxMuzzle').setDepth(7).setBlendMode(Phaser.BlendModes.ADD).setScale(0.32); m.play('brMuzzle'); m.once('animationcomplete', ()=> m.destroy()); });
+        c.chg.forEach(a=>{ const p = this.brasPort(e, a[0]); a[1].destroy(); this.brasOrb(p[0], p[1], BRAS.ports[a[0]][2], e); const m = this.add.sprite(p[0], p[1], 'brFxMuzzle').setDepth(7).setBlendMode(Phaser.BlendModes.ADD).setScale(0.32); m.play('brMuzzle'); m.once('animationcomplete', ()=> m.destroy()); });
         c.chg = []; sfx.brasShot({ pan:this.panOf(e.x) });
       }
       if (c.t >= c.charge + 0.25){ e.cur = null; if (!e.vq.length && ++e.salvos >= BRAS.salvos + e.tier){ e.leaving = true; e.body.velocity.y = 55; } }
@@ -69,10 +69,10 @@ mixin(GameScene, {
       if (e.fireCd <= 0){ e.vq = this.brasPlan(e); e.fireCd = e.tier === 4 ? Phaser.Math.Between(500, 2400) : BRAS.cooldown[e.tier]; }
     }
   },
-  brasOrb(x, y, deg){
+  brasOrb(x, y, deg, e){
     if (this._bLoad > BULLET_CAP) return;
     const ang = Phaser.Math.DegToRad(deg), H = BRAS.shotHead, b = this.enemyBullets.create(x, y, 'brFxOrb', 0);
-    b.setDepth(4); b.damage = BRAS.shotDmg; b.setScale(BRAS.shotScale).setOrigin(H[0]/64, H[1]/128).setRotation(ang - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
+    b.setDepth(4); b.damage = this.waveDamage(e, BRAS.shotDmg); b.setScale(BRAS.shotScale).setOrigin(H[0]/64, H[1]/128).setRotation(ang - Math.PI/2).setBlendMode(Phaser.BlendModes.ADD);
     const r = 5.25 / BRAS.shotScale; b.body.setCircle(r, H[0] - r, H[1] - r);
     b.play('brOrb'); this.physics.velocityFromRotation(ang, this.eSpd(BRAS.shotSpeed), b.body.velocity); b.body.setGravityY(BRAS.shotGravity);
   },

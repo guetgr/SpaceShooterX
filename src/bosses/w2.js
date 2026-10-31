@@ -19,6 +19,7 @@
       Object.keys(FX).forEach(fxImg);
       this.reset(); this.pl = { x:W/2, y:H - 70 };
     }
+    lvl(){ const t = this.cfg.thresh; return this.hp*100 > t[0] ? 0 : this.hp*100 > t[1] ? 1 : 2; }      // état d'usure 0..2 selon les paliers de la config (% de vie)
     reset(){ this.t = 0; this.fx = []; this.timers = []; this.bx = this.W/2; this.by = -260; this.mv = null; this.pose = {}; this.tws = []; this.rollA = 0; this.hp = 1; this.dead = false; this.pieces = null;
       this.cur = -1; this.curT = 0; this.gapT = 1.4; this.shake = 0; this.pull = 0; this.escorts = []; this.atkIdx = 0; this.flash = 0; this.deathT = 0; }
     prep(){          // 3 états d'usure fabriqués une fois dans le sprite (plaques arrachées, fissures lumineuses, assombrissement) ; les pièces mobiles sont découpées dans chacun
@@ -97,7 +98,7 @@
       this.rollA += (1.2 + (this.pose.spin || 0))*dt;
       if (this.flash > 0) this.flash = Math.max(0, this.flash - dt*6);
       if (mode === 'play'){
-        const lv = this.hp < 0.33 ? 2 : this.hp < 0.66 ? 1 : 0;
+        const lv = this.lvl();
         if (this.mv){ const k = clampv((this.t - this.mv.t0)/this.mv.d, 0, 1), e = ease(k); this.bx = lerp(this.mv.x0, this.mv.x1, e); this.by = lerp(this.mv.y0, this.mv.y1, e); if (k >= 1) this.mv = null; }
         else { this.bx += (this.W/2 + Math.sin(this.t*0.5)*90 - this.bx)*dt*0.8; this.by += (190 + Math.sin(this.t*1.1)*8 - this.by)*dt*2; }
         if (this.cur >= 0 && this.curT > this.cfg.attacks[this.cur].dur){ this.cur = -1; this.gapT = GAP[lv]; }
@@ -109,7 +110,7 @@
       if (this.dead){ this.deathT += dt; for (const p of this.pieces){ p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 90*dt; p.rot += p.vr*dt; } }
       for (const e of this.fx){ e.age += dt; if (e.type === 'p'){ if (e.upd) e.upd(e, dt, this); else { e.vy += e.ay*dt; e.x += e.vx*dt; e.y += e.vy*dt; } e.a += e.spin*dt; } if (e.follow){ const p = this.A(e.follow); e.x = p.x; e.y = p.y; } }
       this.fx = this.fx.filter(e=>{ if (e.age < e.life) return true; if (e.onDie) e.onDie(e, this); return false; });
-      const lv = this.hp < 0.33 ? 2 : this.hp < 0.66 ? 1 : 0;      // fumée / étincelles selon la santé
+      const lv = this.lvl();      // fumée / étincelles selon la santé
       if (lv && !this.dead && mode === 'play' && Math.random() < dt*(lv === 2 ? 22 : 9)){ const a = rnd(0, TAU), d = rnd(10, 110); this.proj({ kind:Math.random() < 0.6 ? 'smoke' : 'spark', x:this.bx + Math.cos(a)*d, y:this.by + Math.sin(a)*d*0.8, vx:rnd(-18, 18), vy:rnd(-70, -20), life:rnd(0.6, 1.4), r:rnd(5, 11), col:'#ffb050', harm:false }); }
     }
     // l'API des scripts utilise `flash` pour les lueurs ; la propriété `flash` (blanc d'impact) est donc stockée à part
@@ -117,7 +118,7 @@
       const g = this.ctx; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, this.cv.width, this.cv.height); g.setTransform(this.U, 0, 0, this.U, 0, 0);
       if (!this.ready) return;
       if (!this.dead){
-        const lv = this.hp < 0.33 ? 2 : this.hp < 0.66 ? 1 : 0, set = this.sets[lv], b = this.bg; b.clearRect(0, 0, 512, 512); b.drawImage(set.base, 0, 0);
+        const lv = this.lvl(), set = this.sets[lv], b = this.bg; b.clearRect(0, 0, 512, 512); b.drawImage(set.base, 0, 0);
         (this.cfg.parts || []).forEach((p, i)=>{ const o = p.fn(this, this.t) || {}; b.save(); b.translate(p.pivot[0] + (o.dx || 0), p.pivot[1] + (o.dy || 0)); b.rotate(o.rot || 0); b.translate(-p.pivot[0], -p.pivot[1]); b.drawImage(set.parts[i], 0, 0); b.restore(); });
         if (this.hitFlash > 0 || this.hurtRed){ b.save(); b.globalCompositeOperation = 'source-atop'; b.fillStyle = this.hitFlash > 0 ? 'rgba(255,255,255,' + clampv(this.hitFlash, 0, 1) + ')' : 'rgba(255,60,40,.22)'; b.fillRect(0, 0, 512, 512); b.restore(); }
         g.save(); g.translate(this.bx, this.by); g.scale(K, -K); g.translate(-256, -256); g.drawImage(this.bc, 0, 0); g.restore();
@@ -191,7 +192,7 @@
       const big = size > 360; this.acFx(big ? 'arFxBoomL' : 'brFxBoom', big ? 'arBoomL' : 'explodeBras', x, y, size/(big ? 256 : 160)*1.15, { depth:8 });
       if (size > 500) this.acFx('arFxShock', 'arShock', x, y, size/190, { depth:8 }); if (snd) this.w2Sfx(snd, x);
     },
-    w2Stage(pct){ return pct > 66 ? 0 : pct > 33 ? 1 : 2; },
+    w2Stage(pct){ const t = this.w2.cfg.thresh; return pct > t[0] ? 0 : pct > t[1] ? 1 : 2; },
 
     /* ---------- dégâts reçus ---------- */
     w2Damage(x, y, d, crit){
@@ -274,7 +275,7 @@
       if (w.dieT > 2.4) this.w2Dead();
     },
     w2Dead(){
-      const w = this.w2; if (w.dead) return; w.dead = true; const st = w.st, [cx, cy] = this.w2W(st.bx, st.by);
+      const w = this.w2; if (w.dead) return; w.dead = true; bestiaryBossKill(this, w.id); const st = w.st, [cx, cy] = this.w2W(st.bx, st.by);
       st.shatter(); st.shake = 1;
       this.cameras.main.flash(700, 255, 255, 255, false); this.cameras.main.shake(1100, 0.016);
       this.w2Boom(cx, cy, 1000, w.cfg.sfx + 'Boom'); this.w2Boom(cx, cy, 560, ''); this.w2Boom(cx - 70, cy - 50, 420, ''); this.w2Boom(cx + 70, cy + 50, 420, ''); this.w2Boom(cx, cy + 80, 380, '');

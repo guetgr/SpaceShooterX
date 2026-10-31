@@ -67,7 +67,7 @@ def validate_level(d, original, root=ROOT):
         raise ValueError('Identité, secteur et type du niveau doivent être conservés')
     if type(d.get('schemaVersion')) is not int or d['schemaVersion'] not in SCHEMA_VERSIONS: raise ValueError('schemaVersion %r non supportée (1 ou 2)' % (d.get('schemaVersion'),))
     if any(d.get(k) != original.get(k) for k in ['schemaVersion','tuto']): raise ValueError('Version et mode tutoriel doivent être conservés')
-    if set(d) - {'mobs','bossTune','eventTune','norma','audio'} != set(original) - {'mobs','bossTune','eventTune','norma','audio'}: raise ValueError('Paramètres manquants ou inconnus')
+    if set(d) - {'mobs','bossTune','eventTune','norma','audio','bossAt'} != set(original) - {'mobs','bossTune','eventTune','norma','audio','bossAt'}: raise ValueError('Paramètres manquants ou inconnus')
     def shape(value, ref, at='niveau'):
         if isinstance(ref, dict):
             if not isinstance(value, dict) or set(value) != set(ref): raise ValueError(at + ' : structure invalide')
@@ -79,17 +79,17 @@ def validate_level(d, original, root=ROOT):
             if isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value): raise ValueError(at + ' : nombre fini requis')
         elif isinstance(ref, str) and (not isinstance(value,str) or len(value)>10000): raise ValueError(at + ' : texte invalide')
     if not isinstance(d.get('name'),str) or not 1 <= len(d['name']) <= 40 or '<' in d['name'] or '>' in d['name']: raise ValueError('name : 1 à 40 caractères, sans < ni >')
-    for key in ['name','threat','hpMul','dmgMul','reward','goal','zoom','ambient','tutorial']:
+    for key in ['name','threat','hpMul','dmgMul','reward','zoom','ambient','tutorial']:
         if key in original: shape(d[key],original[key],key)
     if not 1 <= d['threat'] <= 20 or d['hpMul'] <= 0 or d['dmgMul'] <= 0: raise ValueError('Difficulté invalide')
-    if any(v <= 0 for v in d['goal'].values()): raise ValueError('Objectif positif requis')
+    if 'bossAt' in d and (type(d['bossAt']) not in (int,float) or isinstance(d['bossAt'],bool) or not 1 <= d['bossAt'] <= 3600): raise ValueError('bossAt : date d\'arrivée du boss entre 1 et 3600 secondes requise (ou clé absente : le boss arrive après les autres mobs)')
     if type(d['timelineOnly']) != int or d['timelineOnly'] not in [0,1] or d['spawnClock'] not in ['mission','difficulty']: raise ValueError('Mode de spawn invalide')
     enemies = set(re.findall(r"type:'([^']+)'", (root/'src/data/bestiary.js').read_text(encoding='utf-8'))) - {'meteor'}
     enemies = {e for e in enemies if not e.startswith('boss')}
     events = set(re.findall(r'^  (\w+):', (root/'src/data/events.js').read_text(encoding='utf-8'), re.M))
     def number(v,lo,hi):
         return type(v) in (int,float) and lo <= v <= hi
-    if d['type'] in ('kill','collect') and (0 if d['timelineOnly'] == 1 else len(d['spawns'])) + len(d['waves']) == 0 and not d.get('tuto'): raise ValueError('Objectif impossible : aucun ennemi ne peut apparaître (ni réserve ni vague)')
+    if not d.get('tuto') and not d.get('finalBoss') and not d.get('boss'): raise ValueError('Boss manquant : tout ordre se gagne en battant son boss (finalBoss ou boss)')
     if 'mobs' in d:
         known = set(re.findall(r'^  (\w+):\s+\{', (root/'src/data/enemy-stats.js').read_text(encoding='utf-8'), re.M))
         if not known: raise ValueError('mobs : aucune entrée lue dans src/data/enemy-stats.js ; le format « deux espaces, nom: { » doit être conservé')
@@ -194,7 +194,12 @@ def validate_level(d, original, root=ROOT):
             if kind=='spawns':
                 if set(row)-{'type','from','w','tier'} or not {'type','from','w'} <= set(row) or row['type'] not in enemies or not number(row['from'],-1,3600) or not number(row['w'],0.01,1000) or not number(row.get('tier',1),1,4): raise ValueError('Pool invalide')
             elif kind=='waves':
-                if set(row)!={'type','at','count','spacing'} or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
+                bounds = {'spread':(24,300), 'x':(0,100), 'y':(0,80), 'alert':(1,20), 'minAlert':(1,20), 'tier':(1,4), 'hpMul':(0.1,10), 'dmgMul':(0.1,10), 'speedMul':(0.1,10)}
+                required = {'type','at','count','spacing'}
+                if set(row)-required-set(bounds)-{'formation'} or not required <= set(row) or row['type'] not in enemies or not number(row['at'],0,3600) or type(row['count'])!=int or not 1<=row['count']<=100 or not number(row['spacing'],0,60): raise ValueError('Vague invalide')
+                if 'formation' in row and row['formation'] not in ['random','line','column','star']: raise ValueError('Vague invalide')
+                for key,(lo,hi) in bounds.items():
+                    if key in row and (not number(row[key],lo,hi) or (key in ['alert','minAlert','tier'] and type(row[key])!=int)): raise ValueError('Vague invalide')
             elif set(row)-{'kind','at','duration','params','norma'} or not {'kind','at'} <= set(row) or row['kind'] not in events or not number(row['at'],0,3600) or ('duration' in row and not number(row['duration'],0.1,600)): raise ValueError('Événement invalide')
             else:
                 if 'params' in row: check_params(row['params'], row['kind'], 'events.params.' + row['kind'], ev_reg)

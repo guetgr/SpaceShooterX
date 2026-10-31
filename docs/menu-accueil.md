@@ -22,7 +22,7 @@ Pour le voir : `python3 tools/serve.py 8080` puis <http://localhost:8080/> (ou `
 
 ## Parcours
 **Le tuto est le niveau 1 du monde 1** (`w1-tuto`, nœud « ? », type `tuto`) : satellites à détruire, débris à esquiver, boss satellite (`src/game/tuto.js`). Toujours visible et rejouable ; sa 1re victoire donne des fragments et ouvre DECOLLAGE, puis retour à l'accueil. Parcours normal :
-Accueil (page CARTE) → choisir un niveau → DECOLLER → niveau (objectif : survivre X s, éliminer N ennemis, récolter N cristaux, ou vaincre le boss du monde) → écran de résultat → SUIVANT / REJOUER / ACCUEIL.
+Accueil (page CARTE) → choisir un niveau → DECOLLER → niveau (le but est toujours de vaincre le boss de l'ordre : il arrive après les autres mobs de la timeline) → écran de résultat → SUIVANT / REJOUER / ACCUEIL.
 Navigation : glisser le doigt gauche/droite (ou onglets du bas, ou flèches du clavier) entre HANGAR · CARTE · ARBRE. Sur l'arbre, les onglets de branche défilent à l'horizontale : pour changer de page depuis eux, glisser depuis le bord gauche ou toucher un onglet du bas.
 Victoire sur un niveau = niveau suivant débloqué ; boss vaincu = monde suivant débloqué (animation : la camionnette voyage jusqu'au nouveau monde). QUITTER dans la pause = niveau abandonné (fragments gagnés gardés).
 

@@ -3,6 +3,8 @@
 // voyage en hyperespace, zoom vers un monde, animation de déblocage d'un nouveau monde.
 // Modes de la page CARTE (this.mapMode) : 'world' (un monde et ses niveaux en orbite) · 'galaxy' (vue d'ensemble) · 'moving' (transition).
 const GAL_STEP = 165, GAL_BASE_Y = 500, GAL_R = 50, GAL_SCALE = 0.78;
+const GAL_TAP_SLOP = 14;      // px logiques : en dessous, c'est un toucher et non un glissement
+const VORTEX_POS = { x:320, y:490 };      // à droite de la Terre, sous Mars (repère de la carte, défile avec elle)
 const GAL_FONT = "'SSX Label',monospace", GAL_FONT2 = "'SSX Text',monospace";
 
 mixin(HomeScene, {
@@ -29,6 +31,18 @@ mixin(HomeScene, {
       c.add([glow, img, ring, num, sub, star]); this.galaxy.add(c);
       return { w, i, c, glow, img, ring, num, sub, star, pos };
     });
+    // le vortex : ordre spécial sans fin (records de durée et de dégâts) ; un toucher ouvre sa fiche
+    { const c = this.add.container(VORTEX_POS.x, VORTEX_POS.y), glow = this.add.image(0, 0, 'shockRing').setBlendMode(Phaser.BlendModes.ADD).setTint(0x9a6bff).setScale(0.55).setAlpha(0.55);
+      const sw = this.add.graphics(), arms = 3, n = 24;
+      for (let a = 0; a < arms; a++) for (let i = 0; i < n; i++){
+        const t = i/n, r = 3 + t*30, ang = a*Math.PI*2/arms + t*3.4, s = 3.4 - t*2;
+        sw.fillStyle(i < 6 ? 0xffffff : (i < 14 ? 0xc9a8ff : 0x7d4dff), 1 - t*0.55); sw.fillRect(Math.round(Math.cos(ang)*r - s/2), Math.round(Math.sin(ang)*r - s/2), Math.ceil(s), Math.ceil(s));
+      }
+      const lab = this.add.text(0, 40, 'LE VORTEX', { fontFamily:GAL_FONT, fontSize:'8px', color:'#d9c9ff' }).setOrigin(0.5, 0).setResolution(2);
+      c.add([glow, sw, lab]); this.galaxy.add(c); this.galVortex = { c, glow, sw };
+      document.getElementById('btnVortexGo').onclick = ()=> this.launchVortex();
+      document.getElementById('btnVortexClose').onclick = ()=>{ sfx.uiBack(); this.closeVortexCard(); };
+    }
     // défilement vertical au doigt, avec inertie ; un toucher bref sur un monde l'ouvre
     this.input.on('pointerdown', p=>{
       if (this.mapMode !== 'galaxy' || this.page !== 0 || document.querySelector('.overlay:not(.hidden)')) return;
@@ -37,14 +51,20 @@ mixin(HomeScene, {
     this.input.on('pointermove', p=>{
       const d = this.galDrag; if (!d || !p.isDown) return;
       const now = performance.now(), dy = p.y - d.y0; d.moved = Math.max(d.moved, Math.abs(dy));
-      this.galY = d.g0 + dy;
+      if (d.moved < GAL_TAP_SLOP && !d.scroll){ d.last = p.y; d.lt = now; return; }          // zone morte : le tremblement d'un doigt qui touche ne fait pas bouger la carte
+      d.scroll = true;
+      let g = d.g0 + dy;
+      if (g > this.galMax) g = this.galMax + (g - this.galMax)*0.35;                      // résistance élastique au-delà des bornes (pas de tirage libre)
+      else if (g < this.galMin) g = this.galMin + (g - this.galMin)*0.35;
+      this.galY = g;
       if (now > d.lt) this.galVel = this.galVel*0.6 + 0.4*((p.y - d.last)/((now - d.lt)/1000)); d.last = p.y; d.lt = now;
     });
     this.input.on('pointerup', p=>{
       const d = this.galDrag; this.galDrag = null; if (!d) return;
-      if (d.moved < 10 && performance.now() - d.t0 < 400){
+      if (!d.scroll){                                                                      // toucher (même long) sans glissement : ouvre le monde touché
         this.galVel = 0;
-        const hit = this.galWorlds.findIndex(g=> Math.hypot(p.x - g.pos.x, p.y - (g.pos.y + this.galY)) < GAL_R + 8);
+        if (Math.hypot(p.x - VORTEX_POS.x, p.y - (VORTEX_POS.y + this.galY)) < 44){ this.openVortexCard(); return; }
+        const hit = this.galWorlds.findIndex(g=>{ const dx = p.x - g.pos.x, dy = p.y - (g.pos.y + this.galY); return Math.hypot(dx, dy) < GAL_R + 14 || (Math.abs(dx) < 80 && dy > GAL_R && dy < GAL_R + 44); });      // planète ou son libellé
         if (hit >= 0) this.tapGalaxy(hit);
       } else if (performance.now() - d.lt > 90) this.galVel = 0;                           // le doigt s'est arrêté avant de lâcher
     });
@@ -58,16 +78,17 @@ mixin(HomeScene, {
       const key = worldPlanetTexture(this, w, 96);
       g.img.setTexture(key).setTint(open ? 0xffffff : 0x2c3050).setScale(open ? GAL_SCALE : GAL_SCALE*0.85);
       g.glow.setTint(open ? (th.glow || 0x4fa8ff) : 0x30345a).setAlpha(open ? 0.5 : 0.2);
-      const sm = worldSummary(w.id, p);
-      g.num.setText(open ? w.name : '? ? ?').setColor(open ? '#cfd6ff' : '#5a6290');
-      g.sub.setText(open ? ('SECTEUR ' + w.order + ' · ' + sm.done + '/' + sm.total) : 'ACCES REFUSE').setColor(open ? '#ffc21a' : '#7a5a4a');
-      g.star.setVisible(open && sm.bossDown).setPosition(g.sub.width/2 + 10, GAL_R + 31);
+      g.num.setText(open ? w.name : '').setColor('#cfd6ff');
+      g.sub.setText('');
+      g.star.setVisible(false);
       // anneau : un segment par niveau (vert = terminé, rouge = boss), on laisse les dernières lueurs pour les niveaux restants
       const L = w.levels.length, gap = 0.12, seg = Math.PI*2/L;
       g.ring.clear();
       w.levels.forEach((l, k)=>{
         const done = isLevelDone(l.id, p), a0 = -Math.PI/2 + k*seg + gap/2, a1 = -Math.PI/2 + (k + 1)*seg - gap/2;
-        g.ring.lineStyle(3, done ? 0x7bff9a : (l.type === 'boss' ? 0xff4f6d : 0x4ff2ff), open ? (done ? 0.95 : 0.35) : 0.12);
+        const gold = open && done && completionDefs(l.id) && completionPct(l.id, p.comp[l.id] || {}) >= 100;      // niveau fini à 100 % : quartier en or, brillant
+        if (gold){ g.ring.lineStyle(9, 0xffc21a, 0.22); g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath(); g.ring.lineStyle(5, 0xffc21a, 0.4); g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath(); }
+        g.ring.lineStyle(3, gold ? 0xfff0a0 : (done ? 0x7bff9a : (l.type === 'boss' ? 0xff4f6d : 0x4ff2ff)), open ? (done ? 0.95 : 0.35) : 0.12);
         g.ring.beginPath(); g.ring.arc(0, 0, GAL_R, a0, a1, false); g.ring.strokePath();
       });
     });
@@ -96,6 +117,7 @@ mixin(HomeScene, {
       }
     }
     if (!this.galaxy.visible) return;
+    if (this.galVortex){ this.galVortex.sw.rotation += dt*1.1; this.galVortex.glow.setScale(0.55 + 0.05*Math.sin(time/380)); }
     this.galaxy.setPosition(-this.pageX*GAME_W, this.galY);
     const k = Math.max(0, 1 - Math.abs(this.pageX)*1.6);
     this.galaxy.setAlpha(this.galA*k);
@@ -130,23 +152,62 @@ mixin(HomeScene, {
     this.refreshGalaxy();
     const i = this.homeWorld, pos = this.galaxyPos(i), g = this.galWorlds[i];
     this.galY = Phaser.Math.Clamp(360 - pos.y, this.galMin, this.galMax); this.galVel = 0;
+    this.tweens.killTweensOf(this.vanBase);
+    Object.assign(this.vanBase, { x:pos.x + 40, y:pos.y + this.galY - 4, s:0.15, a:0 });      // la camionnette est invisible pendant le dézoom puis apparaît déjà en place (aucun trajet visible)
     this.setMapDom('galaxy');
     this.galaxy.setVisible(true); this.galA = 0; g.img.setVisible(false); g.glow.setVisible(false);
     this.warpPulse();
     this.tweens.add({ targets:this.planetPos, x:pos.x, y:pos.y + this.galY, s:GAL_SCALE, duration:560, ease:'Cubic.easeInOut' });
     this.tweens.add({ targets:this, orbitA:0, duration:300 });
     this.tweens.add({ targets:this, galA:1, duration:560, ease:'Sine.easeIn', onComplete:()=>{
-      g.img.setVisible(true); g.glow.setVisible(true); this.planet.setVisible(false); this.planetGlow.setVisible(false); this.mapMode = 'galaxy';
+      g.img.setVisible(true); g.glow.setVisible(true); this.planet.setVisible(false); this.planetGlow.setVisible(false); this.mapMode = 'galaxy'; this.vanBase.a = 1;
     } });
+  },
+
+  // fiche du vortex : records locaux et bouton d'entrée
+  openVortexCard(){
+    const r = getVortexRecords();
+    document.getElementById('vxTime').textContent = r.runs ? vortexTimeText(r.time) : '--';
+    document.getElementById('vxDmg').textContent = r.runs ? r.damage.toLocaleString('fr-FR') : '--';
+    document.getElementById('vortexCard').classList.remove('hidden'); sfx.uiOpen();
+  },
+  closeVortexCard(){ document.getElementById('vortexCard').classList.add('hidden'); },
+
+  // entrée dans le vortex : partie sans fin (le retour ramène sur la carte des secteurs)
+  launchVortex(){
+    if (this._launching) return;
+    this._launching = true; this._fromVortex = true; sfx.resume(); sfx.uiStart(); this.closeVortexCard();
+    const go = ()=>{
+      const gs = this.scene.get('game');
+      this.scene.setVisible(true, 'game'); gs.input.enabled = true;
+      gs.meta = getMeta();
+      gs.scene.restart({ autoStart:true, vortex:true });
+    };
+    if (Motion.ok()) Motion.cover(go, .45);
+    else { this.cameras.main.fadeOut(380, 5, 4, 12); this.cameras.main.once('camerafadeoutcomplete', go); }
+  },
+
+  // vue d'ensemble affichée d'emblée (sans animation), centrée sur le monde où l'on en est
+  showGalaxyNow(){
+    this.mapMode = 'galaxy'; this.homeMusic(true);
+    this.refreshGalaxy();
+    const pos = this.galaxyPos(this.homeCurrent);
+    this.galY = Phaser.Math.Clamp(360 - pos.y, this.galMin, this.galMax); this.galVel = 0;
+    Object.assign(this.vanBase, { x:pos.x + 40, y:pos.y + this.galY - 4, s:0.15, a:1 });
+    this.setMapDom('galaxy');
+    this.galaxy.setVisible(true); this.galA = 1; this.orbitA = 0;
+    this.planet.setVisible(false); this.planetGlow.setVisible(false);
   },
 
   // zoom vers un monde (depuis la route) : il grossit jusqu'à sa place, ses niveaux se mettent en orbite
   enterWorldView(i){
     if (this.mapMode !== 'galaxy') return;
-    this.mapMode = 'moving'; sfx.uiStart();
-    this.homeWorld = i; this.homeMusic(false);                          // le menu du monde choisi
+    this.mapMode = 'moving'; sfx.uiStart(); this.closeVortexCard();
+    this.tweens.killTweensOf(this.vanBase); this.vanBase.a = 0;                  // la camionnette disparaît d'emblée (pas de glissement visible d'un monde à l'autre)
+    this.homeWorld = i; this.homeCurrent = i; this.homeMusic(false);                          // le menu du monde choisi
     const w = WORLDS[i], p = getWorldProgress(), pos = this.galaxyPos(i), g = this.galWorlds[i];
-    this.homeSel = (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
+    const memo = this.worldMemo && this.worldMemo[w.id];                  // niveau déjà choisi dans ce monde : on le retrouve
+    this.homeSel = (memo && isLevelUnlocked(memo, p)) ? memo : (w.levels.find(l=> isLevelUnlocked(l.id, p) && !isLevelDone(l.id, p)) || w.levels[0]).id;
     this.setHomePlanet(w, !isWorldUnlocked(w.id, p));
     this.planetPos.x = pos.x; this.planetPos.y = pos.y + this.galY; this.planetPos.s = GAL_SCALE;
     this.planet.setVisible(true); this.planetGlow.setVisible(true); g.img.setVisible(false); g.glow.setVisible(false);
@@ -156,9 +217,9 @@ mixin(HomeScene, {
     this.time.delayedCall(380, ()=>{
       this.setMapDom('world'); this.renderHomeMap(true);
       this.tweens.add({ targets:this, orbitA:1, duration:450 });
-      this.moveHomeVan(0);
+      Object.assign(this.vanBase, { x:GAME_W/2, y:432, s:0.22 });             // replacée sans trajet, toujours invisible
     });
-    this.time.delayedCall(700, ()=>{ this.mapMode = 'world'; });
+    this.time.delayedCall(700, ()=>{ this.mapMode = 'world'; this.vanBase.a = 1; });
   },
 
   tapGalaxy(i){
@@ -172,7 +233,7 @@ mixin(HomeScene, {
 
   // remet la page CARTE en vue « monde » (retour d'un niveau, premier affichage)
   resetMapView(){
-    this.orbitRotation = 0;
+    this.orbitRotation = null;
     if(this.orbitTween) this.orbitTween.stop();
     this.mapMode = 'world'; this.galVel = 0; this.galDrag = null; this.galForceLock = -1;
     this.galaxy.setVisible(false); this.galA = 0;

@@ -3,7 +3,6 @@
   "name": "LE KRAKEN",
   "type": "boss",
   "threat": 17,
-  "goal": {},
   "intro": null,
   "reward": {
     "clear": 170,

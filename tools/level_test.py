@@ -2,7 +2,7 @@
 """Test headless des niveaux des mondes : victoire par type d'objectif (survie, kills, cristaux, boss), défaite, déblocages, sauvegarde.
 
   python tools/level_test.py          (sert le dossier du projet SANS ?dev, pour tester les vrais déblocages ; prérequis : pip install playwright)
-Les objectifs sont raccourcis par le test (goal.seconds = 3, etc.) ; le moteur de jeu tourne pour de vrai.
+L'arrivée du boss est avancée par le test (bossAt = 3, etc.) ; le moteur de jeu tourne pour de vrai.
 """
 import functools, http.server, json, os, sys, threading
 from playwright.sync_api import sync_playwright
@@ -37,7 +37,7 @@ with sync_playwright() as pw:
     p.route('**/fonts.googleapis.com/**', lambda r: r.fulfill(status=200, content_type='text/css', body=''))
     p.goto(url)
     p.wait_for_selector('#btnStart', state='attached', timeout=60000)      # l'ancien menu est masqué : l'accueil (#home) le remplace
-    p.wait_for_function('window.__ssxScene && typeof levelById === "function"', timeout=60000)      # le chargement des scripts peut être long
+    p.wait_for_function('window.__ssxScene && typeof levelById === "function"', polling=250, timeout=60000)      # le chargement des scripts peut être long
     p.wait_for_timeout(1000)
     p.evaluate("localStorage.removeItem('ssx_worlds_v1')")
 
@@ -46,6 +46,11 @@ with sync_playwright() as pw:
         p.wait_for_timeout(1200)
         p.evaluate("(()=>{ const sc = %s; sc.introT = 99999; })()" % SC)
         p.wait_for_timeout(800)
+
+    def kill_generic_boss():
+        # ordre sans boss « module » : le Dreadnought générique arrive à `bossAt` ; on le détruit pour gagner
+        p.wait_for_function("!!window.__ssxScene.currentBoss && window.__ssxScene.lvBossOut", polling=250, timeout=15000)
+        p.evaluate("(()=>{ const b = window.__ssxScene.currentBoss; b.hp = 0; window.__ssxScene.killEnemy(b); })()")
 
     def go_visible(): return p.evaluate("!document.getElementById('gameover').classList.contains('hidden')")
     def title(): return p.evaluate("document.querySelector('#gameover .go-title').textContent")
@@ -67,11 +72,12 @@ with sync_playwright() as pw:
     check(p.evaluate("%s.player.tintTopLeft" % SC) == 0xffa07c, 'soignée : la teinte de l\'apparence revient')
     p.evaluate("setShipSkin('base')")
 
-    print('survie (w1-l1)')
+    print('victoire en battant le boss (w1-l1, boss générique)')
     f0 = p.evaluate("getMeta().composants")
     check(p.evaluate("typeof LEVEL_FRAG_MUL") == 'undefined', 'ancien calcul (score -> fragments) retiré')
-    start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
+    start('w1-l1', "levelById('w1-l1').bossAt = 3; levelById('w1-l1').finalBoss = null; levelById('w1-l1').boss = 'dread'")       # les boss de fin « modules » sont testés à part plus bas
     check(p.evaluate("%s.lvDef.id" % SC) == 'w1-l1', 'le niveau est chargé')
+    check(p.evaluate("%s.lvBossAt" % SC) == 3 and p.evaluate("typeof levelById('w1-l1').goal") == 'undefined', "plus d'objectif : le boss arrive à bossAt (3 s)")
     check(p.evaluate("%s.alertLevel" % SC) == 1, 'menace = celle du niveau')
     print('composants en mission')
     check(p.evaluate("%s.runComposants" % SC) == 0 and p.evaluate("%s.comps.getLength()" % SC) == 0, 'composants : compteur à 0 au départ')
@@ -83,8 +89,9 @@ with sync_playwright() as pw:
     check(p.evaluate("document.getElementById('compVal').textContent") == str(p.evaluate("%s.runComposants" % SC)), 'compteur du HUD = composants ramassés')
     check(p.evaluate("(()=>{ const sc = %s; const k = sc.comps.getLength(); sc.tuto = 1; sc.composantDrop({ enemyType:'tank', x:200, y:200 }); sc.tuto = 0; return sc.comps.getLength() - k; })()" % SC) == 0, 'tutoriel : aucun composant')
     c0 = p.evaluate("(()=>{ const sc = %s; sc.stats.magnetRadius = 60; for (let i=0;i<10;i++) sc.spawnComposantAt(20, sc.player.y - 300, 'compS', 0); return sc.runComposants; })()" % SC)
-    p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
-    check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par survie -> écran de fin')
+    kill_generic_boss()
+    p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", polling=250, timeout=15000)
+    check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du boss -> écran de fin')
     check(p.evaluate("%s.runComposants" % SC) - c0 >= 10, "victoire : les composants restés à l'écran sont aspirés vers la camionnette")
     check(vis('#btnNext') and vis('#btnRetry') and vis('#btnGoMenu'), 'victoire : boutons SUIVANT, REJOUER, ACCUEIL')
     check(not vis('#home'), "l'arbre de compétences (page de l'accueil) ne s'ouvre pas tout seul : l'accueil reste fermé")
@@ -100,21 +107,16 @@ with sync_playwright() as pw:
     check(p.evaluate("!!(getMeta().rd.laser_auto && getMeta().rd.laser_auto.plan)"), '1re victoire de w1-l1 : le plan du LASER AUTO-CIBLEUR est acquis (R&D)')
 
     print('rejeu : pas de nouveau bonus de 1re victoire')
-    start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = null")       # le boss de fin est testé à part plus bas
+    start('w1-l1', "levelById('w1-l1').bossAt = 3; levelById('w1-l1').finalBoss = null; levelById('w1-l1').boss = 'dread'")
     check(p.evaluate("%s.runComposants" % SC) == 0, 'rejeu : le compteur repart de 0')
-    p.wait_for_timeout(5500)
+    kill_generic_boss(); p.wait_for_timeout(4500)
     f2 = p.evaluate("getMeta().composants"); bk = bank()
     check(bk.get('prime') == 10 and f2 - f1 == bk.get('total'), 'rejeu : prime réduite à 10 (%s, +%s)' % (bk, f2 - f1))
 
-    print('kills (w1-l4)')
-    start('w1-l4', "levelById('w1-l4').goal.count = 5; levelById('w1-l4').finalBoss = null")       # le boss de fin est testé à part plus bas
-    p.evaluate("(()=>{ %s.runKills = 5; })()" % SC); p.wait_for_timeout(3800)
-    check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par kills')
-
     print('boss de fin (w1-l4, Anneau)')
-    start('w1-l4', "levelById('w1-l4').goal.count = 3; levelById('w1-l4').finalBoss = 'anneau'")
-    p.evaluate("(()=>{ %s.runKills = 3; })()" % SC); p.wait_for_timeout(3500)
-    check(p.evaluate("!!%s.an" % SC), "L'Anneau arrive quand les kills sont faits")
+    start('w1-l4', "levelById('w1-l4').bossAt = 3; levelById('w1-l4').finalBoss = 'anneau'")
+    p.wait_for_timeout(5000)
+    check(p.evaluate("!!%s.an" % SC), "L'Anneau arrive à la date du boss")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
     p.wait_for_timeout(2500)
     p.evaluate("(()=>{ const sc = %s; sc.dodgeInvuln = 1e9; sc.anStartAtk('bays'); })()" % SC); p.wait_for_timeout(2500)       # le joueur est invulnérable (délai de coup) : on teste le boss, pas l'esquive
@@ -124,13 +126,13 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ %s.anDamage(200, 200, 600, true); })()" % SC); p.wait_for_timeout(1500)
     check(p.evaluate("%s.an.st >= 2" % SC), "L'Anneau s'abîme (états d'usure)")
     k0 = p.evaluate("(()=>{ const sc = %s; sc.comps.clear(true, true); return sc.runComposants; })()" % SC)       # on ne mesure que la pluie du boss
-    p.evaluate("(()=>{ %s.anDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.an && window.__ssxScene.an.dead", timeout=10000); p.wait_for_timeout(200)
+    p.evaluate("(()=>{ %s.anDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.an && window.__ssxScene.an.dead", polling=250, timeout=10000); p.wait_for_timeout(200)
     check(p.evaluate("%s.runComposants + %s.composantsOnScreenValue()" % (SC, SC)) - k0 >= 20, 'mini-boss (Anneau) : pluie de composants (4 gros)')
     p.wait_for_timeout(7000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', "victoire à la mort de L'Anneau")
     p.evaluate("(()=>{ %s.dodgeInvuln = 0; })()" % SC)
     print("mob Éclaireur (w1-l4) : verrouillage et tirs qui visent le joueur")
-    start('w1-l4', "levelById('w1-l4').goal.count = 999; levelById('w1-l4').finalBoss = null")
+    start('w1-l4', "levelById('w1-l4').bossAt = 999; levelById('w1-l4').finalBoss = null; levelById('w1-l4').boss = 'dread'")
     p.evaluate("(()=>{ const sc = %s; sc.enemies.clear(true, true); sc.enemyBullets.clear(true, true); sc.player.x = 200; const e = sc.spawnOneEnemy('eclaireur', 200); window.__ec = e; e.y = sc.visibleYRange(0).min + 40; e.stopY = e.y + 60; e.hp = e.maxHp = 1e7; })()" % SC); p.wait_for_timeout(6000)
     check(p.evaluate("!!(window.__ec && window.__ec.cone)"), "l'Éclaireur a son projecteur")
     check(p.evaluate("window.__ec.state !== 'patrol' || window.__ec.detT > 0 || window.__ec.f > 60"), "l'Éclaireur patrouille et te repère")
@@ -139,11 +141,6 @@ with sync_playwright() as pw:
     check(p.evaluate("!!(window.__lkb && window.__lkb._lk)"), 'pendant le verrouillage, le tir d un autre ennemi vise le joueur')
     check(p.evaluate("!!%s._ecRet && %s._ecRet.visible" % (SC, SC)), 'le viseur est affiché sur le joueur')
     print('  erreurs JS jusqu ici :', errs[:3])
-
-    print('cristaux (w1-l3)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 4; levelById('w1-l3').finalBoss = null")       # le boss de fin est testé à part plus bas
-    p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(3800)
-    check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire par cristaux')
 
     print('défaite (w1-l2) : fragments conservés, pas de victoire enregistrée')
     start('w1-l2')
@@ -175,7 +172,7 @@ with sync_playwright() as pw:
     p.evaluate("(()=>{ const sc = %s; sc.pdStartAtk('guard'); })()" % SC); p.wait_for_timeout(2500)
     check(p.evaluate("%s.pd.ships.length >= 1" % SC), 'jusqu\'à trois vaisseaux de protection')
     k0 = p.evaluate("(()=>{ const sc = %s; sc.comps.clear(true, true); return sc.runComposants; })()" % SC)       # on ne mesure que la pluie du boss
-    p.evaluate("(()=>{ %s.pdDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.pd && window.__ssxScene.pd.dead", timeout=12000); p.wait_for_timeout(200)
+    p.evaluate("(()=>{ %s.pdDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.pd && window.__ssxScene.pd.dead", polling=250, timeout=12000); p.wait_for_timeout(200)
     check(p.evaluate("%s.runComposants + %s.composantsOnScreenValue()" % (SC, SC)) - k0 >= 60, 'boss de secteur (PDG) : grosse pluie de composants (12 gros)')
     p.wait_for_timeout(9000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du PDG')
@@ -197,33 +194,33 @@ with sync_playwright() as pw:
     bk = bank(); check(bk.get('gross', 0) >= 10 and bk.get('franchise') == int(bk['gross']*0.3 + 0.5) and bk.get('prime') == 0, 'abandon : franchise, pas de prime (%s)' % bk)
 
     print('boss de fin (w1-l2)')
-    start('w1-l2', "levelById('w1-l2').goal.seconds = 3")
+    start('w1-l2', "levelById('w1-l2').bossAt = 3")
     p.wait_for_timeout(4500)
-    check(p.evaluate("!!%s.ar" % SC), "le boss de fin arrive quand le temps est écoulé")
+    check(p.evaluate("!!%s.ar" % SC), "le boss de fin arrive à sa date")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.mode === 'play'", timeout=8000)      # en approche (mode 'enter') : dégâts visuels seulement, pas de vraie perte de PV
-    p.evaluate("(()=>{ %s.arDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
+    p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.mode === 'play'", polling=250, timeout=8000)      # en approche (mode 'enter') : dégâts visuels seulement, pas de vraie perte de PV
+    p.evaluate("(()=>{ %s.arDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.ar && window.__ssxScene.ar.dead", polling=250, timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", polling=250, timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du boss')
 
     print('boss de fin (w1-l1, La Météo)')
-    start('w1-l1', "levelById('w1-l1').goal.seconds = 3; levelById('w1-l1').finalBoss = 'meteo'")
+    start('w1-l1', "levelById('w1-l1').bossAt = 3; levelById('w1-l1').finalBoss = 'meteo'")
     p.wait_for_timeout(4500)
-    check(p.evaluate("!!%s.mt" % SC), "La Météo arrive quand le temps est écoulé")
+    check(p.evaluate("!!%s.mt" % SC), "La Météo arrive à la date du boss")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.mode === 'play'", timeout=8000)
-    p.evaluate("(()=>{ %s.mtDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
+    p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.mode === 'play'", polling=250, timeout=8000)
+    p.evaluate("(()=>{ %s.mtDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.mt && window.__ssxScene.mt.dead", polling=250, timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", polling=250, timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort de La Météo')
 
     print('boss de fin (w1-l3, Le Réacteur)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 4; levelById('w1-l3').finalBoss = 'reacteur'")
-    p.evaluate("(()=>{ %s.lvGems = 4; })()" % SC); p.wait_for_timeout(2500)
-    check(p.evaluate("!!%s.rx" % SC), "Le Réacteur arrive quand les cristaux sont ramassés")
+    start('w1-l3', "levelById('w1-l3').bossAt = 3; levelById('w1-l3').finalBoss = 'reacteur'")
+    p.wait_for_timeout(4500)
+    check(p.evaluate("!!%s.rx" % SC), "Le Réacteur arrive à la date du boss")
     check(not go_visible(), 'pas de victoire tant que le boss est en vie')
-    p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.mode === 'play'", timeout=8000)
-    p.evaluate("(()=>{ %s.rxDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.dead", timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", timeout=15000)
+    p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.mode === 'play'", polling=250, timeout=8000)
+    p.evaluate("(()=>{ %s.rxDamage(200, 200, 1e9, true); })()" % SC); p.wait_for_function("window.__ssxScene.rx && window.__ssxScene.rx.dead", polling=250, timeout=10000); p.wait_for_function("!document.getElementById('gameover').classList.contains('hidden') && document.querySelector('#gameover .go-title').textContent === 'INTERVENTION VALIDEE'", polling=250, timeout=15000)
     check(go_visible() and title() == 'INTERVENTION VALIDEE', 'victoire à la mort du Réacteur')
     print('mob Pilleur (w1-l3)')
-    start('w1-l3', "levelById('w1-l3').goal.gems = 999; levelById('w1-l3').finalBoss = null")
+    start('w1-l3', "levelById('w1-l3').bossAt = 999; levelById('w1-l3').finalBoss = null; levelById('w1-l3').boss = 'dread'")
     p.evaluate("(()=>{ const sc = %s; sc.enemies.clear(true, true); const e = sc.spawnOneEnemy('pilleur', 200); window.__pl = e; e.y = sc.visibleYRange(0).min + 40; e.stopY = e.y + 60; e.hp = e.maxHp = 1e7; for (let i = 0; i < 8; i++) sc.spawnGemAt(e.x + (i - 4)*14, e.y + 10 + i*8, 3, 'gemM', 0); })()" % SC); p.wait_for_timeout(5500)
     check(p.evaluate("!!(window.__pl && window.__pl.eaten > 0)"), "le Pilleur avale des cristaux et remplit son réservoir")
     check(p.evaluate("!!(window.__pl && window.__pl.bm)"), 'le Pilleur a son faisceau laser')
@@ -231,7 +228,7 @@ with sync_playwright() as pw:
     print('secteur 2 : le Dreadnought est le boss du 6e ordre')
     check(p.evaluate("AGP_LORE.employee") == 'EMPLOYE N° 0042', 'employé n° 0042 (bible)')
     start('w2-l6')
-    p.wait_for_function("window.__ssxScene.bossActive", timeout=10000); p.wait_for_timeout(300)
+    p.wait_for_function("window.__ssxScene.bossActive", polling=250, timeout=10000); p.wait_for_timeout(300)
     check('DREADNOUGHT' in p.evaluate("document.getElementById('bossLabel').textContent"), 'jauge du boss : DREADNOUGHT (%s)' % p.evaluate("document.getElementById('bossLabel').textContent"))
 
     print('partie infinie historique')

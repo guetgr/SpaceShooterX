@@ -101,13 +101,21 @@ Object.keys(documents).forEach(id=>{
   want.forEach((s, i)=>{ assert.strictEqual(desc(steps(p)[i]), s.text, id + ' ' + s.id + ' : description'); assert.strictEqual(all(steps(p)[i], '.f').length, s.fields.length, id + ' ' + s.id + ' : champs'); nFields += s.fields.length; });
 });
 
+// Fixtures des interactions : tester les créations/retraits à partir de champs facultatifs absents,
+// indépendamment des dialogues et événements désormais présents dans les vrais niveaux (testés ci-dessus).
+for(const id of ['w1-l1','w1-l2']){
+  delete documents[id].norma;
+  documents[id].events=id==='w1-l2'?[{kind:'meteors',at:30}]:[];
+}
+S.documents=clone(documents);
+
 // (2) un nombre : clé de premier niveau stockée, description recalculée, retour au défaut = surcharge effacée ; invalide = refusé avec message
 {
-  const id = 'w1-l2', p = render(id), st = stepOf(p, 'OBJECTIF'), r = rowOf(st, 'Menace'), num = all(r, 'input')[0];
+  const id = 'w1-l2', p = render(id), st = stepOf(p, 'MISSION'), r = rowOf(st, 'Menace'), num = all(r, 'input')[0];
   const before = ctx.changes;
   fire(num, 7);
   assert.strictEqual(S.ov.levels[id].threat, 7);
-  assert.ok(/menace 7/.test(desc(stepOf(p, 'OBJECTIF'))), 'description mise à jour : ' + desc(stepOf(p, 'OBJECTIF')));
+  assert.ok(/menace 7/.test(desc(stepOf(p, 'MISSION'))), 'description mise à jour : ' + desc(stepOf(p, 'MISSION')));
   assert.ok(r.classList.has('mod'), 'valeur modifiée en orange');
   assert.strictEqual(ctx.changes, before + 1);
   fire(num, 999);
@@ -245,11 +253,11 @@ Object.keys(documents).forEach(id=>{
 {
   const id = 'w1-l3';
   S.documents[id].norma = { start:['A.'], tickEvery:[30, 40] };
-  S.ov.levels[id] = { mobs:{ grunt:{ hpMul:2 } }, bossTune:{ rx:{ hp:900 } }, eventTune:{ meteors:{ tickMs:500 } }, norma:{ start:['B.'] }, audio:{ level:['w1_l3_a'] }, goal:{ seconds:99 }, foo:1 };
+  S.ov.levels[id] = { mobs:{ grunt:{ hpMul:2 } }, bossTune:{ rx:{ hp:900 } }, eventTune:{ meteors:{ tickMs:500 } }, norma:{ start:['B.'] }, audio:{ level:['w1_l3_a'] }, reward:{ clear:99 }, foo:1 };
   const d = ctx.editorLevelDocument(id);
   eq(d.mobs, { grunt:{ hpMul:2 } }); eq(d.bossTune, { rx:{ hp:900 } }); eq(d.eventTune, { meteors:{ tickMs:500 } });
   eq(d.norma, { start:['B.'] }, 'remplacement entier (tickEvery d\'origine disparu)'); eq(d.audio, { level:['w1_l3_a'] });
-  eq(d.goal, Object.assign({}, documents[id].goal, { seconds:99 }), 'fusion au premier niveau conservée');
+  eq(d.reward, Object.assign({}, documents[id].reward, { clear:99 }), 'fusion au premier niveau conservée');
   assert.ok(!('foo' in d), 'clé inconnue ignorée');
   S.ov.levels[id] = { norma:null }; assert.ok(!('norma' in ctx.editorLevelDocument(id)), 'null = retirée');
   // retirer la dernière sous-clé d'une clé présente dans le document d'origine -> null stocké
@@ -266,8 +274,9 @@ Object.keys(documents).forEach(id=>{
 
 // (7) applyTuning transporte les cinq clés (et events[i].params / norma) dans la définition du niveau, sans lever
 {
-  const base = { id:'test', type:'survive', goal:{ seconds:60 }, norma:{ start:['A.'], tickEvery:[30, 40] }, events:[] };
+  const base = { id:'test', type:'mission', norma:{ start:['A.'], tickEvery:[30, 40] }, events:[] };
   const c = vm.createContext({ console, WORLDS:[{ levels:[clone(base)] }], TUTO_DEFAULTS:{}, TUNING_OVERRIDES:{}, BESTIARY_LIST:[] });
+  vm.runInContext(read('data/wave-patterns.js'), c);
   vm.runInContext(read('data/tuning-apply.js') + '\nthis.F = TUNE_LEVEL_FIELDS;', c);
   ['mobs', 'bossTune', 'eventTune', 'norma', 'audio'].forEach(k=> assert.ok(c.F.indexOf(k) >= 0, 'TUNE_LEVEL_FIELDS : ' + k));
   const l = ()=> c.WORLDS[0].levels[0];

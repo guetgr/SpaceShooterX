@@ -3,7 +3,6 @@
   "name": "LE PRISME",
   "type": "boss",
   "threat": 14,
-  "goal": {},
   "intro": null,
   "reward": {
     "clear": 160,

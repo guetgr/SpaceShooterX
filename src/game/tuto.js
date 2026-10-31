@@ -128,7 +128,7 @@ mixin(GameScene, {
         this.tutoHitBox(this.playerBullets, sp, 44, 36, b=>{ this.juiceImpact(b, s); this.tutoHitSat(s, b.damage || 10, b.x, b.y); }, s);
         this.tutoHitBox(this.missiles, sp, 48, 40, b=>{ this.explodeFx(b.x, b.y, 40); this.tutoHitSat(s, (b.damage || 20), b.x, b.y); }, s);
       }
-      if (!s.dead && Math.abs(sp.x - px) < 34 && Math.abs(sp.y - py) < 30){ this.damagePlayer(TUTO_TUNE.sats.contactDmg); this.tutoKillSat(s, false); }
+      if (!s.dead && Math.abs(sp.x - px) < 34 && Math.abs(sp.y - py) < 30){ this.damagePlayer(TUTO_TUNE.sats.contactDmg*(s.waveDmgMul||1)); this.tutoKillSat(s, false); }
     });
     this.tutoSats = this.tutoSats.filter(s=> !s.dead);
     if (this.tutoBoss) this.tutoBossUpdate(delta, dt);
@@ -216,12 +216,12 @@ mixin(GameScene, {
     const rec = this.tutoBank(); if (!rec) return;
     const host = document.getElementById('gameover').parentNode, d = rec.after - rec.before, full = rec.after >= 100;
     const el = document.createElement('div'); el.id = 'tutoEnd'; el.className = 'overlay fadein' + (victory ? ' win' : '');
-    const nx = completionNext(TUTO_ID);
+    const nx = completionNext(TUTO_ID), nextLv = victory && nextLevelOf(TUTO_ID), nextId = nextLv && nextLv.id;
     const rows = rec.rows.map((r, i)=>{
       const pc = Math.round(r.best * r.w), gain = Math.round((r.best - r.prev) * r.w), ok = r.best >= 0.999;
       return '<div class="te-row' + (ok ? ' ok' : '') + '" style="animation-delay:' + (0.5 + i*0.18) + 's"><span class="te-l">' + (ok ? uiIco('check') + ' ' : '') + r.label + '</span><span class="te-v">' + pc + '/' + r.w + (gain > 0 ? ' <em>+' + gain + '</em>' : '') + '</span><div class="te-b"><i style="width:' + Math.round(r.best*100) + '%"></i></div></div>';
     }).join('');
-    el.innerHTML = '<div class="rp-doc">' +
+    el.innerHTML = '<div class="rp-scroll"><div class="rp-doc">' +
       '<div class="rp-head"><i class="agp-logo">AGP</i><span class="rp-h1">BILAN DE FORMATION</span></div>' +
       '<div class="go-title">' + (victory ? 'FORMATION VALIDEE' : 'ACCIDENT DU TRAVAIL') + '</div>' +
       '<div class="te-big"><b id="teN">' + rec.before + '</b>%</div><div class="te-sub">TAUX DE FINITION DE LA FORMATION' + (d > 0 ? ' <em>+' + d + '%</em>' : '') + '</div>' +
@@ -230,11 +230,14 @@ mixin(GameScene, {
       (rec.milestones.length ? '<div class="go-unlock">' + uiIco('star') + ' PALIER ' + rec.milestones.join(' + ') + '% · +' + rec.fragments + ' ' + uiIco('frag') + '</div>' : '') +
       (full ? '<div class="go-unlock">' + uiIco('star') + ' FINITION 100% — PARFAIT ' + uiIco('star') + '</div>' : (nx ? '<div class="te-next">IL TE MANQUE <b>' + (100 - rec.after) + '%</b> · ' + nx.tip.toUpperCase() + ' <em>+' + nx.missing + '%</em></div>' : '')) +
       (d <= 0 ? '<div class="te-next">Cette partie : ' + rec.runPct + '% · record ' + rec.after + '%</div>' : '') +
-      '</div>' +
-      '<button class="btn" id="teRetry">' + (full ? 'REFAIRE LA FORMATION' : 'REFAIRE · VISER ' + (COMPLETION_STEPS.find(s=> s > rec.after) || 100) + '%') + '</button><button class="btn secondary" id="teHome">RETOUR AU BUREAU</button>';
+      '</div></div>' +
+      '<div class="rp-btns">' + (victory && nextId ?      // victoire : on enchaîne l'histoire ; REFAIRE et RETOUR plus petits, côte à côte
+        '<button class="btn" id="teNext">CONTINUER</button><div class="rp-row"><button class="btn secondary" id="teRetry">REFAIRE</button><button class="btn secondary" id="teHome">RETOUR AU BUREAU</button></div>' :
+        '<button class="btn" id="teHome">RETOUR AU BUREAU</button>') + '</div>';      // accident : seulement le retour à l'accueil
     host.appendChild(el);
-    el.querySelector('#teRetry').onclick = ()=>{ sfx.resume(); this.tutoCleanup(); this.scene.restart({ autoStart:true, tuto:true }); };
-    el.querySelector('#teHome').onclick = ()=>{ this.tutoFinish(); };
+    if (el.querySelector('#teRetry')) el.querySelector('#teRetry').onclick = ()=>{ sfx.resume(); this.tutoCleanup(); this.scene.restart({ autoStart:true, tuto:true }); };
+    if (el.querySelector('#teNext')) el.querySelector('#teNext').onclick = ()=>{ sfx.uiStart(); this.tutoCleanup(); this.scene.restart({ autoStart:true, levelId:nextId }); };
+    if (el.querySelector('#teHome')) el.querySelector('#teHome').onclick = ()=>{ this.tutoFinish(); };
     // le % monte à l'écran (compteur + barre)
     const t0 = performance.now(), n = el.querySelector('#teN'), f = el.querySelector('#teFill');
     requestAnimationFrame(()=>{ f.style.transition = 'width 1.1s cubic-bezier(.2,.8,.2,1) .25s'; f.style.width = rec.after + '%'; });

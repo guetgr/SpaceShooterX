@@ -63,6 +63,7 @@ mixin(GameScene, {
     if (!victory && !abandon) this.playerDeathFx();  // le vaisseau explose; le jingle et l'écran de fin viennent après
     if (this.achv) setAchv(this.achv);   // on enregistre les compteurs de succès en fin de partie
     if (this.bestiaryDirty){ setBestiary(this.bestiary); this.bestiaryDirty = false; }
+    const vx = this.vortex ? recordVortexRun(this.elapsed, this.runDamage) : null;      // vortex : records locaux de durée et de dégâts
     const hs = getHighScore();
     const isNew = this.score > hs;
     if (isNew) setHighScore(Math.floor(this.score));
@@ -86,7 +87,7 @@ mixin(GameScene, {
 
     // classement local : la partie est enregistrée avec le dernier pseudo utilisé (modifiable juste après)
     this.lastEntryId = Date.now() + '-' + Math.floor(Math.random()*1e6);
-    if (!this.lvDef) addLeaderboardEntry({
+    if (!this.lvDef && !this.vortex) addLeaderboardEntry({
       id:this.lastEntryId, name: sanitizeName(getPlayerName()) || 'ANONYME',
       score: Math.floor(this.score), level:this.level, time:Math.floor(this.elapsed),
       alert:this.alertLevel, date:Date.now()
@@ -96,6 +97,10 @@ mixin(GameScene, {
     const ex = document.getElementById('goExtra');
     ex.innerHTML = '';
     const addLine = (txt, cls)=>{ const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; ex.appendChild(d); };
+    if (vx){
+      addLine('DEGATS INFLIGES : ' + Math.floor(this.runDamage).toLocaleString('fr-FR') + (vx.newDamage ? ' · NOUVEAU RECORD' : ' · record ' + vx.before.damage.toLocaleString('fr-FR')), vx.newDamage ? 'go-near' : '');
+      addLine('DUREE : ' + vortexTimeText(this.elapsed) + (vx.newTime ? ' · NOUVEAU RECORD' : ' · record ' + vortexTimeText(vx.before.time)), vx.newTime ? 'go-near' : '');
+    }
     { const gN = this.globalGearItems().length, mN = this.pauseGearItems().length;
       addLine('ATOUTS : ' + gN + ' GLOBAUX conservés · ' + mN + ' DE MISSION restitués'); }
     if (this.pacts && this.pacts.length) addLine('CLAUSES SPECIALES (' + this.pacts.length + ') · composants x' + this.pactBonusMul.toFixed(2), 'go-near');
@@ -124,7 +129,7 @@ mixin(GameScene, {
     { const goEl = document.getElementById('gameover'), L = this.lvDef, res = this.lvResult;
       goEl.classList.toggle('win', !!victory);
       document.getElementById('finalKills').textContent = this.runKills;
-      document.getElementById('goLevel').textContent = L ? ('SECTEUR ' + worldById(L.world).name + ' · ORDRE ' + String(L.num).padStart(2, '0') + ' — ' + L.name) : '';
+      document.getElementById('goLevel').textContent = this.vortex ? 'VORTEX · HEURES SUPPLEMENTAIRES' : L ? ('SECTEUR ' + worldById(L.world).name + ' · ORDRE ' + String(L.num).padStart(2, '0') + ' — ' + L.name) : '';
       document.getElementById('rpNo').textContent = 'N° ' + (L ? agpDossier(L) : 'AGP-' + String(Math.floor(this.score) % 100000).padStart(5, '0'));
       { const g = STYLE_RANKS[this.runBestRank].l, gr = document.getElementById('rpGrade'); gr.textContent = g; gr.style.setProperty('--gc', STYLE_RANKS[this.runBestRank].col); document.getElementById('rpMention').textContent = AGP_LORE.grades[g] || '';
         const sec = victory && this.lvDef && this.lvDef.type === 'boss' && AGP_LINES.sectors[this.lvDef.world];      // fin de secteur : la transmission de la bible
