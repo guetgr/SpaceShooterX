@@ -6,7 +6,7 @@ import json, os
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 A = os.path.join(R, 'assets')
 files = sorted(os.path.relpath(os.path.join(d, f), A).replace(os.sep, '/')
-               for d, _, fs in os.walk(A) for f in fs if f != 'manifest.json')
+               for d, _, fs in os.walk(A) for f in fs if f != 'manifest.json' and not f.startswith('.'))
 with open(os.path.join(A, 'manifest.json'), 'w', encoding='utf-8', newline='\n') as f:
     json.dump(files, f, indent=2)
     f.write('\n')

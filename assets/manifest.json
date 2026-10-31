@@ -1,5 +1,4 @@
 [
-  ".DS_Store",
   "atelier/atelier-calibre-detaille.png",
   "atelier/icone-kit-carrosserie.png",
   "atelier/icone-kit-peinture.png",
@@ -7,7 +6,6 @@
   "atelier/module-aimant-v2.png",
   "atelier/module-canon.png",
   "atelier/vehicule-nu.png",
-  "audio/.DS_Store",
   "audio/music/boss_p1.mp3",
   "audio/music/bossd_a.mp3",
   "audio/music/bossd_b.mp3",
@@ -405,7 +403,6 @@
   "home/earth-orbital.png",
   "home/hangar-window.png",
   "hud/segments.svg",
-  "rd/.DS_Store",
   "rd/runtime/dossier-background.png",
   "rd/tabs/runtime/tab-blue.png",
   "rd/tabs/runtime/tab-ochre.png",
