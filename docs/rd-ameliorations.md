@@ -8,8 +8,8 @@
 | Amélioration | Secteur | Effet de base | 1er achat | Après 4 achats | Max au secteur 9 | Prix niv. 1 | Prix niv. 4 | Coût total au max |
 |---|---|---|---|---|---|---|---|---|
 | PUISSANCE DE TIR | 1 | Dégâts de chaque tir. | +2 % | +8 % | +72 % (niv. 36) | 8 ◆ | 12 ◆ | 1044 ◆ |
-| CADENCE DE TIR | 1 | Le canon tire plus vite. | +1,5 % | +6 % | +54 % (niv. 36) | 8 ◆ | 12 ◆ | 1044 ◆ |
-| DOUBLE TIR | 2 | Deux projectiles partent côte à côte. Le 2e démarre à 50 % des dégâts et gagne 1,6 % par niveau. | 2 tirs · 2e à 50 % | 2 tirs · 2e à 55 % | 2 tirs · 2e à 100 % (niv. 32) | 14 ◆ | 20 ◆ | 1491 ◆ |
+| CADENCE DE TIR | 1 | Le canon tire plus vite. | +3 % | +12 % | +108 % (niv. 36) | 8 ◆ | 12 ◆ | 1044 ◆ |
+| DOUBLE TIR | 1 | Deux projectiles partent côte à côte. Le 2e démarre à 50 % des dégâts et gagne 1,6 % par niveau. | 2 tirs · 2e à 50 % | 2 tirs · 2e à 55 % | 2 tirs · 2e à 100 % (niv. 36) | 14 ◆ | 20 ◆ | 1828 ◆ |
 | VITESSE DES PROJECTILES | 2 | Les projectiles volent plus vite. | +1,5 % | +6 % | +48 % (niv. 32) | 10 ◆ | 15 ◆ | 1069 ◆ |
 | PERFORATION | 3 | Chaque tir traverse un ennemi de plus par niveau. | 1 ennemi traversé | 4 ennemis traversés | 10 ennemis traversés (niv. 10) | 16 ◆ | 35 ◆ | 682 ◆ |
 
@@ -60,7 +60,7 @@
 | ATOUT DOUBLE | 7 | Chance qu'un atout choisi compte double (50 % au plus). | 1,5 % | 6 % | 18 % (niv. 12) | 30 ◆ | 44 ◆ | 658 ◆ |
 | VISION EN NEBULEUSE | 8 | Allonge le cône de vision dans la nébuleuse. | +21 px | +84 px | +168 px (niv. 8) | 30 ◆ | 44 ◆ | 367 ◆ |
 
-**Coût cumulé de toutes les améliorations au plafond du secteur 9 : 22456 ◆.**
+**Coût cumulé de toutes les améliorations au plafond du secteur 9 : 22793 ◆.**
 
 ## Économie
 

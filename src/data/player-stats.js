@@ -6,7 +6,7 @@ function makeDefaultStats(){
     maxHp: 100,
     shieldMax: 0,
     damage: 10,
-    fireRate: 340, // ms between shots
+    fireRate: 680, // ms between shots (1,5 tir/s : la cadence se gagne en R&D, au niveau 36 on retrouve l'ancienne base de 340 ms)
     bulletSpeed: 520,
     spreadCount: 1,
     moveResponsiveness: 11, // per-second smoothing rate, frame-rate independent

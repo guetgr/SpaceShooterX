@@ -16,7 +16,7 @@ const near = (a, b)=> Math.abs(a - b) < 1e-9;
 
 // ---- liste exacte
 const ids = g=> JSON.stringify(run("rdOfGroup('" + g + "').map(u=>u.id + ':' + u.from)"));
-ok(ids('canon') === '["c_puissance:1","c_cadence:1","c_double:2","c_vitesse:2","c_perfo:3"]', 'CANON : 5 améliorations aux bons secteurs');
+ok(ids('canon') === '["c_puissance:1","c_cadence:1","c_double:1","c_vitesse:2","c_perfo:3"]', 'CANON : 5 améliorations aux bons secteurs');
 ok(ids('carcasse') === '["k_coque:1","k_collision:1","k_blindage:2","k_autorep:2","k_nano:4"]', 'CARCASSE : 5 améliorations aux bons secteurs');
 ok(ids('bouclier') === '["b_capacite:1","b_reprise:2","b_vitesse:2","b_riposte:3","b_portee:3","b_reserve:4"]', 'BOUCLIER : 6 améliorations aux bons secteurs');
 ok(ids('propulseurs') === '["p_reactivite:1","p_charges:2","p_duree:2","p_recup:3","p_urgence:4"]', 'PROPULSEURS : 5 améliorations aux bons secteurs');
@@ -27,7 +27,8 @@ ok(run("ATELIER_SLOTS.length") === 5 && run("ATELIER_SLOTS[3].from") === null &&
 // ---- plafond = 4 × (monde − déblocage + 1)
 const cap = (id, w)=> run("rdCap(RD_BY_ID['" + id + "'], " + w + ")");
 ok(cap('c_puissance', 1) === 4 && cap('c_puissance', 2) === 8 && cap('c_puissance', 9) === 36, 'débloquée au secteur 1 : 4, 8, …, 36');
-ok(cap('c_double', 1) === 0 && cap('c_double', 2) === 4 && cap('c_double', 9) === 32, 'secteur 2 : bloquée au 1, 4 au 2, 32 au 9');
+ok(cap('c_vitesse', 1) === 0 && cap('c_vitesse', 2) === 4 && cap('c_vitesse', 9) === 32, 'secteur 2 : bloquée au 1, 4 au 2, 32 au 9');
+ok(cap('c_double', 1) === 4 && cap('c_double', 9) === 36, 'double tir accessible dès le secteur 1 : 4 niveaux, 36 au secteur 9');
 ok(cap('c_perfo', 3) === 10 || cap('c_perfo', 3) === 4, 'perforation : 4 au secteur 3');
 ok(run("rdCap(RD_BY_ID['k_nano'], 4)") === 4 && run("rdCap(RD_BY_ID['k_nano'], 9)") === 24, 'secteur 4 : 4 puis 24 au secteur 9');
 ok(cap('c_perfo', 9) === 10 && cap('p_charges', 9) === 6, 'les valeurs entières sont bornées par `max`');
@@ -39,7 +40,7 @@ const mk = (c, niv)=> "({ v:4, composants:" + c + ", niv:" + JSON.stringify(niv 
   ctx.m = run(mk(7)); const avant = JSON.stringify(ctx.m);
   ok(run("rdBuy(m, 'c_puissance', 1)") === false && JSON.stringify(ctx.m) === avant && run("rdCanBuy(m, 'c_puissance', 1).reason") === 'composants', 'composants insuffisants : refus, meta intacte');
   ctx.m = run(mk(100));
-  ok(run("rdBuy(m, 'c_double', 1)") === false && run("rdCanBuy(m, 'c_double', 1).reason") === 'secteur', 'secteur non atteint : refus');
+  ok(run("rdBuy(m, 'c_vitesse', 1)") === false && run("rdCanBuy(m, 'c_vitesse', 1).reason") === 'secteur', 'secteur non atteint : refus');
   ok(run("rdBuy(m, 'b_reprise', 2)") === false && run("rdCanBuy(m, 'b_reprise', 2).reason") === 'dependance', 'bouclier : la reprise exige la capacité');
   ctx.m = run(mk(100, { c_puissance:4 }));
   ok(run("rdBuy(m, 'c_puissance', 1)") === false && run("rdCanBuy(m, 'c_puissance', 1).reason") === 'plafond', 'plafond du secteur atteint : refus');
