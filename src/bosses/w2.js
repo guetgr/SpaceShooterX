@@ -15,24 +15,35 @@
       this.sc = scene; this.cfg = cfg; this.W = W; this.H = H; this.U = U; this.K = K; this.ready = false;
       this.cv = document.createElement('canvas'); this.cv.width = Math.round(W*U); this.cv.height = Math.round(H*U); this.ctx = this.cv.getContext('2d');
       this.bc = document.createElement('canvas'); this.bc.width = this.bc.height = 512; this.bg = this.bc.getContext('2d');       // le boss seul (pour le flash blanc)
-      this.img = new Image(); this.img.onload = ()=> this.prep(); this.img.src = asset('sprites/w2_' + cfg.tex + '.webp');
+      let need = 3; const one = ()=>{ if (--need === 0) this.prep(); };
+      this.img = new Image(); this.img.onload = one; this.img.src = asset('sprites/w2_' + cfg.tex + '.webp');
+      this.dimg = new Image(); this.dimg.onload = one; this.dimg.src = asset('sprites/w2_' + cfg.tex + '_dmg.webp');          // 3 états dessinés par l'usine à sprites : abîmé, très abîmé, épave
+      this.deb = new Image(); this.deb.onload = one; this.deb.src = asset('sprites/w2_' + cfg.tex + '_debris.webp');         // débris dessinés par l'usine (cases de 128 px)
       Object.keys(FX).forEach(fxImg);
       this.reset(); this.pl = { x:W/2, y:H - 70 };
     }
     lvl(){ const t = this.cfg.thresh; return this.hp*100 > t[0] ? 0 : this.hp*100 > t[1] ? 1 : 2; }      // état d'usure 0..2 selon les paliers de la config (% de vie)
     reset(){ this.t = 0; this.fx = []; this.timers = []; this.bx = this.W/2; this.by = -260; this.mv = null; this.pose = {}; this.tws = []; this.rollA = 0; this.hp = 1; this.dead = false; this.pieces = null;
       this.cur = -1; this.curT = 0; this.gapT = 1.4; this.shake = 0; this.pull = 0; this.escorts = []; this.atkIdx = 0; this.flash = 0; this.deathT = 0; }
-    prep(){          // 3 états d'usure fabriqués une fois dans le sprite (plaques arrachées, fissures lumineuses, assombrissement) ; les pièces mobiles sont découpées dans chacun
-      const mk = lvl=>{ const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d'); g.drawImage(this.img, 0, 0); g.globalCompositeOperation = 'source-atop';
-        let seed = this.cfg.seed + lvl*7; const r = ()=> (seed = (seed*16807) % 2147483647)/2147483647;
-        for (let i = 0; i < 9*lvl; i++){ const x = r()*440 + 36, y = r()*440 + 36, n = 5 + (r()*4 | 0), R = 14 + r()*26*lvl; g.beginPath(); for (let k = 0; k < n; k++){ const a = k/n*TAU, rr = R*(0.5 + r()*0.7); g.lineTo(x + Math.cos(a)*rr, y + Math.sin(a)*rr); }
-          g.closePath(); g.fillStyle = 'rgba(8,3,4,.82)'; g.fill(); g.strokeStyle = 'rgba(255,120,40,.55)'; g.lineWidth = 2; g.stroke(); }
-        for (let i = 0; i < 6*lvl; i++){ let x = r()*480 + 16, y = r()*480 + 16; g.beginPath(); g.moveTo(x, y); for (let k = 0; k < 6; k++){ x += (r() - 0.5)*46; y += (r() - 0.3)*40; g.lineTo(x, y); } g.strokeStyle = 'rgba(255,150,50,.85)'; g.lineWidth = 2; g.stroke(); }
-        g.fillStyle = 'rgba(0,0,0,' + (0.18*lvl) + ')'; g.fillRect(0, 0, 512, 512); return c; };
-      this.dmg = [this.img, mk(1), mk(2)]; this.sets = this.dmg.map(src=> this.buildParts(src));
-      const m = document.createElement('canvas'); m.width = m.height = 512; const mg = m.getContext('2d', { willReadFrequently:true }); mg.drawImage(this.img, 0, 0); this.mask = mg.getImageData(0, 0, 512, 512).data;
-      this.op = []; for (let y = 0; y < 512; y += 8) for (let x = 0; x < 512; x += 8) if (this.mask[(y*512 + x)*4 + 3] > 200) this.op.push([x, y]);
-      this.ready = true;
+    // états d'usure = VRAIS dessins de l'usine à sprites (`w2_<boss>_dmg.webp` : 3 images 512 = abîmé, très abîmé, épave) ; l'original est `w2_<boss>.webp`
+    prep(){
+      const mk = ()=>{ const c = document.createElement('canvas'); c.width = c.height = 512; return c; }, alphaOf = c=> c.getContext('2d', { willReadFrequently:true }).getImageData(0, 0, 512, 512).data;
+      const c0 = mk(); c0.getContext('2d').drawImage(this.img, 0, 0);
+      this.states = [c0]; for (let i = 0; i < 3; i++){ const c = mk(); c.getContext('2d').drawImage(this.dimg, i*512, 0, 512, 512, 0, 0, 512, 512); this.states.push(c); }      // [0] original, [1] abîmé, [2] très abîmé, [3] épave
+      this.sets = this.states.slice(0, 3).map(src=> this.buildParts(src));
+      this.masks = this.states.map(alphaOf); this.ops = this.masks.map(m=>{ const op = []; for (let y = 0; y < 512; y += 8) for (let x = 0; x < 512; x += 8) if (m[(y*512 + x)*4 + 3] > 200) op.push([x, y]); return op; });
+      this.nDeb = Math.max(1, Math.round(this.deb.width/128)); this.ready = true;
+    }
+    hull(){ const op = this.ops[this.wrecked ? 3 : this.lvl()], o = op[(Math.random()*op.length) | 0] || [256, 256]; return this.P(o[0], o[1]); }
+    setWreck(){ this.wrecked = true; this.hitFlash = 1; }
+    boom(px, py, size, snd){ const w = this.sc.w2W(px, py); this.sc.w2Boom(w[0], w[1], size*this.U, snd || ''); }
+    // pièces du boss, DESSINÉES par l'usine (cases de 128 px de `_debris.webp`), qui partent en tournoyant avec fumée et lueur de braise ; o.from = départ (page), o.big = grosses pièces
+    debris(n, o){
+      o = o || {};
+      for (let k = 0; k < n; k++){ const q = o.from || this.hull(), cell = (Math.random()*this.nDeb) | 0, size = o.big ? rnd(60, 96) : rnd(30, 60), a = Math.atan2(q.y - this.by, q.x - this.bx) + rnd(-0.6, 0.6), sp = rnd(120, 300)*(o.big ? 1.1 : 1),
+          vx = Math.cos(a)*sp, vy = Math.sin(a)*sp - rnd(40, 160), life = rnd(1.3, 2.3), spin = rnd(-7, 7), x0 = q.x, y0 = q.y, hot = Math.random() < 0.6;
+        this.add({ type:'x', life, tick:(e, dt, st)=>{ if (Math.random() < dt*12) st.proj({ kind:Math.random() < 0.6 ? 'smoke' : 'spark', r:rnd(4, 8), x:x0 + vx*e.age, y:y0 + vy*e.age + 220*e.age*e.age, vx:rnd(-12, 12), vy:-24, life:0.7, col:'#ffb050', harm:false }); },
+          draw:(g, e, kk)=>{ const t = e.age; g.save(); g.globalAlpha = 1 - Math.pow(kk, 3); g.translate(x0 + vx*t, y0 + vy*t + 220*t*t); g.rotate(spin*t); if (hot) this.glow(g, 0, 0, size*0.7, 'rgba(255,120,40,.8)', 0.5*(1 - kk)); g.drawImage(this.deb, cell*128, 0, 128, 128, -size/2, -size/2, size, size); g.restore(); } }); }
     }
     path(g, p){ g.beginPath();
       if (p.type === 'circle') g.arc(p.c[0], p.c[1], p.r, 0, TAU);
@@ -84,13 +95,8 @@
     crushEscort(){ for (const e of this.escortList()){ this.sc.w2Boom(e.en.x, e.en.y, 160, ''); e.en.destroy(); } this.escorts = []; }
     escortList(){ return this.escorts.filter(e=> e.en && e.en.active); }
     runAttack(i){ this.cur = i; this.curT = 0; this.timers = []; this.cfg.attacks[i].go(this); }
-    /* ---- mort : la coque se brise en 16 morceaux ---- */
-    shatter(){
-      this.timers = []; this.fx = []; this.dead = true; const N = 4, pts = []; for (let j = 0; j <= N; j++){ pts[j] = []; for (let i = 0; i <= N; i++) pts[j][i] = [i*512/N + ((i && i < N) ? rnd(-34, 34) : 0), j*512/N + ((j && j < N) ? rnd(-34, 34) : 0)]; }
-      this.pieces = []; for (let j = 0; j < N; j++) for (let i = 0; i < N; i++){ const q = [pts[j][i], pts[j][i + 1], pts[j + 1][i + 1], pts[j + 1][i]], cx = q.reduce((a, p)=> a + p[0], 0)/4, cy = q.reduce((a, p)=> a + p[1], 0)/4, dx = cx - 256, dy = cy - 256, d = Math.hypot(dx, dy) + 1;
-        this.pieces.push({ q, cx, cy, x:0, y:0, rot:0, vx:dx/d*rnd(60, 190) + rnd(-30, 30), vy:dy/d*rnd(40, 150) + rnd(-60, 20), vr:rnd(-2.6, 2.6), burn:rnd(0.4, 1) }); }
-      this.deathT = 0;
-    }
+    /* ---- mort : l'épave (vrai dessin) explose, ses débris (vrais dessins) partent ; la scène de chaque boss est unique (`cfg.death` dans data/boss-w2.js) ---- */
+    finale(){ this.dead = true; this.deathT = 0; this.debris(8, { big:true }); this.debris(10); if (this.cfg.death && this.cfg.death.final) this.cfg.death.final(this); }
     /* ---- mise à jour d'une image ---- */
     update(dt, mode){
       this.t += dt; this.curT += dt;
@@ -105,10 +111,10 @@
         else if (this.cur < 0){ this.gapT -= dt; if (this.gapT <= 0) this.runAttack(this.atkIdx++ % this.cfg.attacks.length); }
         for (const tm of this.timers.slice()) if (this.t >= tm.t){ tm.fn(this); this.timers.splice(this.timers.indexOf(tm), 1); }
       } else if (mode === 'dying'){
-        this.timers = this.timers.filter(tm=> this.t < tm.t);
+        for (const tm of this.timers.slice()) if (this.t >= tm.t){ tm.fn(this); this.timers.splice(this.timers.indexOf(tm), 1); }
       }
-      if (this.dead){ this.deathT += dt; for (const p of this.pieces){ p.x += p.vx*dt; p.y += p.vy*dt; p.vy += 90*dt; p.rot += p.vr*dt; } }
-      for (const e of this.fx){ e.age += dt; if (e.type === 'p'){ if (e.upd) e.upd(e, dt, this); else { e.vy += e.ay*dt; e.x += e.vx*dt; e.y += e.vy*dt; } e.a += e.spin*dt; } if (e.follow){ const p = this.A(e.follow); e.x = p.x; e.y = p.y; } }
+      if (this.dead) this.deathT += dt;
+      for (const e of this.fx){ e.age += dt; if (e.type === 'p'){ if (e.upd) e.upd(e, dt, this); else { e.vy += e.ay*dt; e.x += e.vx*dt; e.y += e.vy*dt; } e.a += e.spin*dt; } if (e.tick) e.tick(e, dt, this); if (e.follow){ const p = this.A(e.follow); e.x = p.x; e.y = p.y; } }
       this.fx = this.fx.filter(e=>{ if (e.age < e.life) return true; if (e.onDie) e.onDie(e, this); return false; });
       const lv = this.lvl();      // fumée / étincelles selon la santé
       if (lv && !this.dead && mode === 'play' && Math.random() < dt*(lv === 2 ? 22 : 9)){ const a = rnd(0, TAU), d = rnd(10, 110); this.proj({ kind:Math.random() < 0.6 ? 'smoke' : 'spark', x:this.bx + Math.cos(a)*d, y:this.by + Math.sin(a)*d*0.8, vx:rnd(-18, 18), vy:rnd(-70, -20), life:rnd(0.6, 1.4), r:rnd(5, 11), col:'#ffb050', harm:false }); }
@@ -118,14 +124,12 @@
       const g = this.ctx; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, this.cv.width, this.cv.height); g.setTransform(this.U, 0, 0, this.U, 0, 0);
       if (!this.ready) return;
       if (!this.dead){
-        const lv = this.lvl(), set = this.sets[lv], b = this.bg; b.clearRect(0, 0, 512, 512); b.drawImage(set.base, 0, 0);
-        (this.cfg.parts || []).forEach((p, i)=>{ const o = p.fn(this, this.t) || {}; b.save(); b.translate(p.pivot[0] + (o.dx || 0), p.pivot[1] + (o.dy || 0)); b.rotate(o.rot || 0); b.translate(-p.pivot[0], -p.pivot[1]); b.drawImage(set.parts[i], 0, 0); b.restore(); });
+        const lv = this.lvl(), set = this.sets[lv], b = this.bg; b.clearRect(0, 0, 512, 512);
+        if (this.wrecked) b.drawImage(this.states[3], 0, 0);       // l'épave : 3e dessin de l'usine, plus de pièces mobiles
+        else { b.drawImage(set.base, 0, 0);
+  (this.cfg.parts || []).forEach((p, i)=>{ const o = p.fn(this, this.t) || {}; b.save(); b.translate(p.pivot[0] + (o.dx || 0), p.pivot[1] + (o.dy || 0)); b.rotate(o.rot || 0); b.translate(-p.pivot[0], -p.pivot[1]); b.drawImage(set.parts[i], 0, 0); b.restore(); }); }
         if (this.hitFlash > 0 || this.hurtRed){ b.save(); b.globalCompositeOperation = 'source-atop'; b.fillStyle = this.hitFlash > 0 ? 'rgba(255,255,255,' + clampv(this.hitFlash, 0, 1) + ')' : 'rgba(255,60,40,.22)'; b.fillRect(0, 0, 512, 512); b.restore(); }
-        g.save(); g.translate(this.bx, this.by); g.scale(K, -K); g.translate(-256, -256); g.drawImage(this.bc, 0, 0); g.restore();
-      } else {
-        for (const p of this.pieces){ g.save(); g.translate(this.bx + (p.cx - 256)*K + p.x, this.by + (256 - p.cy)*K + p.y); g.rotate(p.rot); g.scale(K, -K); g.translate(-p.cx, -p.cy);
-          g.beginPath(); p.q.forEach((v, i)=> i ? g.lineTo(v[0], v[1]) : g.moveTo(v[0], v[1])); g.closePath(); g.clip(); g.drawImage(this.dmg[2], 0, 0); g.fillStyle = 'rgba(10,3,3,' + (0.35 + 0.4*p.burn) + ')'; g.fillRect(0, 0, 512, 512); g.restore();
-          g.fillStyle = 'rgba(255,130,40,' + (clampv(1 - this.deathT/3, 0, 1)*0.7) + ')'; g.beginPath(); g.arc(this.bx + (p.cx - 256)*K + p.x, this.by + (256 - p.cy)*K + p.y, 6, 0, TAU); g.fill(); }
+        g.save(); g.translate(this.bx + (this.wrecked ? rnd(-2, 2) : 0), this.by + (this.wrecked ? rnd(-2, 2) : 0)); g.scale(K, -K); g.translate(-256, -256); g.drawImage(this.bc, 0, 0); g.restore();
       }
       if (this.cfg.over && !this.dead) this.cfg.over(this, g);
       for (const e of this.fx) this.drawFx(g, e);
@@ -175,7 +179,7 @@
     w2Start(id){
       if (this.w2) return; const cfg = BOSS_W2[id]; if (!cfg) return;
       const vx = this.visibleXRange(0), vy = this.visibleYRange(0), U = (vx.max - vx.min)/PW, H = (vy.max - vy.min)/U;
-      const st = new W2Stage(this, cfg, PW, H, U); st.flash = function(x, y, col, r, life, follow){ return this.flash_(x, y, col, r, life, follow); };
+      const st = new W2Stage(this, cfg, PW, H, U); st.id = id; st.flash = function(x, y, col, r, life, follow){ return this.flash_(x, y, col, r, life, follow); };
       const w2 = this.w2 = { id, cfg, st, hp:cfg.hp, max:cfg.hp, mode:'enter', t:0, ox:vx.min, oy:vy.min, U, S:U, dead:false, hitT:0, key:'w2cv' + (this._w2N = (this._w2N || 0) + 1), lastWound:0 };
       w2.tex = this.textures.addCanvas(w2.key, st.cv); w2.im = this.add.image(vx.min, vy.min, w2.key).setOrigin(0, 0).setDepth(5);
       const lab = document.getElementById('bossLabel'), fill = document.getElementById('bossHpFill');
@@ -186,8 +190,8 @@
     // coordonnées : page <-> monde
     w2W(px, py){ const w = this.w2; return [w.ox + px*w.U, w.oy + py*w.U]; },
     w2P(wx, wy){ const w = this.w2; return [(wx - w.ox)/w.U, (wy - w.oy)/w.U]; },
-    w2Solid(px, py){ const st = this.w2.st; if (!st.ready) return false; const sx = Math.round((px - st.bx)/K + 256), sy = Math.round(256 - (py - st.by)/K); return sx >= 0 && sy >= 0 && sx < 512 && sy < 512 && st.mask[(sy*512 + sx)*4 + 3] > 128; },
-    w2HullPoint(){ const w = this.w2, st = w.st, o = st.op[Phaser.Math.Between(0, st.op.length - 1)], p = st.P(o[0], o[1]); return this.w2W(p.x, p.y); },
+    w2Solid(px, py){ const st = this.w2.st; if (!st.ready) return false; const sx = Math.round((px - st.bx)/K + 256), sy = Math.round(256 - (py - st.by)/K); return sx >= 0 && sy >= 0 && sx < 512 && sy < 512 && st.masks[st.lvl()][(sy*512 + sx)*4 + 3] > 128; },
+    w2HullPoint(){ const w = this.w2, st = w.st, op = st.ops[st.lvl()], o = op[Phaser.Math.Between(0, op.length - 1)], p = st.P(o[0], o[1]); return this.w2W(p.x, p.y); },
     w2Boom(x, y, size, snd){
       const big = size > 360; this.acFx(big ? 'arFxBoomL' : 'brFxBoom', big ? 'arBoomL' : 'explodeBras', x, y, size/(big ? 256 : 160)*1.15, { depth:8 });
       if (size > 500) this.acFx('arFxShock', 'arShock', x, y, size/190, { depth:8 }); if (snd) this.w2Sfx(snd, x);
@@ -207,7 +211,8 @@
       if (w.hp <= 0) this.w2Die();
     },
     w2Wound(ns){
-      const w = this.w2; w.lastWound = ns; this.cameras.main.shake(300, 0.012); this.juiceStop && this.juiceStop('bossPhase');
+      const w = this.w2, old = w.lastWound; w.lastWound = ns; w.st.debris(7); w.st.hitFlash = 1;      // le dessin change (état suivant, fait par l'usine) et des débris dessinés partent
+      this.cameras.main.shake(300, 0.012); this.juiceStop && this.juiceStop('bossPhase');
       for (let k = 0; k < 3; k++){ const [bx, by] = this.w2HullPoint(); this.w2Boom(bx, by, 200, k === 0 ? w.cfg.sfx + 'Wound' : ''); }
       const fill = document.getElementById('bossHpFill'); if (fill) fill.className = 'boss-hp-fill p' + Math.min(3, ns);
       w.st.hurtRed = ns >= 2;
@@ -264,19 +269,20 @@
       const w = this.w2; if (w.mode === 'dying' || w.dead) return; const st = w.st;
       w.mode = 'dying'; w.dieT = 0; st.cur = -1; st.timers = []; st.fx = st.fx.filter(e=> e.type === 'p' && e.harm === false || e.type === 'x' && !e.hurt && !e.draw);
       st.escorts.forEach(e=>{ if (e.en && e.en.active) e.en.hp = 0; });
+      st.at(0.3, ()=> st.setWreck()); if (st.cfg.death && st.cfg.death.agony) st.cfg.death.agony(st);      // l'épave apparaît, puis la scène d'agonie propre au boss
       this.enemyBullets.children.iterate(b=>{ if (b) b.destroy(); });
       const wrap = document.getElementById('boss-hp-wrap'); if (wrap) wrap.classList.remove('show');
       this.startSlowmo && this.startSlowmo(1500, 0.5); this.juiceStop && this.juiceStop('bossKill'); this.w2Sfx(w.cfg.sfx + 'Roar', null);
     },
     w2DyingStep(dt){
-      const w = this.w2, st = w.st; st.update(dt*0.5, 'dying'); w.dieT += dt; st.shake = 0.5;
-      w._ex = (w._ex || 0) + dt; while (w._ex >= 0.1){ w._ex -= 0.1; const [x, y] = this.w2HullPoint(); this.w2Boom(x, y, Phaser.Math.Between(150, 280), Math.random() < 0.3 ? w.cfg.sfx + 'Wound' : '');
+      const w = this.w2, st = w.st; st.update(dt*0.5, 'dying'); if (w.dead) return; w.dieT += dt; st.shake = 0.5;
+      w._ex = (w._ex || 0) + dt; while (w._ex >= 0.1){ w._ex -= 0.1; const [x, y] = this.w2HullPoint(), k = 0.8 + 0.7*Math.min(1, w.dieT/2.4); this.w2Boom(x, y, Phaser.Math.Between(150, 280)*k, Math.random() < 0.3 ? w.cfg.sfx + 'Wound' : ''); st.debris(1);
         const f = this.acFx('acFxFlame', 'acFlame', x, y + 8, 0.9*w.U*1.4, { loop:true, vy:-8 }); this.time.delayedCall(900, ()=>{ if (f && f.active) f.destroy(); }); this.acFx('acFxSpark', 'acSpark', x, y, 1.4); }
       if (w.dieT > 2.4) this.w2Dead();
     },
     w2Dead(){
       const w = this.w2; if (w.dead) return; w.dead = true; bestiaryBossKill(this, w.id); const st = w.st, [cx, cy] = this.w2W(st.bx, st.by);
-      st.shatter(); st.shake = 1;
+      st.finale(); st.shake = 1;
       this.cameras.main.flash(700, 255, 255, 255, false); this.cameras.main.shake(1100, 0.016);
       this.w2Boom(cx, cy, 1000, w.cfg.sfx + 'Boom'); this.w2Boom(cx, cy, 560, ''); this.w2Boom(cx - 70, cy - 50, 420, ''); this.w2Boom(cx + 70, cy + 50, 420, ''); this.w2Boom(cx, cy + 80, 380, '');
       this.time.delayedCall(250, ()=>{ this.w2Boom(cx - 90, cy + 40, 360, ''); this.w2Boom(cx + 90, cy - 40, 360, ''); }); this.time.delayedCall(550, ()=>{ this.w2Boom(cx, cy, 700, w.cfg.sfx + 'Wound'); });

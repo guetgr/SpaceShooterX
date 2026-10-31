@@ -21,6 +21,11 @@ const BOSS_W2 = (()=>{
       { type:'circle', c:[400, 345], r:56, pivot:[355, 300], fn:s=>({ rot:-Math.sin(s.t*2.3 + 1)*0.05 }) },
     ],
     over(s, g){ glowAt(s, g, s.A('clawL'), 22, 'rgba(255,90,40,.5)', 0.5 + 0.5*Math.sin(s.t*4)); glowAt(s, g, s.A('clawR'), 22, 'rgba(255,90,40,.5)', 0.5 + 0.5*Math.sin(s.t*4 + 1)); },
+    death:{
+      agony(s){ s.tw('open', 1, 0.3); for (let i = 0; i < 10; i++) s.at(0.15 + i*0.22, ()=>{ const q = s.hull(); s.burst(q.x, q.y, 10, '#ffd090', 280, 0.6); s.debris(1); s.boom(q.x, q.y, rnd(90, 150)); if (i % 3 === 0) s.snd('cbClang'); });
+        for (let i = 0; i < 5; i++) s.at(0.3 + i*0.42, ()=>{ s.tw('snap', i % 2 ? 0 : 1, 0.1); s.ring(s.bx, s.by + 60, 80 + i*14, 0.35, '#ffd090'); }); },
+      final(s){ for (const nm of ['clawL', 'clawR']){ const p = s.A(nm); s.debris(3, { from:p, big:true }); s.burst(p.x, p.y, 26, '#ffd090', 360, 1); s.ring(p.x, p.y, 120, 0.5, '#ffb060'); }
+        fan(s, { x:s.bx, y:s.by }, 18, TAU, 0, 300, { kind:'shard', r:6, harm:false }); s.at(0.2, ()=> fan(s, { x:s.bx, y:s.by }, 14, TAU, 0.2, 220, { kind:'shard', r:5, harm:false })); } },
     attacks:[
       { name:'Scies boomerang', dur:4.2,
         go(s){ s.tw('open', 1, 0.6); s.at(0.7, ()=> s.tw('open', 0, 0.25)); s.snd('cbCharge');
@@ -43,15 +48,22 @@ const BOSS_W2 = (()=>{
     parts:[{ type:'circle', c:[262, 256], r:94, pivot:[262, 256], fn:s=>({ rot:s.t*(0.25 + (s.pose.heat || 0)*2.2) }) }],
     over(s, g){ const h = s.pose.heat || 0, c = s.A('core'); s.glow(g, c.x, c.y, 120*s.K + h*40, 'rgba(255,120,40,.8)', 0.35 + 0.15*Math.sin(s.t*3) + h*0.45); if (h > 0.3) s.glow(g, c.x, c.y, 50*s.K, '#fff0c0', h*0.8);
       [[140,60],[190,60],[340,60],[390,120],[140,125]].forEach((q, i)=>{ const p = s.P(q[0], q[1]); s.glow(g, p.x, p.y, 16, 'rgba(255,150,50,.9)', 0.45 + 0.55*Math.max(0, Math.sin(s.t*5 + i*1.3))); }); },
+    death:{
+      agony(s){ s.tw('heat', 1, 1.2); s.snd('icHeat');
+        for (let i = 0; i < 14; i++) s.at(0.1 + i*0.16, ()=>{ const q = s.hull(), a = Math.atan2(q.y - s.by, q.x - s.bx); for (let k = 0; k < 6; k++){ const aa = a + rnd(-0.5, 0.5), v = rnd(180, 380); s.proj({ kind:'fire', r:rnd(8, 12), x:q.x, y:q.y, vx:Math.cos(aa)*v, vy:Math.sin(aa)*v - 40, life:rnd(0.6, 1.0), harm:false }); } s.boom(q.x, q.y, rnd(80, 140)); if (i % 4 === 0) s.snd('icFlame'); });
+        s.at(1.7, ()=>{ s.flash(0, 0, '#fff0c0', 190, 0.7, 'core').charge = true; }); },
+      final(s){ const c = s.A('core'); s.snd('icRing'); for (let r = 0; r < 3; r++) s.at(r*0.18, ()=>{ s.ring(c.x, c.y, 160 + r*90, 0.7, '#ff9a30'); });
+        for (let i = 0; i < 90; i++){ const a = rnd(0, TAU), v = rnd(220, 560); s.proj({ kind:'fire', r:rnd(8, 14), x:c.x, y:c.y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:rnd(1.0, 1.7), harm:false }); }
+        for (let i = 0; i < 8; i++){ const a = -DOWN + rnd(-0.9, 0.9), v = rnd(200, 380); s.proj({ kind:'lava', r:13, x:c.x, y:c.y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, ay:420, life:1.6, harm:false }); } } },
     attacks:[
       { name:'Lance-flammes', dur:4.6,
         go(s){ s.tw('heat', 1, 0.9); s.at(3.9, ()=> s.tw('heat', 0, 1)); s.flash(0, 0, '#fff0a0', 100, 0.9, 'core').charge = true; s.snd('icHeat'); const t0 = 0.9, D = 2.4; s.at(t0, ()=> s.snd('icFlame'));
-          for (let i = 0; i < 150; i++) s.at(t0 + i/150*D, ()=>{ const sw = Math.sin(((s.curT - t0)/D)*Math.PI - Math.PI/2)*0.85; const c = s.A('core'), a = DOWN + sw + rnd(-0.12, 0.12), v = rnd(230, 330);
-            s.proj({ kind:'fire', r:rnd(8, 13), x:c.x, y:c.y + 30, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:rnd(0.7, 1.05) }); }); } },
+          for (let i = 0; i < 150; i++) s.at(t0 + i/150*D, ()=>{ const sw = Math.sin(((s.curT - t0)/D)*Math.PI - Math.PI/2)*0.85; const c = s.A('core'), a = DOWN + sw + rnd(-0.12, 0.12), v = rnd(430, 570);
+            s.proj({ kind:'fire', r:rnd(8, 13), x:c.x, y:c.y + 30, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:rnd(1.25, 1.65) }); }); } },
       { name:'Anneau de fournaise', dur:4.2,
         go(s){ for (let r = 0; r < 3; r++){ s.at(r*0.8, ()=>{ s.tw('heat', 1, 0.4); s.flash(0, 0, '#ffcc60', 80, 0.45, 'core').charge = true; }); s.at(r*0.8 + 0.5, ()=> s.tw('heat', 0.2, 0.3));
           s.at(r*0.8 + 0.45, ()=>{ s.snd('icRing'); const c = s.A('core'), gap = Math.atan2(s.pl.y - c.y, s.pl.x - c.x) + rnd(-0.5, 0.5); s.ring(c.x, c.y, 90, 0.3, '#ff9a30'); const N = 30;
-            for (let i = 0; i < N; i++){ const a = i/N*TAU; if (Math.abs(Math.atan2(Math.sin(a - gap), Math.cos(a - gap))) < 0.42) continue; s.proj({ kind:'orb', r:9, x:c.x, y:c.y, vx:Math.cos(a)*170, vy:Math.sin(a)*170, life:3.2 }); } }); } } },
+            for (let i = 0; i < N; i++){ const a = i/N*TAU; if (Math.abs(Math.atan2(Math.sin(a - gap), Math.cos(a - gap))) < 0.42) continue; s.proj({ kind:'orb', r:9, x:c.x, y:c.y, vx:Math.cos(a)*240, vy:Math.sin(a)*240, life:3.4 }); } }); } } },
       { name:'Boules de lave', dur:4.8,
         go(s){ s.tw('heat', 0.5, 0.5); s.at(3.4, ()=> s.tw('heat', 0, 1)); for (let i = 0; i < 4; i++){ s.at(i*0.6, ()=>{ const c = s.A('core'), t = { x:clamp(s.pl.x + rnd(-110, 110), 40, s.W - 40), y:clamp(s.pl.y - rnd(0, 120), s.H*0.5, s.H - 50) };
             s.flash(c.x, c.y, '#ffb050', 50, 0.3); s.snd('icLava'); lob(s, c, t, 'lava', 13, 1.2, e=>{ s.snd('icSplash'); s.impact(e.tx, e.ty, 120); s.zone(e.tx, e.ty, 46, 2.6, '#ffb040'); s.burst(e.tx, e.ty, 10, '#ff9a30', 200, 0.6); }); }); } } },
@@ -63,6 +75,13 @@ const BOSS_W2 = (()=>{
     over(s, g){ const sp = (3 + (s.pose.rush || 0)*14)*s.t*14, si = s.pose.siren || 0;
       for (const x of [102, 412]) for (const [y0, y1] of [[75, 205], [245, 415]]){ for (let y = y0 - (sp % 14); y < y1; y += 14){ if (y < y0) continue; const a = s.P(x - 17, y), b = s.P(x + 17, y); g.fillStyle = 'rgba(255,255,255,.07)'; g.fillRect(a.x, a.y - 1, b.x - a.x, 2); } }
       [[200, 26], [256, 26], [312, 26]].forEach((q, i)=>{ const p = s.P(q[0], q[1]), on = Math.sin(s.t*12 + i*2.1) > 0; s.glow(g, p.x, p.y, 20 + si*14, i === 1 ? '#ffb020' : '#ff2a20', (0.25 + si*0.75)*(on ? 1 : 0.25)); }); },
+    death:{
+      agony(s){ s.tw('siren', 1, 0.2); s.tw('rush', 0.7, 0.3); s.snd('bnSiren');
+        for (let i = 0; i < 9; i++) s.at(0.1 + i*0.25, ()=>{ const p = s.P(256 + rnd(-70, 70), 40 + i*50), hl = s.A('hopperL'), hr = s.A('hopperR'); s.boom(p.x, p.y, rnd(100, 170)); s.burst(p.x, p.y, 8, '#ffa060', 240, 0.6);
+          for (let k = 0; k < 4; k++){ const h = k % 2 ? hl : hr; s.proj({ kind:'cube', r:rnd(5, 9), x:h.x, y:h.y, vx:rnd(-220, 220), vy:rnd(-330, -120), ay:720, life:1, spin:rnd(-12, 12), harm:false }); } if (i % 3 === 0) s.snd('bnLand'); });
+        for (let i = 0; i < 4; i++) s.at(0.2 + i*0.5, ()=> s.debris(1, { big:true })); },
+      final(s){ const b = s.A('skip'); s.snd('bnSlam'); s.shake = 1; for (let i = 0; i < 4; i++) s.at(i*0.12, ()=> s.ring(b.x, b.y, 120 + i*70, 0.5, '#ffd090'));
+        fan(s, b, 22, 2.4, -DOWN, 380, { kind:'cube', r:10, spin:8, ay:520, life:1.5, harm:false }); for (let i = 0; i < 12; i++) s.proj({ kind:'puff', x:b.x + rnd(-90, 90), y:b.y + rnd(-40, 40), vx:rnd(-60, 60), vy:rnd(-60, 20), life:1.1, r:rnd(14, 26), harm:false }); } },
     attacks:[
       { name:'Charge du bulldozer', dur:4.4,
         go(s){ s.tw('siren', 1, 0.1); s.at(1.9, ()=> s.tw('siren', 0, 0.6)); s.at(1.2, ()=> s.tw('rush', 1, 0.4)); s.at(2.6, ()=> s.tw('rush', 0, 0.8)); s.snd('bnSiren'); s.moveTo(s.bx, 165, 0.6); for (let i = 0; i < 6; i++) s.at(i*0.12, ()=> s.flash(0, 0, i % 2 ? '#ff3020' : '#ffd040', 40, 0.12, 'cab'));
@@ -86,6 +105,10 @@ const BOSS_W2 = (()=>{
     ],
     over(s, g){ const sp = s.pose.spin || 0; for (const nm of ['rollL', 'rollR']){ const c = s.A(nm); if (sp > 1) s.glow(g, c.x, c.y, 60, 'rgba(255,90,40,.7)', Math.min(1, sp/14)*0.7); }
       const h = s.P(270, 44); s.glow(g, h.x, h.y, 22, 'rgba(255,60,40,.9)', 0.5 + 0.5*Math.sin(s.t*4)); },
+    death:{
+      agony(s){ s.tw('spin', 30, 1.2); s.snd('bySpin');
+        for (let i = 0; i < 12; i++) s.at(0.12 + i*0.19, ()=>{ for (const nm of ['rollL', 'rollR']){ const c = s.A(nm); fan(s, c, 7, TAU, rnd(0, TAU), rnd(220, 340), { kind:'tooth', r:7, spin:10, life:1.4, harm:false }); s.ring(c.x, c.y, 50, 0.22, '#ff7a40'); } const q = s.hull(); s.boom(q.x, q.y, rnd(90, 150)); s.debris(1); if (i % 3 === 0) s.snd('byTooth'); }); },
+      final(s){ for (let v = 0; v < 3; v++) s.at(v*0.2, ()=>{ for (const nm of ['rollL', 'rollR']){ const c = s.A(nm); s.snd('bySlam'); fan(s, c, 20, TAU, v*0.3, 300 + v*60, { kind:'tooth', r:8, spin:10, life:2, harm:false }); s.ring(c.x, c.y, 110 + v*40, 0.5, '#ff8a50'); s.debris(2, { from:c, big:true }); } }); } },
     attacks:[
       { name:'Rotors à dents', dur:4.6,
         go(s){ s.tw('spin', 14, 0.9); s.at(2.9, ()=> s.tw('spin', 0, 1.2)); s.snd('bySpin'); for (const nm of ['rollL', 'rollR']) s.flash(0, 0, '#ff6a30', 70, 0.9, nm).charge = true;
@@ -119,6 +142,13 @@ const BOSS_W2 = (()=>{
       fn:s=>({ rot:Math.sin(s.t*1.4 + i*1.1)*0.03 + (s.pose.arms || 0)*Math.sin(s.t*9 + i*2)*0.035 + (s.pose.arms || 0)*(i % 2 ? 1 : -1)*0.05 }) })),
     over(s, g){ const c = s.A('core'), h = s.pose.heal || 0; s.glow(g, c.x, c.y, 70*s.K + h*30, 'rgba(90,255,110,.8)', 0.3 + 0.12*Math.sin(s.t*3) + h*0.4);
       for (const nm of ['t0', 't1', 't2', 't3', 't4', 't5']){ const a = s.A(nm); s.glow(g, a.x, a.y, 12, 'rgba(160,255,160,.8)', 0.3 + 0.3*Math.sin(s.t*4 + a.x)); } },
+    death:{
+      agony(s){ s.tw('arms', 1, 0.2); s.tw('heal', 1, 1.5); s.snd('rpWarm'); const arms = ['t0', 't1', 't2', 't3', 't4', 't5'];
+        for (let i = 0; i < 14; i++) s.at(0.1 + i*0.16, ()=>{ const a = arms[(Math.random()*6) | 0], q = s.A(a), c = s.A('core'); s.beam(()=> s.A(a), ()=> ({ x:c.x + rnd(-60, 60), y:c.y + rnd(-60, 60) }), i % 2 ? '#7dff7a' : '#9fe8ff', 4, 0.3, true); s.burst(q.x, q.y, 8, '#9fe8ff', 220, 0.5); s.boom(q.x, q.y, rnd(70, 120)); if (i % 4 === 0) s.snd('rpArc'); });
+        for (let i = 0; i < 5; i++) s.at(0.2 + i*0.45, ()=> s.debris(1, { from:s.A(arms[i]), big:true })); },
+      final(s){ const c = s.A('core'); s.snd('rpHeal'); s.flash(c.x, c.y, '#ccffcc', 220, 0.6); for (let r = 0; r < 3; r++) s.at(r*0.2, ()=> s.ring(c.x, c.y, 180 + r*80, 0.7, r % 2 ? '#9fe8ff' : '#7dff7a'));
+        for (let i = 0; i < 34; i++){ const a = rnd(0, TAU), v = rnd(100, 340); s.proj({ kind:'plus', x:c.x, y:c.y, vx:Math.cos(a)*v, vy:Math.sin(a)*v, life:rnd(0.8, 1.4), harm:false }); }
+        for (let i = 0; i < 6; i++) s.debris(1, { from:s.A(['t0', 't1', 't2', 't3', 't4', 't5'][i]), big:true }); } },
     attacks:[
       { name:'Réparation', dur:5.2,
         go(s){ s.tw('heal', 1, 0.5); s.at(4.2, ()=> s.tw('heal', 0, 0.6)); s.snd('rpCall'); s.callEscort(3, true);

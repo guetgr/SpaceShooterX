@@ -694,8 +694,18 @@
   "sprites/vortex_death.png",
   "sprites/vortex_idle.png",
   "sprites/w2_benne.webp",
+  "sprites/w2_benne_debris.webp",
+  "sprites/w2_benne_dmg.webp",
   "sprites/w2_broyeur.webp",
+  "sprites/w2_broyeur_debris.webp",
+  "sprites/w2_broyeur_dmg.webp",
   "sprites/w2_crabe.webp",
+  "sprites/w2_crabe_debris.webp",
+  "sprites/w2_crabe_dmg.webp",
   "sprites/w2_incinerateur.webp",
-  "sprites/w2_reparateur.webp"
+  "sprites/w2_incinerateur_debris.webp",
+  "sprites/w2_incinerateur_dmg.webp",
+  "sprites/w2_reparateur.webp",
+  "sprites/w2_reparateur_debris.webp",
+  "sprites/w2_reparateur_dmg.webp"
 ]
